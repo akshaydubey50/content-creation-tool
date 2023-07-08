@@ -1,0 +1,76 @@
+"use client"
+import React, { useState } from "react";
+import Link from "next/link";
+import { ImCross } from "react-icons/im";
+import { GiHamburgerMenu } from "react-icons/gi";
+
+export default function Navbar() {
+  const menuItem = [
+    { id: 1, label: "All Program", href: "/" },
+    { id: 2, label: "Category", href: "/" },
+    { id: 3, label: "Contact", href: "/" },
+    { id: 4, label: "Login", href: "/" }
+  ];
+
+  const [isMenu, setIsMenu] = useState(false);
+
+  function hamburgerHandler() {
+    setIsMenu(true);
+  }
+
+  function crossHandler() {
+    setIsMenu(false);
+  }
+
+  return (
+    <>
+      <nav className="bg-white z-30 relative shadow-md w-full px-5 lg:px-10">
+        <div className="flex justify-between py-4 lg:px-4 lg:py-6">
+          <div>
+            <h2 className="text-xl lg:text-2xl font-bold">Content Creation</h2>
+          </div>
+          {/* menubar in large screen */}
+          <ul className="hidden text-lg lg:flex flex-1 flex-wrap justify-end font-semibold gap-x-10">
+            {menuItem.map((menu) => (
+              <li key={menu.id}>
+                <Link href={menu.href}>{menu.label}</Link>
+              </li>
+            ))}
+            <li>
+              <span className="px-6 py-2 text-white rounded-full bg-DarkOrange">
+                <Link href="/">Login</Link>
+              </span>
+            </li>
+          </ul>
+          <div className="block lg:hidden">
+            <button onClick={hamburgerHandler} className="outline-none">
+              <GiHamburgerMenu size={20} />
+            </button>
+          </div>
+        </div>
+      </nav>
+      {/* Mobile View Sidebar */}
+      <aside
+        className={`fixed top-0 z-40 h-full w-screen bg-white text-black text-xl transform transition-transform duration-500 ${
+          isMenu ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="p-3 flex my-2">
+          <h2 className="text-2xl font-bold">Content Creation</h2>
+          <button onClick={crossHandler} className="outline-none ml-auto px-4">
+            <ImCross size={20} color="red" />
+          </button>
+        </div>
+        <ul>
+          {menuItem.map((menu) => (
+            <li key={menu.id} className="py-3 px-3 font-medium">
+              <Link href={menu.href} className="px-4 border-l-4 border-DarkOrange border-solid">
+                {menu.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    </>
+  );
+}
