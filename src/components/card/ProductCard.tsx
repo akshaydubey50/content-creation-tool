@@ -2,23 +2,31 @@
 import React from "react";
 import Image from "next/image";
 import { BsBookmark } from 'react-icons/bs';
+import CTAButton from "../button/CTAButton";
+import Link from "next/link";
 
 export default function ProudctCard() {
   return (
     <>
-      <main className="px-[30px] lg:px-[100px] grid grid-cols-1 gap-y-5 md:grid-cols-2  md:gap-x-6 md:gap-y-5 lg:grid-cols-3 lg:gap-x-10   justify-center my-[20px]">
+      <main className="px-8  grid grid-cols-1 gap-y-5 md:grid-cols-2  md:gap-6 lg:grid-cols-3 lg:gap-9 mx-auto w-fit  justify-items-center my-[20px]">
+        <CardContainer />
+        <CardContainer />
+        <CardContainer />
         <CardContainer />
         <CardContainer />
         <CardContainer />
       </main>
+      <CTAButton value="Load More" />
     </>
   );
 }
 
 function CardContainer() {
   return (
-    <div className="rounded-2xl flex flex-col  border border-black border-solid  shadow-2xl ">
-      <section className="w-full border-b border-black border-solid">
+    <>
+    <Link href="/tool-details">
+    <div className="rounded-2xl max-w-xs md:max-w-xs  flex flex-col  border border-black border-solid  shadow-2xl ">
+      <section className="w-full  border-b border-black border-solid">
         <Image
           alt="logo banner"
           loading="lazy"
@@ -54,5 +62,8 @@ function CardContainer() {
         </div>
       </section>
     </div>
+    </Link>
+    </>
+
   );
 }
