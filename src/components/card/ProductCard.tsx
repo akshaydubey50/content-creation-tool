@@ -25,7 +25,7 @@ function CardContainer() {
   return (
     <>
     <Link href="/tool-details">
-    <div className="rounded-2xl max-w-xs md:max-w-xs  flex flex-col  border border-black border-solid  shadow-2xl ">
+    <div className="rounded-2xl max-w-sm  flex flex-col  border border-black border-solid  shadow-2xl ">
       <section className="w-full  border-b border-black border-solid">
         <Image
           alt="logo banner"
@@ -41,10 +41,10 @@ function CardContainer() {
       </section>
       <section className="bg-[#F5F5F5] py-[30px] px-[20px] rounded-b-2xl">
         <div className="pb-[15px] flex flex-1 flex-row justify-between">
-          <h1 className="font-bold">GTmetrix</h1>
+          <h1 className="font-bold text-lg md:text-2xl">GTmetrix</h1>
           <h1>👍 1</h1>
         </div>
-        <article className="text-sm">
+        <article className="text-base md:text-xl ">
           <p>
             GTmetrix was developed by Carbon60 as a tool for customers to easily
             test the performance of their webpages.
@@ -53,12 +53,11 @@ function CardContainer() {
             Other
           </button>
         </article>
-        <div className="text-white text-sm font-semibold flex justify-between items-center">
+        <div className="text-white  font-semibold flex justify-between items-center text-base md:text-xl">
           <button className="px-5 py-2 rounded-full bg-DarkOrange ">
             Visit Website
           </button>
           <BsBookmark size={24} color="black" />
-
         </div>
       </section>
     </div>
