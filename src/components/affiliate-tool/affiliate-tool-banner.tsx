@@ -10,7 +10,7 @@ export default function AffiliateToolBanner() {
             <main className='bg-light-gray  p-10 md:px-20 md:py-16 md:mb-12'>
                 <BreadCrumb />
                 <div className="affiliate-tool-container flex-col  space-y-8 md:flex lg:flex-row flex-1    lg:space-x-20 my-12">
-                    <div className="aftl-left-section border border-black border-solid rounded-t-xl lg:w-1/2 ">
+                    <div className="aftl-left-section border border-black border-solid rounded-t-xl ">
                         <Image
                             alt="logo bannero"
                             loading="lazy"
@@ -23,7 +23,7 @@ export default function AffiliateToolBanner() {
                         //   style="color: transparent"
                         />
                     </div>
-                    <div className="aftl-right-section lg:w-1/2">
+                    <div className="aftl-right-section">
                         <div className="flex flex-col flex-1 space-y-10 mb-6">
                             <h1 className='text-3xl md:text-5xl font-bold'>GTmetrix</h1>
                             <p className='ml-0 text-2xl'>GTmetrix was developed by Carbon60 as a tool for customers to easily test the performance of their webpages.</p>
@@ -38,12 +38,11 @@ export default function AffiliateToolBanner() {
                         </div>
                     </div>
                 </div>
-                <div className="flex justify-between md:justify-center md:space-x-20 lg:justify-between   lg:w-1/2 lg:space-x-0 lg:pr-10 items-center">
+                <div className="flex justify-between md:justify-center md:space-x-20 lg:justify-between   lg:w-1/3 lg:space-x-0 lg:pr-10 items-center">
                     <div className="bg-DarkOrange rounded-full text-lg">
                         <button className='px-6 md:px-8 py-2 text-white font-semibold '>Visit Website</button>
                     </div>
                     <BsBookmark size={24} color="black" />
-
                 </div>
             </main>
         </>
