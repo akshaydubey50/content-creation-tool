@@ -17,6 +17,17 @@ module.exports = {
         DarkOrange: '#FF8C00',
         'light-gray':'#F2F2F2',
       },
+      fontSize:{
+        'Heading-Small':'1.25rem',
+        'Heading-Medium':'1.875rem',
+        'Heading-Large':'3rem',
+        'Title-Small':'1rem',
+        'Title-Medium':'1.15rem',
+        'Title-Large':'1.25rem',
+        'Title-Larger':'1.5rem',
+        'Description':'1rem',
+        'tags':'0.9rem',
+      }
     },
   },
   plugins: [],
