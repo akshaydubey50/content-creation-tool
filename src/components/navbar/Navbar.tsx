@@ -89,7 +89,11 @@ export default function Navbar() {
             )}
           </ul>
           <div className="block lg:hidden">
-            <button onClick={hamburgerHandler} className="outline-none">
+            <button
+              title="menu"
+              onClick={hamburgerHandler}
+              className="outline-none"
+            >
               <GiHamburgerMenu size={20} />
             </button>
           </div>
@@ -103,7 +107,11 @@ export default function Navbar() {
       >
         <div className="p-3 flex my-2">
           <h2 className="text-2xl font-bold">Content Creation</h2>
-          <button onClick={crossHandler} className="outline-none ml-auto px-4">
+          <button
+            title="close"
+            onClick={crossHandler}
+            className="outline-none ml-auto px-4"
+          >
             <ImCross size={20} color="red" />
           </button>
         </div>

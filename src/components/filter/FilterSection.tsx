@@ -36,6 +36,7 @@ export default function FilterSection() {
           </div>
           <div className="bg-orange-200  rounded-full px-3 font-medium  py-2 border-2 border-DarkOrange border-solid md:w-full lg:w-full ">
             <select
+              title="Price"
               name=""
               id=""
               className="bg-transparent  focus:outline-none text-black w-full"
@@ -82,6 +83,7 @@ export default function FilterSection() {
         <div className="flex justify-center space-x-4">
           <div className="bg-orange-200  rounded-full px-3 font-medium  py-2 border-2 border-DarkOrange border-solid w-full lg:w-1/3">
             <select
+              title="Category"
               name=""
               id=""
               className="bg-transparent  focus:outline-none text-black w-full "
@@ -96,6 +98,7 @@ export default function FilterSection() {
           </div>
           <div className="bg-orange-200  rounded-full px-3 font-medium  py-2 border-2 border-DarkOrange border-solid lg:w-1/3 w-full">
             <select
+              title="Price"
               name=""
               id=""
               className="bg-transparent  focus:outline-none text-black w-full"
