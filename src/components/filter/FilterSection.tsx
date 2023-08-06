@@ -1,7 +1,13 @@
-"use client"
-import React from "react";
+"use client";
+import React, { useState } from "react";
 
 export default function FilterSection() {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) return;
+  };
+
   return (
     <>
       <section className="hidden md:flex md:flex-col lg:flex-row py-[25px] justify-center items-center    md:px-[60px] lg:space-x-10   lg:px-[100px] md:space-y-3 lg:space-y-0">
@@ -15,6 +21,7 @@ export default function FilterSection() {
           </div>
           <div className="bg-orange-200  rounded-full px-3 font-medium  py-2 border-2 border-DarkOrange border-solid md:w-full lg:w-full ">
             <select
+              title="select"
               name=""
               id=""
               className="bg-transparent  focus:outline-none text-black w-full "
@@ -49,6 +56,10 @@ export default function FilterSection() {
           </div>
           <div className="text-black md:w-2/3  lg:w-full py-0.5">
             <input
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+              }}
               className="rounded-full w-full  border-2 outline-none px-3 py-2 font-medium border-black border-solid"
               type="text"
               placeholder="Search"
