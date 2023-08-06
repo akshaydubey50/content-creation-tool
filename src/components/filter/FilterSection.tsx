@@ -10,7 +10,7 @@ export default function FilterSection() {
 
   return (
     <>
-      <section className="hidden md:flex md:flex-col lg:flex-row py-[25px] justify-center items-center    md:px-[60px] lg:space-x-10   lg:px-[100px] md:space-y-3 lg:space-y-0">
+      <section className="hidden md:flex md:flex-col lg:flex-row py-6 justify-center items-center px-8 lg:space-x-10  md:space-y-3 lg:space-y-0 mx-auto max-w-7xl">
         <p className="text-black font-medium text-xl ">Filters</p>
         {/* Dropdown */}
         <div className="flex justify-between items-center space-x-5 w-full">

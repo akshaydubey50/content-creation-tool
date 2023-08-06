@@ -3,7 +3,7 @@ import React from "react";
 
 export default function HeroSection() {
   return (
-    <section className="bg-DarkOrange  md:mb-[50px]">
+    <main className="bg-DarkOrange  md:mb-[50px]">
       <div className="flex flex-col justify-center items-start md:justify-center md:items-center p-10  lg:p-40 px-5 lg:px-10 gap-y-5">
         <div className="container mx-auto  text-white text-center w-full md:max-w-2xl lg:max-w-4xl xl:max-w-6xl">
           <h1 className="text-xl mb-3 md:text-3xl lg:text-5xl font-bold leading-tight ">
@@ -27,6 +27,6 @@ export default function HeroSection() {
           <button className="bg-black text-white rounded-full px-5 py-1 md:px-6 md:py-2">Submit</button>
         </div>
       </div>
-    </section>
+    </main>
   );
 }

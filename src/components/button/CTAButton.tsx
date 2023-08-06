@@ -4,7 +4,10 @@ import React from "react";
 export default function CTAButton() {
   return (
     <React.Fragment>
-      <div className="flex flex-1 flex-row justify-center items-center py-[20px] text-white font-bold">
+      <div
+        className="flex flex-1 flex-row justify-center items-center py-[20px]
+       text-white font-bold"
+      >
         <button
           className="bg-DarkOrange hover:bg-light-yellow focus:bg-DarkOrange 
         rounded-full px-6 py-2"

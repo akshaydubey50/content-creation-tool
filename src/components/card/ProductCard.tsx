@@ -79,8 +79,10 @@ export default function ProudctCard() {
 
 function CardContainer({ img, title, description, tag, link }: Product) {
   return (
-    <div className="rounded-2xl flex flex-col  border border-black border-solid  shadow-2xl ">
-      <section className="w-full border-b border-black border-solid">
+    <>
+    <Link href="/tool-details">
+    <div className="rounded-2xl max-w-sm  flex flex-col  border border-black border-solid  shadow-2xl ">
+      <section className="w-full  border-b border-black border-solid">
         <Image
           alt="logo banner"
           loading="lazy"
@@ -96,16 +98,17 @@ function CardContainer({ img, title, description, tag, link }: Product) {
       </section>
       <section className="bg-[#F5F5F5] py-[30px] px-[20px] rounded-b-2xl">
         <div className="pb-[15px] flex flex-1 flex-row justify-between">
-          <h1 className="font-bold">{title}</h1>
+          <h1 className="font-bold text-lg md:text-2xl">{title}</h1>
           <h1>👍 1</h1>
         </div>
-        <article className="text-sm">
+        <article className="text-base md:text-xl">
           <p>{description}</p>
           <button className="bg-white rounded-full border border-solid border-black my-6 px-4 py-1">
             {tag}
           </button>
         </article>
-        <div className="text-white text-sm font-semibold flex justify-between items-center">
+        <div className="text-white font-semibold flex 
+        justify-between items-center text-base md:text-xl">
           <Link
             href={link}
             target="_blank"
@@ -117,5 +120,8 @@ function CardContainer({ img, title, description, tag, link }: Product) {
         </div>
       </section>
     </div>
+    </Link>
+    </>
+
   );
 }
