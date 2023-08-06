@@ -9,7 +9,7 @@ export default function ToolDetails() {
     <>
     <Navbar />
     <AffiliateToolBanner />
-    <h1 className='text-2xl md:text-3xl lg:text-4xl text-center  my-5 w-full font-bold'>Similar <span className="text-DarkOrange">Other</span> Tools</h1>
+    <h1 className='text-2xl md:text-3xl lg:text-4xl text-center  my-10 w-full font-bold'>Similar <span className="text-DarkOrange">Other</span> Tools</h1>
     <ProudctCard />
     </>
   )
