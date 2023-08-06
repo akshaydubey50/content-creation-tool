@@ -2,23 +2,31 @@
 import React from "react";
 import Image from "next/image";
 import { BsBookmark } from 'react-icons/bs';
+import CTAButton from "../button/CTAButton";
+import Link from "next/link";
 
 export default function ProudctCard() {
   return (
     <>
-      <main className="px-[30px] lg:px-[100px] grid grid-cols-1 gap-y-5 md:grid-cols-2  md:gap-x-6 md:gap-y-5 lg:grid-cols-3 lg:gap-x-10   justify-center my-[20px]">
+      <main className="px-8  grid grid-cols-1 gap-y-5 md:grid-cols-2  md:gap-6 lg:grid-cols-3 lg:gap-9 mx-auto w-fit  justify-items-center my-[20px]">
+        <CardContainer />
+        <CardContainer />
+        <CardContainer />
         <CardContainer />
         <CardContainer />
         <CardContainer />
       </main>
+      <CTAButton value="Load More" />
     </>
   );
 }
 
 function CardContainer() {
   return (
-    <div className="rounded-2xl flex flex-col  border border-black border-solid  shadow-2xl ">
-      <section className="w-full border-b border-black border-solid">
+    <>
+    <Link href="/tool-details">
+    <div className="rounded-2xl max-w-sm  flex flex-col  border border-black border-solid  shadow-2xl ">
+      <section className="w-full  border-b border-black border-solid">
         <Image
           alt="logo banner"
           loading="lazy"
@@ -33,10 +41,10 @@ function CardContainer() {
       </section>
       <section className="bg-[#F5F5F5] py-[30px] px-[20px] rounded-b-2xl">
         <div className="pb-[15px] flex flex-1 flex-row justify-between">
-          <h1 className="font-bold">GTmetrix</h1>
+          <h1 className="font-bold text-lg md:text-2xl">GTmetrix</h1>
           <h1>👍 1</h1>
         </div>
-        <article className="text-sm">
+        <article className="text-base md:text-xl ">
           <p>
             GTmetrix was developed by Carbon60 as a tool for customers to easily
             test the performance of their webpages.
@@ -45,14 +53,16 @@ function CardContainer() {
             Other
           </button>
         </article>
-        <div className="text-white text-sm font-semibold flex justify-between items-center">
+        <div className="text-white  font-semibold flex justify-between items-center text-base md:text-xl">
           <button className="px-5 py-2 rounded-full bg-DarkOrange ">
             Visit Website
           </button>
           <BsBookmark size={24} color="black" />
-
         </div>
       </section>
     </div>
+    </Link>
+    </>
+
   );
 }
