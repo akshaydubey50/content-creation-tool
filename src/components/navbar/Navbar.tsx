@@ -64,10 +64,10 @@ export default function Navbar() {
       <nav className="bg-white z-30 relative shadow-md w-full px-5 lg:px-10">
         <div className="flex justify-between py-4 lg:px-4 lg:py-6">
           <div>
-            <h2 className="text-xl lg:text-2xl font-bold">Content Creation</h2>
+            <h2 className="text-Title-Large lg:text-Title-Larger font-bold">Content Creation</h2>
           </div>
           {/* menubar in large screen */}
-          <ul className="hidden text-lg lg:flex flex-1 flex-wrap justify-end font-semibold gap-x-10">
+          <ul className="hidden text-Title-Large lg:flex flex-1 flex-wrap justify-end font-semibold gap-x-10">
             {menuItem.map((menu) => (
               <li key={menu.id}>
                 <Link href={menu.href}>{menu.label}</Link>
@@ -101,12 +101,12 @@ export default function Navbar() {
       </nav>
       {/* Mobile View Sidebar */}
       <aside
-        className={`fixed top-0 z-40 h-full w-screen bg-white text-black text-xl transform transition-transform duration-500 ${
+        className={`fixed top-0 z-40 h-full w-screen bg-white text-black text-Title-Large transform transition-transform duration-500 overflow-hidden ${
           isMenu ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="p-3 flex my-2">
-          <h2 className="text-2xl font-bold">Content Creation</h2>
+          <h2 className="text-Title-Larger font-bold">Content Creation</h2>
           <button
             title="close"
             onClick={crossHandler}
@@ -126,6 +126,20 @@ export default function Navbar() {
               </Link>
             </li>
           ))}
+          {!session && (
+              <li className="py-3 px-3 font-medium">
+                <span className="px-4 border-l-4 border-DarkOrange border-solid">
+                  <button onClick={togglePopup}>Login</button>
+                </span>
+              </li>
+            )}
+            {session && (
+              <li className="py-3 px-3 font-medium">
+                <span className="px-4 border-l-4 border-DarkOrange border-solid">
+                  <button onClick={logout}>Logout</button>
+                </span>
+              </li>
+            )}
         </ul>
       </aside>
     </>

@@ -43,8 +43,7 @@ export default function ProudctCard() {
   return (
     <>
       <main
-        className="px-[30px] lg:px-[100px] grid grid-cols-1 gap-y-5 md:grid-cols-2  
-      md:gap-x-6 md:gap-y-5 lg:grid-cols-3 lg:gap-x-10   justify-center my-[20px]"
+        className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-14 2xl:px-0"
       >
         {data &&
           data.slice(0, visibleItem).map((item) => {
@@ -81,7 +80,7 @@ function CardContainer({ img, title, description, tag, link }: Product) {
   return (
     <>
     <Link href="/tool-details">
-    <div className="rounded-2xl max-w-sm  flex flex-col  border border-black border-solid  shadow-2xl ">
+    <div className="rounded-2xl max-w-sm  flex flex-col  border border-black border-solid  shadow-2xl">
       <section className="w-full  border-b border-black border-solid">
         <Image
           alt="logo banner"
@@ -98,17 +97,17 @@ function CardContainer({ img, title, description, tag, link }: Product) {
       </section>
       <section className="bg-[#F5F5F5] py-[30px] px-[20px] rounded-b-2xl">
         <div className="pb-[15px] flex flex-1 flex-row justify-between">
-          <h1 className="font-bold text-lg md:text-2xl">{title}</h1>
+          <h1 className="font-bold text-Title-Medium md:text-Title-Large">{title}</h1>
           <h1>👍 1</h1>
         </div>
-        <article className="text-base md:text-xl">
+        <article className="text-Description">
           <p>{description}</p>
-          <button className="bg-white rounded-full border border-solid border-black my-6 px-4 py-1">
+          <button className="bg-white rounded-full  text-tags font-medium border border-solid border-black my-6 px-4 py-1">
             {tag}
           </button>
         </article>
-        <div className="text-white font-semibold flex 
-        justify-between items-center text-base md:text-xl">
+        <div className="text-white text-tags font-semibold flex 
+        justify-between items-center ">
           <Link
             href={link}
             target="_blank"
