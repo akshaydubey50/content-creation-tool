@@ -1,9 +1,10 @@
+"use client";
 import Navbar from "@/components/navbar/Navbar";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { ProductContextProvider } from "@/lib/productContext";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,8 +18,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <main>{children}</main>
+      <body className="">
+        <Navbar />
+        <ProductContextProvider>
+          <main>{children}</main>
+        </ProductContextProvider>
         <div>Footer</div>
       </body>
     </html>
