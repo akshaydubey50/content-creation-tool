@@ -8,7 +8,7 @@ import AirtableModel from "@/models/airtableModel";
 import CTAButton from "../button/CTAButton";
 
 type Product = {
-  img: string;
+  // url: string;
   title: string;
   description: string;
   tag: string;
@@ -48,10 +48,11 @@ export default function ProudctCard() {
         {data &&
           data.slice(0, visibleItem).map((item) => {
             if (item?.fields?.Description?.trim() !== "") {
+              console.log(item);
               return (
                 <CardContainer
                   key={item.id}
-                  img=""
+                  // url={item.fields.ToolImage.url}
                   title={item.fields.Name}
                   description={item.fields.Description}
                   tag={item.fields.Tags}
@@ -76,13 +77,16 @@ export default function ProudctCard() {
   );
 }
 
-function CardContainer({ img, title, description, tag, link }: Product) {
+function CardContainer({  title, description, tag, link }: Product) {
+  // console.log(img[0].url);
   return (
     <>
     <Link href="/tool-details">
     <div className="rounded-2xl max-w-sm  flex flex-col  border border-black border-solid  shadow-2xl">
       <section className="w-full  border-b border-black border-solid">
         <Image
+        src="https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Ff7d95ad62eb920e10e24d9622cace8f1.cdn.bubble.io%2Ff1679057707435x141688706130410850%2Fai-copywriting-copy.ai.png?w=768&h=407&auto=enhance&dpr=1&q=100&fit=max"
+          // src={img}
           alt="logo banner"
           loading="lazy"
           width="400"
@@ -90,8 +94,6 @@ function CardContainer({ img, title, description, tag, link }: Product) {
           decoding="async"
           data-nimg="1"
           className="rounded-t-xl w-full"
-          // src={img}
-          src="https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Ff7d95ad62eb920e10e24d9622cace8f1.cdn.bubble.io%2Ff1679057707435x141688706130410850%2Fai-copywriting-copy.ai.png?w=768&h=407&auto=enhance&dpr=1&q=100&fit=max"
           //   style="color: transparent"
         />
       </section>

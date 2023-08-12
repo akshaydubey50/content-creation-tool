@@ -7,5 +7,12 @@ export default interface AirtableModel {
     Name: string;
     WebsiteLink: string;
     Description: string;
+    ToolImage:{
+      url:ImageUrl[];
+    }
   };
+}
+
+interface ImageUrl {
+  url:string
 }

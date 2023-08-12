@@ -15,16 +15,16 @@ export default function FilterSection() {
         {/* Dropdown */}
         <div className="flex justify-between items-center space-x-5 w-full">
           <div className="md:w-1/3 lg:w-1/3 ">
-            <button className="bg-DarkOrange  px-5 lg:px-8 py-2 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-medium w-full">
+            <button className="bg-DarkOrange  px-5 lg:px-8 py-2 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-medium w-full text-center">
               All
             </button>
           </div>
-          <div className="bg-orange-200  rounded-full px-1 font-medium  py-2 border-2 border-DarkOrange border-solid md:w-full lg:w-full ">
+          <div className="bg-orange-200  rounded-full px-5 font-medium  py-2 border-2 border-DarkOrange border-solid md:w-full lg:w-full ">
             <select
               title="select"
               name=""
               id=""
-              className="bg-transparent  focus:outline-none text-black w-full "
+              className="bg-transparent  focus:outline-none text-black w-full  text-center"
             >
               <option defaultValue="Category">Category </option>
               <option value="1">1</option>
@@ -34,12 +34,12 @@ export default function FilterSection() {
               <option value="5">5</option>
             </select>
           </div>
-          <div className="bg-orange-200  rounded-full px-3 font-medium  py-2 border-2 border-DarkOrange border-solid md:w-full lg:w-full ">
+          <div className="bg-orange-200  rounded-full px-5 font-medium  py-2 border-2 border-DarkOrange border-solid md:w-full lg:w-full ">
             <select
               title="Price"
               name=""
               id=""
-              className="bg-transparent  focus:outline-none text-black w-full"
+              className="bg-transparent  focus:outline-none text-black w-full text-center"
             >
               <option defaultValue="Price">Price</option>
               <option value="">2</option>
@@ -51,7 +51,7 @@ export default function FilterSection() {
         </div>
         <div className="md:flex lg:none space-x-5 justify-between  items-center w-full">
           <div className="md:w-1/3">
-            <button className="bg-DarkOrange whitespace-nowrap px-2  py-2 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-medium w-full">
+            <button className="bg-DarkOrange whitespace-nowrap px-5  py-2 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-medium w-full text-center">
               Clear Filters
             </button>
           </div>
