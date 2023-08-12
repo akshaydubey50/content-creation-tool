@@ -3,11 +3,12 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { BsBookmark } from "react-icons/bs";
 import Link from "next/link";
-import axios from "axios";
 import AirtableModel from "@/models/airtableModel";
 import CTAButton from "../button/CTAButton";
+import { useApiDataContext } from "@/lib/productContext";
 
 type Product = {
+  id: string;
   url: string;
   title: string;
   description: string;
@@ -17,24 +18,9 @@ type Product = {
 
 export default function ProudctCard() {
   const [visibleItem, setVisibleItem] = useState(9);
-  const [data, setData] = useState<AirtableModel[]>();
+  const { apiData } = useApiDataContext();
 
-  // let i: number = 0;
-  async function fetchData() {
-    if (data == undefined || data == null) {
-      const response = await axios.get("/api/airtable");
-      setData(response.data.filterData);
-
-      console.log(data);
-    }
-    /*  if (typeof window === "undefined") {
-        // Server-side rendering
-        return null;
-      } */
-  }
-  useEffect(() => {
-    fetchData();
-  }, [visibleItem, data]);
+  // useEffect(() => {}, [apiData]);
 
   async function loadMore() {
     setVisibleItem(visibleItem + 9);
@@ -42,15 +28,17 @@ export default function ProudctCard() {
 
   return (
     <>
-      <main className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-14 2xl:px-0">
-        {data &&
-          data.slice(0, visibleItem).map((item) => {
+      <main
+        className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
+      lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-14 2xl:px-0"
+      >
+        {apiData &&
+          apiData.slice(0, visibleItem).map((item: AirtableModel) => {
             if (item?.fields?.Description?.trim() !== "") {
-              console.log("img url:::", item.fields.ToolImage[0].url);
-
               return (
                 <CardContainer
                   key={item.id}
+                  id={item.id}
                   url={item.fields.ToolImage[0].url}
                   title={item.fields.Name}
                   description={item.fields.Description}
@@ -61,13 +49,14 @@ export default function ProudctCard() {
             }
           })}
 
-        {!data && (
-          <div>
-            <h1 className="text-3xl text-center font-bold">Loading....</h1>
-          </div>
-        )}
+        {!apiData ||
+          (apiData.length == 0 && (
+            <div>
+              <h1 className="text-3xl text-center font-bold">Loading....</h1>
+            </div>
+          ))}
       </main>
-      {visibleItem <= data?.length && (
+      {apiData !== undefined && visibleItem <= apiData.length && (
         <div onClick={loadMore}>
           <CTAButton />
         </div>
@@ -76,11 +65,22 @@ export default function ProudctCard() {
   );
 }
 
-function CardContainer({ url, title, description, tag, link }: Product) {
-  console.log("from CArad cintaianer", url);
+function CardContainer({ id, url, title, description, tag, link }: Product) {
+  const formattedTitle = title.toLowerCase().replace(/\s/g, "");
+  /* .replace(/\.(?:\w+)$/, ""); */
+  console.log("URL ENCOEDD:::", encodeURIComponent(title));
   return (
     <>
-      <Link href="/tool-details">
+      <Link
+        href={{
+          pathname: `/tool/${formattedTitle}`,
+          query: {
+            id: id,
+          },
+        }}
+        /* as={`/tool/${formattedTitle}`}
+        passHref */
+      >
         <div
           className="rounded-2xl max-w-sm  flex flex-col  border border-black 
         border-solid  shadow-2xl"
