@@ -23,6 +23,7 @@
     "eslint-config-next": "13.4.9",
     "next": "13.4.9",
     "postcss": "8.4.25",
+    "puppeteer": "^21.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.10.1",
@@ -31,6 +32,7 @@
     "typescript": "5.1.6"
   },
   "devDependencies": {
-    "supabase": "^1.77.9"
+    "supabase": "^1.77.9",
+    "urlbox": "^1.3.3"
   }
 }

@@ -3,10 +3,10 @@ import FilterSection from "@/components/filter/FilterSection";
 import ProductCard from "@/components/card/ProductCard";
 import Navbar from "@/components/navbar/Navbar";
 
-export default function Home() {
+  export default function Home() {
   return (
     <div>
-      <Navbar />
+      {/* <Navbar /> */}
       <HeroSection />
       <FilterSection />
       <ProductCard />
