@@ -19,9 +19,6 @@ type Product = {
 export default function ProudctCard({ filterData, categoryData }: any) {
   const [visibleItem, setVisibleItem] = useState(9);
   const { apiData } = useApiDataContext();
-
-  const { apiData } = useApiDataContext();
-
   console.log('ProductCard filterdata>>>', filterData);
 
   async function loadMore() {
@@ -68,12 +65,13 @@ export default function ProudctCard({ filterData, categoryData }: any) {
               return (
                 <CardContainer
                   key={item.id}
-                  // url={item.fields.ToolImage.url}
+                  id={item.id}
+                  url={item.fields.ToolImage[0].url}
                   title={item.fields.Name}
                   description={item.fields.Description}
                   tag={item.fields.Tags}
-                  link={item.fields.WebsiteLink}
-                />
+                  link={item.fields.WebsiteLink} 
+                  />
               );
             }
           })}
@@ -84,12 +82,13 @@ export default function ProudctCard({ filterData, categoryData }: any) {
             return (
               <CardContainer
                 key={item.id}
-                // url={item.fields.ToolImage.url}
+                id={item.id}
+                url={item.fields.ToolImage[0].url}
                 title={item.fields.Name}
                 description={item.fields.Description}
                 tag={item.fields.Tags}
                 link={item.fields.WebsiteLink}
-              />
+                />
             );
           })
         }
@@ -127,24 +126,24 @@ export default function ProudctCard({ filterData, categoryData }: any) {
 
       {getProductByCategory() !== null && !(getProductByCategory()!.length === visibleItem) && visibleItem < getProductByCategory()!.length && (
         <div onClick={loadMore}>
-          <CTAButton value={`Load More Category ${getProductByCategory()!.length}`} />
+          <CTAButton value={"Load More"} />
         </div>
       )}
       {visibleItem < filterData?.length && (
         <div onClick={loadMore}>
-          <CTAButton value={`Load More Filter ${filterData?.length}`} />
+          <CTAButton value={"Load More"} />
         </div>
       )}
       {visibleItem <= apiData?.length && (getProductByCategory() === null || getProductByCategory()!.length === 0) && filterData?.length === 0 && (
         <div onClick={loadMore}>
-          <CTAButton value={`Load More All ${apiData?.length}`} />
+          <CTAButton value={"Load More"} />
         </div>
       )}
     </>
   );
 }
 
-function CardContainer({ id, url, title, description, tag, link }: Product) {
+export function CardContainer({ id, url, title, description, tag, link }: Product) {
   const formattedTitle = title.toLowerCase().replace(/\s/g, "");
   /* .replace(/\.(?:\w+)$/, ""); */
   console.log("URL ENCOEDD:::", encodeURIComponent(title));
