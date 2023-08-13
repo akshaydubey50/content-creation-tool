@@ -64,7 +64,11 @@ export default function Navbar() {
       <nav className="bg-white z-30 relative shadow-md w-full px-5 lg:px-10">
         <div className="flex justify-between py-4 lg:px-4 lg:py-6">
           <div>
-            <h2 className="text-Title-Large lg:text-Title-Larger font-bold">Content Creation</h2>
+            <Link href="/">
+              <h2 className="text-Title-Large lg:text-Title-Larger font-bold">
+                Content Creation
+              </h2>
+            </Link>
           </div>
           {/* menubar in large screen */}
           <ul className="hidden text-Title-Large lg:flex flex-1 flex-wrap justify-end font-semibold gap-x-10">
@@ -127,19 +131,19 @@ export default function Navbar() {
             </li>
           ))}
           {!session && (
-              <li className="py-3 px-3 font-medium">
-                <span className="px-4 border-l-4 border-DarkOrange border-solid">
-                  <button onClick={togglePopup}>Login</button>
-                </span>
-              </li>
-            )}
-            {session && (
-              <li className="py-3 px-3 font-medium">
-                <span className="px-4 border-l-4 border-DarkOrange border-solid">
-                  <button onClick={logout}>Logout</button>
-                </span>
-              </li>
-            )}
+            <li className="py-3 px-3 font-medium">
+              <span className="px-4 border-l-4 border-DarkOrange border-solid">
+                <button onClick={togglePopup}>Login</button>
+              </span>
+            </li>
+          )}
+          {session && (
+            <li className="py-3 px-3 font-medium">
+              <span className="px-4 border-l-4 border-DarkOrange border-solid">
+                <button onClick={logout}>Logout</button>
+              </span>
+            </li>
+          )}
         </ul>
       </aside>
     </>

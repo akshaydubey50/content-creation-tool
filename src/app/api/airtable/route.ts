@@ -4,6 +4,9 @@ import axios from "axios";
 import { AirtableConf } from "@/conf/conf";
 
 export async function GET(request: Request) {
+  // check if req is having any id
+  // if yes then grab and send the details of that product
+  // else send all list of product
   const headers = {
     Authorization: `Bearer ${AirtableConf.BEARER_TOKEN}`,
   };

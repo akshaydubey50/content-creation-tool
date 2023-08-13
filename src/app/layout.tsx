@@ -19,10 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="">
+        <Navbar />
         <ProductContextProvider>
-            <main>{children}</main>
-            <div>Footer</div>
+          <main>{children}</main>
         </ProductContextProvider>
+        <div>Footer</div>
       </body>
     </html>
   );
