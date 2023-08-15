@@ -4,7 +4,7 @@ import {
   createClientComponentClient,
   createRouteHandlerClient,
 } from "@supabase/auth-helpers-nextjs";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { ImCross } from "react-icons/im";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -12,6 +12,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 export default function Navbar() {
   const supabase = createClientComponentClient();
   const [session, setSession] = useState<Session>();
+  const memoizedIsUserLoggedIn = useCallback(isUserLoggedIn, [supabase.auth]);
   async function isUserLoggedIn() {
     const {
       data: { session },
@@ -34,8 +35,10 @@ export default function Navbar() {
   }
 
   useEffect(() => {
-    if (!session) isUserLoggedIn();
-  }, [session]);
+    if (!session) {
+      memoizedIsUserLoggedIn();
+    }
+  }, [session, memoizedIsUserLoggedIn]);
 
   const menuItem = [
     { id: 1, label: "All Program", href: "/" },

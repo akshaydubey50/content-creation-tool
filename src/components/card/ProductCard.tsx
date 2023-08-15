@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { BsBookmark } from "react-icons/bs";
 import Link from "next/link";
@@ -20,35 +20,35 @@ export default function ProudctCard({ filterData, categoryData }: any) {
   const { apiData } = useApiDataContext();
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();
 
-  console.log('categoryData>>>>>>>>', categoryData)
-
   async function loadMore() {
-    if (getProductByCategory(categoryData) !== null && visibleItem < getProductByCategory(categoryData)!.length) {
+    if (
+      getProductByCategory(categoryData) !== null &&
+      visibleItem < getProductByCategory(categoryData)!.length
+    ) {
       setVisibleItem(visibleItem + 9);
     }
     if (visibleItem < filterData!.length || visibleItem < apiData?.length) {
       setVisibleItem(visibleItem + 9);
     }
   }
-  console.log('filterData', filterData, 'categoryData', categoryData, 'apiData', apiData);
+
+  const getProductByCategory = useCallback(
+    (categoryType: string): AirtableModel[] | null => {
+      if (categoryType !== "") {
+        return apiData.filter((item: AirtableModel) => {
+          if (item?.fields?.Tags[0] === categoryType) {
+            return categoryType;
+          }
+        });
+      }
+      return null;
+    },
+    [apiData]
+  );
 
   useEffect(() => {
     getProductByCategory(categoryData);
-    // if (getProductByCategory() !== null) {
-    //   setVisibleItem(getProductByCategory()!.length < 9 ? getProductByCategory()!.length : 9)
-    // }
-  }, [filterData, categoryData, visibleItem])
-
-  const getProductByCategory = (categoryType:string): AirtableModel[] | null => {
-    if (categoryData !== "") {
-      return apiData.filter((item: AirtableModel) => {
-        if (item?.fields?.Tags[0] === categoryData) {
-          return categoryData
-        }
-      })
-    }
-    return null;
-  }
+  }, [filterData, categoryData, visibleItem, getProductByCategory]);
 
   return (
     <>
@@ -57,7 +57,9 @@ export default function ProudctCard({ filterData, categoryData }: any) {
       lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-14 2xl:px-0"
       >
         {/* All data cards listed when filter & category values is empty all data listed on api call */}
-        {(filterData?.length <= 0 && categoryData?.length <= 0) && apiData &&
+        {filterData?.length <= 0 &&
+          categoryData?.length <= 0 &&
+          apiData &&
           apiData.slice(0, visibleItem).map((item: AirtableModel) => {
             if (item?.fields?.Description?.trim() !== "") {
               // console.log(item);
@@ -76,21 +78,22 @@ export default function ProudctCard({ filterData, categoryData }: any) {
           })}
 
         {/*on  Category card listed choosing dropdown value */}
-        {
-          getProductByCategory(categoryData) && getProductByCategory(categoryData)?.slice(0, visibleItem).map((item) => {
-            return (
-              <CardContainer
-                key={item.id}
-                id={item.id}
-                url={item.fields.ToolImage[0].url}
-                title={item.fields.Name}
-                description={item.fields.Description}
-                tag={item.fields.Tags}
-                link={item.fields.WebsiteLink}
-              />
-            );
-          })
-        }
+        {getProductByCategory(categoryData) &&
+          getProductByCategory(categoryData)
+            ?.slice(0, visibleItem)
+            .map((item) => {
+              return (
+                <CardContainer
+                  key={item.id}
+                  id={item.id}
+                  url={item.fields.ToolImage[0].url}
+                  title={item.fields.Name}
+                  description={item.fields.Description}
+                  tag={item.fields.Tags}
+                  link={item.fields.WebsiteLink}
+                />
+              );
+            })}
 
         {/* Displaying filtered data if input field has some value*/}
         {filterData?.length > 0 &&
@@ -117,33 +120,58 @@ export default function ProudctCard({ filterData, categoryData }: any) {
           </div>
         )}
       </main>
-      {filterData === null && (<div>
-        <h1 className="text-3xl font-bold  text-center" > No search result found</h1>
-      </div>)}
-
-      {/* Load More Button for Category Base Dropdown Value  */}
-      {getProductByCategory(categoryData) !== null && !(getProductByCategory(categoryData)!.length === visibleItem) && visibleItem < getProductByCategory(categoryData)!.length && (
-        <div onClick={loadMore}>
-          <CTAButton value={`Load More Category ${getProductByCategory(categoryData)!.length - visibleItem}`} />
+      {filterData === null && (
+        <div>
+          <h1 className="text-3xl font-bold  text-center">
+            {" "}
+            No search result found
+          </h1>
         </div>
       )}
+
+      {/* Load More Button for Category Base Dropdown Value  */}
+      {getProductByCategory(categoryData) !== null &&
+        !(getProductByCategory(categoryData)!.length === visibleItem) &&
+        visibleItem < getProductByCategory(categoryData)!.length && (
+          <div onClick={loadMore}>
+            <CTAButton
+              value={`Load More Category ${
+                getProductByCategory(categoryData)!.length - visibleItem
+              }`}
+            />
+          </div>
+        )}
       {/* Load More Button for Filter/Search Base  Value  */}
       {visibleItem < filterData?.length && (
         <div onClick={loadMore}>
-          <CTAButton value={`Load More Filter ${filterData?.length - visibleItem}`} />
+          <CTAButton
+            value={`Load More Filter ${filterData?.length - visibleItem}`}
+          />
         </div>
       )}
       {/* Load More Button for All Data */}
-      {visibleItem <= apiData?.length && (getProductByCategory(categoryData) === null || getProductByCategory(categoryData)!.length === 0) && filterData?.length === 0 && (
-        <div onClick={loadMore}>
-          <CTAButton value={`Load More All ${apiData?.length - visibleItem}`} />
-        </div>
-      )}
+      {visibleItem <= apiData?.length &&
+        (getProductByCategory(categoryData) === null ||
+          getProductByCategory(categoryData)!.length === 0) &&
+        filterData?.length === 0 && (
+          <div onClick={loadMore}>
+            <CTAButton
+              value={`Load More All ${apiData?.length - visibleItem}`}
+            />
+          </div>
+        )}
     </>
   );
 }
 
-export function CardContainer({ id, url, title, description, tag, link }: Product) {
+export function CardContainer({
+  id,
+  url,
+  title,
+  description,
+  tag,
+  link,
+}: Product) {
   const formattedTitle = title.toLowerCase().replace(/\s/g, "");
   /* .replace(/\.(?:\w+)$/, ""); */
   console.log("URL ENCOEDD:::", encodeURIComponent(title));
@@ -171,7 +199,7 @@ export function CardContainer({ id, url, title, description, tag, link }: Produc
               decoding="async"
               data-nimg="1"
               className="rounded-t-2xl w-full object-cover"
-            //   style="color: transparent"
+              //   style="color: transparent"
             />
           </section>
           <section className="bg-[#F5F5F5] py-[30px] px-[20px] rounded-b-2xl">
@@ -201,7 +229,7 @@ export function CardContainer({ id, url, title, description, tag, link }: Produc
               >
                 Visit Website
               </Link>
-              <button type="button">
+              <button title="Bookmark" type="button">
                 <BsBookmark size={24} color="black" />
               </button>
             </div>

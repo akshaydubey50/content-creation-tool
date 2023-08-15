@@ -4,7 +4,7 @@ import ProudctCard from "@/components/card/ProductCard";
 import { useApiDataContext } from "@/lib/productContext";
 import AirtableModel from "@/models/airtableModel";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 export default function ToolDetails() {
   const id = useSearchParams().get("id");
@@ -12,21 +12,20 @@ export default function ToolDetails() {
   const [product, setProductData] = useState<AirtableModel>();
   const localCategoryData = product && product!.fields.Tags[0];
 
-  async function getProductFromId() {
-    apiData.filter((product: AirtableModel) => {
-      if (product.id === id) {
-        setProductData(product);
-        return product;
-      }
-    });
-  }
+  const getProductFromId = useCallback(() => {
+    const productMatched = apiData.find(
+      (product: AirtableModel) => product.id === id
+    );
+    if (productMatched) {
+      setProductData(productMatched);
+    }
+  }, [id, apiData]);
 
   useEffect(() => {
-    console.log("APIII::::CONTEXT:::::", apiData);
-    if (product === undefined) {
+    if (!product) {
       getProductFromId();
     }
-  }, [apiData]);
+  }, [product, id, apiData, getProductFromId]);
 
   return (
     <>
@@ -41,7 +40,8 @@ export default function ToolDetails() {
       )}
       {product && (
         <h1 className="text-2xl md:text-3xl lg:text-4xl text-center  my-10 w-full font-bold">
-          Similar <span className="text-DarkOrange">{product!.fields.Tags}</span> Tools
+          Similar{" "}
+          <span className="text-DarkOrange">{product!.fields.Tags}</span> Tools
         </h1>
       )}
       <ProudctCard categoryData={localCategoryData} filterData={[]} />

@@ -18,7 +18,7 @@ export const ProductContextProvider = ({ children }) => {
     }
 
     fetchData();
-  }, []);
+  }, [setApiData]);
 
   return (
     <ProductContext.Provider value={{ apiData }}>
