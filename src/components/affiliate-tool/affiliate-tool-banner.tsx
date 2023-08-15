@@ -23,7 +23,7 @@ export default function AffiliateToolBanner({
         >
           <div
             className="aftl-left-section border border-black border-solid 
-          rounded-t-xl md:xl w-800"
+          rounded-t-xl md:xl w-400 h-auto"
           >
             <Image
               src={url}
@@ -33,7 +33,7 @@ export default function AffiliateToolBanner({
               height="400"
               decoding="async"
               data-nimg="1"
-              className="rounded-t-xl w-full h-full  object-contain"
+              className="rounded-t-xl w-full h-full  object-cover"
               //   style="color: transparent"
             />
           </div>

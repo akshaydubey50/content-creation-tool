@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-export default function CTAButton() {
+export default function CTAButton({value}:any) {
   return (
     <React.Fragment>
       <div
@@ -12,7 +12,7 @@ export default function CTAButton() {
           className="bg-DarkOrange hover:bg-light-yellow focus:bg-DarkOrange 
         rounded-full px-6 py-2"
         >
-          Load more
+          {value}
         </button>
       </div>
     </React.Fragment>

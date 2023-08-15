@@ -1,0 +1,19 @@
+import React, { useContext, createContext, useState, useEffect } from "react";
+
+export const VisibleItemData = createContext();
+
+export function VisibleItemContextProvider({ children }) {
+  const [visibleItem, setVisibleItem] = useState(9);
+ 
+  return (
+    <>
+      <VisibleItemData.Provider value={{ visibleItem,setVisibleItem }}>
+        {children}
+      </VisibleItemData.Provider>
+    </>
+  );
+}
+
+export const useVisibleItemContextData = () => {
+  return useContext(VisibleItemData);
+};
