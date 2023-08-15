@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Navbar from "@/components/navbar/Navbar";
 import "./globals.css";
@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ProductContextProvider } from "@/lib/productContext";
 import { VisibleItemContextProvider } from "@/lib/visibleItemContext";
+import Footer from "@/components/footer/Footer";
 
 export default function RootLayout({
   children,
@@ -17,11 +18,11 @@ export default function RootLayout({
       <body className="">
         <Navbar />
         <ProductContextProvider>
-         <VisibleItemContextProvider>
-          <main>{children}</main>
-         </VisibleItemContextProvider>
+          <VisibleItemContextProvider>
+            <main>{children}</main>
+          </VisibleItemContextProvider>
         </ProductContextProvider>
-        <div>Footer</div>
+        <Footer />
       </body>
     </html>
   );
