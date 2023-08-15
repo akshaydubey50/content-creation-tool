@@ -5,11 +5,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ProductContextProvider } from "@/lib/productContext";
-
-
-// const inter = Inter({ subsets: ["latin"] });
-
-
+import { VisibleItemContextProvider } from "@/lib/visibleItemContext";
 
 export default function RootLayout({
   children,
@@ -21,7 +17,9 @@ export default function RootLayout({
       <body className="">
         <Navbar />
         <ProductContextProvider>
+         <VisibleItemContextProvider>
           <main>{children}</main>
+         </VisibleItemContextProvider>
         </ProductContextProvider>
         <div>Footer</div>
       </body>

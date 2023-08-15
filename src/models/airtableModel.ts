@@ -2,7 +2,7 @@ export default interface AirtableModel {
   id: string;
   fields: {
     Tags: string;
-    Price: string;
+    Price: string[];
     Status: string;
     Name: string;
     WebsiteLink: string;
@@ -14,3 +14,4 @@ export default interface AirtableModel {
 interface ImageUrl {
   url: string;
 }
+

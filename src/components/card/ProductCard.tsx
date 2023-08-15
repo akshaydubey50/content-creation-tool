@@ -6,6 +6,7 @@ import Link from "next/link";
 import AirtableModel from "@/models/airtableModel";
 import CTAButton from "../button/CTAButton";
 import { useApiDataContext } from "@/lib/productContext";
+import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 
 type Product = {
   id: string;
@@ -15,32 +16,30 @@ type Product = {
   tag: string;
   link: string;
 };
-
 export default function ProudctCard({ filterData, categoryData }: any) {
-  const [visibleItem, setVisibleItem] = useState(9);
   const { apiData } = useApiDataContext();
-  console.log('ProductCard filterdata>>>', filterData);
+  const { visibleItem, setVisibleItem } = useVisibleItemContextData();
+
+  console.log('categoryData>>>>>>>>', categoryData)
 
   async function loadMore() {
-    if (getProductByCategory() !== null && visibleItem < getProductByCategory()!.length) {
+    if (getProductByCategory(categoryData) !== null && visibleItem < getProductByCategory(categoryData)!.length) {
       setVisibleItem(visibleItem + 9);
     }
     if (visibleItem < filterData!.length || visibleItem < apiData?.length) {
       setVisibleItem(visibleItem + 9);
     }
   }
-
-  console.log('Product Category>>>>', categoryData)
   console.log('filterData', filterData, 'categoryData', categoryData, 'apiData', apiData);
 
   useEffect(() => {
-    getProductByCategory();
+    getProductByCategory(categoryData);
     // if (getProductByCategory() !== null) {
     //   setVisibleItem(getProductByCategory()!.length < 9 ? getProductByCategory()!.length : 9)
     // }
-  }, [filterData, categoryData])
+  }, [filterData, categoryData, visibleItem])
 
-  const getProductByCategory = (): AirtableModel[] | null => {
+  const getProductByCategory = (categoryType:string): AirtableModel[] | null => {
     if (categoryData !== "") {
       return apiData.filter((item: AirtableModel) => {
         if (item?.fields?.Tags[0] === categoryData) {
@@ -58,7 +57,7 @@ export default function ProudctCard({ filterData, categoryData }: any) {
       lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-14 2xl:px-0"
       >
         {/* All data cards listed when filter & category values is empty all data listed on api call */}
-        {filterData?.length <= 0 && categoryData?.length <= 0 && apiData &&
+        {(filterData?.length <= 0 && categoryData?.length <= 0) && apiData &&
           apiData.slice(0, visibleItem).map((item: AirtableModel) => {
             if (item?.fields?.Description?.trim() !== "") {
               // console.log(item);
@@ -70,15 +69,15 @@ export default function ProudctCard({ filterData, categoryData }: any) {
                   title={item.fields.Name}
                   description={item.fields.Description}
                   tag={item.fields.Tags}
-                  link={item.fields.WebsiteLink} 
-                  />
+                  link={item.fields.WebsiteLink}
+                />
               );
             }
           })}
 
         {/*on  Category card listed choosing dropdown value */}
         {
-          getProductByCategory() && getProductByCategory()?.slice(0, visibleItem).map((item) => {
+          getProductByCategory(categoryData) && getProductByCategory(categoryData)?.slice(0, visibleItem).map((item) => {
             return (
               <CardContainer
                 key={item.id}
@@ -88,7 +87,7 @@ export default function ProudctCard({ filterData, categoryData }: any) {
                 description={item.fields.Description}
                 tag={item.fields.Tags}
                 link={item.fields.WebsiteLink}
-                />
+              />
             );
           })
         }
@@ -112,31 +111,32 @@ export default function ProudctCard({ filterData, categoryData }: any) {
             }
           })}
 
-
-        {filterData === null && (<div>
-          <h2> No search result found</h2>
-        </div>)}
-
         {!apiData && (
           <div>
             <h1 className="text-3xl text-center font-bold">Loading....</h1>
           </div>
         )}
       </main>
+      {filterData === null && (<div>
+        <h1 className="text-3xl font-bold  text-center" > No search result found</h1>
+      </div>)}
 
-      {getProductByCategory() !== null && !(getProductByCategory()!.length === visibleItem) && visibleItem < getProductByCategory()!.length && (
+      {/* Load More Button for Category Base Dropdown Value  */}
+      {getProductByCategory(categoryData) !== null && !(getProductByCategory(categoryData)!.length === visibleItem) && visibleItem < getProductByCategory(categoryData)!.length && (
         <div onClick={loadMore}>
-          <CTAButton value={"Load More"} />
+          <CTAButton value={`Load More Category ${getProductByCategory(categoryData)!.length - visibleItem}`} />
         </div>
       )}
+      {/* Load More Button for Filter/Search Base  Value  */}
       {visibleItem < filterData?.length && (
         <div onClick={loadMore}>
-          <CTAButton value={"Load More"} />
+          <CTAButton value={`Load More Filter ${filterData?.length - visibleItem}`} />
         </div>
       )}
-      {visibleItem <= apiData?.length && (getProductByCategory() === null || getProductByCategory()!.length === 0) && filterData?.length === 0 && (
+      {/* Load More Button for All Data */}
+      {visibleItem <= apiData?.length && (getProductByCategory(categoryData) === null || getProductByCategory(categoryData)!.length === 0) && filterData?.length === 0 && (
         <div onClick={loadMore}>
-          <CTAButton value={"Load More"} />
+          <CTAButton value={`Load More All ${apiData?.length - visibleItem}`} />
         </div>
       )}
     </>
@@ -156,8 +156,6 @@ export function CardContainer({ id, url, title, description, tag, link }: Produc
             id: id,
           },
         }}
-        /* as={`/tool/${formattedTitle}`}
-        passHref */
       >
         <div
           className="rounded-2xl max-w-sm  flex flex-col  border border-black 
@@ -172,8 +170,8 @@ export function CardContainer({ id, url, title, description, tag, link }: Produc
               height="400"
               decoding="async"
               data-nimg="1"
-              className="rounded-t-xl w-full"
-              //   style="color: transparent"
+              className="rounded-t-2xl w-full object-cover"
+            //   style="color: transparent"
             />
           </section>
           <section className="bg-[#F5F5F5] py-[30px] px-[20px] rounded-b-2xl">
@@ -203,7 +201,9 @@ export function CardContainer({ id, url, title, description, tag, link }: Produc
               >
                 Visit Website
               </Link>
-              <BsBookmark size={24} color="black" />
+              <button type="button">
+                <BsBookmark size={24} color="black" />
+              </button>
             </div>
           </section>
         </div>
