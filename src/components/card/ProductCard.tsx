@@ -135,9 +135,8 @@ export default function ProudctCard({ filterData, categoryData }: any) {
         visibleItem < getProductByCategory(categoryData)!.length && (
           <div onClick={loadMore}>
             <CTAButton
-              value={`Load More Category ${
-                getProductByCategory(categoryData)!.length - visibleItem
-              }`}
+              value={`Load More Category ${getProductByCategory(categoryData)!.length - visibleItem
+                }`}
             />
           </div>
         )}
@@ -177,17 +176,18 @@ export function CardContainer({
   console.log("URL ENCOEDD:::", encodeURIComponent(title));
   return (
     <>
-      <Link
-        href={{
-          pathname: `/tool/${formattedTitle}`,
-          query: {
-            id: id,
-          },
-        }}
-      >
-        <div
-          className="rounded-2xl max-w-sm  flex flex-col  border border-black 
+
+      <div
+        className="rounded-2xl max-w-sm  flex flex-col  border border-black 
         border-solid  shadow-2xl"
+      >
+        <Link
+          href={{
+            pathname: `/tool/${formattedTitle}`,
+            query: {
+              id: id,
+            },
+          }}
         >
           <section className="w-full  border-b border-black border-solid">
             <Image
@@ -199,43 +199,43 @@ export function CardContainer({
               decoding="async"
               data-nimg="1"
               className="rounded-t-2xl w-full object-cover"
-              //   style="color: transparent"
+            //   style="color: transparent"
             />
           </section>
-          <section className="bg-[#F5F5F5] py-[30px] px-[20px] rounded-b-2xl">
-            <div className="pb-[15px] flex flex-1 flex-row justify-between">
-              <h1 className="font-bold text-Title-Medium md:text-Title-Large">
-                {title}
-              </h1>
-              <h1>👍 1</h1>
-            </div>
-            <article className="text-Description">
-              <p>{description}</p>
-              <button
-                className="bg-white rounded-full  text-tags font-medium border 
+        </Link>
+        <section className="bg-[#F5F5F5] py-[30px] px-[20px] rounded-b-2xl">
+          <div className="pb-[15px] flex flex-1 flex-row justify-between">
+            <h1 className="font-bold text-Title-Medium md:text-Title-Large">
+              {title}
+            </h1>
+            <h1>👍 1</h1>
+          </div>
+          <article className="text-Description">
+            <p>{description}</p>
+            <button
+              className="bg-white rounded-full  text-tags font-medium border 
               border-solid border-black my-6 px-4 py-1"
-              >
-                {tag}
-              </button>
-            </article>
-            <div
-              className="text-white text-tags font-semibold flex 
-        justify-between items-center "
             >
-              <Link
-                href={link}
-                target="_blank"
-                className="px-5 py-2 rounded-full bg-DarkOrange "
-              >
-                Visit Website
-              </Link>
-              <button title="Bookmark" type="button">
-                <BsBookmark size={24} color="black" />
-              </button>
-            </div>
-          </section>
-        </div>
-      </Link>
+              {tag}
+            </button>
+          </article>
+          <div
+            className="text-white text-tags font-semibold flex 
+        justify-between items-center "
+          >
+            <Link
+              href={link}
+              target="_blank"
+              className="px-5 py-2 rounded-full bg-DarkOrange "
+            >
+              Visit Website
+            </Link>
+            <button title="Bookmark" type="button">
+              <BsBookmark size={24} color="black" />
+            </button>
+          </div>
+        </section>
+      </div>
     </>
   );
 }

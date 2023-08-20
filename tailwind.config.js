@@ -17,6 +17,9 @@ module.exports = {
         DarkOrange: '#FF8C00',
         'light-gray':'#F2F2F2',
       },
+      fontFamily:{
+        poppins: ['var(--font-poppins)'],
+      },
       fontSize:{
         'Heading-Small':'1.25rem',
         'Heading-Medium':'1.875rem',
