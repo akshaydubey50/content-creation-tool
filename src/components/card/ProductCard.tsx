@@ -8,6 +8,7 @@ import AirtableModel from "@/models/airtableModel";
 import CTAButton from "../button/CTAButton";
 import { useApiDataContext } from "@/lib/productContext";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
+import VisitWebsite from "../visit-website/VisitWebsite";
 
 type Product = {
   id: string;
@@ -224,16 +225,7 @@ export function CardContainer({
             className="text-white text-Title-Medium  flex 
         justify-between items-center "
           >
-            <div className="flex rounded-full font-semibold bg-DarkOrange px-10 py-3 space-x-5">
-            <Link
-              href={link}
-              target="_blank"
-              className=""
-            >
-              Visit Website 
-            </Link>
-              <FiArrowUpRight size={24} color="white" />
-            </div>
+            <VisitWebsite url={link} />
             <button title="Bookmark" type="button">
               <BsBookmark size={24} color="black" />
             </button>

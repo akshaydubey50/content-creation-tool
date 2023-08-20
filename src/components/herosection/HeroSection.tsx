@@ -100,7 +100,7 @@ export default function HeroSection() {
                     onClick={handleSearchClick}
                   >
                     {isSearchFilled ? (
-                      <RiSearchFill size={40} color="black" />
+                      <RiSearchLine size={40} color="black" />
                     ) : (
                       <RiSearchLine size={40} color='black' />
                     )}
