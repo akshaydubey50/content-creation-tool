@@ -87,7 +87,7 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
               title="select"
               name=""
               id=""
-              className="bg-transparent  focus:outline-none text-black w-full"
+              className="bg-transparent  focus:outline-none text-black w-full text-center"
               onChange={selectedCategory}
               value={categoryValue}
             >
@@ -141,7 +141,7 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
         {/* Dropdown */}
         <div className="text-black lg:w-full ">
           <input
-            className="rounded-full w-full  border-2 outline-none px-3 py-1 font-medium border-black border-solid"
+            className="rounded-full w-full  border-2 outline-none px-3 py-2 font-medium border-black border-solid"
             type="text"
             placeholder="Search"
             value={searchQuery}
@@ -154,7 +154,7 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
               title="Category"
               name=""
               id=""
-              className="bg-transparent  focus:outline-none text-black w-full "
+              className="bg-transparent  focus:outline-none text-black w-full text-center"
               onChange={selectedCategory}
               value={categoryValue}
             >

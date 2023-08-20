@@ -5,6 +5,7 @@ import Image from "next/image";
 import { BsBookmark } from "react-icons/bs";
 import { Product } from "@/types/product";
 import Link from "next/link";
+import VisitWebsite from "../visit-website/VisitWebsite";
 
 export default function AffiliateToolBanner({
   url,
@@ -67,16 +68,10 @@ export default function AffiliateToolBanner({
         </div>
         <div
           className="flex justify-between md:justify-center md:space-x-20 
-        lg:justify-between   lg:w-1/3 lg:space-x-0 lg:pr-10 items-center"
+        lg:justify-between   lg:w-1/3 lg:space-x-0 lg:pr-10 items-center text-white"
         >
-          <div className="bg-DarkOrange rounded-full text-tags">
-            <Link
-              href={link}
-              className="px-6 md:px-8 py-2 text-white font-semibold "
-            >
-              Visit Website
-            </Link>
-          </div>
+           <VisitWebsite url={link} />
+         
           <BsBookmark size={24} color="black" />
         </div>
       </main>
