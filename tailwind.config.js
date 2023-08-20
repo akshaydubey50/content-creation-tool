@@ -14,8 +14,8 @@ module.exports = {
       },
       colors: {
         'light-yellow': '#FFA500',
-        DarkOrange: '#FF8C00',
-        'light-gray':'#F2F2F2',
+        'DarkOrange': '#FF8C00',
+        'light-gray':'#F5F5F5',
       },
       fontFamily:{
         poppins: ['var(--font-poppins)'],
@@ -30,6 +30,10 @@ module.exports = {
         'Title-Larger':'1.5rem',
         'Description':'1rem',
         'tags':'0.9rem',
+      },
+      lineHeight:{
+        '45':'2.813rem',
+        '90':'5.625rem'
       }
     },
   },

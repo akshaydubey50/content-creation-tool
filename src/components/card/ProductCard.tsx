@@ -2,6 +2,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { BsBookmark } from "react-icons/bs";
+import { FiArrowUpRight } from "react-icons/fi";
 import Link from "next/link";
 import AirtableModel from "@/models/airtableModel";
 import CTAButton from "../button/CTAButton";
@@ -54,7 +55,7 @@ export default function ProudctCard({ filterData, categoryData }: any) {
     <>
       <main
         className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
-      lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-14 2xl:px-0"
+      lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0"
       >
         {/* All data cards listed when filter & category values is empty all data listed on api call */}
         {filterData?.length <= 0 &&
@@ -203,7 +204,7 @@ export function CardContainer({
             />
           </section>
         </Link>
-        <section className="bg-[#F5F5F5] py-[30px] px-[20px] rounded-b-2xl">
+        <section className="bg-light-gray py-[30px] px-[20px] rounded-b-2xl">
           <div className="pb-[15px] flex flex-1 flex-row justify-between">
             <h1 className="font-bold text-Title-Medium md:text-Title-Large">
               {title}
@@ -220,16 +221,19 @@ export function CardContainer({
             </button>
           </article>
           <div
-            className="text-white text-tags font-semibold flex 
+            className="text-white text-Title-Medium  flex 
         justify-between items-center "
           >
+            <div className="flex rounded-full font-semibold bg-DarkOrange px-10 py-3 space-x-5">
             <Link
               href={link}
               target="_blank"
-              className="px-5 py-2 rounded-full bg-DarkOrange "
+              className=""
             >
-              Visit Website
+              Visit Website 
             </Link>
+              <FiArrowUpRight size={24} color="white" />
+            </div>
             <button title="Bookmark" type="button">
               <BsBookmark size={24} color="black" />
             </button>
