@@ -8,11 +8,11 @@ interface visiWebsite{
 }
 export default function VisitWebsite({url}:visiWebsite) {
   return (
-    <div className="flex rounded-full font-semibold bg-DarkOrange px-10 py-3 space-x-5">
+    <div className="flex rounded-full font-semibold bg-DarkOrange text-Title-Small px-4 md:px-6  py-3 space-x-5">
     <Link
       href={url}
       target="_blank"
-      className=""
+      className="flex-1"
     >
       Visit Website 
     </Link>
