@@ -1,5 +1,5 @@
 "use client";
-import AffiliateToolBanner from "@/components/affiliate-tool/affiliate-tool-banner";
+import ProductToolBanner from "@/components/product-tool/ProductToolBanner";
 import ProudctCard from "@/components/card/ProductCard";
 import { useApiDataContext } from "@/lib/productContext";
 import AirtableModel from "@/models/airtableModel";
@@ -11,11 +11,13 @@ export default function ToolDetails() {
   const { apiData } = useApiDataContext();
   const [product, setProductData] = useState<AirtableModel>();
   const localCategoryData = product && product!.fields.Tags[0];
-
+  console.log('localcatgeory', localCategoryData);
+  
   const getProductFromId = useCallback(() => {
     const productMatched = apiData.find(
       (product: AirtableModel) => product.id === id
     );
+    // console.log('@@productMatched',productMatched)
     if (productMatched) {
       setProductData(productMatched);
     }
@@ -30,8 +32,8 @@ export default function ToolDetails() {
   return (
     <>
       {product && (
-        <AffiliateToolBanner
-          url={product!.fields.ToolImage[0].url}
+        <ProductToolBanner
+          url={product!.fields.ToolImage}
           title={product!.fields.Name}
           description={product!.fields.Description}
           tag={product!.fields.Tags}

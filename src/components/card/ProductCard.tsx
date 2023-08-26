@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import Image from "next/image";
-import { BsBookmark } from "react-icons/bs";
+import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { FiArrowUpRight } from "react-icons/fi";
 import Link from "next/link";
 import AirtableModel from "@/models/airtableModel";
@@ -9,6 +9,7 @@ import CTAButton from "../button/CTAButton";
 import { useApiDataContext } from "@/lib/productContext";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import VisitWebsite from "../visit-website/VisitWebsite";
+import { useSearchParams } from "next/navigation";
 
 type Product = {
   id: string;
@@ -21,6 +22,7 @@ type Product = {
 export default function ProudctCard({ filterData, categoryData }: any) {
   const { apiData } = useApiDataContext();
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();
+  const id = useSearchParams().get("id");
 
   async function loadMore() {
     if (
@@ -38,7 +40,7 @@ export default function ProudctCard({ filterData, categoryData }: any) {
     (categoryType: string): AirtableModel[] | null => {
       if (categoryType !== "") {
         return apiData.filter((item: AirtableModel) => {
-          if (item?.fields?.Tags[0] === categoryType) {
+          if (item?.fields?.Tags[0] === categoryType && item?.id !== id) {
             return categoryType;
           }
         });
@@ -69,7 +71,7 @@ export default function ProudctCard({ filterData, categoryData }: any) {
                 <CardContainer
                   key={item.id}
                   id={item.id}
-                  url={item.fields.ToolImage[0].url}
+                  url={item.fields.ToolImage}
                   title={item.fields.Name}
                   description={item.fields.Description}
                   tag={item.fields.Tags}
@@ -88,7 +90,7 @@ export default function ProudctCard({ filterData, categoryData }: any) {
                 <CardContainer
                   key={item.id}
                   id={item.id}
-                  url={item.fields.ToolImage[0].url}
+                  url={item.fields.ToolImage}
                   title={item.fields.Name}
                   description={item.fields.Description}
                   tag={item.fields.Tags}
@@ -106,7 +108,7 @@ export default function ProudctCard({ filterData, categoryData }: any) {
                 <CardContainer
                   key={item.id}
                   id={item.id}
-                  url={item.fields.ToolImage[0].url}
+                  url={item.fields.ToolImage}
                   title={item.fields.Name}
                   description={item.fields.Description}
                   tag={item.fields.Tags}
@@ -173,7 +175,15 @@ export function CardContainer({
   tag,
   link,
 }: Product) {
+  console.log('url>>>',url)
   const formattedTitle = title.toLowerCase().replace(/\s/g, "");
+  const [isBookMarked, setIsBookMarked] = useState(false);
+
+  const handleBookMark =()=>{
+    setIsBookMarked(!isBookMarked);
+    console.log(' @@ bookmark',isBookMarked)
+  }
+
   /* .replace(/\.(?:\w+)$/, ""); */
   console.log("URL ENCOEDD:::", encodeURIComponent(title));
   return (
@@ -191,13 +201,13 @@ export function CardContainer({
             },
           }}
         >
-          <section className="w-full  border-b border-black border-solid">
+          <section className="  border-b border-black border-solid">
             <Image
               src={url}
               alt="logo banner"
               loading="lazy"
-              width="400"
-              height="400"
+              width="1280"
+              height="720"
               decoding="async"
               data-nimg="1"
               className="rounded-t-2xl w-full object-cover"
@@ -226,8 +236,9 @@ export function CardContainer({
         justify-between items-center "
           >
             <VisitWebsite url={link} />
-            <button title="Bookmark" type="button">
-              <BsBookmark size={24} color="black" />
+            <button title="Bookmark" type="button" onClick={handleBookMark}>
+              {isBookMarked ? (<BsBookmarkFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
+              ) : (<BsBookmark size={24} color="black" />)}
             </button>
           </div>
         </section>

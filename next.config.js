@@ -11,6 +11,7 @@ const nextConfig = {
       "images.unsplash.com",
       "v5.airtableusercontent.com",
       "d1muf25xaso8hp.cloudfront.net", // Add the domain here
+      "ik.imagekit.io",
     ],
   },
 };
