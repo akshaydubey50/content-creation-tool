@@ -7,7 +7,7 @@ import { Product } from "@/types/product";
 import Link from "next/link";
 import VisitWebsite from "../visit-website/VisitWebsite";
 
-export default function AffiliateToolBanner({
+export default function ProductToolBanner({
   url,
   title,
   description,
@@ -24,14 +24,14 @@ export default function AffiliateToolBanner({
         >
           <div
             className="aftl-left-section border border-black border-solid 
-          rounded-t-xl md:xl w-400 h-auto"
+          rounded-t-xl md:xl "
           >
             <Image
               src={url}
               alt="logo bannero"
               loading="lazy"
-              width="400"
-              height="400"
+              width="1280"
+              height="720"
               decoding="async"
               data-nimg="1"
               className="rounded-t-xl w-full h-full  object-cover"
