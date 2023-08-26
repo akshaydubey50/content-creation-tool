@@ -54,16 +54,16 @@ export default function HeroSection() {
           <div className="flex space-x-8 ">
             <div className="flex-1">
               
-              <div className="flex space-x-2 xl:space-x-12 ">
+              <div className="flex space-x-2  md:space-x-4 lg:space-x-8 xl:space-x-12 ">
                 <div className="flex flex-col place-items-center  space-y-4 cursor-pointer">
                   <button
                     className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6 ${isAllFilled ? 'bg-gray-200' : 'bg-gray-300'} hover:bg-opacity-75 focus:outline-none`}
                     onClick={handleAllClick}
                   >
                     {isAllFilled ? (
-                      <RiStackFill size={40} color="black" />
+                      <RiStackFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
                     ) : (
-                      <PiStack size={40} color='black' />
+                      <PiStack className="text-2xl md:text-3xl lg:text-4xl text-black" />
                     )}
                   </button>
                   <p className="font-medium text-Title-Small xl:text-Title-Medium">All</p>
@@ -74,9 +74,9 @@ export default function HeroSection() {
                     onClick={handleBookMarkClick}
                   >
                     {isBookMarkFilled ? (
-                      <BsBookmarkFill size={40} color="black" />
+                      <BsBookmarkFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
                     ) : (
-                      <BsBookmark size={40} color='black' />
+                      <BsBookmark className="text-2xl md:text-3xl lg:text-4xl text-black" />
                     )}
                   </button>
                   <p className="font-medium text-Title-Small xl:text-Title-Medium">Bookmark</p>
@@ -87,9 +87,9 @@ export default function HeroSection() {
                     onClick={handleVerifiedClick}
                   >
                     {isVerifiedFilled ? (
-                      <VscVerifiedFilled size={40} color="black" />
+                      <VscVerifiedFilled className="text-2xl md:text-3xl lg:text-4xl text-black" />
                     ) : (
-                      <VscVerified size={40} color='black' />
+                      <VscVerified className="text-2xl md:text-3xl lg:text-4xl text-black" />
                     )}
                   </button>
                   <p className="font-medium text-Title-Small xl:text-Title-Medium">Verified</p>
@@ -100,9 +100,9 @@ export default function HeroSection() {
                     onClick={handleSearchClick}
                   >
                     {isSearchFilled ? (
-                      <RiSearchLine size={40} color="black" />
+                      <RiSearchLine className="text-2xl md:text-3xl lg:text-4xl text-black" />
                     ) : (
-                      <RiSearchLine size={40} color='black' />
+                      <RiSearchLine className="text-2xl md:text-3xl lg:text-4xl text-black" />
                     )}
                   </button>
                   <p className="font-medium text-Title-Small xl:text-Title-Medium">Search</p>
