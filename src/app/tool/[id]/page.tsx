@@ -41,7 +41,7 @@ export default function ToolDetails() {
         />
       )}
       {product && (
-        <h1 className="text-2xl md:text-3xl lg:text-4xl text-center  my-10 w-full font-bold">
+        <h1 className="text-xl md:text-3xl lg:text-4xl text-center  my-6 md:my-8 w-full font-bold">
           Similar{" "}
           <span className="text-DarkOrange">{product!.fields.Tags}</span> Tools
         </h1>

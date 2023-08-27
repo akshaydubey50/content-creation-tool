@@ -70,11 +70,11 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
   ]);
   return (
     <>
-      <section className="hidden md:flex md:flex-col lg:flex-row py-6 justify-center items-center px-10 lg:px-14 xl:px-0 lg:space-x-10  md:space-y-3 lg:space-y-0 mx-auto lg:max-w-5xl xl:max-w-6xl   text-Title-Small lg:text-Title-Large">
+      <section className="hidden md:flex md:flex-col lg:flex-row py-6 justify-center items-center lg:space-x-4 px-10 lg:px-14 xl:px-0  md:space-y-3 lg:space-y-0 mx-auto lg:max-w-5xl xl:max-w-6xl   text-Title-Small lg:text-Title-Small">
         <p className="text-black font-medium">Filters</p>
         {/* Dropdown */}
         <div className="flex justify-between items-center space-x-5 w-full">
-          <div className="md:w-1/3 lg:w-1/3 flex-1">
+          <div className="md:w-1/3 lg:w-1/3 md:flex-1">
             <button
               className="bg-DarkOrange  px-5 lg:px-8 py-2 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-medium w-full text-center"
               onClick={clearFilter}
@@ -82,7 +82,7 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
               All
             </button>
           </div>
-          <div className="flex-1 bg-orange-200  rounded-full px-5 font-medium  py-2 border-2 border-DarkOrange border-solid md:w-full lg:w-full ">
+          <div className="md:flex-1 bg-DarkOrange  rounded-full px-5 font-medium  py-2 border-2 border-DarkOrange border-solid md:w-full lg:w-full ">
             <select
               title="select"
               name=""
@@ -99,7 +99,7 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
               ))}
             </select>
           </div>
-          <div className="flex-1 bg-orange-200  rounded-full px-5 font-medium  py-2 border-2 border-DarkOrange border-solid md:w-full lg:w-full hidden">
+          {/* <div className="flex-1 bg-orange-200  rounded-full px-5 font-medium  py-2 border-2 border-DarkOrange border-solid md:w-full lg:w-full hidden">
             <select
               title="Price"
               name=""
@@ -112,12 +112,12 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
               <option value="">4</option>
               <option value="">5</option>
             </select>
-          </div>
+          </div> */}
         </div>
         <div className="md:flex lg:none space-x-5 justify-between  items-center w-full">
           <div className="md:w-1/3 flex-1">
             <button
-              className="bg-DarkOrange whitespace-nowrap px-5  py-2 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-medium w-full text-center"
+              className="bg-DarkOrange whitespace-nowrap px-5  py-3 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-medium w-full text-center"
               onClick={clearFilter}
             >
               Clear Filters
