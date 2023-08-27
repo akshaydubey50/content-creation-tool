@@ -20,11 +20,11 @@ export default function ProductToolBanner({
         <BreadCrumb tag={tag} title={title} />
         <div
           className="affiliate-tool-container  space-y-8 flex flex-col 
-        lg:flex-row  lg:space-x-20 my-12"
+        lg:flex-row  lg:space-x-10 my-12"
         >
           <div
             className="aftl-left-section border border-black border-solid 
-          rounded-t-xl md:xl "
+          rounded-t-xl md:xl lg:w-1/2"
           >
             <Image
               src={url}
@@ -35,10 +35,10 @@ export default function ProductToolBanner({
               decoding="async"
               data-nimg="1"
               className="rounded-t-xl w-full h-full  object-cover"
-              //   style="color: transparent"
+            //   style="color: transparent"
             />
           </div>
-          <div className="aftl-right-section ">
+          <div className="aftl-right-section  lg:w-1/2">
             <div className="flex flex-col flex-1 space-y-4 mb-6">
               <h1 className="text-Heading-Medium md:text-Heading-Large font-bold">
                 {title}
@@ -46,14 +46,13 @@ export default function ProductToolBanner({
               <p className="ml-0 text-Description">{description}</p>
             </div>
             <div
-              className="aftl-category   flex flex-1 text-xl justify-between 
-            md:justify-center lg:justify-start   md:space-x-20"
+              className="aftl-category   flex flex-1 text-xl space-x-4"
             >
               <div
                 className=" rounded-full bg-white border border-solid
                border-black text-center"
               >
-                <button className=" px-10 md:px-16 py-2 font-bold ">
+                <button className="text-sm px-6 py-2 md:px-10 md:py-2 font-bold w-fit">
                   {tag}
                 </button>
               </div>
@@ -61,17 +60,17 @@ export default function ProductToolBanner({
                 className="rounded-full  bg-gray-400 text-white border border-solid
                border-black text-center"
               >
-                <button className="px-10 md:px-16 py-2 font-bold ">Free</button>
+                <button className="text-sm px-6 py-2 md:px-10 md:py-2 font-bold w-fit">Free</button>
               </div>
             </div>
           </div>
         </div>
+
         <div
-          className="flex justify-between md:justify-center md:space-x-20 
-        lg:justify-between   lg:w-1/3 lg:space-x-0 lg:pr-10 items-center text-white"
+          className="flex justify-between items-center text-white"
         >
-           <VisitWebsite url={link} />
-         
+          <VisitWebsite url={link} />
+
           <BsBookmark size={24} color="black" />
         </div>
       </main>
