@@ -2,7 +2,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
-import { FiArrowUpRight } from "react-icons/fi";
+import { MdVerified } from "react-icons/md";
 import Link from "next/link";
 import AirtableModel from "@/models/airtableModel";
 import CTAButton from "../button/CTAButton";
@@ -10,6 +10,7 @@ import { useApiDataContext } from "@/lib/productContext";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import VisitWebsite from "../visit-website/VisitWebsite";
 import { useSearchParams } from "next/navigation";
+import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
 
 type Product = {
   id: string;
@@ -21,6 +22,7 @@ type Product = {
 };
 export default function ProudctCard({ filterData, categoryData }: any) {
   const { apiData } = useApiDataContext();
+  const { isVerifiedFilled, setIsVerifiedFilled } = useVerifiedToolContextData();
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();
   const id = useSearchParams().get("id");
 
@@ -62,7 +64,7 @@ export default function ProudctCard({ filterData, categoryData }: any) {
       >
         {/* All data cards listed when filter & category values is empty all data listed on api call */}
         {filterData?.length <= 0 &&
-          categoryData?.length <= 0 &&
+          categoryData?.length <= 0 && !isVerifiedFilled &&
           apiData &&
           apiData.slice(0, visibleItem).map((item: AirtableModel) => {
             if (item?.fields?.Description?.trim() !== "") {
@@ -82,7 +84,7 @@ export default function ProudctCard({ filterData, categoryData }: any) {
           })}
 
         {/*on  Category card listed choosing dropdown value */}
-        {getProductByCategory(categoryData) &&
+        {!isVerifiedFilled && getProductByCategory(categoryData) &&
           getProductByCategory(categoryData)
             ?.slice(0, visibleItem)
             .map((item) => {
@@ -100,7 +102,7 @@ export default function ProudctCard({ filterData, categoryData }: any) {
             })}
 
         {/* Displaying filtered data if input field has some value*/}
-        {filterData?.length > 0 &&
+        {filterData?.length > 0 && !isVerifiedFilled &&
           filterData.slice(0, visibleItem).map((item: AirtableModel) => {
             if (item?.fields?.Description?.trim() !== "") {
               // console.log(item);
@@ -118,6 +120,18 @@ export default function ProudctCard({ filterData, categoryData }: any) {
             }
           })}
 
+        {/* Verify Icon base filter data  */}
+        {isVerifiedFilled && apiData.filter((item: AirtableModel) => item.fields.Verified).map((item: AirtableModel) => (
+          <CardContainer
+            key={item.id}
+            id={item.id}
+            url={item.fields.ToolImage}
+            title={item.fields.Name}
+            description={item.fields.Description}
+            tag={item.fields.Tags}
+            link={item.fields.WebsiteLink}
+          />
+        ))}
         {!apiData && (
           <div>
             <h1 className="text-3xl text-center font-bold">Loading....</h1>
@@ -153,7 +167,7 @@ export default function ProudctCard({ filterData, categoryData }: any) {
         </div>
       )}
       {/* Load More Button for All Data */}
-      {visibleItem <= apiData?.length &&
+      {visibleItem <= apiData?.length && !isVerifiedFilled &&
         (getProductByCategory(categoryData) === null ||
           getProductByCategory(categoryData)!.length === 0) &&
         filterData?.length === 0 && (
@@ -175,17 +189,18 @@ export function CardContainer({
   tag,
   link,
 }: Product) {
-  console.log('url>>>',url)
+  // console.log('url>>>',url)
   const formattedTitle = title.toLowerCase().replace(/\s/g, "");
   const [isBookMarked, setIsBookMarked] = useState(false);
+  const { isVerifiedFilled } = useVerifiedToolContextData();
 
-  const handleBookMark =()=>{
+  const handleBookMark = () => {
     setIsBookMarked(!isBookMarked);
-    console.log(' @@ bookmark',isBookMarked)
+    console.log(' @@ bookmark', isBookMarked)
   }
 
   /* .replace(/\.(?:\w+)$/, ""); */
-  console.log("URL ENCOEDD:::", encodeURIComponent(title));
+  // console.log("URL ENCOEDD:::", encodeURIComponent(title));
   return (
     <>
 
@@ -215,12 +230,16 @@ export function CardContainer({
             />
           </section>
         </Link>
-        <section className="bg-light-gray py-[30px] px-[20px] rounded-b-2xl">
+        <section className="bg-light-gray py-[30px] px-[20px] rounded-b-2xl h-full">
           <div className="pb-[15px] flex flex-1 flex-row justify-between">
-            <h1 className="font-bold text-Title-Medium md:text-Title-Large">
+           <div className="flex space-x-6 items-center">
+           <h1 className="font-bold text-Title-Medium md:text-Title-Large">
               {title}
             </h1>
+            {isVerifiedFilled ? <MdVerified className="text-2xl text-DarkOrange" /> :''}
+           </div>
             <h1>👍 1</h1>
+
           </div>
           <article className="text-Description">
             <p>{description}</p>
@@ -233,7 +252,7 @@ export function CardContainer({
           </article>
           <div
             className="text-white text-Title-Medium  flex 
-        justify-between items-center "
+        justify-between items-center"
           >
             <VisitWebsite url={link} />
             <button title="Bookmark" type="button" onClick={handleBookMark}>

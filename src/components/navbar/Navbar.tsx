@@ -76,7 +76,7 @@ export default function Navbar() {
           {/* menubar in large screen */}
           <ul className="hidden text-Title-Large lg:flex flex-1 flex-wrap justify-end font-semibold gap-x-10">
             {menuItem.map((menu) => (
-              <li key={menu.id}>
+              <li key={menu.id} className="hover:border hover:bg-DarkOrange hover:border-solid hover:px-3 hover:rounded-full hover:text-white ">
                 <Link href={menu.href}>{menu.label}</Link>
               </li>
             ))}

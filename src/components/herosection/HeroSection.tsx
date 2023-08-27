@@ -1,39 +1,26 @@
 "use client"
-import React, { useState } from "react";
-import { RiStackFill,RiSearchLine,RiSearchFill } from 'react-icons/ri';
+import React, { useEffect, useState } from "react";
+import { RiStackFill, RiSearchLine, RiSearchFill } from 'react-icons/ri';
 import { PiStack } from 'react-icons/pi';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import { VscVerified, VscVerifiedFilled } from 'react-icons/vsc';
-
+import { useVerifiedToolContextData } from "@/lib/verifiedToolContext"
 
 
 export default function HeroSection() {
   const [isAllFilled, setIsAllFilled] = useState(false);
   const [isBookMarkFilled, setIsBookMarkFilled] = useState(false);
-  const [isVerifiedFilled, setIsVerifiedFilled] = useState(false);
   const [isSearchFilled, setIsSearchFilled] = useState(false);
-
-
-  // const bookMarkType = ['All', 'Bookmark', 'Verified', 'Search'];
-
-  // const handleBookmarkClick = (index: number) => {
-  //   const updatedBookmarks = [...isFilled];
-  //   updatedBookmarks[index] = !updatedBookmarks[index];
-  //   setIsFilled(updatedBookmarks);
-  // };
+const {isVerifiedFilled,handleVerifiedClick} = useVerifiedToolContextData();
   const handleAllClick = () => {
     setIsAllFilled(!isAllFilled);
   };
   const handleBookMarkClick = () => {
     setIsBookMarkFilled(!isBookMarkFilled);
-  }; 
-  const handleVerifiedClick = () => {
-    setIsVerifiedFilled(!isVerifiedFilled);
   };
-   const handleSearchClick = () => {
+  const handleSearchClick = () => {
     setIsSearchFilled(!isSearchFilled);
   };
-
   return (
     <main className="py-12 xl:py-32 bg-light-gray  ">
       <section className="flex  flex-col place-items-center space-y-10 xl:space-y-20 xl:py-28 px-4 md:px-8 xl:px-10">
@@ -53,7 +40,7 @@ export default function HeroSection() {
         <div className="flex-1">
           <div className="flex space-x-8 ">
             <div className="flex-1">
-              
+
               <div className="flex space-x-2  md:space-x-4 lg:space-x-8 xl:space-x-12 ">
                 <div className="flex flex-col place-items-center  space-y-4 cursor-pointer">
                   <button

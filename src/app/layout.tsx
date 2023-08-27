@@ -6,12 +6,13 @@ import { ProductContextProvider } from "@/lib/productContext";
 import { VisibleItemContextProvider } from "@/lib/visibleItemContext";
 import Footer from "@/components/footer/Footer";
 import { Poppins } from "next/font/google"
+import { VerifiedToolContextProvider } from "@/lib/verifiedToolContext";
 
 
-const poppins =   Poppins({
+const poppins = Poppins({
   subsets: ['latin'],
   variable: '--font-poppins',
-  weight: ["400","700"]
+  weight: ["400", "700"]
 });
 
 
@@ -21,13 +22,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en"  className={`${poppins.variable} font-sans`}>
+    <html lang="en" className={`${poppins.variable} font-sans`}>
       <body className="font-poppins">
         <Navbar />
         <ProductContextProvider>
-          <VisibleItemContextProvider>
-            <main>{children}</main>
-          </VisibleItemContextProvider>
+          <VerifiedToolContextProvider>
+            <VisibleItemContextProvider>
+              <main>{children}</main>
+            </VisibleItemContextProvider>
+          </VerifiedToolContextProvider>
         </ProductContextProvider>
         <Footer />
       </body>

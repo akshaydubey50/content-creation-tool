@@ -5,7 +5,8 @@ import Image from "next/image";
 import { BsBookmark } from "react-icons/bs";
 import { Product } from "@/types/product";
 import Link from "next/link";
-import VisitWebsite from "../visit-website/VisitWebsite";
+import { FiArrowUpRight } from "react-icons/fi";
+
 
 export default function ProductToolBanner({
   url,
@@ -20,7 +21,7 @@ export default function ProductToolBanner({
         <BreadCrumb tag={tag} title={title} />
         <div
           className="affiliate-tool-container  space-y-8 flex flex-col 
-        lg:flex-row  lg:space-x-10 my-12"
+        lg:flex-row my-12"
         >
           <div
             className="aftl-left-section border border-black border-solid 
@@ -38,15 +39,15 @@ export default function ProductToolBanner({
             //   style="color: transparent"
             />
           </div>
-          <div className="aftl-right-section  lg:w-1/2">
-            <div className="flex flex-col flex-1 space-y-4 mb-6">
+          <div className="aftl-right-section  lg:w-2/5 ">
+            <div className="flex flex-col flex-1 space-y-4 mb-6 ">
               <h1 className="text-Heading-Medium md:text-Heading-Large font-bold">
                 {title}
               </h1>
               <p className="ml-0 text-Description">{description}</p>
             </div>
             <div
-              className="aftl-category   flex flex-1 text-xl space-x-4"
+              className="aftl-category   flex flex-1 text-xl space-x-4 "
             >
               <div
                 className=" rounded-full bg-white border border-solid
@@ -67,11 +68,23 @@ export default function ProductToolBanner({
         </div>
 
         <div
-          className="flex justify-between items-center text-white"
+          className="flex justify-between  items-center text-white lg:w-1/2"
         >
-          <VisitWebsite url={link} />
-
-          <BsBookmark size={24} color="black" />
+          <div className="flex rounded-full font-semibold bg-DarkOrange items-center justify-around  md:text-2xl px-4 md:px-6  md:py-4 space-x-4 w-4/5 py-2">
+            <Link
+              href={link}
+              target="_blank"
+              className="flex-1 text-center"
+            >
+              Visit Website
+            </Link>
+            <div className="">
+              <FiArrowUpRight className="text-white text-2xl md:text-4xl " />
+            </div>
+          </div>
+          <div className=" ml-auto">
+            <BsBookmark className=" text-black text-2xl md:text-4xl " />
+          </div>
         </div>
       </main>
     </>
