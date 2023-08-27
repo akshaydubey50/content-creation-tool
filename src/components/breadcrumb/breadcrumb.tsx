@@ -7,7 +7,7 @@ type HyperHead = { tag: string; title: string };
 export default function BreadCrumb({ tag, title }: HyperHead) {
   return (
     <>
-      <p className=" text-xl md:text-2xl font-semibold">
+      <p className="  md:text-2xl font-semibold">
         Content Tools {">"} {tag} {">"} {title}
       </p>
     </>
