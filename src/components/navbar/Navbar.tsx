@@ -6,12 +6,20 @@ import {
 } from "@supabase/auth-helpers-nextjs";
 import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from 'next/navigation'
 import { ImCross } from "react-icons/im";
 import { GiHamburgerMenu } from "react-icons/gi";
 
+
+interface MenuItem {
+  id: number;
+  label: string;
+  href: string;
+}
 export default function Navbar() {
   const supabase = createClientComponentClient();
   const [session, setSession] = useState<Session>();
+  const [isActiveMenu, setIsActiveMenu] = useState<number>(0);
   const memoizedIsUserLoggedIn = useCallback(isUserLoggedIn, [supabase.auth]);
   async function isUserLoggedIn() {
     const {
@@ -40,7 +48,7 @@ export default function Navbar() {
     }
   }, [session, memoizedIsUserLoggedIn]);
 
-  const menuItem = [
+  const menuItem: MenuItem[] = [
     { id: 1, label: "All Program", href: "/" },
     { id: 2, label: "Category", href: "/" },
     { id: 3, label: "Contact", href: "/" },
@@ -49,6 +57,10 @@ export default function Navbar() {
 
   const [isMenu, setIsMenu] = useState(false);
   const [isPopupOpen, setPopupOpen] = useState(false);
+
+  const handleNavbarMenu = (index: number) => {
+    setIsActiveMenu(index);
+  }
 
   const togglePopup = () => {
     setPopupOpen(!isPopupOpen);
@@ -74,24 +86,24 @@ export default function Navbar() {
             </Link>
           </div>
           {/* menubar in large screen */}
-          <ul className="hidden text-Title-Large lg:flex flex-1 flex-wrap justify-end font-semibold gap-x-10">
-            {menuItem.map((menu) => (
-              <li key={menu.id} className="hover:border hover:bg-DarkOrange hover:border-solid hover:px-3 hover:rounded-full hover:text-white ">
+          <ul className="hidden text-Title-Large lg:flex flex-1 flex-wrap justify-end font-semibold gap-x-8 text-black items-baseline">
+            {menuItem.map((menu,index) => (
+              <li key={menu.id}
+                className={`px-6 py-2  text-black   rounded-full
+                 ${isActiveMenu === index ? 'bg-DarkOrange text-white ' : 'text-black'
+                  }`}
+                onClick={() => handleNavbarMenu(index)}>
                 <Link href={menu.href}>{menu.label}</Link>
               </li>
             ))}
             {!session && (
-              <li>
-                <span className="px-6 py-2 text-white rounded-full bg-DarkOrange">
+              <li className="bg-black px-4 py-2 text-white rounded-lg hover:text-black hover:bg-white hover:outline hover:outline-2">
                   <button onClick={togglePopup}>Login</button>
-                </span>
               </li>
             )}
             {session && (
-              <li>
-                <span className="px-6 py-2 text-white rounded-full bg-DarkOrange">
-                  <button onClick={logout}>Logout</button>
-                </span>
+              <li className="bg-black px-4 py-2 text-white rounded-lg hover:text-black hover:bg-white hover:outline hover:outline-2">
+              <button onClick={logout}>Logout</button>
               </li>
             )}
           </ul>
@@ -108,9 +120,8 @@ export default function Navbar() {
       </nav>
       {/* Mobile View Sidebar */}
       <aside
-        className={`fixed top-0 z-40 h-full w-screen bg-white text-black text-Title-Large transform transition-transform duration-500 overflow-hidden ${
-          isMenu ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 z-40 h-full w-screen bg-white text-black text-Title-Large transform transition-transform duration-500 overflow-hidden ${isMenu ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="p-3 flex my-2">
           <h2 className="text-Title-Larger font-bold">Content Creation</h2>
