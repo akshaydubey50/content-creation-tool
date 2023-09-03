@@ -19,7 +19,7 @@ interface MenuItem {
 export default function Navbar() {
   const supabase = createClientComponentClient();
   const [session, setSession] = useState<Session>();
-  const [isActiveMenu, setIsActiveMenu] = useState<number | null>(null);
+  const [isActiveMenu, setIsActiveMenu] = useState<number>(0);
   const memoizedIsUserLoggedIn = useCallback(isUserLoggedIn, [supabase.auth]);
   async function isUserLoggedIn() {
     const {
@@ -86,28 +86,24 @@ export default function Navbar() {
             </Link>
           </div>
           {/* menubar in large screen */}
-          <ul className="hidden text-Title-Large lg:flex flex-1 flex-wrap justify-end font-semibold gap-x-8 text-white">
+          <ul className="hidden text-Title-Large lg:flex flex-1 flex-wrap justify-end font-semibold gap-x-8 text-black items-baseline">
             {menuItem.map((menu,index) => (
               <li key={menu.id}
-                className={`px-6 py-2  text-black hover:bg-DarkOrange hover:text-white
-                 ${isActiveMenu === index ? 'bg-DarkOrange text-white rounded-full' : 'text-black'
+                className={`px-6 py-2  text-black   rounded-full
+                 ${isActiveMenu === index ? 'bg-DarkOrange text-white ' : 'text-black'
                   }`}
                 onClick={() => handleNavbarMenu(index)}>
                 <Link href={menu.href}>{menu.label}</Link>
               </li>
             ))}
             {!session && (
-              <li className="px-6 py-2  rounded-full bg-DarkOrange">
-                <span className="">
+              <li className="bg-black px-4 py-2 text-white rounded-lg hover:text-black hover:bg-white hover:outline hover:outline-2">
                   <button onClick={togglePopup}>Login</button>
-                </span>
               </li>
             )}
             {session && (
-              <li className="px-6 py-2  rounded-full bg-DarkOrange">
-                <span>
-                  <button onClick={logout}>Logout</button>
-                </span>
+              <li className="bg-black px-4 py-2 text-white rounded-lg hover:text-black hover:bg-white hover:outline hover:outline-2">
+              <button onClick={logout}>Logout</button>
               </li>
             )}
           </ul>

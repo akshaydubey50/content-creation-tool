@@ -256,7 +256,7 @@ export function CardContainer({
           >
             <VisitWebsite url={link} />
             <button title="Bookmark" type="button" onClick={handleBookMark}>
-              {isBookMarked ? (<BsBookmarkFill className="text-2xl text-black" />
+              {isBookMarked ? (<BsBookmarkFill className="text-2xl text-DarkOrange" />
               ) : (<BsBookmark className="text-2xl   text-black" />)}
             </button>
           </div>
