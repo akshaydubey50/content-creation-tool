@@ -29,6 +29,7 @@ module.exports = {
         'Title-Large':'1.25rem',
         'Title-Larger':'1.5rem',
         'Description':'1rem',
+        'Description-Large':'1.25rem',
         'tags':'0.9rem',
       },
       lineHeight:{

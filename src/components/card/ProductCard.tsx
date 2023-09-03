@@ -232,7 +232,7 @@ export function CardContainer({
         </Link>
         <section className="bg-light-gray py-[30px] px-[20px] rounded-b-2xl h-full">
           <div className="pb-[15px] flex flex-1 flex-row justify-between">
-           <div className="flex space-x-6 items-center">
+           <div className="flex space-x-3 items-center">
            <h1 className="font-bold text-Title-Medium md:text-Title-Large">
               {title}
             </h1>
