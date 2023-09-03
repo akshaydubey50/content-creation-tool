@@ -70,19 +70,19 @@ export default function ProductToolBanner({
         <div
           className="flex justify-between  items-center text-white lg:w-1/2"
         >
-          <div className="flex rounded-full font-semibold bg-DarkOrange items-center justify-around  md:text-2xl px-4 md:px-6  md:py-4 space-x-4 w-4/5 py-2">
             <Link
               href={link}
               target="_blank"
-              className="flex-1 text-center"
+              className="flex rounded-full font-semibold bg-DarkOrange items-center justify-around  md:text-2xl px-4 md:px-6  md:py-4 space-x-4 w-4/5 py-2"
             >
-              Visit Website
-            </Link>
-            <div className="">
+              <p className="flex-1 text-center">
+                Visit Website
+              </p>
+            <div>
               <FiArrowUpRight className="text-white text-2xl md:text-4xl " />
             </div>
-          </div>
-          <div className=" ml-auto">
+            </Link>
+          <div className="ml-auto">
             <BsBookmark className=" text-black text-2xl md:text-4xl " />
           </div>
         </div>
