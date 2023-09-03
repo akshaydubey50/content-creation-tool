@@ -44,7 +44,7 @@ export default function ProductToolBanner({
               <h1 className="text-Heading-Medium md:text-Heading-Large font-bold">
                 {title}
               </h1>
-              <p className="ml-0 text-Description">{description}</p>
+              <p className="ml-0 text-Description lg:text-Description-Large">{description}</p>
             </div>
             <div
               className="aftl-category   flex flex-1 text-xl space-x-4 "
