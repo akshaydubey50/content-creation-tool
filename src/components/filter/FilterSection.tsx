@@ -4,6 +4,7 @@ import { useApiDataContext } from "@/lib/productContext";
 import CardContainer from "@/components/card/ProductCard";
 import AirtableModel from "@/models/airtableModel";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
+import { useRouter } from 'next/navigation'
 
 type Product = {
   // url: string;
@@ -17,6 +18,8 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
   const [categoryValue, setCategoryValue] = useState("");
   const { apiData } = useApiDataContext();
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();
+  const router = useRouter();
+
   const handleSearch = (e: any) => {
     setCategoryValue("");
     setCategoryData("");
@@ -50,18 +53,21 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
 
   const selectedCategory = (e: any) => {
     let categoryVal = e.target.value;
+    let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
+    router.push(`/category/${formatedCategory}`);
     setFilterData("");
     setCategoryData(categoryVal);
     setCategoryValue(categoryVal);
   };
   const clearFilter = () => {
+    router.push('/');
     setCategoryValue("");
     setCategoryData("");
     setSearchQuery("");
     setVisibleItem(9);
     setFilterData([]);
   };
-  useEffect(() => {}, [
+  useEffect(() => { }, [
     setCategoryValue,
     setCategoryData,
     setSearchQuery,

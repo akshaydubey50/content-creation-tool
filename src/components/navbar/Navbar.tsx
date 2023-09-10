@@ -19,7 +19,8 @@ interface MenuItem {
 export default function Navbar() {
   const supabase = createClientComponentClient();
   const [session, setSession] = useState<Session>();
-  const [isActiveMenu, setIsActiveMenu] = useState<number>(0);
+  const [isActiveMenu, setIsActiveMenu] = useState();
+
   const memoizedIsUserLoggedIn = useCallback(isUserLoggedIn, [supabase.auth]);
   async function isUserLoggedIn() {
     const {
@@ -50,8 +51,8 @@ export default function Navbar() {
 
   const menuItem: MenuItem[] = [
     { id: 1, label: "All Program", href: "/" },
-    { id: 2, label: "Category", href: "/" },
-    { id: 3, label: "Contact", href: "/" },
+    { id: 2, label: "Contact", href: "/" },
+    { id: 3, label: "Post a Program", href: "/submit" },
     // { id: 4, label: "Login", href: "/" }
   ];
 
@@ -97,12 +98,12 @@ export default function Navbar() {
               </li>
             ))}
             {!session && (
-              <li className="bg-black px-4 py-2 text-white rounded-lg hover:text-black hover:bg-white hover:outline hover:outline-2">
+              <li className="bg-black px-6 py-2 text-white rounded-lg hover:text-black hover:bg-white hover:outline hover:outline-2">
                   <button onClick={togglePopup}>Login</button>
               </li>
             )}
             {session && (
-              <li className="bg-black px-4 py-2 text-white rounded-lg hover:text-black hover:bg-white hover:outline hover:outline-2">
+              <li className="bg-black px-6 py-2 text-white rounded-lg hover:text-black hover:bg-white hover:outline hover:outline-2">
               <button onClick={logout}>Logout</button>
               </li>
             )}

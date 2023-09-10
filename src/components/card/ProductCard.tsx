@@ -2,6 +2,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { MdVerified } from "react-icons/md";
 import Link from "next/link";
 import AirtableModel from "@/models/airtableModel";
@@ -20,12 +21,12 @@ type Product = {
   tag: string;
   link: string;
 };
-export default function ProudctCard({ filterData, categoryData }: any) {
+export default function ProudctCard({ filterData, categoryData, isFromUrl = false }: any) {
+  console.log('check categoryData:-', categoryData,)
   const { apiData } = useApiDataContext();
   const { isVerifiedFilled, setIsVerifiedFilled } = useVerifiedToolContextData();
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();
   const id = useSearchParams().get("id");
-
   async function loadMore() {
     if (
       getProductByCategory(categoryData) !== null &&
@@ -132,6 +133,22 @@ export default function ProudctCard({ filterData, categoryData }: any) {
             link={item.fields.WebsiteLink}
           />
         ))}
+
+        {/* Category Page filter Data base on url last pathname */}
+        {isFromUrl && categoryData !== undefined && categoryData?.slice(0, visibleItem).map((item: AirtableModel) => {
+          return (
+            <CardContainer
+              key={item.id}
+              id={item.id}
+              url={item.fields.ToolImage}
+              title={item.fields.Name}
+              description={item.fields.Description}
+              tag={item.fields.Tags}
+              link={item.fields.WebsiteLink}
+            />
+          );
+        })}
+
         {!apiData && (
           <div>
             <h1 className="text-3xl text-center font-bold">Loading....</h1>
@@ -194,6 +211,8 @@ export function CardContainer({
   const [isBookMarked, setIsBookMarked] = useState(false);
   const { isVerifiedFilled } = useVerifiedToolContextData();
 
+
+  const formattedTag = tag[0].toLowerCase().replace(/\s/g, "-");
   const handleBookMark = () => {
     setIsBookMarked(!isBookMarked);
     console.log(' @@ bookmark', isBookMarked)
@@ -232,23 +251,30 @@ export function CardContainer({
         </Link>
         <section className="bg-light-gray py-[30px] px-[20px] rounded-b-2xl h-full">
           <div className="pb-[15px] flex flex-1 flex-row justify-between">
-           <div className="flex space-x-3 items-center">
-           <h1 className="font-bold text-Title-Medium md:text-Title-Large">
-              {title}
-            </h1>
-            {isVerifiedFilled ? <MdVerified className="text-2xl text-DarkOrange" /> :''}
-           </div>
-            <h1>👍 1</h1>
+            <div className="flex space-x-3 items-center">
+              <h1 className="font-bold text-Title-Medium md:text-Title-Large">
+                {title}
+              </h1>
+              {isVerifiedFilled ? <MdVerified className="text-2xl text-DarkOrange" /> : ''}
+            </div>
+            <button title="Bookmark" type="button" onClick={handleBookMark}>
+              {isBookMarked ? (<AiFillHeart className="text-3xl text-DarkOrange" />
+              ) : (<AiOutlineHeart className="text-3xl   text-black" />)}
+            </button>
 
           </div>
           <article className="text-Description">
             <p>{description}</p>
-            <button
-              className="bg-white rounded-full  text-tags font-medium border 
-              border-solid border-black my-6 px-4 py-1"
-            >
-              {tag}
-            </button>
+            <p className="my-6 ">
+              <Link className=" bg-white rounded-full  text-tags font-medium border 
+              border-solid border-black px-4 py-1"
+                href={{
+                  pathname: `/category/${formattedTag}`,
+                }}
+              >
+                {tag}
+              </Link>
+            </p>
           </article>
           <div
             className="text-white text-Title-Medium  flex 
@@ -256,8 +282,8 @@ export function CardContainer({
           >
             <VisitWebsite url={link} />
             <button title="Bookmark" type="button" onClick={handleBookMark}>
-              {isBookMarked ? (<BsBookmarkFill className="text-2xl text-DarkOrange" />
-              ) : (<BsBookmark className="text-2xl   text-black" />)}
+              {isBookMarked ? (<BsBookmarkFill className="text-3xl text-DarkOrange" />
+              ) : (<BsBookmark className="text-3xl   text-black" />)}
             </button>
           </div>
         </section>

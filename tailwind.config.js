@@ -35,6 +35,9 @@ module.exports = {
       lineHeight:{
         '45':'2.813rem',
         '90':'5.625rem'
+      },
+      spacing: {
+        '10-percent': '10%',
       }
     },
   },
