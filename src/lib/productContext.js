@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import axios from "axios";
 
 const ProductContext = createContext();
 
@@ -10,8 +9,9 @@ export const ProductContextProvider = ({ children }) => {
     // Fetch data from the API and set it to the state
     async function fetchData() {
       try {
-        const response = await axios.get("/api/airtable");
-        setApiData(response.data.filterData);
+        const response = await fetch("/api/airtable",{cache:'no-store'});
+        const responseBody = await response.json()
+        setApiData(responseBody.filterData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

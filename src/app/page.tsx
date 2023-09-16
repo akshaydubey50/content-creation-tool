@@ -4,8 +4,6 @@ import FilterSection from "@/components/filter/FilterSection";
 import ProductCard from "@/components/card/ProductCard";
 import { useState } from "react";
 
-export const revalidate = 30;
-
 export default function Home() {
   const [filterData, setFilterData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
