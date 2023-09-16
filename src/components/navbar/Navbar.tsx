@@ -60,6 +60,7 @@ export default function Navbar() {
   const [isPopupOpen, setPopupOpen] = useState(false);
 
   const handleNavbarMenu = (index: number) => {
+    console.log('index::',index)
     setIsActiveMenu(index);
   }
 
@@ -75,10 +76,13 @@ export default function Navbar() {
     setIsMenu(false);
   }
 
+  useEffect(()=>{
+    console.log('side effect',isActiveMenu)
+  },[isActiveMenu])
   return (
     <>
-      <nav className="bg-white z-30 relative shadow-md w-full px-5 lg:px-10">
-        <div className="flex justify-between py-4 lg:px-4 lg:py-6">
+      <nav className="bg-white z-30 relative shadow-md w-full px-5 xl:px-10">
+        <div className="flex justify-between items-center py-4 lg:px-4 lg:py-6">
           <div>
             <Link href="/">
               <h2 className="text-Title-Large lg:text-Title-Larger font-bold">
@@ -87,10 +91,10 @@ export default function Navbar() {
             </Link>
           </div>
           {/* menubar in large screen */}
-          <ul className="hidden text-Title-Large lg:flex flex-1 flex-wrap justify-end font-semibold gap-x-8 text-black items-baseline">
+          <ul className="hidden text-Title-Large lg:flex flex-1 flex-wrap justify-end font-semibold gap-x-4 xl:gap-x-8 text-black items-baseline">
             {menuItem.map((menu,index) => (
               <li key={menu.id}
-                className={`px-6 py-2  text-black   rounded-full
+                className={`px-6 py-2  text-black   rounded-full hover:bg-DarkOrange hover:text-white
                  ${isActiveMenu === index ? 'bg-DarkOrange text-white ' : 'text-black'
                   }`}
                 onClick={() => handleNavbarMenu(index)}>

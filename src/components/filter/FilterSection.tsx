@@ -155,7 +155,7 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
           />
         </div>
         <div className="flex justify-center space-x-4">
-          <div className="bg-orange-200  rounded-full px-3 font-medium  py-2 border-2 border-DarkOrange border-solid w-full lg:w-1/3">
+          <div className="bg-DarkOrange  rounded-full px-3 font-medium  py-2  w-full lg:w-1/3">
             <select
               title="Category"
               name=""

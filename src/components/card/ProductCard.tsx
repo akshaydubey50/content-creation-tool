@@ -12,7 +12,7 @@ import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import VisitWebsite from "../visit-website/VisitWebsite";
 import { useSearchParams } from "next/navigation";
 import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
-
+import { useRouter } from "next/navigation";
 type Product = {
   id: string;
   url: string;
@@ -27,6 +27,7 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
   const { isVerifiedFilled, setIsVerifiedFilled } = useVerifiedToolContextData();
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();
   const id = useSearchParams().get("id");
+
   async function loadMore() {
     if (
       getProductByCategory(categoryData) !== null &&
@@ -209,8 +210,9 @@ export function CardContainer({
   // console.log('url>>>',url)
   const formattedTitle = title.toLowerCase().replace(/\s/g, "");
   const [isBookMarked, setIsBookMarked] = useState(false);
+  const [likedTool, setLikedTool] = useState(false);
   const { isVerifiedFilled } = useVerifiedToolContextData();
-
+  const router = useRouter();
 
   const formattedTag = tag[0].toLowerCase().replace(/\s/g, "-");
   const handleBookMark = () => {
@@ -218,6 +220,10 @@ export function CardContainer({
     console.log(' @@ bookmark', isBookMarked)
   }
 
+  const handleLikedTool = () => {
+    setLikedTool(!likedTool);
+    console.log(' @@ likedTool', likedTool)
+  }
   /* .replace(/\.(?:\w+)$/, ""); */
   // console.log("URL ENCOEDD:::", encodeURIComponent(title));
   return (
@@ -249,33 +255,33 @@ export function CardContainer({
             />
           </section>
         </Link>
-        <section className="bg-light-gray py-[30px] px-[20px] rounded-b-2xl h-full">
-          <div className="pb-[15px] flex flex-1 flex-row justify-between">
-            <div className="flex space-x-3 items-center">
+        <section className="bg-light-gray pt-7 px-5 rounded-b-2xl h-full">
+          <div className="flex flex-col justify-between h-full">
+         <div className="">
+         <div className="pb-4 flex flex-1 flex-row justify-between">
               <h1 className="font-bold text-Title-Medium md:text-Title-Large">
                 {title}
               </h1>
               {isVerifiedFilled ? <MdVerified className="text-2xl text-DarkOrange" /> : ''}
-            </div>
-            <button title="Bookmark" type="button" onClick={handleBookMark}>
-              {isBookMarked ? (<AiFillHeart className="text-3xl text-DarkOrange" />
+            <button title="Bookmark" type="button" onClick={handleLikedTool}>
+              {likedTool ? (<AiFillHeart className="text-3xl text-DarkOrange" />
               ) : (<AiOutlineHeart className="text-3xl   text-black" />)}
             </button>
-
           </div>
-          <article className="text-Description">
+          <div className="text-Description">
             <p>{description}</p>
-            <p className="my-6 ">
+          </div>
+         </div>
+          <div className="tool-btn-section pb-7">
+          <p className="my-6 ">
               <Link className=" bg-white rounded-full  text-tags font-medium border 
               border-solid border-black px-4 py-1"
-                href={{
-                  pathname: `/category/${formattedTag}`,
-                }}
+                href={`/category/${formattedTag}`}
+                prefetch={true}
               >
                 {tag}
               </Link>
             </p>
-          </article>
           <div
             className="text-white text-Title-Medium  flex 
         justify-between items-center"
@@ -286,6 +292,9 @@ export function CardContainer({
               ) : (<BsBookmark className="text-3xl   text-black" />)}
             </button>
           </div>
+          </div>
+          </div>
+
         </section>
       </div>
     </>
