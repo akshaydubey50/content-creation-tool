@@ -1,8 +1,10 @@
-"use client"
+"use client";
 import HeroSection from "@/components/herosection/HeroSection";
 import FilterSection from "@/components/filter/FilterSection";
 import ProductCard from "@/components/card/ProductCard";
 import { useState } from "react";
+
+export const revalidate = 30;
 
 export default function Home() {
   const [filterData, setFilterData] = useState([]);
@@ -13,11 +15,8 @@ export default function Home() {
       <FilterSection
         setFilterData={setFilterData}
         setCategoryData={setCategoryData}
-        />
-      <ProductCard
-        filterData={filterData}
-        categoryData={categoryData}
       />
+      <ProductCard filterData={filterData} categoryData={categoryData} />
     </div>
   );
 }
