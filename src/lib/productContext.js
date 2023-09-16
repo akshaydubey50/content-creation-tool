@@ -10,7 +10,7 @@ export const ProductContextProvider = ({ children }) => {
     // Fetch data from the API and set it to the state
     async function fetchData() {
       try {
-        const response = await axios.get("/api/airtable");
+        const response = await fetch("/api/airtable", { cache: "no-store" });
         setApiData(response.data.filterData);
       } catch (error) {
         console.error("Error fetching data:", error);
