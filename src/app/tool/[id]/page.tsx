@@ -1,18 +1,18 @@
-      "use client";
+"use client";
 import ProductToolBanner from "@/components/product-tool/ProductToolBanner";
 import ProudctCard from "@/components/card/ProductCard";
 import { useApiDataContext } from "@/lib/productContext";
 import AirtableModel from "@/models/airtableModel";
 import { useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
-
+export const revalidate = 30;
 export default function ToolDetails() {
   const id = useSearchParams().get("id");
   const { apiData } = useApiDataContext();
   const [product, setProductData] = useState<AirtableModel>();
   const localCategoryData = product && product!.fields.Tags[0];
-  console.log('localcatgeory', localCategoryData);
-  
+  console.log("localcatgeory", localCategoryData);
+
   const getProductFromId = useCallback(() => {
     const productMatched = apiData.find(
       (product: AirtableModel) => product.id === id
