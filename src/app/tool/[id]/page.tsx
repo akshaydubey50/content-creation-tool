@@ -5,14 +5,13 @@ import { useApiDataContext } from "@/lib/productContext";
 import AirtableModel from "@/models/airtableModel";
 import { useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
-
 export default function ToolDetails() {
   const id = useSearchParams().get("id");
   const { apiData } = useApiDataContext();
   const [product, setProductData] = useState<AirtableModel>();
   const localCategoryData = product && product!.fields.Tags[0];
-  console.log('localcatgeory', localCategoryData);
-  
+  console.log("localcatgeory", localCategoryData);
+
   const getProductFromId = useCallback(() => {
     const productMatched = apiData.find(
       (product: AirtableModel) => product.id === id

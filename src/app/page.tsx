@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import HeroSection from "@/components/herosection/HeroSection";
 import FilterSection from "@/components/filter/FilterSection";
 import ProductCard from "@/components/card/ProductCard";
@@ -13,11 +13,8 @@ export default function Home() {
       <FilterSection
         setFilterData={setFilterData}
         setCategoryData={setCategoryData}
-        />
-      <ProductCard
-        filterData={filterData}
-        categoryData={categoryData}
       />
+      <ProductCard filterData={filterData} categoryData={categoryData} />
     </div>
   );
 }

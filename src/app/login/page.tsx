@@ -1,85 +1,42 @@
 "use client";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
 
-const LoginPopup = () => {
+const LoginPopup = ({ isPopupOpenn }: any) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPopupOpen, setPopupOpen] = useState(false);
-  const router = useRouter();
   const supabase = createClientComponentClient();
   const [user, setUser] = useState("");
 
-  const handleSignIn = async () => {
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    /* setUser(user); */
-    console.log("data", user);
-    console.log("error", error);
-    if (user) {
-      router.replace("/");
-    }
-  };
-
-  const handleSignUp = async () => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-    console.log("data", user);
-    console.log("error", error);
-    console.log("err desc", error);
-  };
-  async function signOut() {
-    const { error } = await supabase.auth.signOut();
-
-    if (!error) {
-      console.log("sign out error", error);
-    }
-  }
-
-  async function signInWithEmail() {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
-
-    if (error) {
-      console.log(error.message);
-    }
-    if (data.session) {
-      console.log(data.user);
-    }
-  }
-
+  console.log("LoginPopup isPopupOpen", isPopupOpen);
   const togglePopup = () => {
     setPopupOpen(!isPopupOpen);
   };
 
   return (
     <>
-      <button
-        onClick={togglePopup}
-        className="px-4 py-2 text-white bg-blue-500 rounded"
-      >
-        Login
-      </button>
-      <button
+      {
+        <button
+          onClick={togglePopup}
+          className="px-4 py-2 text-white bg-blue-500 rounded"
+        >
+          Login
+        </button>
+      }
+      {/*  <button
         onClick={signOut}
         className="px-4 ml-4 py-2 text-white bg-blue-500 rounded"
       >
         signOut
-      </button>
+      </button> */}
 
       {isPopupOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-10">
+        <div className=" fixed inset-0 flex items-center justify-center z-10">
           {/* Fixed background overlay with slight blur */}
           <div
             onClick={togglePopup}
@@ -87,53 +44,34 @@ const LoginPopup = () => {
           ></div>
 
           {/* Popup content */}
-          <div className="bg-white p-8 rounded shadow-md z-20 relative">
-            <h2 className="text-2xl font-semibold mb-4">Login</h2>
-            {/* <form onSubmit={signInWithEmail}> */}
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-700">
-                Email
-              </label>
-              <input
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-                type="email"
-                id="email"
-                name="email"
-                className="w-full px-3 py-2 border rounded"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-700">
-                Password
-              </label>
-              <input
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-                type="password"
-                id="password"
-                name="password"
-                className="w-full px-3 py-2 border rounded"
-              />
-            </div>
-            <button
-              /*  type="submit" */
-              onClick={handleSignIn}
-              className="w-full px-4 py-2 text-white bg-blue-500 rounded"
-            >
-              Login
-            </button>
-            <button
-              /*  type="submit" */
-              onClick={handleSignUp}
-              className="w-full mt-4 px-4 py-2 text-white bg-blue-500 rounded"
-            >
-              Sign Up
-            </button>
-            {/*  </form> */}
+          <div className="bg-white p-8 md:w-2/5 lg:w-2/5 mt-12 rounded shadow-md z-20 relative">
+            <Auth
+              supabaseClient={supabase}
+              providers={["google"]}
+              redirectTo={`/auth/callback`}
+              magicLink={true}
+              appearance={{
+                style: {
+                  message: { color: "black" },
+                  anchor: { color: "black" },
+                  label: { color: "black" },
+                  container: { width: "flex" },
+                },
+                theme: ThemeSupa,
+                variables: {
+                  default: {
+                    colors: {
+                      brand: "#404040",
+                      brandAccent: "#52525b",
+                    },
+                  },
+                },
+              }}
+              theme="dark"
+            />
             <button
               onClick={togglePopup}
-              className="absolute top-0 right-0 mt-4 mr-4 text-gray-700"
+              className="absolute top-0 right-0 mt-4 mr-4 text-gray-700 "
             >
               &times;
             </button>
