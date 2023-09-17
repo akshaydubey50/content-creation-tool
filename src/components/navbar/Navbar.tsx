@@ -10,7 +10,6 @@ import { ImCross } from "react-icons/im";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { Auth } from "@supabase/auth-ui-react";
-import { useActiveMenuContextData } from "@/lib/activeMenuContext"
 
 interface MenuItem {
   id: number;
@@ -20,8 +19,20 @@ interface MenuItem {
 export default function Navbar() {
   const supabase = createClientComponentClient();
   const [session, setSession] = useState<Session>();
+  const storedValue = localStorage.getItem("isActiveMenu");
+  const initialIsActiveMenu = storedValue ? parseInt(storedValue) || 0 : 0;
 
-  const { setIsActiveMenu,isActiveMenu, handleNavbarMenu } = useActiveMenuContextData();
+  const [isActiveMenu, setIsActiveMenu] = useState<number>(initialIsActiveMenu);
+
+  const handleNavbarMenu = (index: number) => {
+    setIsActiveMenu(index);
+  };
+
+  useEffect(() => {
+    console.log("isActiveMenu", isActiveMenu);
+    localStorage.setItem("isActiveMenu", String(isActiveMenu));
+  }, [isActiveMenu]);
+
 
   const memoizedIsUserLoggedIn = useCallback(isUserLoggedIn, [supabase.auth]);
   async function isUserLoggedIn() {
@@ -91,7 +102,7 @@ export default function Navbar() {
               <li
                 key={menu.id}
                 className={`px-6 py-2  text-black   rounded-full hover:bg-DarkOrange hover:text-white cursor-pointer
-                 ${isActiveMenu === index
+                ${isActiveMenu === index
                     ? "bg-DarkOrange text-white  "
                     : "text-black"
                   }`}

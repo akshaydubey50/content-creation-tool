@@ -7,8 +7,6 @@ import { Poppins } from "next/font/google"
 import { ProductContextProvider } from "@/lib/productContext";
 import { VisibleItemContextProvider } from "@/lib/visibleItemContext";
 import { VerifiedToolContextProvider } from "@/lib/verifiedToolContext";
-import { ActiveMenuContextProvider } from "@/lib/activeMenuContext";
-
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -26,13 +24,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable}`}>
       <body className="font-poppins">
-        <Navbar />
+          <Navbar />
         <ProductContextProvider>
           <VerifiedToolContextProvider>
             <VisibleItemContextProvider>
-              <ActiveMenuContextProvider>
-                <main>{children}</main>
-              </ActiveMenuContextProvider>
+              <main>{children}</main>
             </VisibleItemContextProvider>
           </VerifiedToolContextProvider>
         </ProductContextProvider>
