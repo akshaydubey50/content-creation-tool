@@ -58,7 +58,7 @@ export default function Navbar() {
   const [isMenu, setIsMenu] = useState(false);
   const [isPopupOpen, setPopupOpen] = useState(false);
 
-  const handleNavbarMenu = (index: number) => {
+  const handleNavbarMenu = (index:any) => {
     console.log('index::',index)
     setIsActiveMenu(index);
   };
