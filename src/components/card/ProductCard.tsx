@@ -202,13 +202,13 @@ export function CardContainer({
   const handleBookMark = () => {
     setIsOpen(true);
     setIsBookMarked(!isBookMarked);
-    console.log(' @@ bookmark', isBookMarked)
+    // console.log(' @@ bookmark', isBookMarked)
   }
 
   const handleLikedTool = () => {
     setIsOpen(true);
     setLikedTool(!likedTool);
-    console.log(' @@ likedTool', likedTool)
+    // console.log(' @@ likedTool', likedTool)
   }
   /* .replace(/\.(?:\w+)$/, ""); */
   // console.log("URL ENCOEDD:::", encodeURIComponent(title));

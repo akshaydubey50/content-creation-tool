@@ -29,7 +29,7 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    console.log("isActiveMenu", isActiveMenu);
+    // console.log("isActiveMenu", isActiveMenu);
     localStorage.setItem("isActiveMenu", String(isActiveMenu));
   }, [isActiveMenu]);
 
