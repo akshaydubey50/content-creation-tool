@@ -10,6 +10,7 @@ import { ImCross } from "react-icons/im";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { Auth } from "@supabase/auth-ui-react";
+import { useActiveMenuContextData } from "@/lib/ActiveMenuContext"
 
 interface MenuItem {
   id: number;
@@ -19,7 +20,8 @@ interface MenuItem {
 export default function Navbar() {
   const supabase = createClientComponentClient();
   const [session, setSession] = useState<Session>();
-  const [isActiveMenu, setIsActiveMenu] = useState();
+
+  const { isActiveMenu, handleNavbarMenu } = useActiveMenuContextData();
 
   const memoizedIsUserLoggedIn = useCallback(isUserLoggedIn, [supabase.auth]);
   async function isUserLoggedIn() {
@@ -52,16 +54,12 @@ export default function Navbar() {
   const menuItem: MenuItem[] = [
     { id: 1, label: "All Program", href: "/" },
     { id: 2, label: "Contact", href: "/" },
-    { id: 3, label: "Post a Program", href: "/submit" },
+    { id: 3, label: "Post a Program", href: "/post-a-program" },
   ];
 
   const [isMenu, setIsMenu] = useState(false);
   const [isPopupOpen, setPopupOpen] = useState(false);
 
-  const handleNavbarMenu = (index:any) => {
-    console.log('index::',index)
-    setIsActiveMenu(index);
-  };
 
   const togglePopup = () => {
     setPopupOpen(!isPopupOpen);
@@ -75,9 +73,7 @@ export default function Navbar() {
     setIsMenu(false);
   }
 
-  useEffect(()=>{
-    console.log('side effect',isActiveMenu)
-  },[isActiveMenu])
+
   return (
     <>
       <nav className="bg-white z-30 relative shadow-md w-full px-5 xl:px-10">
@@ -95,11 +91,10 @@ export default function Navbar() {
               <li
                 key={menu.id}
                 className={`px-6 py-2  text-black   rounded-full hover:bg-DarkOrange hover:text-white cursor-pointer
-                 ${
-                   isActiveMenu === index
-                     ? "bg-DarkOrange text-white  "
-                     : "text-black"
-                 }`}
+                 ${isActiveMenu === index
+                    ? "bg-DarkOrange text-white  "
+                    : "text-black"
+                  }`}
                 onClick={() => handleNavbarMenu(index)}
               >
                 <Link href={menu.href}>{menu.label}</Link>
@@ -132,9 +127,8 @@ export default function Navbar() {
       </nav>
       {/* Mobile View Sidebar */}
       <aside
-        className={`fixed top-0 z-40 h-full w-screen bg-white text-black text-Title-Large transform transition-transform duration-500 overflow-hidden ${
-          isMenu ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 z-40 h-full w-screen bg-white text-black text-Title-Large transform transition-transform duration-500 overflow-hidden ${isMenu ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="p-3 flex my-2">
           <h2 className="text-Title-Larger font-bold">Content Creation</h2>

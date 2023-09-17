@@ -241,10 +241,12 @@ export function CardContainer({
           <div className="flex flex-col justify-between h-full">
          <div className="">
          <div className="pb-4 flex flex-1 flex-row justify-between">
-              <h1 className="font-bold text-Title-Medium md:text-Title-Large">
+             <div className="flex items-center gap-x-4">
+             <h1 className="font-bold text-Title-Medium md:text-Title-Large">
                 {title}
               </h1>
-              {isVerifiedFilled ? <MdVerified className="text-2xl text-DarkOrange" /> : ''}
+              {isVerifiedFilled && <MdVerified className="text-2xl text-DarkOrange" />}
+             </div>
             <button title="Bookmark" type="button" onClick={handleLikedTool}>
               {likedTool ? (<AiFillHeart className="text-3xl text-DarkOrange" />
               ) : (<AiOutlineHeart className="text-3xl   text-black" />)}
@@ -257,7 +259,7 @@ export function CardContainer({
           <div className="tool-btn-section pb-7">
           <p className="my-6 ">
               <Link className=" bg-white rounded-full  text-tags font-medium border 
-              border-solid border-black px-4 py-1"
+              border-solid border-black px-5 py-1"
                 href={`/category/${formattedTag}`}
                 prefetch={true}
               >
