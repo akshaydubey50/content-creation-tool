@@ -12,6 +12,7 @@ import VisitWebsite from "../visit-website/VisitWebsite";
 import { useSearchParams } from "next/navigation";
 import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import LikedBookmarkModal from "../modal/LikedBookmarkModal";
 
 type Product = {
   id: string;
@@ -195,14 +196,17 @@ export function CardContainer({
   const [isBookMarked, setIsBookMarked] = useState(false);
   const { isVerifiedFilled } = useVerifiedToolContextData();
   const [likedTool, setLikedTool] = useState(false);
+  const [isOpen,setIsOpen] = useState(false)
 
   const formattedTag = tag[0].toLowerCase().replace(/\s/g, "-");
   const handleBookMark = () => {
+    setIsOpen(true);
     setIsBookMarked(!isBookMarked);
     console.log(' @@ bookmark', isBookMarked)
   }
 
   const handleLikedTool = () => {
+    setIsOpen(true);
     setLikedTool(!likedTool);
     console.log(' @@ likedTool', likedTool)
   }
@@ -249,6 +253,7 @@ export function CardContainer({
               {likedTool ? (<AiFillHeart className="text-3xl text-DarkOrange" />
               ) : (<AiOutlineHeart className="text-3xl   text-black" />)}
             </button>
+            {isOpen && <LikedBookmarkModal  isOpen={isOpen} setIsOpen={setIsOpen}/>}
           </div>
           <div className="text-Description">
             <p>{description}</p>
