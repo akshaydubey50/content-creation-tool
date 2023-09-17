@@ -19,7 +19,8 @@ interface MenuItem {
 export default function Navbar() {
   const supabase = createClientComponentClient();
   const [session, setSession] = useState<Session>();
-  const [isActiveMenu, setIsActiveMenu] = useState<number>(0);
+  const [isActiveMenu, setIsActiveMenu] = useState();
+
   const memoizedIsUserLoggedIn = useCallback(isUserLoggedIn, [supabase.auth]);
   async function isUserLoggedIn() {
     const {
@@ -50,14 +51,15 @@ export default function Navbar() {
 
   const menuItem: MenuItem[] = [
     { id: 1, label: "All Program", href: "/" },
-    { id: 2, label: "Category", href: "/" },
-    { id: 3, label: "Contact", href: "/" },
+    { id: 2, label: "Contact", href: "/" },
+    { id: 3, label: "Post a Program", href: "/submit" },
   ];
 
   const [isMenu, setIsMenu] = useState(false);
   const [isPopupOpen, setPopupOpen] = useState(false);
 
   const handleNavbarMenu = (index: number) => {
+    console.log('index::',index)
     setIsActiveMenu(index);
   };
 
@@ -73,10 +75,13 @@ export default function Navbar() {
     setIsMenu(false);
   }
 
+  useEffect(()=>{
+    console.log('side effect',isActiveMenu)
+  },[isActiveMenu])
   return (
     <>
-      <nav className="bg-white z-30 relative shadow-md w-full px-5 lg:px-10">
-        <div className="flex justify-between py-4 lg:px-4 lg:py-6">
+      <nav className="bg-white z-30 relative shadow-md w-full px-5 xl:px-10">
+        <div className="flex justify-between items-center py-4 lg:px-4 lg:py-6">
           <div>
             <Link href="/">
               <h2 className="text-Title-Large lg:text-Title-Larger font-bold">
@@ -89,10 +94,10 @@ export default function Navbar() {
             {menuItem.map((menu, index) => (
               <li
                 key={menu.id}
-                className={`px-6 py-2  text-black   rounded-full
+                className={`px-6 py-2  text-black   rounded-full hover:bg-DarkOrange hover:text-white cursor-pointer
                  ${
                    isActiveMenu === index
-                     ? "bg-DarkOrange text-white "
+                     ? "bg-DarkOrange text-white  "
                      : "text-black"
                  }`}
                 onClick={() => handleNavbarMenu(index)}
