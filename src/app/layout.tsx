@@ -11,6 +11,7 @@ import { VerifiedToolContextProvider } from "@/lib/verifiedToolContext";
 
 const poppins = Poppins({
   subsets: ['latin'],
+  display: 'swap',
   variable: '--font-poppins',
   weight: ["400", "700"]
 });
@@ -22,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${poppins.variable} font-sans`}>
+    <html lang="en" className={`${poppins.variable}`}>
       <body className="font-poppins">
         <Navbar />
         <ProductContextProvider>
