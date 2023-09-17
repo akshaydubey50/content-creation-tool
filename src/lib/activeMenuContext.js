@@ -9,7 +9,7 @@ export function ActiveMenuContextProvider({ children }) {
       };
   return (
     <>
-      <ActiveMenuContext.Provider value={{isActiveMenu,handleNavbarMenu}}>
+      <ActiveMenuContext.Provider value={{isActiveMenu,handleNavbarMenu,setIsActiveMenu}}>
         {children}
       </ActiveMenuContext.Provider>
     </>

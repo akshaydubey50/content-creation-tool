@@ -10,7 +10,7 @@ import { ImCross } from "react-icons/im";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { Auth } from "@supabase/auth-ui-react";
-import { useActiveMenuContextData } from "@/lib/ActiveMenuContext"
+import { useActiveMenuContextData } from "@/lib/activeMenuContext"
 
 interface MenuItem {
   id: number;
@@ -21,7 +21,7 @@ export default function Navbar() {
   const supabase = createClientComponentClient();
   const [session, setSession] = useState<Session>();
 
-  const { isActiveMenu, handleNavbarMenu } = useActiveMenuContextData();
+  const { setIsActiveMenu,isActiveMenu, handleNavbarMenu } = useActiveMenuContextData();
 
   const memoizedIsUserLoggedIn = useCallback(isUserLoggedIn, [supabase.auth]);
   async function isUserLoggedIn() {
