@@ -76,7 +76,7 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
         <div className="flex justify-between items-center space-x-5 w-full">
           <div className="md:w-1/3 lg:w-1/3 md:flex-1">
             <button
-              className="bg-DarkOrange  px-5 lg:px-8 py-2 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-medium w-full text-center"
+              className="bg-DarkOrange  px-5 lg:px-8 py-2.5 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-medium w-full text-center"
               onClick={clearFilter}
             >
               All

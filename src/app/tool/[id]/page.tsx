@@ -10,7 +10,7 @@ export default function ToolDetails() {
   const { apiData } = useApiDataContext();
   const [product, setProductData] = useState<AirtableModel>();
   const localCategoryData = product && product!.fields.Tags[0];
-  console.log("localcatgeory", localCategoryData);
+  // console.log("localcatgeory", localCategoryData);
 
   const getProductFromId = useCallback(() => {
     const productMatched = apiData.find(
