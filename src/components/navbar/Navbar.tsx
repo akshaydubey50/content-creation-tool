@@ -65,7 +65,7 @@ export default function Navbar() {
   const menuItem: MenuItem[] = [
     { id: 1, label: "All Program", href: "/" },
     { id: 2, label: "Contact", href: "/" },
-    { id: 3, label: "Post a Program", href: "/" },
+    { id: 3, label: "Post a Program", href: "/post-a-program" },
   ];
 
   const [isMenu, setIsMenu] = useState(false);
