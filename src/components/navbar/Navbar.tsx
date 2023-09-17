@@ -37,7 +37,7 @@ export default function Navbar() {
     const {
       data: { session },
     } = await supabase.auth.getSession();
-    console.log("logout session", session);
+    // console.log("logout session", session);
     if (session) {
       await supabase.auth.signOut();
     }
@@ -47,7 +47,7 @@ export default function Navbar() {
     if (!session) {
       memoizedIsUserLoggedIn();
     }
-  }, [session, isUserLoggedIn, logout]);
+  }, [session, memoizedIsUserLoggedIn, isUserLoggedIn, logout]);
 
   const menuItem: MenuItem[] = [
     { id: 1, label: "All Program", href: "/" },
@@ -193,18 +193,19 @@ export default function Navbar() {
           <div className="bg-white p-8 md:w-2/5 lg:w-2/5 mt-12 rounded shadow-md z-20 relative">
             <Auth
               supabaseClient={supabase}
-              providers={[]}
+              providers={["google"]}
               redirectTo={`/auth/callback`}
               magicLink={true}
               appearance={{
                 style: {
                   button: {
-                    background: "#FF8C00",
+                    // background: "#FF8C00",
                     outline: "none",
                     border: "none",
+                    // font
                   },
                   anchor: { color: "#FF8C00" },
-                  label: { color: "black" },
+                  // label: { color: "black" },
                   container: { width: "flex" },
                 },
                 theme: ThemeSupa,
