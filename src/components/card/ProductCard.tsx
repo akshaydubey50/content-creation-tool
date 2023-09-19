@@ -2,7 +2,6 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { MdVerified } from "react-icons/md";
 import Link from "next/link";
 import AirtableModel from "@/models/airtableModel";
@@ -212,7 +211,6 @@ export function CardContainer({
   // console.log('url>>>',url)
   const formattedTitle = title.toLowerCase().replace(/\s/g, "");
   const [isBookMarked, setIsBookMarked] = useState(false);
-  const [likedTool, setLikedTool] = useState(false);
   const { isVerifiedFilled } = useVerifiedToolContextData();
   const [likedTool, setLikedTool] = useState(false);
   const [isOpen,setIsOpen] = useState(false)

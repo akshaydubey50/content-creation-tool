@@ -24,10 +24,6 @@ export default function Navbar() {
 
   const [isActiveMenu, setIsActiveMenu] = useState<number>(initialIsActiveMenu);
 
-  const handleNavbarMenu = (index: number) => {
-    setIsActiveMenu(index);
-  };
-
   useEffect(() => {
     // console.log("isActiveMenu", isActiveMenu);
     localStorage.setItem("isActiveMenu", String(isActiveMenu));
