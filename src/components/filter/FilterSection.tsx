@@ -4,7 +4,8 @@ import { useApiDataContext } from "@/lib/productContext";
 import CardContainer from "@/components/card/ProductCard";
 import AirtableModel from "@/models/airtableModel";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
+import Select from 'react-select';
 
 type Product = {
   // url: string;
@@ -13,12 +14,15 @@ type Product = {
   tag: string;
   link: string;
 };
-export default function FilterSection({ setFilterData, setCategoryData }: any) {
+export default function FilterSection({ setFilterData, setCategoryData, categoryData }: any) {
+  console.log('categoryData', categoryData)
   const [searchQuery, setSearchQuery] = useState("");
-  const [categoryValue, setCategoryValue] = useState("");
+  const [categoryValue, setCategoryValue] = useState(categoryData || "");
   const { apiData } = useApiDataContext();
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();
   const router = useRouter();
+
+
 
   const handleSearch = (e: any) => {
     setCategoryValue("");
@@ -51,13 +55,15 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
     return categoryItem;
   };
 
-  const selectedCategory = (e: any) => {
-    let categoryVal = e.target.value;
-    let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
-    router.push(`/category/${formatedCategory}`);
-    setFilterData("");
-    setCategoryData(categoryVal);
-    setCategoryValue(categoryVal);
+  const selectedCategory = (selectedOption: any) => {
+    if (selectedOption) {
+      let categoryVal = selectedOption.value;
+      let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
+      router.push(`/category/${formatedCategory}`);
+      setFilterData("");
+      setCategoryData(categoryVal);
+      setCategoryValue(categoryVal);
+    }
   };
   const clearFilter = () => {
     router.push('/');
@@ -67,29 +73,44 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
     setVisibleItem(9);
     setFilterData([]);
   };
-  useEffect(() => { }, [
+  useEffect(() => {
+    if (categoryData !== categoryValue) {
+      setCategoryValue(categoryData);
+    }
+  }, [
     setCategoryValue,
     setCategoryData,
     setSearchQuery,
     setVisibleItem,
     setFilterData,
-  ]);
+    categoryData, categoryValue
+  ])
+
+  const categoryOptionsList = Array.from(getListOfCategory()).map((item: string, index: number) => {
+    return {
+      value: item,
+      label: item
+    };
+  });
+
+
+
   return (
     <>
-      <section className="hidden md:flex md:flex-col lg:flex-row py-6 justify-center items-center lg:space-x-4 px-10 lg:px-14 xl:px-0  md:space-y-3 lg:space-y-0 mx-auto lg:max-w-5xl xl:max-w-6xl   text-Title-Small lg:text-Title-Small">
-        <p className="text-black font-medium">Filters</p>
-        {/* Dropdown */}
-        <div className="flex justify-between items-center space-x-5 w-full">
-          <div className="md:w-1/3 lg:w-1/3 md:flex-1">
+      <section className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 px-10 py-5 md:gap-4  mx-auto text-white  lg:max-w-5xl xl:max-w-6xl   text-Title-Small lg:text-Title-Small">
+        <div className="col-span-1 ">
+          <div className="">
             <button
-              className="bg-DarkOrange  px-5 lg:px-8 py-2 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-medium w-full text-center"
+              className="bg-DarkOrange  px-5 lg:px-8 py-3 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-semibold w-full text-center "
               onClick={clearFilter}
             >
               All
             </button>
           </div>
-          <div className="md:flex-1 bg-DarkOrange  rounded-full px-5 font-medium  py-2 border-2 border-DarkOrange border-solid md:w-full lg:w-full ">
-            <select
+        </div>
+        <div className="col-span-1 ">
+          <div className=" bg-DarkOrange  rounded-full px-5 h-full">
+            {/* <select
               title="select"
               name=""
               id=""
@@ -103,33 +124,88 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
                   {value}
                 </option>
               ))}
-            </select>
+            </select> */}
+            <Select
+              className=" font-semibold"
+              id="categoryData"
+              styles={{
+                // Apply custom styles for the select container (optional)
+                control: (provided) => ({
+                  ...provided,
+                  backgroundColor: "var(--DarkOrange)",
+                  color: 'white',
+                  outline: 'none',
+                  border: 'none',
+                  '&:hover': {
+                    outline: 'none',
+                    border: 'none',
+                  },
+                  '&:focus': {
+                    outline: 'none',
+                    border: 'none',
+                  },
+                }),
+                // Apply custom styles for the options dropdown (optional)
+                menu: (provided) => ({
+                  ...provided,
+                  backgroundColor: "var(--DarkOrange)",
+                  color: 'white',
+                }),
+                menuList: (provided) => ({
+                  ...provided,
+                  backgroundColor: "#FF8C00",
+                  textAlign: 'center',
+                  scrollbarWidth: 'none',
+                  '-ms-overflow-style': 'none',
+                  '&::-webkit-scrollbar': {
+                    width: 0,
+                  },
+                  '&:hover': {
+                    border: 'none',
+                    outline: 'none'
+                  },
+                  '&:focus': {
+                    border: 'none',
+                    outline: 'none'
+                  },
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isFocused ? '#fed7aa' : '#FF8C00',
+                  '&:hover': {
+                    backgroundColor: '#fed7aa',
+                  },
+                }),
+                singleValue: (provided) => ({
+                  ...provided,
+                  color: "white",
+                  padding: "12px 20px",
+                }),
+                dropdownIndicator: (provided) => ({
+                  ...provided,
+                  color: "white",
+                  paddingRight: "24px"
+                }),
+              }}
+              options={categoryOptionsList}
+              value={categoryValue}
+              onChange={selectedCategory}
+              isSearchable={false}
+            />
           </div>
-          {/* <div className="flex-1 bg-orange-200  rounded-full px-5 font-medium  py-2 border-2 border-DarkOrange border-solid md:w-full lg:w-full hidden">
-            <select
-              title="Price"
-              name=""
-              id=""
-              className="bg-transparent  focus:outline-none text-black w-full "
-            >
-              <option defaultValue="Price">Price</option>
-              <option value="">2</option>
-              <option value="">3</option>
-              <option value="">4</option>
-              <option value="">5</option>
-            </select>
-          </div> */}
         </div>
-        <div className="md:flex lg:none space-x-5 justify-between  items-center w-full">
-          <div className="md:w-1/3 flex-1">
+        <div className="col-span-1 font-medium">
+          <div className="">
             <button
-              className="bg-DarkOrange whitespace-nowrap px-5  py-3 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-medium w-full text-center"
+              className="bg-DarkOrange whitespace-nowrap px-5  py-3 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-semibold w-full text-center"
               onClick={clearFilter}
             >
               Clear Filters
             </button>
           </div>
-          <div className="flex-1 text-black md:w-2/3  lg:w-full py-0.5 ">
+        </div>
+        <div className="col-span-1 font-medium">
+          <div className=" text-black py-0.5 ">
             <input
               value={searchQuery}
               onChange={handleSearch}
@@ -142,21 +218,19 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
       </section>
 
       {/* Visible in mobile screen only */}
-      <section className="flex flex-col md:hidden py-[25px]  space-y-4 text-Title-Small lg:text-Title-Large max-w-md mx-auto px-[30px]">
-        <p className="text-black font-medium    text-center">Filters</p>
-        {/* Dropdown */}
-        <div className="text-black lg:w-full ">
+      <section className="grid grid-cols-1 md:hidden py-[25px]  gap-3 text-Title-Small lg:text-Title-Large max-w-md mx-auto px-[30px]">
+        <div className="col-span-1">
           <input
-            className="rounded-full w-full  border-2 outline-none px-3 py-2 font-medium border-black border-solid"
+            className="rounded-full w-full  border-2 outline-none p-3 font-medium border-black border-solid"
             type="text"
             placeholder="Search"
             value={searchQuery}
             onChange={handleSearch}
           />
         </div>
-        <div className="flex justify-center space-x-4">
-          <div className="bg-DarkOrange  rounded-full px-3 font-medium  py-2  w-full lg:w-1/3">
-            <select
+        <div className="col-span-1">
+          <div className="bg-DarkOrange  rounded-full p-2 font-semibold text-white  w-full ">
+            {/* <select
               title="Category"
               name=""
               id=""
@@ -170,7 +244,183 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
                   {value}
                 </option>
               ))}
-            </select>
+            </select> */}
+            <Select
+              id="categoryData"
+              className="font-semibold"
+              styles={{
+                // Apply custom styles for the select container (optional)
+                control: (provided) => ({
+                  ...provided,
+                  backgroundColor: "var(--DarkOrange)",
+                  color: 'white',
+                  outline: 'none',
+                  border: 'none',
+                  '&:hover': {
+                    outline: 'none',
+                    border: 'none',
+                  },
+                  '&:focus': {
+                    outline: 'none',
+                    border: 'none',
+                  },
+                }),
+                // Apply custom styles for the options dropdown (optional)
+                menu: (provided) => ({
+                  ...provided,
+                  backgroundColor: "var(--DarkOrange)",
+                  color: 'white',
+                }),
+                menuList: (provided) => ({
+                  ...provided,
+                  backgroundColor: "#FF8C00",
+                  textAlign: 'center',
+                  scrollbarWidth: 'none',
+                  '-ms-overflow-style': 'none',
+                  '&::-webkit-scrollbar': {
+                    width: 0,
+                  },
+                  '&:hover': {
+                    border: 'none',
+                    outline: 'none'
+                  },
+                  '&:focus': {
+                    border: 'none',
+                    outline: 'none'
+                  },
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isFocused ? '#fed7aa' : '#FF8C00',
+                  '&:hover': {
+                    backgroundColor: '#fed7aa',
+                  },
+                }),
+                singleValue: (provided) => ({
+                  ...provided,
+                  color: "white",
+                  padding: "12px 20px",
+                }),
+                dropdownIndicator: (provided) => ({
+                  ...provided,
+                  color: "white",
+                  paddingRight: "24px"
+                }),
+              }}
+              options={categoryOptionsList}
+              value={categoryValue}
+              onChange={selectedCategory}
+              isSearchable={false}
+            />
+          </div>
+        </div>
+        <div className="col-span-1 text-white font-semibold">
+          <div className=" grid grid-cols-2 gap-x-4">
+            <div className="col-span-1">
+              <button
+                className="w-full bg-DarkOrange   p-3 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 "
+                onClick={clearFilter}
+              >
+                All
+              </button>
+            </div>
+            <div className="col-span-1">
+              <button
+                className="w-full bg-DarkOrange whitespace-nowrap p-3 rounded-full  focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 "
+                onClick={clearFilter}
+              >
+                Clear Filters
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+        {/* <div className="text-black lg:w-full ">
+           <input
+            className="rounded-full w-full  border-2 outline-none px-3 py-2 font-medium border-black border-solid"
+            type="text"
+            placeholder="Search"
+            value={searchQuery}
+            onChange={handleSearch}
+          /> 
+        </div>*/}
+        {/* <div className="flex justify-center space-x-4">
+          <div className="bg-DarkOrange  rounded-full px-3 font-medium  py-2  w-full lg:w-1/3">
+            
+            <Select
+              id="categoryData"
+              styles={{
+                control: (provided) => ({
+                  ...provided,
+                  backgroundColor: "var(--DarkOrange)",
+                  color: 'white',
+                  outline: 'none',
+                  border: 'none',
+                  '&:hover': {
+                    outline: 'none',
+                    border: 'none',
+                  },
+                  '&:focus': {
+                    outline: 'none',
+                    border: 'none',
+                  },
+                }),
+                menu: (provided) => ({
+                  ...provided,
+                  backgroundColor: "var(--DarkOrange)",
+                  color: 'white',
+                }),
+                menuList: (provided) => ({
+                  ...provided,
+                  backgroundColor: "#FF8C00",
+                  textAlign: 'center',
+                  scrollbarWidth: 'none',
+                  '-ms-overflow-style': 'none',
+                  '&::-webkit-scrollbar': {
+                    width: 0,
+                  },
+                  '&:hover': {
+                    border: 'none',
+                    outline: 'none'
+                  },
+                  '&:focus': {
+                    border: 'none',
+                    outline: 'none'
+                  },
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isFocused ? '#fed7aa' : '#FF8C00',
+                  '&:hover': {
+                    backgroundColor: '#fed7aa',
+                  },
+                }),
+                singleValue: (provided) => ({
+                  ...provided,
+                  color: "white",
+                  padding: "12px 20px",
+                }),
+                dropdownIndicator: (provided) => ({
+                  ...provided,
+                  color: "white",
+                  paddingRight: "24px"
+                }),
+              }}
+              options={categoryOptionsList}
+              value={categoryValue}
+              onChange={selectedCategory}
+              isSearchable={false}
+            />
           </div>
           <div className="bg-orange-200  rounded-full px-3 font-medium  py-2 border-2 border-DarkOrange border-solid lg:w-1/3 w-full hidden">
             <select
@@ -204,7 +454,7 @@ export default function FilterSection({ setFilterData, setCategoryData }: any) {
               Clear Filters
             </button>
           </div>
-        </div>
+        </div> */}
       </section>
     </>
   );
