@@ -237,11 +237,9 @@ export function CardContainer({
     setLikedTool(!likedTool);
     // console.log(' @@ likedTool', likedTool)
   }
-  /* .replace(/\.(?:\w+)$/, ""); */
-  // console.log("URL ENCOEDD:::", encodeURIComponent(title));
+  
   return (
     <>
-
       <div
         className="rounded-2xl max-w-sm  flex flex-col  border border-black 
         border-solid  shadow-2xl"
