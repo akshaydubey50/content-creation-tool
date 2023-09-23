@@ -68,7 +68,7 @@ export default function ProductToolBanner({
         </div>
 
         <div
-          className="flex justify-between  items-center text-white lg:w-1/2"
+          className="flex justify-between  items-center text-white lg:w-1/2 max-w-7xl"
         >
             <Link
               href={link}
