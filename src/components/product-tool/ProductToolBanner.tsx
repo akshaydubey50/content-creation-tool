@@ -1,12 +1,13 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BreadCrumb from "../breadcrumb/breadcrumb";
 import Image from "next/image";
-import { BsBookmark } from "react-icons/bs";
+import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { Product } from "@/types/product";
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
-
+import LikedBookmarkModal from "../modal/LikedBookmarkModal";
+import { useRouter } from "next/navigation";
 
 export default function ProductToolBanner({
   url,
@@ -15,6 +16,20 @@ export default function ProductToolBanner({
   tag,
   link,
 }: Product) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isBookMarked, setIsBookMarked] = useState(false);
+  const router = useRouter();
+
+  const handleBookMark = () => {
+    setIsOpen(true);
+    setIsBookMarked(!isBookMarked);
+    // console.log(' @@ bookmark', isBookMarked)
+  }
+  const formattedTag = tag[0].toLowerCase().replace(/\s/g, "-");
+
+  const goToCategory = ()=>{
+    router.push(`/category/${formattedTag}`)
+  }
   return (
     <>
       <main className="bg-light-gray  p-10 md:px-10 md:py-16 md:mb-12 xl:px-10-percent ">
@@ -51,11 +66,12 @@ export default function ProductToolBanner({
             >
               <div
                 className=" rounded-full bg-white border border-solid
-               border-black text-center"
+               border-black text-center cursor-pointer hover:bg-DarkOrange hover:text-white hover:border-none"
               >
-                <button className="text-sm px-6 py-2 md:px-10 md:py-2 font-bold w-fit">
+                <button className="text-sm px-6 py-2 md:px-10 md:py-2 font-bold w-fit"
+                onClick={goToCategory}>
                   {tag}
-                </button>
+                  </button>
               </div>
               <div
                 className="rounded-full  bg-gray-400 text-white border border-solid
@@ -83,8 +99,12 @@ export default function ProductToolBanner({
             </div>
             </Link>
           <div className="ml-auto">
-            <BsBookmark className=" text-black text-2xl md:text-4xl " />
-          </div>
+          <button title="Bookmark" type="button" onClick={handleBookMark}>
+                  {isBookMarked ? (<BsBookmarkFill className="text-3xl text-DarkOrange" />
+                  ) : (<BsBookmark className="text-3xl   text-black" />)}
+                </button>          </div>
+          {isOpen && <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />}
+
         </div>
       </main>
     </>
