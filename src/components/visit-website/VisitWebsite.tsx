@@ -11,7 +11,7 @@ export default function VisitWebsite({ url }: visiWebsite) {
     <Link
       href={url}
       target="_blank"
-      className=" flex gap-x-2 px-4 md:px-6  py-2 rounded-full font-semibold bg-DarkOrange items-center text-Title-Small "
+      className=" flex gap-x-2 px-4 md:px-6  py-2 rounded-full text-cct-White font-medium bg-DarkOrange items-center text-Title-Small "
     >
       <p>
         Visit Website

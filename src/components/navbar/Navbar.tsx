@@ -19,14 +19,7 @@ interface MenuItem {
 export default function Navbar() {
   const supabase = createClientComponentClient();
   const [session, setSession] = useState<Session>();
-  const storedValue = localStorage.getItem("isActiveMenu");
-  const initialIsActiveMenu = storedValue ? parseInt(storedValue) || 0 : 0;
-
-  const [isActiveMenu, setIsActiveMenu] = useState<number>(initialIsActiveMenu);
-
-  const handleNavbarMenu = (index: number) => {
-    setIsActiveMenu(index);
-  };
+  const [isActiveMenu, setIsActiveMenu] = useState(0);
 
   useEffect(() => {
     // console.log("isActiveMenu", isActiveMenu);
@@ -50,7 +43,7 @@ export default function Navbar() {
     const {
       data: { session },
     } = await supabase.auth.getSession();
-    // console.log("logout session", session);
+    console.log("logout session", session);
     if (session) {
       await supabase.auth.signOut();
     }
@@ -60,7 +53,7 @@ export default function Navbar() {
     if (!session) {
       memoizedIsUserLoggedIn();
     }
-  }, [session, memoizedIsUserLoggedIn, isUserLoggedIn, logout]);
+  }, [session, isUserLoggedIn, logout]);
 
   const menuItem: MenuItem[] = [
     { id: 1, label: "All Program", href: "/" },
@@ -71,6 +64,10 @@ export default function Navbar() {
   const [isMenu, setIsMenu] = useState(false);
   const [isPopupOpen, setPopupOpen] = useState(false);
 
+  const handleNavbarMenu = (index: number) => {
+    console.log('index::',index)
+    setIsActiveMenu(index);
+  };
 
   const togglePopup = () => {
     setPopupOpen(!isPopupOpen);
@@ -83,7 +80,6 @@ export default function Navbar() {
   function crossHandler() {
     setIsMenu(false);
   }
-
 
   return (
     <>
@@ -198,19 +194,18 @@ export default function Navbar() {
           <div className="bg-white p-8 md:w-2/5 lg:w-2/5 mt-12 rounded shadow-md z-20 relative">
             <Auth
               supabaseClient={supabase}
-              providers={["google"]}
+              providers={[]}
               redirectTo={`/auth/callback`}
               magicLink={true}
               appearance={{
                 style: {
                   button: {
-                    // background: "#FF8C00",
+                    background: "#FF8C00",
                     outline: "none",
                     border: "none",
-                    // font
                   },
                   anchor: { color: "#FF8C00" },
-                  // label: { color: "black" },
+                  label: { color: "black" },
                   container: { width: "flex" },
                 },
                 theme: ThemeSupa,

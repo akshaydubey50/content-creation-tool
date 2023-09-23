@@ -17,7 +17,7 @@ export default function ProductToolBanner({
 }: Product) {
   return (
     <>
-      <main className="bg-light-gray  p-10 md:px-20 md:py-16 md:mb-12">
+      <main className="bg-light-gray  p-10 md:px-10 md:py-16 md:mb-12 xl:px-10-percent ">
         <BreadCrumb tag={tag} title={title} />
         <div
           className="affiliate-tool-container  space-y-8 flex flex-col 
@@ -25,7 +25,7 @@ export default function ProductToolBanner({
         >
           <div
             className="aftl-left-section border border-black border-solid 
-          rounded-t-xl md:xl lg:w-1/2"
+          rounded-t-xl  xl:w-45%"
           >
             <Image
               src={url}
@@ -39,7 +39,7 @@ export default function ProductToolBanner({
             //   style="color: transparent"
             />
           </div>
-          <div className="aftl-right-section  lg:w-2/5 ">
+          <div className="aftl-right-section  xl:w-30%">
             <div className="flex flex-col flex-1 space-y-4 mb-6 ">
               <h1 className="text-Heading-Medium md:text-Heading-Large font-bold">
                 {title}
