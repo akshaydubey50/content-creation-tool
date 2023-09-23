@@ -53,7 +53,7 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
       }
       return null;
     },
-    [apiData]
+    [apiData,id]
   );
 
   useEffect(() => {
@@ -140,7 +140,6 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
             tag={item.fields.Tags}
             link={item.fields.WebsiteLink}
             isVerified={item.fields?.Verified}
-
           />
         ))}
 
@@ -156,7 +155,6 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
               tag={item.fields.Tags}
               link={item.fields.WebsiteLink}
               isVerified={item.fields?.Verified}
-
             />
           );
         })}
@@ -221,7 +219,7 @@ export function CardContainer({
   isVerified = false
 }: Product) {
   // console.log('url>>>',url)
-  const formattedTitle = title.toLowerCase().replace(/\s/g, "");
+  const formattedTitle = title.toLowerCase().replace(/\s/g, "-");
   const [isBookMarked, setIsBookMarked] = useState(false);
   const { isVerifiedFilled } = useVerifiedToolContextData();
   const [likedTool, setLikedTool] = useState(false);
