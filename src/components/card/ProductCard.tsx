@@ -12,6 +12,10 @@ import VisitWebsite from "../visit-website/VisitWebsite";
 import { useSearchParams } from "next/navigation";
 import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import {
+  Session,
+  createClientComponentClient,
+} from "@supabase/auth-helpers-nextjs";
 
 type Product = {
   id: string;
@@ -23,7 +27,8 @@ type Product = {
 };
 export default function ProudctCard({ filterData, categoryData }: any) {
   const { apiData } = useApiDataContext();
-  const { isVerifiedFilled, setIsVerifiedFilled } = useVerifiedToolContextData();
+  const { isVerifiedFilled, setIsVerifiedFilled } =
+    useVerifiedToolContextData();
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();
   const id = useSearchParams().get("id");
 
@@ -65,7 +70,8 @@ export default function ProudctCard({ filterData, categoryData }: any) {
       >
         {/* All data cards listed when filter & category values is empty all data listed on api call */}
         {filterData?.length <= 0 &&
-          categoryData?.length <= 0 && !isVerifiedFilled &&
+          categoryData?.length <= 0 &&
+          !isVerifiedFilled &&
           apiData &&
           apiData.slice(0, visibleItem).map((item: AirtableModel) => {
             if (item?.fields?.Description?.trim() !== "") {
@@ -85,7 +91,8 @@ export default function ProudctCard({ filterData, categoryData }: any) {
           })}
 
         {/*on  Category card listed choosing dropdown value */}
-        {!isVerifiedFilled && getProductByCategory(categoryData) &&
+        {!isVerifiedFilled &&
+          getProductByCategory(categoryData) &&
           getProductByCategory(categoryData)
             ?.slice(0, visibleItem)
             .map((item) => {
@@ -103,7 +110,8 @@ export default function ProudctCard({ filterData, categoryData }: any) {
             })}
 
         {/* Displaying filtered data if input field has some value*/}
-        {filterData?.length > 0 && !isVerifiedFilled &&
+        {filterData?.length > 0 &&
+          !isVerifiedFilled &&
           filterData.slice(0, visibleItem).map((item: AirtableModel) => {
             if (item?.fields?.Description?.trim() !== "") {
               // console.log(item);
@@ -122,17 +130,20 @@ export default function ProudctCard({ filterData, categoryData }: any) {
           })}
 
         {/* Verify Icon base filter data  */}
-        {isVerifiedFilled && apiData.filter((item: AirtableModel) => item.fields.Verified).map((item: AirtableModel) => (
-          <CardContainer
-            key={item.id}
-            id={item.id}
-            url={item.fields.ToolImage}
-            title={item.fields.Name}
-            description={item.fields.Description}
-            tag={item.fields.Tags}
-            link={item.fields.WebsiteLink}
-          />
-        ))}
+        {isVerifiedFilled &&
+          apiData
+            .filter((item: AirtableModel) => item.fields.Verified)
+            .map((item: AirtableModel) => (
+              <CardContainer
+                key={item.id}
+                id={item.id}
+                url={item.fields.ToolImage}
+                title={item.fields.Name}
+                description={item.fields.Description}
+                tag={item.fields.Tags}
+                link={item.fields.WebsiteLink}
+              />
+            ))}
         {!apiData && (
           <div>
             <h1 className="text-3xl text-center font-bold">Loading....</h1>
@@ -154,8 +165,9 @@ export default function ProudctCard({ filterData, categoryData }: any) {
         visibleItem < getProductByCategory(categoryData)!.length && (
           <div onClick={loadMore}>
             <CTAButton
-              value={`Load More Category ${getProductByCategory(categoryData)!.length - visibleItem
-                }`}
+              value={`Load More Category ${
+                getProductByCategory(categoryData)!.length - visibleItem
+              }`}
             />
           </div>
         )}
@@ -168,7 +180,8 @@ export default function ProudctCard({ filterData, categoryData }: any) {
         </div>
       )}
       {/* Load More Button for All Data */}
-      {visibleItem <= apiData?.length && !isVerifiedFilled &&
+      {visibleItem <= apiData?.length &&
+        !isVerifiedFilled &&
         (getProductByCategory(categoryData) === null ||
           getProductByCategory(categoryData)!.length === 0) &&
         filterData?.length === 0 && (
@@ -195,22 +208,62 @@ export function CardContainer({
   const [isBookMarked, setIsBookMarked] = useState(false);
   const { isVerifiedFilled } = useVerifiedToolContextData();
   const [likedTool, setLikedTool] = useState(false);
-
+  const [userSession, setUserSession] = useState<Session>();
+  const supabase = createClientComponentClient();
   const formattedTag = tag[0].toLowerCase().replace(/\s/g, "-");
+
   const handleBookMark = () => {
     setIsBookMarked(!isBookMarked);
-    console.log(' @@ bookmark', isBookMarked)
-  }
+    console.log(" @@ bookmark", isBookMarked);
+  };
 
-  const handleLikedTool = () => {
-    setLikedTool(!likedTool);
-    console.log(' @@ likedTool', likedTool)
-  }
-  /* .replace(/\.(?:\w+)$/, ""); */
-  // console.log("URL ENCOEDD:::", encodeURIComponent(title));
+  const getSession = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (session !== null) {
+      setUserSession(session);
+    }
+  };
+
+  const handleLikedTool = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (session?.user) {
+      const { data, error } = await supabase
+        .from("likes")
+        .select("id")
+        .eq("user_id", session.user?.id)
+        .eq("product_id", id);
+
+      if (error) {
+        console.error(error);
+      } else {
+        // product exist deleting
+        if (data.length === 1) {
+          const { error } = await supabase
+            .from("likes")
+            .delete()
+            .eq("user_id", session.user?.id)
+            .eq("product_id", id);
+          setLikedTool(false);
+        }
+        if (data.length === 0) {
+          const { data: likes, error: err } = await supabase
+            .from("likes")
+            .insert([{ user_id: session.user?.id, product_id: id }])
+            .select();
+          setLikedTool(true);
+          console.log("like added to db::", likes);
+        }
+      }
+    }
+    console.log("sign in to like the post");
+  };
+
   return (
     <>
-
       <div
         className="rounded-2xl max-w-sm  flex flex-col  border border-black 
         border-solid  shadow-2xl"
@@ -233,48 +286,62 @@ export function CardContainer({
               decoding="async"
               data-nimg="1"
               className="rounded-t-2xl w-full object-cover"
-            //   style="color: transparent"
             />
           </section>
         </Link>
         <section className="bg-light-gray pt-7 px-5 rounded-b-2xl h-full">
           <div className="flex flex-col justify-between h-full">
-         <div className="">
-         <div className="pb-4 flex flex-1 flex-row justify-between">
-              <h1 className="font-bold text-Title-Medium md:text-Title-Large">
-                {title}
-              </h1>
-              {isVerifiedFilled ? <MdVerified className="text-2xl text-DarkOrange" /> : ''}
-            <button title="Bookmark" type="button" onClick={handleLikedTool}>
-              {likedTool ? (<AiFillHeart className="text-3xl text-DarkOrange" />
-              ) : (<AiOutlineHeart className="text-3xl   text-black" />)}
-            </button>
-          </div>
-          <div className="text-Description">
-            <p>{description}</p>
-          </div>
-         </div>
-          <div className="tool-btn-section pb-7">
-          <p className="my-6 ">
-              <Link className=" bg-white rounded-full  text-tags font-medium border 
+            <div className="">
+              <div className="pb-4 flex flex-1 flex-row justify-between">
+                <h1 className="font-bold text-Title-Medium md:text-Title-Large">
+                  {title}
+                </h1>
+                {isVerifiedFilled ? (
+                  <MdVerified className="text-2xl text-DarkOrange" />
+                ) : (
+                  ""
+                )}
+                <button
+                  title="Bookmark"
+                  type="button"
+                  onClick={handleLikedTool}
+                >
+                  {likedTool ? (
+                    <AiFillHeart className="text-3xl text-DarkOrange" />
+                  ) : (
+                    <AiOutlineHeart className="text-3xl   text-black" />
+                  )}
+                </button>
+              </div>
+              <div className="text-Description">
+                <p>{description}</p>
+              </div>
+            </div>
+            <div className="tool-btn-section pb-7">
+              <p className="my-6 ">
+                <Link
+                  className=" bg-white rounded-full  text-tags font-medium border 
               border-solid border-black px-4 py-1"
-                href={`/category/${formattedTag}`}
-                prefetch={true}
-              >
-                {tag}
-              </Link>
-            </p>
-          <div
-            className="text-white text-Title-Medium  flex 
+                  href={`/category/${formattedTag}`}
+                  prefetch={true}
+                >
+                  {tag}
+                </Link>
+              </p>
+              <div
+                className="text-white text-Title-Medium  flex 
         justify-between items-center"
-          >
-            <VisitWebsite url={link} />
-            <button title="Bookmark" type="button" onClick={handleBookMark}>
-              {isBookMarked ? (<BsBookmarkFill className="text-3xl text-DarkOrange" />
-              ) : (<BsBookmark className="text-3xl   text-black" />)}
-            </button>
-          </div>
-          </div>
+              >
+                <VisitWebsite url={link} />
+                <button title="Bookmark" type="button" onClick={handleBookMark}>
+                  {isBookMarked ? (
+                    <BsBookmarkFill className="text-3xl text-DarkOrange" />
+                  ) : (
+                    <BsBookmark className="text-3xl   text-black" />
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         </section>
       </div>
