@@ -18,8 +18,6 @@ export default function ToolDetails() {
   const [filterData, setFilterData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
 
-
-
   useEffect(() => {
     const urlData = pathName.split('/').filter((item) => item !== '');
     // console.log('urlData::', urlData)
@@ -47,12 +45,14 @@ export default function ToolDetails() {
     );
     // console.log('ParamData::', paramData)
 
-    // from paramData we cane get the current category base on url param
+    // from paramData we can get the current category base on url param
     const getParamBaseCategory = paramData?.fields.Tags[0];
     setFilterData([]);
     setCategoryData(getParamBaseCategory);
-    // console.log('getParamBaseCategory::',getParamBaseCategory);
-  }, [apiData, pathName, param.name]);
+    console.log('getParamBaseCategory::',getParamBaseCategory);
+    console.log('categoryData::',categoryData);
+
+  }, [apiData, pathName, param.name,categoryData]);
 
   return (
     <>

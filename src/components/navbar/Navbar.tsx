@@ -19,10 +19,7 @@ interface MenuItem {
 export default function Navbar() {
   const supabase = createClientComponentClient();
   const [session, setSession] = useState<Session>();
-  const storedValue = localStorage.getItem("isActiveMenu");
-  const initialIsActiveMenu = storedValue ? parseInt(storedValue) || 0 : 0;
-
-  const [isActiveMenu, setIsActiveMenu] = useState<number>(initialIsActiveMenu);
+  const [isActiveMenu, setIsActiveMenu] = useState(0);
 
   useEffect(() => {
     // console.log("isActiveMenu", isActiveMenu);

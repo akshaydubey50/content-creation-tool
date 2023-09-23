@@ -5,6 +5,7 @@ import { useApiDataContext } from "@/lib/productContext";
 import AirtableModel from "@/models/airtableModel";
 import { useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
+
 export default function ToolDetails() {
   const id = useSearchParams().get("id");
   const { apiData } = useApiDataContext();
