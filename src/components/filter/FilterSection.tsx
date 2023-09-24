@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useApiDataContext } from "@/lib/productContext";
 import AirtableModel from "@/models/airtableModel";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
-import { useRouter, useParams } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation';
+import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
 import SelectDropdown from "./SelectDropdown";
 
 type Product = {
@@ -20,6 +21,8 @@ export default function FilterSection({ setFilterData, setCategoryData, category
   const { apiData } = useApiDataContext();
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();
   const router = useRouter();
+
+  const { setIsVerifiedFilled } = useVerifiedToolContextData();
 
   const handleSearch = (e: any) => {
     setCategoryValue("");
@@ -51,15 +54,18 @@ export default function FilterSection({ setFilterData, setCategoryData, category
     });
     return categoryItem;
   };
- 
+
   const selectedCategory = (selectedOption: any) => {
     if (selectedOption) {
       let categoryVal = selectedOption.value;
       let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
       router.push(`/category/${formatedCategory}`);
+      setIsVerifiedFilled(false);
       setFilterData("");
       setCategoryData(categoryVal);
       setCategoryValue(categoryVal);
+    setVisibleItem(9);
+
     }
   };
   const clearFilter = () => {
@@ -71,7 +77,7 @@ export default function FilterSection({ setFilterData, setCategoryData, category
     setFilterData([]);
   };
   useEffect(() => {
-   
+
   }, [
     setCategoryValue,
     setCategoryData,
@@ -82,14 +88,14 @@ export default function FilterSection({ setFilterData, setCategoryData, category
 
   useEffect(() => {
     if (categoryData !== categoryValue) {
-      console.log('before::',categoryData,categoryValue)
-      
+      console.log('before::', categoryData, categoryValue)
+
       setCategoryValue(categoryData);
-      console.log('before after::',categoryData,categoryValue)
+      console.log('before after::', categoryData, categoryValue)
 
     }
   }, [
-    categoryData, categoryValue,setCategoryValue
+    categoryData, categoryValue, setCategoryValue
   ])
 
   const categoryOptionsList = Array.from(getListOfCategory()).map((item: string, index: number) => {
@@ -114,9 +120,9 @@ export default function FilterSection({ setFilterData, setCategoryData, category
         </div>
         <div className="col-span-1 ">
           <div className=" bg-DarkOrange  rounded-full  h-full">
-            <SelectDropdown 
-             key={categoryValue}  placeholder="Select Category" options={categoryOptionsList} onChange={selectedCategory}   value={categoryOptionsList.find(option => option.value === categoryValue) || null} 
-             />
+            <SelectDropdown
+              key={categoryValue} placeholder="Select Category" options={categoryOptionsList} onChange={selectedCategory} value={categoryOptionsList.find(option => option.value === categoryValue) || null}
+            />
           </div>
         </div>
         <div className="col-span-1 font-medium">
@@ -155,22 +161,9 @@ export default function FilterSection({ setFilterData, setCategoryData, category
         </div>
         <div className="col-span-1">
           <div className="bg-DarkOrange  rounded-full text-white  w-full ">
-            {/* <select
-              title="Category"
-              name=""
-              id=""
-              className="bg-transparent  focus:outline-none text-black w-full text-center"
-              onChange={selectedCategory}
-              value={categoryValue}
-            >
-              <option defaultValue="Category">Category </option>
-              {Array.from(getListOfCategory()).map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select> */}
-               <SelectDropdown placeholder="Select Category" options={categoryOptionsList} onChange={selectedCategory} value={categoryValue} />
+            <SelectDropdown
+              key={categoryValue} placeholder="Select Category" options={categoryOptionsList} onChange={selectedCategory} value={categoryOptionsList.find(option => option.value === categoryValue) || null}
+            />
           </div>
         </div>
         <div className="col-span-1 text-white font-semibold">

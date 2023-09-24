@@ -6,12 +6,16 @@ import React, { useEffect, useState } from "react";
 import HeroSection from "@/components/herosection/HeroSection";
 import { usePathname } from "next/navigation";
 import FilterSection from "@/components/filter/FilterSection";
-import { useParams } from 'next/navigation'
+import { useParams,useRouter } from 'next/navigation'
+import {useVisibleItemContextData } from "@/lib/visibleItemContext";
 
 export default function ToolDetails() {
   const { apiData } = useApiDataContext();
   const pathName = usePathname();
   const param = useParams();
+  const router = useRouter();
+  const { visibleItem, setVisibleItem } = useVisibleItemContextData();
+
 
 
   const [matchedCategory, setMatchedCategory] = useState<AirtableModel>();
@@ -19,6 +23,7 @@ export default function ToolDetails() {
   const [categoryData, setCategoryData] = useState([]);
 
   useEffect(() => {
+    setVisibleItem(9); 
     const urlData = pathName.split('/').filter((item) => item !== '');
     // console.log('urlData::', urlData)
     if (urlData.length > 0) {
@@ -31,7 +36,6 @@ export default function ToolDetails() {
       console.log('filteredData::', filteredData);
       setMatchedCategory(filteredData)
     }
-
 
     // url params value set to category dropdown
     const paramData = apiData.find((item: AirtableModel) => {

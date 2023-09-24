@@ -32,7 +32,12 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
 
   async function loadMore() {
     if (
-      getProductByCategory(categoryData) !== null &&
+      (isFromUrl && categoryData !== undefined) && visibleItem < categoryData!.length
+    ) {
+      setVisibleItem(visibleItem + 9);
+    }
+    if (
+      !isFromUrl && getProductByCategory(categoryData) !== null &&
       visibleItem < getProductByCategory(categoryData)!.length
     ) {
       setVisibleItem(visibleItem + 9);
@@ -53,12 +58,12 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
       }
       return null;
     },
-    [apiData,id]
+    [apiData, id]
   );
 
   useEffect(() => {
     getProductByCategory(categoryData);
-    console.log('card category:::::::', categoryData)
+    console.log('card visibleItem:::::::', (visibleItem));
   }, [filterData, categoryData, visibleItem, getProductByCategory]);
 
   return (
@@ -176,9 +181,18 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
 
 
       {/* Load More Button for Category Base Dropdown Value  */}
-      {getProductByCategory(categoryData) &&
-        !(getProductByCategory(categoryData)!.length === visibleItem) &&
-        visibleItem < getProductByCategory(categoryData)!.length && (
+      {(isFromUrl && categoryData !== undefined) && visibleItem < categoryData!.length && (
+        <div onClick={loadMore}>
+          <CTAButton
+            value={`Load More Category ${categoryData!.length - visibleItem
+              }`}
+          />
+        </div>
+      )
+        ||
+        (getProductByCategory(categoryData) &&
+          !(getProductByCategory(categoryData)!.length === visibleItem) &&
+          visibleItem < getProductByCategory(categoryData)!.length) && (
           <div onClick={loadMore}>
             <CTAButton
               value={`Load More Category ${getProductByCategory(categoryData)!.length - visibleItem
@@ -186,6 +200,9 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
             />
           </div>
         )}
+
+
+
       {/* Load More Button for Filter/Search Base  Value  */}
       {visibleItem < filterData?.length && (
         <div onClick={loadMore}>
@@ -195,7 +212,7 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
         </div>
       )}
       {/* Load More Button for All Data */}
-      {visibleItem <= apiData?.length && !isVerifiedFilled &&
+      {visibleItem <= apiData?.length && !isFromUrl && !isVerifiedFilled &&
         (getProductByCategory(categoryData) === null ||
           getProductByCategory(categoryData)!.length === 0) &&
         filterData?.length === 0 && (
@@ -237,7 +254,7 @@ export function CardContainer({
     setLikedTool(!likedTool);
     // console.log(' @@ likedTool', likedTool)
   }
-  
+
   return (
     <>
       <div
