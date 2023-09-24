@@ -2,10 +2,11 @@
 
 import Navbar from "@/components/navbar/Navbar";
 import "./globals.css";
-import { ProductContextProvider } from "@/lib/productContext";
-import { VisibleItemContextProvider } from "@/lib/visibleItemContext";
 import Footer from "@/components/footer/Footer";
 import { Poppins } from "next/font/google";
+import { ProductContextProvider } from "@/lib/productContext";
+import { VisibleItemContextProvider } from "@/lib/visibleItemContext";
+
 import { VerifiedToolContextProvider } from "@/lib/verifiedToolContext";
 import type { Metadata } from "next";
 

@@ -18,7 +18,7 @@ export default function Home() {
         setFilterData={setFilterData}
         setCategoryData={setCategoryData}
       />
-      <ProductCard filterData={filterData} categoryData={categoryData} />
+ <ProductCard filterData={filterData} categoryData={categoryData} />
     </div>
   );
 }
