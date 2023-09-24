@@ -252,15 +252,86 @@ export function CardContainer({
         if (data.length === 0) {
           const { data: likes, error: err } = await supabase
             .from("likes")
-            .insert([{ user_id: session.user?.id, product_id: id }])
+            .insert([
+              {
+                user_id: session.user?.id,
+                product_id: id,
+                product_name: title,
+              },
+            ])
             .select();
           setLikedTool(true);
           console.log("like added to db::", likes);
         }
       }
     }
-    console.log("sign in to like the post");
+    if (!session?.user) {
+      console.log("sign in to like the post");
+    }
   };
+  const handleBookmarkTool = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (session?.user) {
+      const { data, error } = await supabase
+        .from("bookmark")
+        .select("id")
+        .eq("user_id", session.user?.id)
+        .eq("product_id", id);
+
+      if (error) {
+        console.error(error);
+      } else {
+        // product exist deleting
+        if (data.length === 1) {
+          const { error } = await supabase
+            .from("bookmark")
+            .delete()
+            .eq("user_id", session.user?.id)
+            .eq("product_id", id);
+          setIsBookMarked(false);
+        }
+        if (data.length === 0) {
+          const { data: bookmark, error: err } = await supabase
+            .from("bookmark")
+            .insert([
+              {
+                user_id: session.user?.id,
+                product_id: id,
+                product_name: title,
+              },
+            ])
+            .select();
+          setIsBookMarked(true);
+          console.log("bookmarked added to db::", bookmark);
+        }
+      }
+    }
+    if (!session?.user) {
+      console.log("sign in to Bookmark the post");
+    }
+  };
+
+  const likedToolByUser = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (session?.user) {
+      const { data, error } = await supabase
+        .from("bookmark")
+        .select("product_id")
+        .eq("user_id", session.user?.id);
+      if (error) {
+        console.error(error);
+      }
+      // console.log("liked product by user", data);
+    }
+  };
+
+  // useEffect(() => {
+  //   likedToolByUser();
+  // }, []);
 
   return (
     <>
@@ -333,7 +404,11 @@ export function CardContainer({
         justify-between items-center"
               >
                 <VisitWebsite url={link} />
-                <button title="Bookmark" type="button" onClick={handleBookMark}>
+                <button
+                  title="Bookmark"
+                  type="button"
+                  onClick={handleBookmarkTool}
+                >
                   {isBookMarked ? (
                     <BsBookmarkFill className="text-3xl text-DarkOrange" />
                   ) : (
