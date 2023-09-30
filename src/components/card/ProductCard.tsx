@@ -12,7 +12,8 @@ import { ContentToolCard } from "./ContentToolCard";
 export default function ProudctCard({ filterData, categoryData, isFromUrl = false }: any) {
   console.log('check categoryData:-', categoryData,)
   const { apiData } = useApiDataContext();
-  const { isVerifiedFilled, setIsVerifiedFilled } = useVerifiedToolContextData();
+  const { isVerifiedFilled, setIsVerifiedFilled } =
+    useVerifiedToolContextData();
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();
   const id = useSearchParams().get("id");
 
@@ -60,7 +61,8 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
       >
         {/* All data cards listed when filter & category values is empty all data listed on api call */}
         {filterData?.length <= 0 &&
-          categoryData?.length <= 0 && !isVerifiedFilled &&
+          categoryData?.length <= 0 &&
+          !isVerifiedFilled &&
           apiData &&
           apiData.slice(0, visibleItem).map((item: AirtableModel) => {
             if (item?.fields?.Description?.trim() !== "") {
@@ -81,7 +83,8 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
           })}
 
         {/*on  Category card listed choosing dropdown value */}
-        {!isVerifiedFilled && getProductByCategory(categoryData) &&
+        {!isVerifiedFilled &&
+          getProductByCategory(categoryData) &&
           getProductByCategory(categoryData)
             ?.slice(0, visibleItem)
             .map((item) => {
@@ -100,7 +103,8 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
             })}
 
         {/* Displaying filtered data if input field has some value*/}
-        {filterData?.length > 0 && !isVerifiedFilled &&
+        {filterData?.length > 0 &&
+          !isVerifiedFilled &&
           filterData.slice(0, visibleItem).map((item: AirtableModel) => {
             if (item?.fields?.Description?.trim() !== "") {
               // console.log(item);
@@ -181,8 +185,9 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
           visibleItem < getProductByCategory(categoryData)!.length) && (
           <div onClick={loadMore}>
             <CTAButton
-              value={`Load More Category ${getProductByCategory(categoryData)!.length - visibleItem
-                }`}
+              value={`Load More Category ${
+                getProductByCategory(categoryData)!.length - visibleItem
+              }`}
             />
           </div>
         )}
