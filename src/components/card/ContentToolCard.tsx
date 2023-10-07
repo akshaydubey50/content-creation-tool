@@ -96,10 +96,12 @@ export function ContentToolCard({
                   </button>
                   {isOpen && <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />}
                 </div>
+              </div>
+              <div className="">
                 <div className="text-Description">
                   <p>{description}</p>
                 </div>
-              </div>
+                </div>
               <div className="tool-btn-section pb-7">
                 <p className="my-6 ">
                   <Link className=" bg-white rounded-full  text-tags font-medium border 
