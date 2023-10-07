@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect,useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import AirtableModel from "@/models/airtableModel";
 import CTAButton from "../button/CTAButton";
 import { useApiDataContext } from "@/lib/productContext";
@@ -33,6 +33,9 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
     if (visibleItem < filterData!.length || visibleItem < apiData?.length) {
       setVisibleItem(visibleItem + 9);
     }
+    if (isVerifiedFilled && (visibleItem < verifiedTool()?.length)) {
+      setVisibleItem(visibleItem + 9);
+    }
   }
 
   const getProductByCategory = useCallback(
@@ -49,6 +52,25 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
     [apiData, id]
   );
 
+
+  const verifiedTool=()=>{
+    let verifyTool = apiData.filter((item: AirtableModel) => item.fields.Verified).map((item: AirtableModel) => (
+      <ContentToolCard
+        key={item.id}
+        id={item.id}
+        url={item.fields.ToolImage}
+        title={item.fields.Name}
+        description={item.fields.Description}
+        tag={item.fields.Tags}
+        link={item.fields.WebsiteLink}
+        isVerified={item.fields?.Verified}
+      />))
+      console.log('verifyTool:::',verifyTool)
+      return verifyTool
+  }
+
+
+
   useEffect(() => {
     getProductByCategory(categoryData);
     setIsLoading(false);
@@ -61,101 +83,90 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
         <main
           className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
       lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0"
-      >
-        {/* All data cards listed when filter & category values is empty all data listed on api call */}
-        {filterData?.length <= 0 &&
-          categoryData?.length <= 0 &&
-          !isVerifiedFilled &&
-          apiData &&
-          apiData.slice(0, visibleItem).map((item: AirtableModel) => {
-            if (item?.fields?.Description?.trim() !== "") {
-              // console.log(item);
-              return (
-                <ContentToolCard
-                  key={item.id}
-                  id={item.id}
-                  url={item.fields.ToolImage}
-                  title={item.fields.Name}
-                  description={item.fields.Description}
-                  tag={item.fields.Tags}
-                  link={item.fields.WebsiteLink}
-                  isVerified={item.fields?.Verified}
-                />
-              );
-            }
-          })}
-
-        {/*on  Category card listed choosing dropdown value */}
-        {!isVerifiedFilled &&
-          getProductByCategory(categoryData) &&
-          getProductByCategory(categoryData)
-            ?.slice(0, visibleItem)
-            .map((item) => {
-              return (
-                <ContentToolCard
-                  key={item.id}
-                  id={item.id}
-                  url={item.fields.ToolImage}
-                  title={item.fields.Name}
-                  description={item.fields.Description}
-                  tag={item.fields.Tags}
-                  link={item.fields.WebsiteLink}
-                  isVerified={item.fields?.Verified}
-                />
-              );
+        >
+          {/* All data cards listed when filter & category values is empty all data listed on api call */}
+          {filterData?.length <= 0 &&
+            categoryData?.length <= 0 &&
+            !isVerifiedFilled &&
+            apiData &&
+            apiData.slice(0, visibleItem).map((item: AirtableModel) => {
+              if (item?.fields?.Description?.trim() !== "") {
+                // console.log(item);
+                return (
+                  <ContentToolCard
+                    key={item.id}
+                    id={item.id}
+                    url={item.fields.ToolImage}
+                    title={item.fields.Name}
+                    description={item.fields.Description}
+                    tag={item.fields.Tags}
+                    link={item.fields.WebsiteLink}
+                    isVerified={item.fields?.Verified}
+                  />
+                );
+              }
             })}
 
-        {/* Displaying filtered data if input field has some value*/}
-        {filterData?.length > 0 &&
-          !isVerifiedFilled &&
-          filterData.slice(0, visibleItem).map((item: AirtableModel) => {
-            if (item?.fields?.Description?.trim() !== "") {
-              // console.log(item);
-              return (
-                <ContentToolCard
-                  key={item.id}
-                  id={item.id}
-                  url={item.fields.ToolImage}
-                  title={item.fields.Name}
-                  description={item.fields.Description}
-                  tag={item.fields.Tags}
-                  link={item.fields.WebsiteLink}
-                  isVerified={item.fields?.Verified}
+          {/*on  Category card listed choosing dropdown value */}
+          {!isVerifiedFilled &&
+            getProductByCategory(categoryData) &&
+            getProductByCategory(categoryData)
+              ?.slice(0, visibleItem)
+              .map((item) => {
+                return (
+                  <ContentToolCard
+                    key={item.id}
+                    id={item.id}
+                    url={item.fields.ToolImage}
+                    title={item.fields.Name}
+                    description={item.fields.Description}
+                    tag={item.fields.Tags}
+                    link={item.fields.WebsiteLink}
+                    isVerified={item.fields?.Verified}
+                  />
+                );
+              })}
+
+          {/* Displaying filtered data if input field has some value*/}
+          {filterData?.length > 0 &&
+            !isVerifiedFilled &&
+            filterData.slice(0, visibleItem).map((item: AirtableModel) => {
+              if (item?.fields?.Description?.trim() !== "") {
+                // console.log(item);
+                return (
+                  <ContentToolCard
+                    key={item.id}
+                    id={item.id}
+                    url={item.fields.ToolImage}
+                    title={item.fields.Name}
+                    description={item.fields.Description}
+                    tag={item.fields.Tags}
+                    link={item.fields.WebsiteLink}
+                    isVerified={item.fields?.Verified}
 
                   />
                 );
               }
             })}
 
-        {/* Verify Icon base filter data  */}
-        {isVerifiedFilled && apiData.filter((item: AirtableModel) => item.fields.Verified).map((item: AirtableModel) => (
-          <ContentToolCard
-            key={item.id}
-            id={item.id}
-            url={item.fields.ToolImage}
-            title={item.fields.Name}
-            description={item.fields.Description}
-            tag={item.fields.Tags}
-            link={item.fields.WebsiteLink}
-            isVerified={item.fields?.Verified}
-          />
-        ))}
+          {/* Verify Icon base filter data  */}
+          {isVerifiedFilled && verifiedTool().slice(0, visibleItem)}
 
-        {/* Category Page filter Data base on url last pathname */}
-        {isFromUrl && categoryData !== undefined && categoryData?.slice(0, visibleItem).map((item: AirtableModel) => {
-          return (
-            <ContentToolCard
-              key={item.id}
-              id={item.id}
-              url={item.fields.ToolImage}
-              title={item.fields.Name}
-              description={item.fields.Description}
-              tag={item.fields.Tags}
-              link={item.fields.WebsiteLink}
-              isVerified={item.fields?.Verified}
-            />
-          );
-        })}
+          {/* Category Page filter Data base on url last pathname */}
+          {isFromUrl && categoryData !== undefined && categoryData?.slice(0, visibleItem).map((item: AirtableModel) => {
+            return (
+              <ContentToolCard
+                key={item.id}
+                id={item.id}
+                url={item.fields.ToolImage}
+                title={item.fields.Name}
+                description={item.fields.Description}
+                tag={item.fields.Tags}
+                link={item.fields.WebsiteLink}
+                isVerified={item.fields?.Verified}
+              />
+            );
+          })}
 
           {!apiData && !filterData &&
             !categoryData && !isFromUrl && (
@@ -188,9 +199,8 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
           visibleItem < getProductByCategory(categoryData)!.length) && (
           <div onClick={loadMore}>
             <CTAButton
-              value={`Load More Category ${
-                getProductByCategory(categoryData)!.length - visibleItem
-              }`}
+              value={`Load More Category ${getProductByCategory(categoryData)!.length - visibleItem
+                }`}
             />
           </div>
         )}
@@ -204,6 +214,16 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
           />
         </div>
       )}
+
+      {isVerifiedFilled && (visibleItem < verifiedTool()?.length) && (
+        <div onClick={loadMore}>
+          <CTAButton
+            value={`Load More Verified Tool's ${verifiedTool()?.length - visibleItem}`}
+          />
+        </div>
+      )}
+
+
       {/* Load More Button for All Data */}
       {visibleItem <= apiData?.length && !isFromUrl && !isVerifiedFilled &&
         (getProductByCategory(categoryData) === null ||
