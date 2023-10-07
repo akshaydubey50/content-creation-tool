@@ -5,6 +5,7 @@ import { PiStack } from "react-icons/pi";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { VscVerified, VscVerifiedFilled } from "react-icons/vsc";
 import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
+import {useVisibleItemContextData} from "@/lib/visibleItemContext";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export default function HeroSection() {
@@ -14,6 +15,8 @@ export default function HeroSection() {
   const supabase = createClientComponentClient();
   const { isVerifiedFilled, handleVerifiedClick } =
     useVerifiedToolContextData();
+  const { visibleItem, setVisibleItem } = useVisibleItemContextData();
+
   const handleAllClick = () => {
     setIsAllFilled(!isAllFilled);
   };
@@ -32,6 +35,12 @@ export default function HeroSection() {
     }
     setIsBookMarkFilled(!isBookMarkFilled);
   };
+
+  const verifiedToogleClick =()=>{
+    handleVerifiedClick();
+    setVisibleItem(9);
+    
+  }
 
   
   const handleSearchClick = () => {
@@ -100,7 +109,7 @@ export default function HeroSection() {
                     className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6 ${
                       isVerifiedFilled ? "bg-gray-200" : "bg-gray-300"
                     } hover:bg-opacity-75 focus:outline-none`}
-                    onClick={handleVerifiedClick}
+                    onClick={verifiedToogleClick}
                   >
                     {isVerifiedFilled ? (
                       <VscVerifiedFilled className="text-2xl md:text-3xl lg:text-4xl text-black" />
