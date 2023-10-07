@@ -10,7 +10,6 @@ export async function GET(request: Request) {
   // else send all list of product
   const headers = {
     Authorization: `Bearer ${AirtableConf.BEARER_TOKEN}`,
-      "Cache-Control": "no-cache, no-store, must-revalidate",
 
   };
   console.log(
