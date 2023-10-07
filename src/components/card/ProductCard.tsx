@@ -10,12 +10,12 @@ import { ContentToolCard } from "./ContentToolCard";
 
 
 export default function ProudctCard({ filterData, categoryData, isFromUrl = false }: any) {
-  console.log('check categoryData:-', categoryData,)
   const { apiData } = useApiDataContext();
   const { isVerifiedFilled, setIsVerifiedFilled } =
     useVerifiedToolContextData();
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();
   const id = useSearchParams().get("id");
+  const [isLoading, setIsLoading] = useState(true);
 
   async function loadMore() {
     if (
@@ -50,13 +50,15 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
 
   useEffect(() => {
     getProductByCategory(categoryData);
+    setIsLoading(false);
     console.log('card visibleItem:::::::', (visibleItem));
   }, [filterData, categoryData, visibleItem, getProductByCategory]);
 
   return (
     <>
-      <main
-        className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
+      {isLoading ? (<Loader />) : (
+        <main
+          className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
       lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0"
       >
         {/* All data cards listed when filter & category values is empty all data listed on api call */}
@@ -119,10 +121,10 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
                   link={item.fields.WebsiteLink}
                   isVerified={item.fields?.Verified}
 
-                />
-              );
-            }
-          })}
+                  />
+                );
+              }
+            })}
 
         {/* Verify Icon base filter data  */}
         {isVerifiedFilled && apiData.filter((item: AirtableModel) => item.fields.Verified).map((item: AirtableModel) => (
@@ -154,12 +156,12 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
           );
         })}
 
-        {!apiData && (
-          <div>
-            <h1 className="text-3xl text-center font-bold">Loading....</h1>
-          </div>
-        )}
-      </main>
+          {!apiData && !filterData &&
+            !categoryData && !isFromUrl && (
+              <Loader />
+            )}
+        </main>
+      )}
       {filterData === null && (
         <div>
           <h1 className="text-3xl font-bold  text-center">
