@@ -73,6 +73,7 @@ export default function SelectDropdown(props:any) {
         color: "white",
         fontWeight: 600,
         whiteSpace: "nowrap",
+        textAlign:"center"
       };
     },
     noOptionsMessage: (styles:any) => ({
