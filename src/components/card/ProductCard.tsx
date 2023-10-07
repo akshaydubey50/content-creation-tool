@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect,useState } from "react";
 import AirtableModel from "@/models/airtableModel";
 import CTAButton from "../button/CTAButton";
 import { useApiDataContext } from "@/lib/productContext";
@@ -7,6 +7,7 @@ import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import { useSearchParams } from "next/navigation";
 import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
 import { ContentToolCard } from "./ContentToolCard";
+import Loader from "../spinner-loader/Loader";
 
 
 export default function ProudctCard({ filterData, categoryData, isFromUrl = false }: any) {
