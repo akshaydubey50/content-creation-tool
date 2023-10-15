@@ -1,6 +1,5 @@
 import Loader from "@/components/spinner-loader/Loader";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import useSWR from 'swr'
 
 const ProductContext = createContext();
 
@@ -11,8 +10,7 @@ export const ProductContextProvider = ({ children }) => {
     // Fetch data from the API and set it to the state
     async function fetchData() {
       try {
-        const { signal } = new AbortController()
-        const response = await fetch("/api/airtable",{signal});
+        const response = await fetch("/api/airtable");
         const responseBody = await response.json()
         setApiData(responseBody.filterData);
       } catch (error) {
