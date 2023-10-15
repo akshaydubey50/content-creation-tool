@@ -16,7 +16,7 @@ module.exports = {
         'light-yellow': '#FFA500',
         'DarkOrange': '#FF8C00',
         'light-gray':'#F5F5F5',
-        'Orange-200':'rgb(254 215 170);',
+        'Orange-200':'#fed7aa',
       },
       fontFamily:{
         poppins: ['var(--font-poppins)'],

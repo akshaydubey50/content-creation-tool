@@ -8,6 +8,7 @@ import { ProductContextProvider } from "@/lib/productContext";
 import { VisibleItemContextProvider } from "@/lib/visibleItemContext";
 
 import { VerifiedToolContextProvider } from "@/lib/verifiedToolContext";
+import Loader from "@/components/spinner-loader/Loader";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -27,6 +28,7 @@ export default function RootLayout({
     <html lang="en" className={`${poppins.variable}`}>
       <body className="font-poppins">
         <Navbar />
+        {/* <Loader /> */}
         <ProductContextProvider>
           <VerifiedToolContextProvider>
             <VisibleItemContextProvider>
