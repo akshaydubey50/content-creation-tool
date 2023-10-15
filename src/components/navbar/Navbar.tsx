@@ -65,7 +65,7 @@ export default function Navbar() {
   const [isPopupOpen, setPopupOpen] = useState(false);
 
   const handleNavbarMenu = (index: number) => {
-    console.log('index::',index)
+    console.log('index::', index)
     setIsActiveMenu(index);
   };
 
@@ -191,7 +191,7 @@ export default function Navbar() {
           ></div>
 
           {/* Popup content */}
-          <div className="bg-white p-8 md:w-2/5 lg:w-2/5 mt-12 rounded shadow-md z-20 relative">
+          <div className="bg-light-gray p-8 md:w-2/5 lg:w-2/5 mt-12 rounded-3xl shadow-md z-20 relative max-w-lg">
             <Auth
               supabaseClient={supabase}
               providers={[]}
@@ -203,9 +203,16 @@ export default function Navbar() {
                     background: "#FF8C00",
                     outline: "none",
                     border: "none",
+                    borderRadius: "5px",
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
                   },
-                  anchor: { color: "#FF8C00" },
-                  label: { color: "black" },
+                  anchor: { color: "#FF8C00",fontSize:"1rem",textDecorationLine:"none",fontWeight:600 },
+                  label: {
+                    color: "black",
+                    fontWeight: "bold",
+                    fontSize: "1.2rem"
+                  },
                   container: { width: "flex" },
                 },
                 theme: ThemeSupa,
@@ -218,11 +225,11 @@ export default function Navbar() {
                   },
                 },
               }}
-              theme="dark"
+              theme="light"
             />
             <button
               onClick={togglePopup}
-              className="absolute top-0 right-0 mt-4 mr-4 text-gray-700 "
+              className="absolute top-0 right-0 mt-4 mr-4 text-gray-700 text-3xl"
             >
               &times;
             </button>
