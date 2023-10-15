@@ -7,47 +7,21 @@ const ProductContext = createContext();
 export const ProductContextProvider = ({ children }) => {
   const [apiData, setApiData] = useState([]);
 
-
-  const fetcher = async () => {
-    const response = await fetch("/api/airtable");
-    const responseBody = await response.json();
-    return responseBody.filterData;
-  };
-  const {data,error} =   useSWR("/api/airtable",fetcher)
-
-    useEffect(() => {
-      if (data && !error) {
-        setApiData(data);
+  useEffect(() => {
+    // Fetch data from the API and set it to the state
+    async function fetchData() {
+      try {
+        const { signal } = new AbortController()
+        const response = await fetch("/api/airtable",{signal});
+        const responseBody = await response.json()
+        setApiData(responseBody.filterData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
-    }, [data, error]);
-  
-    if(error) {
-      return 'An error has occured'
-    }
-    if(!data) {
-      return (
-        <Loader />
-      )
     }
 
-
-
-
-  // useEffect(() => {
-  //   // Fetch data from the API and set it to the state
-  //   async function fetchData() {
-  //     try {
-  //       const { signal } = new AbortController()
-  //       const response = await fetch("/api/airtable",{signal});
-  //       const responseBody = await response.json()
-  //       setApiData(responseBody.filterData);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   }
-
-  //   fetchData();
-  // }, [setApiData]);
+    fetchData();
+  }, [setApiData]);
 
   return (
     <ProductContext.Provider value={{ apiData }}>
