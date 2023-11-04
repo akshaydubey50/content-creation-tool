@@ -1,39 +1,22 @@
 "use client";
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import Image from "next/image";
-import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
-import { MdVerified } from "react-icons/md";
-import Link from "next/link";
+import React, { useCallback, useEffect, useState } from "react";
 import AirtableModel from "@/models/airtableModel";
 import CTAButton from "../button/CTAButton";
 import { useApiDataContext } from "@/lib/productContext";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
-import VisitWebsite from "../visit-website/VisitWebsite";
 import { useSearchParams } from "next/navigation";
 import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import {
-  Session,
-  createClientComponentClient,
-} from "@supabase/auth-helpers-nextjs";
-import LikedBookmarkModal from "../modal/LikedBookmarkModal";
+import { ContentToolCard } from "./ContentToolCard";
+import Loader from "../spinner-loader/Loader";
 
-type Product = {
-  id: string;
-  url: string;
-  title: string;
-  description: string;
-  tag: string;
-  link: string;
-  isVerified: boolean
-};
+
 export default function ProudctCard({ filterData, categoryData, isFromUrl = false }: any) {
-  console.log('check categoryData:-', categoryData,)
   const { apiData } = useApiDataContext();
   const { isVerifiedFilled, setIsVerifiedFilled } =
     useVerifiedToolContextData();
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();
   const id = useSearchParams().get("id");
+  const [isLoading, setIsLoading] = useState(true);
 
   async function loadMore() {
     if (
@@ -48,6 +31,9 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
       setVisibleItem(visibleItem + 9);
     }
     if (visibleItem < filterData!.length || visibleItem < apiData?.length) {
+      setVisibleItem(visibleItem + 9);
+    }
+    if (isVerifiedFilled && (visibleItem < verifiedTool()?.length)) {
       setVisibleItem(visibleItem + 9);
     }
   }
@@ -66,118 +52,128 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
     [apiData, id]
   );
 
+
+  const verifiedTool=()=>{
+    let verifyTool = apiData.filter((item: AirtableModel) => item.fields.Verified).map((item: AirtableModel) => (
+      <ContentToolCard
+        key={item.id}
+        id={item.id}
+        url={item.fields.ToolImage}
+        title={item.fields.Name}
+        description={item.fields.Description}
+        tag={item.fields.Tags}
+        link={item.fields.WebsiteLink}
+        isVerified={item.fields?.Verified}
+      />))
+      console.log('verifyTool:::',verifyTool)
+      return verifyTool
+  }
+
+
+
   useEffect(() => {
     getProductByCategory(categoryData);
+    setIsLoading(false);
     console.log('card visibleItem:::::::', (visibleItem));
   }, [filterData, categoryData, visibleItem, getProductByCategory]);
 
   return (
     <>
-      <main
-        className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
+      {isLoading ? (<Loader />) : (
+        <main
+          className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
       lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0"
-      >
-        {/* All data cards listed when filter & category values is empty all data listed on api call */}
-        {filterData?.length <= 0 &&
-          categoryData?.length <= 0 &&
-          !isVerifiedFilled &&
-          apiData &&
-          apiData.slice(0, visibleItem).map((item: AirtableModel) => {
-            if (item?.fields?.Description?.trim() !== "") {
-              // console.log(item);
-              return (
-                <CardContainer
-                  key={item.id}
-                  id={item.id}
-                  url={item.fields.ToolImage}
-                  title={item.fields.Name}
-                  description={item.fields.Description}
-                  tag={item.fields.Tags}
-                  link={item.fields.WebsiteLink}
-                  isVerified={item.fields?.Verified}
-                />
-              );
-            }
-          })}
-
-        {/*on  Category card listed choosing dropdown value */}
-        {!isVerifiedFilled &&
-          getProductByCategory(categoryData) &&
-          getProductByCategory(categoryData)
-            ?.slice(0, visibleItem)
-            .map((item) => {
-              return (
-                <CardContainer
-                  key={item.id}
-                  id={item.id}
-                  url={item.fields.ToolImage}
-                  title={item.fields.Name}
-                  description={item.fields.Description}
-                  tag={item.fields.Tags}
-                  link={item.fields.WebsiteLink}
-                  isVerified={item.fields?.Verified}
-                />
-              );
+        >
+          {/* All data cards listed when filter & category values is empty all data listed on api call */}
+          {filterData?.length <= 0 &&
+            categoryData?.length <= 0 &&
+            !isVerifiedFilled &&
+            apiData &&
+            apiData.slice(0, visibleItem).map((item: AirtableModel) => {
+              if (item?.fields?.Description?.trim() !== "") {
+                // console.log(item);
+                return (
+                  <ContentToolCard
+                    key={item.id}
+                    id={item.id}
+                    url={item.fields.ToolImage}
+                    title={item.fields.Name}
+                    description={item.fields.Description}
+                    tag={item.fields.Tags}
+                    link={item.fields.WebsiteLink}
+                    isVerified={item.fields?.Verified}
+                  />
+                );
+              }
             })}
 
-        {/* Displaying filtered data if input field has some value*/}
-        {filterData?.length > 0 &&
-          !isVerifiedFilled &&
-          filterData.slice(0, visibleItem).map((item: AirtableModel) => {
-            if (item?.fields?.Description?.trim() !== "") {
-              // console.log(item);
-              return (
-                <CardContainer
-                  key={item.id}
-                  id={item.id}
-                  url={item.fields.ToolImage}
-                  title={item.fields.Name}
-                  description={item.fields.Description}
-                  tag={item.fields.Tags}
-                  link={item.fields.WebsiteLink}
-                  isVerified={item.fields?.Verified}
+          {/*on  Category card listed choosing dropdown value */}
+          {!isVerifiedFilled &&
+            getProductByCategory(categoryData) &&
+            getProductByCategory(categoryData)
+              ?.slice(0, visibleItem)
+              .map((item) => {
+                return (
+                  <ContentToolCard
+                    key={item.id}
+                    id={item.id}
+                    url={item.fields.ToolImage}
+                    title={item.fields.Name}
+                    description={item.fields.Description}
+                    tag={item.fields.Tags}
+                    link={item.fields.WebsiteLink}
+                    isVerified={item.fields?.Verified}
+                  />
+                );
+              })}
 
-                />
-              );
-            }
+          {/* Displaying filtered data if input field has some value*/}
+          {filterData?.length > 0 &&
+            !isVerifiedFilled &&
+            filterData.slice(0, visibleItem).map((item: AirtableModel) => {
+              if (item?.fields?.Description?.trim() !== "") {
+                // console.log(item);
+                return (
+                  <ContentToolCard
+                    key={item.id}
+                    id={item.id}
+                    url={item.fields.ToolImage}
+                    title={item.fields.Name}
+                    description={item.fields.Description}
+                    tag={item.fields.Tags}
+                    link={item.fields.WebsiteLink}
+                    isVerified={item.fields?.Verified}
+
+                  />
+                );
+              }
+            })}
+
+          {/* Verify Icon base filter data  */}
+          {isVerifiedFilled && verifiedTool().slice(0, visibleItem)}
+
+          {/* Category Page filter Data base on url last pathname */}
+          {isFromUrl && categoryData !== undefined && categoryData?.slice(0, visibleItem).map((item: AirtableModel) => {
+            return (
+              <ContentToolCard
+                key={item.id}
+                id={item.id}
+                url={item.fields.ToolImage}
+                title={item.fields.Name}
+                description={item.fields.Description}
+                tag={item.fields.Tags}
+                link={item.fields.WebsiteLink}
+                isVerified={item.fields?.Verified}
+              />
+            );
           })}
 
-        {/* Verify Icon base filter data  */}
-        {isVerifiedFilled && apiData.filter((item: AirtableModel) => item.fields.Verified).map((item: AirtableModel) => (
-          <CardContainer
-            key={item.id}
-            id={item.id}
-            url={item.fields.ToolImage}
-            title={item.fields.Name}
-            description={item.fields.Description}
-            tag={item.fields.Tags}
-            link={item.fields.WebsiteLink}
-            isVerified={item.fields?.Verified}
-          />
-        ))}
-
-        {/* Category Page filter Data base on url last pathname */}
-        {isFromUrl && categoryData !== undefined && categoryData?.slice(0, visibleItem).map((item: AirtableModel) => {
-          return (
-            <CardContainer
-              key={item.id}
-              id={item.id}
-              url={item.fields.ToolImage}
-              title={item.fields.Name}
-              description={item.fields.Description}
-              tag={item.fields.Tags}
-              link={item.fields.WebsiteLink}
-              isVerified={item.fields?.Verified}
-            />
-          );
-        })}
-
-        {!apiData && (
-          <div>
-            <h1 className="text-3xl text-center font-bold">Loading....</h1>
-          </div>
-        )}
-      </main>
+          {!apiData && !filterData &&
+            !categoryData && !isFromUrl && (
+              <Loader />
+            )}
+        </main>
+      )}
       {filterData === null && (
         <div>
           <h1 className="text-3xl font-bold  text-center">
@@ -203,13 +199,11 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
           visibleItem < getProductByCategory(categoryData)!.length) && (
           <div onClick={loadMore}>
             <CTAButton
-              value={`Load More Category ${
-                getProductByCategory(categoryData)!.length - visibleItem
-              }`}
+              value={`Load More Category ${getProductByCategory(categoryData)!.length - visibleItem
+                }`}
             />
           </div>
         )}
-
 
 
       {/* Load More Button for Filter/Search Base  Value  */}
@@ -220,6 +214,16 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
           />
         </div>
       )}
+
+      {isVerifiedFilled && (visibleItem < verifiedTool()?.length) && (
+        <div onClick={loadMore}>
+          <CTAButton
+            value={`Load More Verified Tool's ${verifiedTool()?.length - visibleItem}`}
+          />
+        </div>
+      )}
+
+
       {/* Load More Button for All Data */}
       {visibleItem <= apiData?.length && !isFromUrl && !isVerifiedFilled &&
         (getProductByCategory(categoryData) === null ||
@@ -235,229 +239,3 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
   );
 }
 
-export function CardContainer({
-  id,
-  url,
-  title,
-  description,
-  tag,
-  link,
-  isVerified = false
-}: Product) {
-  // console.log('url>>>',url)
-  const formattedTitle = title.toLowerCase().replace(/\s/g, "-");
-  const [isBookMarked, setIsBookMarked] = useState(false);
-  const { isVerifiedFilled } = useVerifiedToolContextData();
-  const [likedTool, setLikedTool] = useState(false);
-  const [userSession, setUserSession] = useState<Session>();
-  const supabase = createClientComponentClient();  const [isOpen, setIsOpen] = useState(false)
-
-  const formattedTag = tag[0].toLowerCase().replace(/\s/g, "-");
-
-  const handleBookMark = () => {
-    setIsOpen(true);
-    setIsBookMarked(!isBookMarked);
-    console.log(" @@ bookmark", isBookMarked);
-  };
-
-  const getSession = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (session !== null) {
-      setUserSession(session);
-    }
-  };
-
-  const handleLikedTool = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (session?.user) {
-      const { data, error } = await supabase
-        .from("likes")
-        .select("id")
-        .eq("user_id", session.user?.id)
-        .eq("product_id", id);
-
-      if (error) {
-        console.error(error);
-      } else {
-        // product exist deleting
-        if (data.length === 1) {
-          const { error } = await supabase
-            .from("likes")
-            .delete()
-            .eq("user_id", session.user?.id)
-            .eq("product_id", id);
-          setLikedTool(false);
-        }
-        if (data.length === 0) {
-          const { data: likes, error: err } = await supabase
-            .from("likes")
-            .insert([
-              {
-                user_id: session.user?.id,
-                product_id: id,
-                product_name: title,
-              },
-            ])
-            .select();
-          setLikedTool(true);
-          console.log("like added to db::", likes);
-        }
-      }
-    }
-    if (!session?.user) {
-      console.log("sign in to like the post");
-    }
-  };
-  const handleBookmarkTool = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (session?.user) {
-      const { data, error } = await supabase
-        .from("bookmark")
-        .select("id")
-        .eq("user_id", session.user?.id)
-        .eq("product_id", id);
-
-      if (error) {
-        console.error(error);
-      } else {
-        // product exist deleting
-        if (data.length === 1) {
-          const { error } = await supabase
-            .from("bookmark")
-            .delete()
-            .eq("user_id", session.user?.id)
-            .eq("product_id", id);
-          setIsBookMarked(false);
-        }
-        if (data.length === 0) {
-          const { data: bookmark, error: err } = await supabase
-            .from("bookmark")
-            .insert([
-              {
-                user_id: session.user?.id,
-                product_id: id,
-                product_name: title,
-              },
-            ])
-            .select();
-          setIsBookMarked(true);
-          console.log("bookmarked added to db::", bookmark);
-        }
-      }
-    }
-    if (!session?.user) {
-      console.log("sign in to Bookmark the post");
-    }
-  };
-
-  const likedToolByUser = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (session?.user) {
-      const { data, error } = await supabase
-        .from("bookmark")
-        .select("product_id")
-        .eq("user_id", session.user?.id);
-      if (error) {
-        console.error(error);
-      }
-      // console.log("liked product by user", data);
-    }
-  };
-
-  // useEffect(() => {
-  //   likedToolByUser();
-  // }, []);
-
-  return (
-    <>
-      <div
-        className="rounded-2xl max-w-sm  flex flex-col  border border-black 
-        border-solid  shadow-2xl"
-      >
-        <Link
-          href={{
-            pathname: `/tool/${formattedTitle}`,
-            query: {
-              id: id,
-            },
-          }}
-        >
-          <section className="  border-b border-black border-solid">
-            <Image
-              src={url}
-              alt="logo banner"
-              loading="lazy"
-              width="1280"
-              height="720"
-              decoding="async"
-              data-nimg="1"
-              className="rounded-t-2xl w-full object-cover"
-            />
-          </section>
-        </Link>
-        <section className="bg-light-gray pt-7 px-5 rounded-b-2xl h-full">
-          <div className="flex flex-col justify-between h-full">
-            <div className="">
-              <div className="pb-4 flex flex-1 flex-row justify-between">
-                <div className="flex items-center gap-x-2">
-                  <h1 className="font-bold text-Title-Medium md:text-Title-Large">
-                    {title}
-                  </h1>
-
-                  {isVerified && <MdVerified className="text-2xl text-DarkOrange" />}
-                </div>
-                <button title="Bookmark" type="button" onClick={handleLikedTool} className="flex items-center gap-x-1">
-                  <p>
-                    {likedTool ? (<AiFillHeart className="text-3xl text-DarkOrange" />
-                    ) : (<AiOutlineHeart className="text-3xl   text-black" />)}
-                  </p>
-                  <p className="">1</p>
-                </button>
-                {isOpen && <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />}
-              </div>
-              <div className="text-Description">
-                <p>{description}</p>
-              </div>
-            </div>
-            <div className="tool-btn-section pb-7">
-              <p className="my-6 ">
-                <Link className=" bg-white rounded-full  text-tags font-medium border 
-              border-solid border-black px-5 py-1"
-                  href={`/category/${formattedTag}`}
-                  prefetch={true}
-                >
-                  {tag}
-                </Link>
-              </p>
-              <div
-                className="text-white text-Title-Medium  flex 
-        justify-between items-center"
-              >
-                <VisitWebsite url={link} />
-                <button
-                  title="Bookmark"
-                  type="button"
-                  onClick={handleBookmarkTool}
-                >
-                  {isBookMarked ? (
-                    <BsBookmarkFill className="text-3xl text-DarkOrange" />
-                  ) : (
-                    <BsBookmark className="text-3xl   text-black" />
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    </>
-  );
-}

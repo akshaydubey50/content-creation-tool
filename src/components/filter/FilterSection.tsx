@@ -43,6 +43,8 @@ export default function FilterSection({ setFilterData, setCategoryData, category
     } else {
       setFilterData(null);
     }
+    setVisibleItem(9);
+
   };
 
   const getListOfCategory = (): Set<string> => {
