@@ -85,8 +85,10 @@ export function ContentToolCard({
         }
       }
     }
-    // add login modal here
-    console.log("sign in to bookmark the post");
+    else{
+      setIsOpen(true)
+      console.log("sign in to bookmark the post");
+    }
   };
 
   const getSession = async () => {
@@ -131,7 +133,11 @@ export function ContentToolCard({
         }
       }
     }
-    console.log("sign in to like the post");
+    else{
+      setIsOpen(true)
+      console.log("sign in to like the post");
+
+    }
   };
 
   return (
