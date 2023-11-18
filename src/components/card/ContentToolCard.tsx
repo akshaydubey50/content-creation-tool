@@ -1,15 +1,25 @@
 "use client";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+// React Component Import
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
-import { MdVerified } from "react-icons/md";
-import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import LikedBookmarkModal from "../modal/LikedBookmarkModal";
-import VisitWebsite from "../visit-website/VisitWebsite";
+
+// Backend Data Import
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Session } from "@supabase/supabase-js";
+
+// Icon's Import
+import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
+import { MdVerified } from "react-icons/md";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+
+// Project  Component Import
+import LikedBookmarkModal from "../modal/LikedBookmarkModal";
+import VisitWebsite from "../visit-website/VisitWebsite";
+
+// Content Data Import
+import { useBookMarkedToolContextData } from "@/lib/bookMarkContext";
+
 
 type Product = {
   id: string;
@@ -30,26 +40,22 @@ export function ContentToolCard({
   link,
   isVerified = false,
 }: Product) {
-  // console.log('url>>>',url)
-  const formattedTitle = title.toLowerCase().replace(/\s/g, "-");
-  const [isBookMarked, setIsBookMarked] = useState(false);
-  const { isVerifiedFilled } = useVerifiedToolContextData();
-  const [likedTool, setLikedTool] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [userSession, setUserSession] = useState<Session>();
   const supabase = createClientComponentClient();
 
+  const formattedTitle = title.toLowerCase().replace(/\s/g, "-");
   const formattedTag = tag[0].toLowerCase().replace(/\s/g, "-");
-  /* const handleBookMark = () => {
-    setIsOpen(true);
-    setIsBookMarked(!isBookMarked);
-    // console.log(' @@ bookmark', isBookMarked)
-  }; */
+
+  const [userSession, setUserSession] = useState<Session>();
+  const [isBookMarked, setIsBookMarked] = useState(false);
+  const [likedTool, setLikedTool] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  
 
   const handleBookMark = async () => {
     const {
       data: { session },
     } = await supabase.auth.getSession();
+
     if (session?.user) {
       const { data, error } = await supabase
         .from("bookmark")
@@ -184,9 +190,9 @@ export function ContentToolCard({
                   </p>
                   <p className="">1</p>
                 </button>
-                {/* {isOpen && (
+                {isOpen && (
                   <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
-                )} */}
+                )}
               </div>
             </div>
             <div className="">

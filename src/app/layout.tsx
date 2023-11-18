@@ -8,6 +8,11 @@ import { ProductContextProvider } from "@/lib/productContext";
 import { VisibleItemContextProvider } from "@/lib/visibleItemContext";
 
 import { VerifiedToolContextProvider } from "@/lib/verifiedToolContext";
+import { BookMarkedToolContextProvider } from "@/lib/bookMarkContext";
+import {
+  LikedToolContextProvider
+} from '@/lib/likedToolContext'
+
 import Loader from "@/components/spinner-loader/Loader";
 
 const poppins = Poppins({
@@ -30,11 +35,15 @@ export default function RootLayout({
         <Navbar />
         {/* <Loader /> */}
         <ProductContextProvider>
-          <VerifiedToolContextProvider>
-            <VisibleItemContextProvider>
-              <main>{children}</main>
-            </VisibleItemContextProvider>
-          </VerifiedToolContextProvider>
+          <BookMarkedToolContextProvider>
+            <LikedToolContextProvider>
+            <VerifiedToolContextProvider>
+              <VisibleItemContextProvider>
+                <main>{children}</main>
+              </VisibleItemContextProvider>
+            </VerifiedToolContextProvider>
+            </LikedToolContextProvider>
+          </BookMarkedToolContextProvider>
         </ProductContextProvider>
         <Footer />
       </body>

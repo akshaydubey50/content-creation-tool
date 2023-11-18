@@ -1,22 +1,29 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import AirtableModel from "@/models/airtableModel";
 import CTAButton from "../button/CTAButton";
+import Loader from "../spinner-loader/Loader";
+import { ContentToolCard } from "./ContentToolCard";
 import { useApiDataContext } from "@/lib/productContext";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
-import { useSearchParams } from "next/navigation";
 import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
-import { ContentToolCard } from "./ContentToolCard";
-import Loader from "../spinner-loader/Loader";
+import { useBookMarkedToolContextData } from "@/lib/bookMarkContext";
+import { useLikedToolContextData } from "@/lib/likedToolContext";
 
 
 export default function ProudctCard({ filterData, categoryData, isFromUrl = false }: any) {
+  const id = useSearchParams().get("id");
+  const [isLoading, setIsLoading] = useState(true);
+
   const { apiData } = useApiDataContext();
   const { isVerifiedFilled, setIsVerifiedFilled } =
     useVerifiedToolContextData();
+  const { isBookMarkFilled, bookMarkedTool } =
+    useBookMarkedToolContextData();
+  const { islikeFilled, likedTool } =
+    useLikedToolContextData();
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();
-  const id = useSearchParams().get("id");
-  const [isLoading, setIsLoading] = useState(true);
 
   async function loadMore() {
     if (
@@ -69,8 +76,6 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
       return verifyTool
   }
 
-
-
   useEffect(() => {
     getProductByCategory(categoryData);
     setIsLoading(false);
@@ -87,7 +92,7 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
           {/* All data cards listed when filter & category values is empty all data listed on api call */}
           {filterData?.length <= 0 &&
             categoryData?.length <= 0 &&
-            !isVerifiedFilled &&
+            !isVerifiedFilled && !isBookMarkFilled && !islikeFilled&&
             apiData &&
             apiData.slice(0, visibleItem).map((item: AirtableModel) => {
               if (item?.fields?.Description?.trim() !== "") {
@@ -148,6 +153,57 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
                 );
               }
             })}
+
+            {/* Bookmark Tool Data */}
+
+          {isBookMarkFilled &&
+            apiData
+              .filter((item: AirtableModel) => {
+                for (let index = 0; index < bookMarkedTool.length; index++) {
+                  const bookMarkData = bookMarkedTool[index];
+                  if (bookMarkData.product_id === item?.id) {
+                    return item;
+                  }
+                }
+                return false;
+              })
+              .map((item: AirtableModel) => (
+                <ContentToolCard
+                  key={item.id}  // Add a unique key for each item in the array
+                  id={item.id}
+                  url={item.fields.ToolImage}
+                  title={item.fields.Name}
+                  description={item.fields.Description}
+                  tag={item.fields.Tags}
+                  link={item.fields.WebsiteLink}
+                  isVerified={item.fields?.Verified}
+                />
+              ))}
+
+          {/* Liked Tool Data */}
+          {islikeFilled &&
+            apiData
+              .filter((item: AirtableModel) => {
+                for (let index = 0; index < likedTool.length; index++) {
+                  const likedData = likedTool[index];
+                  if (likedData.product_id === item?.id) {
+                    return item;
+                  }
+                }
+                return false;
+              })
+              .map((item: AirtableModel) => (
+                <ContentToolCard
+                  key={item.id}  // Add a unique key for each item in the array
+                  id={item.id}
+                  url={item.fields.ToolImage}
+                  title={item.fields.Name}
+                  description={item.fields.Description}
+                  tag={item.fields.Tags}
+                  link={item.fields.WebsiteLink}
+                  isVerified={item.fields?.Verified}
+                />
+              ))}
 
           {/* Verify Icon base filter data  */}
           {isVerifiedFilled && verifiedTool().slice(0, visibleItem)}
@@ -235,6 +291,7 @@ export default function ProudctCard({ filterData, categoryData, isFromUrl = fals
             />
           </div>
         )}
+      
     </>
   );
 }
