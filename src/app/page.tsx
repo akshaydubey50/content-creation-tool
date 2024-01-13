@@ -1,7 +1,7 @@
 "use client";
 import HeroSection from "@/components/herosection/HeroSection";
 import FilterSection from "@/components/filter/FilterSection";
-import ProductCard from "@/components/card/ProductCard";
+import ProductList from "@/components/card/ProductList";
 import { useState } from "react";
 
 export default function Home() {
@@ -14,7 +14,7 @@ export default function Home() {
         setFilterData={setFilterData}
         setCategoryData={setCategoryData}
       />
- <ProductCard filterData={filterData} categoryData={categoryData} />
+      <ProductList filterData={filterData} categoryData={categoryData} />
     </div>
   );
 }

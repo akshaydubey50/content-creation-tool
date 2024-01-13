@@ -28,17 +28,17 @@ export default function RootLayout({
       <body className="font-poppins">
         <Navbar />
         {/* <Loader /> */}
-        <ProductContextProvider>
-          <BookMarkedToolContextProvider>
-            <LikedToolContextProvider>
-              <VerifiedToolContextProvider>
-                <VisibleItemContextProvider>
-                  <main>{children}</main>
-                </VisibleItemContextProvider>
-              </VerifiedToolContextProvider>
-            </LikedToolContextProvider>
-          </BookMarkedToolContextProvider>
-        </ProductContextProvider>
+          <ProductContextProvider>
+            <BookMarkedToolContextProvider>
+              <LikedToolContextProvider>
+                <VerifiedToolContextProvider>
+                  <VisibleItemContextProvider>
+                    <main>{children}</main>
+                  </VisibleItemContextProvider>
+                </VerifiedToolContextProvider>
+              </LikedToolContextProvider>
+            </BookMarkedToolContextProvider>
+          </ProductContextProvider>
         <Footer />
       </body>
     </html>

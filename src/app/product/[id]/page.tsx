@@ -1,13 +1,13 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import ProductToolBanner from "@/components/product-tool/ProductToolBanner";
-import ProudctCard from "@/components/card/ProductCard";
+import ProductList from "@/components/card/ProductList";
 import { useApiDataContext } from "@/lib/productContext";
 import AirtableModel from "@/models/airtableModel";
 import { useSearchParams } from "next/navigation";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 
-export default function ToolDetails() {
+export default function ProductDetail() {
   const id = useSearchParams().get("id");
   const { apiData } = useApiDataContext();
   const [product, setProductData] = useState<AirtableModel>();
@@ -27,7 +27,7 @@ export default function ToolDetails() {
   }, [id, apiData]);
 
   useEffect(() => {
-    setVisibleItem(9); 
+    setVisibleItem(9);
 
     if (!product) {
       getProductFromId();
@@ -51,7 +51,7 @@ export default function ToolDetails() {
           <span className="text-DarkOrange">{product!.fields.Tags}</span> Tools
         </h1>
       )}
-      <ProudctCard categoryData={localCategoryData} filterData={[]} />
+      <ProductList categoryData={localCategoryData} filterData={[]} />
     </>
   );
 }

@@ -15,8 +15,7 @@ type Product = {
   link: string;
 };
 export default function FilterSection({ setFilterData, setCategoryData, categoryData }: any) {
-  console.log('categoryData in filter component::', categoryData)
-  const [searchQuery, setSearchQuery] = useState("");
+   const [searchQuery, setSearchQuery] = useState("");
   const [categoryValue, setCategoryValue] = useState(categoryData || "Content");
   const { apiData } = useApiDataContext();
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();

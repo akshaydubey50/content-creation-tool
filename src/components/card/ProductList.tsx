@@ -11,7 +11,7 @@ import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
 import { useBookMarkedToolContextData } from "@/lib/bookMarkContext";
 import { useLikedToolContextData } from "@/lib/likedToolContext";
 
-export default function ProudctCard({
+export default function ProductList({
   filterData,
   categoryData,
   isFromUrl = false,
@@ -88,7 +88,7 @@ export default function ProudctCard({
   useEffect(() => {
     getProductByCategory(categoryData);
     setIsLoading(false);
-    console.log("card visibleItem:::::::", visibleItem);
+    // console.log("card visibleItem:::::::", visibleItem);
   }, [filterData, categoryData, visibleItem, getProductByCategory]);
 
   return (
@@ -104,8 +104,7 @@ export default function ProudctCard({
           {getAllProductData()}
 
           {/*on  Category card listed choosing dropdown value */}
-          {!isVerifiedFilled &&
-            getProductByCategory(categoryData) &&
+          {getProductByCategory(categoryData) &&
             getProductByCategory(categoryData)
               ?.slice(0, visibleItem)
               .map((item) => {
@@ -260,7 +259,7 @@ export default function ProudctCard({
           apiData &&
           apiData.slice(0, visibleItem).map((item: AirtableModel) => {
             if (item?.fields?.Description?.trim() !== "") {
-                     return (
+              return (
                 <ContentToolCard
                   key={item.id}
                   id={item.id}
@@ -367,4 +366,5 @@ export default function ProudctCard({
       </>
     );
   }
+  // function getProductByCategory(){}
 }
