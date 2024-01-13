@@ -21,8 +21,7 @@ export default function Navbar() {
   const [session, setSession] = useState<Session>();
   const [isActiveMenu, setIsActiveMenu] = useState(0);
 
-  useEffect(() => {
-    // console.log("isActiveMenu", isActiveMenu);
+  useEffect(() => { 
     localStorage.setItem("isActiveMenu", String(isActiveMenu));
   }, [isActiveMenu]);
 
@@ -32,8 +31,7 @@ export default function Navbar() {
     const {
       data: { session },
     } = await supabase.auth.getSession();
-    if (session) {
-      // console.log("session", session);
+    if (session) { 
       setSession(session);
     }
     return session;

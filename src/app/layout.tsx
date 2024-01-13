@@ -1,19 +1,15 @@
 "use client";
 
-import Navbar from "@/components/navbar/Navbar";
 import "./globals.css";
-import Footer from "@/components/footer/Footer";
+import Navbar from "@/components/common/Navbar";
+import Footer from "@/components/common/Footer";
 import { Poppins } from "next/font/google";
 import { ProductContextProvider } from "@/lib/productContext";
 import { VisibleItemContextProvider } from "@/lib/visibleItemContext";
 
 import { VerifiedToolContextProvider } from "@/lib/verifiedToolContext";
 import { BookMarkedToolContextProvider } from "@/lib/bookMarkContext";
-import {
-  LikedToolContextProvider
-} from '@/lib/likedToolContext'
-
-import Loader from "@/components/spinner-loader/Loader";
+import { LikedToolContextProvider } from "@/lib/likedToolContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -21,8 +17,6 @@ const poppins = Poppins({
   variable: "--font-poppins",
   weight: ["400", "700"],
 });
-
-
 
 export default function RootLayout({
   children,
@@ -37,11 +31,11 @@ export default function RootLayout({
         <ProductContextProvider>
           <BookMarkedToolContextProvider>
             <LikedToolContextProvider>
-            <VerifiedToolContextProvider>
-              <VisibleItemContextProvider>
-                <main>{children}</main>
-              </VisibleItemContextProvider>
-            </VerifiedToolContextProvider>
+              <VerifiedToolContextProvider>
+                <VisibleItemContextProvider>
+                  <main>{children}</main>
+                </VisibleItemContextProvider>
+              </VerifiedToolContextProvider>
             </LikedToolContextProvider>
           </BookMarkedToolContextProvider>
         </ProductContextProvider>

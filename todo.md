@@ -12,3 +12,10 @@ product details page url will look like this
 eg:- /others/gt-metrics
 
 - [ ] like count number -->
+
+-[ ] bookmark bug
+-[ ] like upvote
+-[ ] pagination
+-[ ] login/logout btn issue
+-[ ] code refactor
+

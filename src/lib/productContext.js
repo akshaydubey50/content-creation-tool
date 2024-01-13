@@ -1,4 +1,4 @@
-import Loader from "@/components/spinner-loader/Loader";
+import Loader from "@/components/common/Loader/Loader";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 const ProductContext = createContext();

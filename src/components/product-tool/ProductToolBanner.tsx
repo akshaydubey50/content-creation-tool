@@ -1,12 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import BreadCrumb from "../breadcrumb/breadcrumb";
+import Breadcrumb from "@/components/common/Breadcrumb";
 import Image from "next/image";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { Product } from "@/types/product";
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
-import LikedBookmarkModal from "../modal/LikedBookmarkModal";
+import LikedBookmarkModal from "@/components/modal/LikedBookmarkModal";
 import { useRouter } from "next/navigation";
 
 export default function ProductToolBanner({
@@ -33,7 +33,7 @@ export default function ProductToolBanner({
   return (
     <>
       <main className="bg-light-gray  p-10 md:px-10 md:py-16 md:mb-12 xl:px-10-percent ">
-        <BreadCrumb tag={tag} title={title} />
+        <Breadcrumb tag={tag} title={title} />
         <div
           className="affiliate-tool-container  space-y-8 flex flex-col 
         lg:flex-row my-12"

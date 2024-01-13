@@ -20,7 +20,6 @@ import VisitWebsite from "../visit-website/VisitWebsite";
 // Content Data Import
 import { useBookMarkedToolContextData } from "@/lib/bookMarkContext";
 
-
 type Product = {
   id: string;
   url: string;
@@ -49,7 +48,6 @@ export function ContentToolCard({
   const [isBookMarked, setIsBookMarked] = useState(false);
   const [likedTool, setLikedTool] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  
 
   const handleBookMark = async () => {
     const {
@@ -84,9 +82,8 @@ export function ContentToolCard({
           console.log("bookmark added to db::", bookmark);
         }
       }
-    }
-    else{
-      setIsOpen(true)
+    } else {
+      setIsOpen(true);
       console.log("sign in to bookmark the post");
     }
   };
@@ -132,11 +129,9 @@ export function ContentToolCard({
           console.log("like added to db::", likes);
         }
       }
-    }
-    else{
-      setIsOpen(true)
+    } else {
+      setIsOpen(true);
       console.log("sign in to like the post");
-
     }
   };
 
