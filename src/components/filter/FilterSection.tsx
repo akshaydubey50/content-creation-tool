@@ -1,11 +1,14 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useApiDataContext } from "@/lib/productContext";
 import AirtableModel from "@/models/airtableModel";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useParams } from "next/navigation";
 import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
 import SelectDropdown from "./SelectDropdown";
+import { useSelector, useDispatch } from "react-redux";
+import { setCategoryData } from "@/lib/categorySlice";
+import { setSearchQuery, setSearchFilterData, clearSearchFilterData } from "@/lib/searchSlice"
 
 type Product = {
   // url: string;
@@ -14,39 +17,53 @@ type Product = {
   tag: string;
   link: string;
 };
-export default function FilterSection({ setFilterData, setCategoryData, categoryData }: any) {
-  console.log('categoryData in filter component::', categoryData)
-  const [searchQuery, setSearchQuery] = useState("");
-  const [categoryValue, setCategoryValue] = useState(categoryData || "Content");
-  const { apiData } = useApiDataContext();
-  const { visibleItem, setVisibleItem } = useVisibleItemContextData();
+export default function FilterSection() {
+
   const router = useRouter();
 
+  /*Redux Dispatch & Selector*/
+  const dispatch = useDispatch();
+  const categoryData = useSelector((store) => store.category.categoryData);
+  const searchQuery = useSelector((store) => store.searchProduct.searchQuery);
+  const filterData = useSelector((store) => store.searchProduct.filterData);
+
+
+  /*Context Data*/
+  const { apiData } = useApiDataContext();
+  const { setVisibleItem } = useVisibleItemContextData();
   const { setIsVerifiedFilled } = useVerifiedToolContextData();
 
-  const handleSearch = (e: any) => {
-    setCategoryValue("");
-    setCategoryData("");
-    const newSearch = e.target.value;
-    setSearchQuery(newSearch);
-    const lowercaseSearchQuery = newSearch.toLowerCase();
 
-    // Filter data based on the updated search query
-    const filteredResults = apiData.filter((searchData: any) => {
+  /*Search Functionality*/
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSearchQuery(""))
+    dispatch(setCategoryData(""));
+
+    const newSearch = event.target.value
+    const lowercaseSearchQuery = newSearch && newSearch.toLowerCase();
+    dispatch(setSearchQuery(lowercaseSearchQuery))
+
+    /* Filter data based on the updated search query */
+    const filteredResults = apiData.filter((searchData: AirtableModel) => {
       const tooldatalist = searchData.fields.Name.toLowerCase();
-      return tooldatalist.includes(lowercaseSearchQuery);
+      return lowercaseSearchQuery && tooldatalist.includes(lowercaseSearchQuery);
     });
 
-    if (filteredResults.length > 0) {
-      // Update filteredData state
-      setFilterData(filteredResults);
+   
+    if (newSearch === "") {
+      // If search is empty, show default data
+      dispatch(clearSearchFilterData()); 
+    } else if (filteredResults.length > 0) {
+      // If there are filtered results, update filtered data
+      dispatch(setSearchFilterData(filteredResults));
     } else {
-      setFilterData(null);
+      // If no results found, show no result message
+      dispatch(setSearchFilterData(null)); 
     }
     setVisibleItem(9);
-
   };
 
+  /*Get a List for Category*/
   const getListOfCategory = (): Set<string> => {
     const categoryItem = new Set<string>([]);
     apiData.map((item: AirtableModel) => {
@@ -57,55 +74,47 @@ export default function FilterSection({ setFilterData, setCategoryData, category
     return categoryItem;
   };
 
+  /* Selected Category functionality */
   const selectedCategory = (selectedOption: any) => {
     if (selectedOption) {
       let categoryVal = selectedOption.value;
       let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
       router.push(`/category/${formatedCategory}`);
       setIsVerifiedFilled(false);
-      setFilterData("");
-      setCategoryData(categoryVal);
-      setCategoryValue(categoryVal);
-    setVisibleItem(9);
 
+      dispatch(clearSearchFilterData());
+      dispatch(setCategoryData(categoryVal));
+
+      setVisibleItem(9);
     }
   };
+
+  /*Clear Filter*/
   const clearFilter = () => {
-    router.push('/');
-    setCategoryValue("");
-    setCategoryData("");
-    setSearchQuery("");
+    router.push("/");
+    dispatch(setSearchQuery(""));
+    dispatch(clearSearchFilterData());
+    dispatch(setCategoryData(""));
     setVisibleItem(9);
-    setFilterData([]);
   };
-  useEffect(() => {
-
-  }, [
-    setCategoryValue,
-    setCategoryData,
-    setSearchQuery,
+  
+  useEffect(() => { }, [
     setVisibleItem,
-    setFilterData,
-  ])
+    searchQuery,
+    categoryData,
+    filterData,
+  ]);
 
-  useEffect(() => {
-    if (categoryData !== categoryValue) {
-      console.log('before::', categoryData, categoryValue)
 
-      setCategoryValue(categoryData);
-      console.log('before after::', categoryData, categoryValue)
 
+  const categoryOptionsList = Array.from(getListOfCategory()).map(
+    (item: string, index: number) => {
+      return {
+        value: item,
+        label: item,
+      };
     }
-  }, [
-    categoryData, categoryValue, setCategoryValue
-  ])
-
-  const categoryOptionsList = Array.from(getListOfCategory()).map((item: string, index: number) => {
-    return {
-      value: item,
-      label: item
-    };
-  });
+  );
 
   return (
     <>
@@ -123,7 +132,15 @@ export default function FilterSection({ setFilterData, setCategoryData, category
         <div className="col-span-1 ">
           <div className=" bg-DarkOrange  rounded-full  h-full">
             <SelectDropdown
-              key={categoryValue} placeholder="Select Category" options={categoryOptionsList} onChange={selectedCategory} value={categoryOptionsList.find(option => option.value === categoryValue) || null}
+              key={categoryData}
+              placeholder="Select Category"
+              options={categoryOptionsList}
+              onChange={selectedCategory}
+              value={
+                categoryOptionsList.find(
+                  (option) => option.value === categoryData
+                ) || null
+              }
             />
           </div>
         </div>
@@ -140,7 +157,6 @@ export default function FilterSection({ setFilterData, setCategoryData, category
         <div className="col-span-1 font-medium">
           <div className=" text-black py-0.5 ">
             <input
-              value={searchQuery}
               onChange={handleSearch}
               className="rounded-full w-full  border-2 outline-none px-3 py-2 font-medium border-black border-solid"
               type="text"
@@ -157,14 +173,21 @@ export default function FilterSection({ setFilterData, setCategoryData, category
             className="rounded-full w-full  border-2 outline-none p-3 font-medium border-black border-solid"
             type="text"
             placeholder="Search"
-            value={searchQuery}
             onChange={handleSearch}
           />
         </div>
         <div className="col-span-1">
           <div className="bg-DarkOrange  rounded-full text-white  w-full ">
             <SelectDropdown
-              key={categoryValue} placeholder="Select Category" options={categoryOptionsList} onChange={selectedCategory} value={categoryOptionsList.find(option => option.value === categoryValue) || null}
+              key={categoryData}
+              placeholder="Select Category"
+              options={categoryOptionsList}
+              onChange={selectedCategory}
+              value={
+                categoryOptionsList.find(
+                  (option) => option.value === categoryData
+                ) || null
+              }
             />
           </div>
         </div>
@@ -188,8 +211,6 @@ export default function FilterSection({ setFilterData, setCategoryData, category
             </div>
           </div>
         </div>
-
-
       </section>
     </>
   );
