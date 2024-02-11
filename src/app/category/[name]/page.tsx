@@ -8,64 +8,65 @@ import { usePathname } from "next/navigation";
 import FilterSection from "@/components/filter/FilterSection";
 import { useParams,useRouter } from 'next/navigation'
 import {useVisibleItemContextData } from "@/lib/visibleItemContext";
-import { useDispatch, useSelector } from 'react-redux';
-import { setCategoryData, setMatchedCategory } from "@/lib/categorySlice";
-import {  clearSearchFilterData } from "@/lib/searchSlice"
-
 
 export default function ToolDetails() {
-
-  const dispatch = useDispatch();
-  const categoryData = useSelector((store)=>store.category.categoryData)
-
   const { apiData } = useApiDataContext();
-  const { setVisibleItem } = useVisibleItemContextData();
   const pathName = usePathname();
   const param = useParams();
+  const router = useRouter();
+  const { visibleItem, setVisibleItem } = useVisibleItemContextData();
 
 
-const categoryTypeHandler = ()=>{
-  const urlData = pathName.split('/').filter((item) => item !== '');
-  // console.log('urlData::', urlData)
-  if (urlData.length > 0) {
-    const getCurrentCategory = urlData[urlData.length - 1];
-    console.log('urlData::', getCurrentCategory)
-    // Filter data directly based on the current category in the URL
-    const filteredData = apiData.filter((item: AirtableModel) =>
-      item.fields.Tags[0]?.toLowerCase().replace(/\s/g, "-") === getCurrentCategory
-    );
-    console.log('filteredData::', filteredData);
-    dispatch(setMatchedCategory(filteredData))
-  }
 
-  // url params value set to category dropdown
-  const paramData = apiData.find((item: AirtableModel) => {
-    let urlParamCategoryName = param.name;
-    if (param.name && param.name.includes('%26')) {
-      urlParamCategoryName = param.name.replace(/%26/g, '&');
-    }
-    let contexApiData = item.fields.Tags[0]?.toLowerCase().replace(/\s/g, "-")
-    return contexApiData === urlParamCategoryName
-  }
-  );
-
-  // from paramData we can get the current category base on url param
-  const getParamBaseCategory = paramData?.fields.Tags[0];
-  dispatch(clearSearchFilterData())
-  dispatch(setCategoryData(getParamBaseCategory))
-}
+  const [matchedCategory, setMatchedCategory] = useState<AirtableModel>();
+  const [filterData, setFilterData] = useState([]);
+  const [categoryData, setCategoryData] = useState([]);
 
   useEffect(() => {
     setVisibleItem(9); 
-    categoryTypeHandler();
+    const urlData = pathName.split('/').filter((item) => item !== '');
+    // console.log('urlData::', urlData)
+    if (urlData.length > 0) {
+      const getCurrentCategory = urlData[urlData.length - 1];
+      console.log('urlData::', getCurrentCategory)
+      // Filter data directly based on the current category in the URL
+      const filteredData = apiData.filter((item: AirtableModel) =>
+        item.fields.Tags[0]?.toLowerCase().replace(/\s/g, "-") === getCurrentCategory
+      );
+      console.log('filteredData::', filteredData);
+      setMatchedCategory(filteredData)
+    }
+
+    // url params value set to category dropdown
+    const paramData = apiData.find((item: AirtableModel) => {
+      let urlParamCategoryName = param.name;
+      if (param.name && param.name.includes('%26')) {
+        urlParamCategoryName = param.name.replace(/%26/g, '&');
+      }
+      let contexApiData = item.fields.Tags[0]?.toLowerCase().replace(/\s/g, "-")
+      return contexApiData === urlParamCategoryName
+    }
+    );
+    // console.log('ParamData::', paramData)
+
+    // from paramData we can get the current category base on url param
+    const getParamBaseCategory = paramData?.fields.Tags[0];
+    setFilterData([]);
+    setCategoryData(getParamBaseCategory);
+    console.log('getParamBaseCategory::',getParamBaseCategory);
+    console.log('categoryData::',categoryData);
 
   }, [apiData, pathName, param.name,categoryData]);
 
   return (
     <>
       <HeroSection />
-      <FilterSection />
-      <ProudctCard  isFromUrl={true} />
+      <FilterSection
+        setFilterData={setFilterData}
+        categoryData={categoryData}
+        setCategoryData={setCategoryData}
+      />
+      <ProudctCard categoryData={matchedCategory} filterData={filterData} isFromUrl={true} />
     </>
   );
 }

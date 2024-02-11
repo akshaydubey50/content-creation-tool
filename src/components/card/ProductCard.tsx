@@ -8,22 +8,15 @@ import { useSearchParams } from "next/navigation";
 import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
 import { ContentToolCard } from "./ContentToolCard";
 import Loader from "../spinner-loader/Loader";
-import { useSelector } from 'react-redux';
 
 
-export default function ProudctCard({ isFromUrl = false }: any) {
-  /*Redux Slice Data*/
-  const categoryData = useSelector((store) => store.category.matchedCategory)
-  const filterData = useSelector((store) => store.searchProduct.searchFilterData)
-
-  /*Context Data*/
+export default function ProudctCard({ filterData, categoryData, isFromUrl = false }: any) {
   const { apiData } = useApiDataContext();
-  const { isVerifiedFilled } =
+  const { isVerifiedFilled, setIsVerifiedFilled } =
     useVerifiedToolContextData();
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();
   const id = useSearchParams().get("id");
   const [isLoading, setIsLoading] = useState(true);
-
 
   async function loadMore() {
     if (
@@ -60,7 +53,7 @@ export default function ProudctCard({ isFromUrl = false }: any) {
   );
 
 
-  const verifiedTool = () => {
+  const verifiedTool=()=>{
     let verifyTool = apiData.filter((item: AirtableModel) => item.fields.Verified).map((item: AirtableModel) => (
       <ContentToolCard
         key={item.id}
@@ -72,9 +65,10 @@ export default function ProudctCard({ isFromUrl = false }: any) {
         link={item.fields.WebsiteLink}
         isVerified={item.fields?.Verified}
       />))
-    console.log('verifyTool:::', verifyTool)
-    return verifyTool
+      console.log('verifyTool:::',verifyTool)
+      return verifyTool
   }
+
 
 
   useEffect(() => {
@@ -149,6 +143,7 @@ export default function ProudctCard({ isFromUrl = false }: any) {
                     tag={item.fields.Tags}
                     link={item.fields.WebsiteLink}
                     isVerified={item.fields?.Verified}
+
                   />
                 );
               }
@@ -179,7 +174,7 @@ export default function ProudctCard({ isFromUrl = false }: any) {
             )}
         </main>
       )}
-      {filterData ===null && (
+      {filterData === null && (
         <div>
           <h1 className="text-3xl font-bold  text-center">
             {" "}
