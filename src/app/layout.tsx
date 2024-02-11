@@ -9,6 +9,9 @@ import { VisibleItemContextProvider } from "@/lib/visibleItemContext";
 
 import { VerifiedToolContextProvider } from "@/lib/verifiedToolContext";
 import Loader from "@/components/spinner-loader/Loader";
+import {appStore} from "@/lib/appStore";
+import { Provider } from 'react-redux';
+
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -32,7 +35,9 @@ export default function RootLayout({
         <ProductContextProvider>
           <VerifiedToolContextProvider>
             <VisibleItemContextProvider>
+              <Provider store={appStore} >
               <main>{children}</main>
+                </Provider>
             </VisibleItemContextProvider>
           </VerifiedToolContextProvider>
         </ProductContextProvider>
