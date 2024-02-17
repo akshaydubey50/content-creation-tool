@@ -66,11 +66,7 @@ export default function ToolDetails() {
         categoryData={categoryData}
         setCategoryData={setCategoryData}
       />
-      <ProductList
-        categoryData={matchedCategory}
-        filterData={filterData}
-        isFromUrl={true}
-      />
+      <ProductList />
     </>
   );
 }

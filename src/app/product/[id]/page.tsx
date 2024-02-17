@@ -51,7 +51,7 @@ export default function ProductDetail() {
           <span className="text-DarkOrange">{product!.fields.Tags}</span> Tools
         </h1>
       )}
-      <ProductList categoryData={localCategoryData} filterData={[]} />
+      <ProductList />
     </>
   );
 }

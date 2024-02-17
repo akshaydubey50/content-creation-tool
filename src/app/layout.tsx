@@ -8,8 +8,9 @@ import { ProductContextProvider } from "@/lib/productContext";
 import { VisibleItemContextProvider } from "@/lib/visibleItemContext";
 
 import { VerifiedToolContextProvider } from "@/lib/verifiedToolContext";
-import { BookMarkedToolContextProvider } from "@/lib/bookMarkContext";
 import { LikedToolContextProvider } from "@/lib/likedToolContext";
+import { Provider } from "react-redux";
+import appStore from "@/lib/store";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -26,19 +27,20 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable}`}>
       <body className="font-poppins">
-        <Navbar />
-        {/* <Loader /> */}
-          <ProductContextProvider>
-            <BookMarkedToolContextProvider>
-              <LikedToolContextProvider>
-                <VerifiedToolContextProvider>
-                  <VisibleItemContextProvider>
-                    <main>{children}</main>
-                  </VisibleItemContextProvider>
-                </VerifiedToolContextProvider>
-              </LikedToolContextProvider>
-            </BookMarkedToolContextProvider>
-          </ProductContextProvider>
+        {/* <ProductContextProvider>
+          <LikedToolContextProvider>
+            <VerifiedToolContextProvider>
+              <VisibleItemContextProvider> */}
+        <VisibleItemContextProvider>
+          <Provider store={appStore}>
+            <Navbar />
+            <main>{children}</main>
+          </Provider>
+        </VisibleItemContextProvider>
+        {/*  </VisibleItemContextProvider>
+            </VerifiedToolContextProvider>
+          </LikedToolContextProvider>
+        </ProductContextProvider> */}
         <Footer />
       </body>
     </html>

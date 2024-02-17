@@ -16,38 +16,94 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 // Project  Component Import
 import LikedBookmarkModal from "../modal/LikedBookmarkModal";
 import VisitWebsite from "../visit-website/VisitWebsite";
+import AirtableModel from "@/models/airtableModel";
+import { Product } from "@/types/product";
 
-// Content Data Import
-import { useBookMarkedToolContextData } from "@/lib/bookMarkContext";
+// type Product = {
+//   id: string;
+//   url: string;
+//   title: string;
+//   description: string;
+//   tag: string;
+//   link: string;
+//   isVerified: boolean;
+// };
 
-type Product = {
-  id: string;
-  url: string;
-  title: string;
-  description: string;
-  tag: string;
-  link: string;
-  isVerified: boolean;
-};
-
-export function ContentToolCard({
-  id,
-  url,
-  title,
-  description,
-  tag,
-  link,
-  isVerified = false,
-}: Product) {
+export function ProductCard(product: any) {
   const supabase = createClientComponentClient();
-
-  const formattedTitle = title.toLowerCase().replace(/\s/g, "-");
-  const formattedTag = tag[0].toLowerCase().replace(/\s/g, "-");
 
   const [userSession, setUserSession] = useState<Session>();
   const [isBookMarked, setIsBookMarked] = useState(false);
   const [likedTool, setLikedTool] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+
+  const { id, fields } = product;
+  /* console.log("prod product.product.fields", product);
+  console.log("fields", fields);
+   */ const {
+    Tags,
+    Price,
+    Status,
+    Name,
+    WebsiteLink,
+    Description,
+    ToolImage,
+    Verified,
+  } = fields;
+  const formattedTitle = Name.toLowerCase().replace(/\s/g, "-");
+  const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
+
+  const addBookmark = async () => {
+    if (isBookMarked) {
+      setIsBookMarked(false);
+      console.log("deleting to bookmark");
+      const res = await fetch("/api/bookmarks/" + id, {
+        method: "DELETE",
+      });
+      if (res.status !== 200) {
+        setIsBookMarked(true);
+      }
+      setIsBookMarked(false);
+      console.log("deleting to bookmark");
+    } else {
+      setIsBookMarked(true);
+      console.log("adding to bookmark");
+      const res = await fetch("/api/bookmarks/" + id, {
+        method: "POST",
+      });
+      if (res.status !== 200) {
+        setIsBookMarked(false);
+      }
+      setIsBookMarked(true);
+      console.log("added to bookmark");
+    }
+  };
+
+  const addLikes = async () => {
+    if (isBookMarked) {
+      setIsBookMarked(false);
+      console.log("deleting to likes");
+      const res = await fetch("/api/likes/" + id, {
+        method: "DELETE",
+      });
+      if (res.status !== 200) {
+        setIsBookMarked(true);
+      }
+      setIsBookMarked(false);
+      console.log("deleted to likes");
+    } else {
+      setIsBookMarked(true);
+      console.log("adding to likes");
+      const res = await fetch("/api/likes/" + id, {
+        method: "POST",
+      });
+      if (res.status !== 200) {
+        setIsBookMarked(false);
+      }
+      setIsBookMarked(true);
+      console.log("added to likes");
+    }
+  };
 
   const handleBookMark = async () => {
     const {
@@ -151,7 +207,7 @@ export function ContentToolCard({
         >
           <section className="  border-b border-black border-solid">
             <Image
-              src={url}
+              src={ToolImage}
               alt="logo banner"
               loading="lazy"
               width="1280"
@@ -159,7 +215,6 @@ export function ContentToolCard({
               decoding="async"
               data-nimg="1"
               className="rounded-t-2xl w-full object-cover"
-              //   style="color: transparent"
             />
           </section>
         </Link>
@@ -169,14 +224,14 @@ export function ContentToolCard({
               <div className="pb-4 flex flex-1 flex-row justify-between">
                 <div className="flex items-center gap-x-2">
                   <h1 className="font-bold text-Title-Medium md:text-Title-Large">
-                    {title}
+                    {Name}
                   </h1>
 
-                  {isVerified && (
+                  {/* {isVerified && (
                     <MdVerified className="text-2xl text-DarkOrange" />
-                  )}
+                  )} */}
                 </div>
-                <button
+                {/* <button
                   title="Bookmark"
                   type="button"
                   onClick={handleLikedTool}
@@ -193,12 +248,12 @@ export function ContentToolCard({
                 </button>
                 {isOpen && (
                   <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
-                )}
+                )} */}
               </div>
             </div>
             <div className="">
               <div className="text-Description">
-                <p>{description}</p>
+                <p>{Description}</p>
               </div>
             </div>
             <div className="tool-btn-section pb-7">
@@ -209,15 +264,15 @@ export function ContentToolCard({
                   href={`/category/${formattedTag}`}
                   prefetch={true}
                 >
-                  {tag}
+                  {Tags}
                 </Link>
               </p>
               <div
                 className="text-white text-Title-Medium  flex 
           justify-between items-center"
               >
-                <VisitWebsite url={link} />
-                <button title="Bookmark" type="button" onClick={handleBookMark}>
+                <VisitWebsite url={WebsiteLink} />
+                <button title="Bookmark" type="button" onClick={addLikes}>
                   {isBookMarked ? (
                     <BsBookmarkFill className="text-3xl text-DarkOrange" />
                   ) : (
