@@ -7,7 +7,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
 import SelectDropdown from "./SelectDropdown";
 import { useSelector, useDispatch } from "react-redux";
-import { setCategoryData } from "@/lib/categorySlice";
+import { setCategoryData, clearCategoryData } from "@/lib/categorySlice";
 import { setSearchQuery, setSearchFilterData, clearSearchFilterData } from "@/lib/searchSlice"
 
 type Product = {
@@ -49,16 +49,16 @@ export default function FilterSection() {
       return lowercaseSearchQuery && tooldatalist.includes(lowercaseSearchQuery);
     });
 
-   
+
     if (newSearch === "") {
       // If search is empty, show default data
-      dispatch(clearSearchFilterData()); 
+      dispatch(clearSearchFilterData());
     } else if (filteredResults.length > 0) {
       // If there are filtered results, update filtered data
       dispatch(setSearchFilterData(filteredResults));
     } else {
       // If no results found, show no result message
-      dispatch(setSearchFilterData(null)); 
+      dispatch(setSearchFilterData(null));
     }
     setVisibleItem(9);
   };
@@ -92,20 +92,22 @@ export default function FilterSection() {
   /*Clear Filter*/
   const clearFilter = () => {
     router.push("/");
-    dispatch(setSearchQuery(""));
-    dispatch(clearSearchFilterData());
-    dispatch(setCategoryData(""));
+    if (searchQuery.length > 0) {
+      dispatch(setSearchQuery(""));
+      dispatch(clearSearchFilterData());
+    }
+    else if (categoryData.length > 0) {
+      dispatch(clearCategoryData());
+    }
     setVisibleItem(9);
   };
-  
+
   useEffect(() => { }, [
     setVisibleItem,
     searchQuery,
     categoryData,
     filterData,
   ]);
-
-
 
   const categoryOptionsList = Array.from(getListOfCategory()).map(
     (item: string, index: number) => {

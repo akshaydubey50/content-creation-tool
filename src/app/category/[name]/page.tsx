@@ -59,7 +59,7 @@ const categoryTypeHandler = ()=>{
     setVisibleItem(9); 
     categoryTypeHandler();
 
-  }, [apiData, pathName, param.name,categoryData]);
+  }, [apiData, pathName, param.name]);
 
   return (
     <>
