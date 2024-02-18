@@ -1,14 +1,13 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import { useApiDataContext } from "@/lib/productContext";
 import AirtableModel from "@/models/airtableModel";
-import { useVisibleItemContextData } from "@/lib/visibleItemContext";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
 import SelectDropdown from "./SelectDropdown";
 import { useSelector, useDispatch } from "react-redux";
-import { setCategoryData, clearCategoryData } from "@/lib/categorySlice";
-import { setSearchQuery, setSearchFilterData, clearSearchFilterData } from "@/lib/searchSlice"
+import { setCategoryData, clearCategoryData } from "@/lib/slice/categorySlice";
+import { setSearchQuery, setSearchFilterData, clearSearchFilterData } from "@/lib/slice/searchSlice"
 
 type Product = {
   // url: string;
@@ -26,10 +25,9 @@ export default function FilterSection() {
   const categoryData = useSelector((store) => store.category.categoryData);
   const searchQuery = useSelector((store) => store.searchProduct.searchQuery);
   const filterData = useSelector((store) => store.searchProduct.filterData);
-
+  const productList = useSelector((store) => store.appSlice.productList)
 
   /*Context Data*/
-  const { apiData } = useApiDataContext();
   const { setVisibleItem } = useVisibleItemContextData();
   const { setIsVerifiedFilled } = useVerifiedToolContextData();
 
@@ -44,7 +42,7 @@ export default function FilterSection() {
     dispatch(setSearchQuery(lowercaseSearchQuery))
 
     /* Filter data based on the updated search query */
-    const filteredResults = apiData.filter((searchData: AirtableModel) => {
+    const filteredResults = productList.length > 0 && productList?.filter((searchData: AirtableModel) => {
       const tooldatalist = searchData.fields.Name.toLowerCase();
       return lowercaseSearchQuery && tooldatalist.includes(lowercaseSearchQuery);
     });
@@ -63,16 +61,6 @@ export default function FilterSection() {
     setVisibleItem(9);
   };
 
-  /*Get a List for Category*/
-  const getListOfCategory = (): Set<string> => {
-    const categoryItem = new Set<string>([]);
-    apiData.map((item: AirtableModel) => {
-      if (item.fields.Tags[0] !== undefined) {
-        categoryItem.add(item.fields.Tags[0]);
-      }
-    });
-    return categoryItem;
-  };
 
   /* Selected Category functionality */
   const selectedCategory = (selectedOption: any) => {
@@ -109,6 +97,17 @@ export default function FilterSection() {
     filterData,
   ]);
 
+  /*Get a List for Category*/
+  const getListOfCategory = (): Set<string> => {
+    const categoryItem = new Set<string>([]);
+    productList.length > 0 && productList?.map((item: AirtableModel) => {
+      if (item?.fields?.Tags[0] !== undefined) {
+        categoryItem.add(item?.fields?.Tags[0]);
+      }
+    });
+    return categoryItem;
+  };
+
   const categoryOptionsList = Array.from(getListOfCategory()).map(
     (item: string, index: number) => {
       return {
@@ -117,6 +116,8 @@ export default function FilterSection() {
       };
     }
   );
+
+
 
   return (
     <>

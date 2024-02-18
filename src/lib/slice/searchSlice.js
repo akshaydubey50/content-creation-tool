@@ -3,21 +3,21 @@ import { createSlice } from "@reduxjs/toolkit";
 const searchSlice = createSlice({
     name: "search",
     initialState: {
-        searchQuery:"",
+        searchQuery: "",
         searchFilterData: [],
 
     },
     reducers: {
-       setSearchQuery:(state,action)=>{
-        state.searchQuery = action.payload
-       },
+        setSearchQuery: (state, action) => {
+            state.searchQuery = action.payload
+        },
         setSearchFilterData: (state, action) => {
             state.searchFilterData = action.payload;
         },
         clearSearchFilterData: (state,) => {
             state.searchFilterData = [];
         },
-       
+
     },
 
 })
