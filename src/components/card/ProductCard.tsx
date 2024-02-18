@@ -122,7 +122,7 @@ export function ProductCard(props: any) {
             },
           }}
         >
-          <section className="  border-b border-black border-solid">
+          <section className="border-b border-black border-solid">
             <Image
               src={ToolImage}
               alt="logo banner"
@@ -176,7 +176,7 @@ export function ProductCard(props: any) {
             <div className="tool-btn-section pb-7">
               <p className="my-6 ">
                 <Link
-                  className=" bg-white rounded-full  text-tags font-medium border 
+                  className="bg-white rounded-full  text-tags font-medium border 
                 border-solid border-black px-5 py-1"
                   href={`/category/${formattedTag}`}
                   prefetch={true}

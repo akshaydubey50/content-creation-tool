@@ -8,29 +8,37 @@ import SelectDropdown from "./SelectDropdown";
 import { useSelector, useDispatch } from "react-redux";
 import { setCategoryData, clearCategoryData } from "@/lib/slice/categorySlice";
 import { setSearchQuery, setSearchFilterData, clearSearchFilterData } from "@/lib/slice/searchSlice"
-import ProductList from '../card/ProductList';
 
-type Product = {
-  // url: string;
-  title: string;
-  description: string;
-  tag: string;
-  link: string;
-};
+
+interface RootState {
+  category: {
+    categoryData: string;
+  };
+  searchProduct: {
+    searchQuery: string;
+    filterData: AirtableModel;
+  };
+  appSlice: {
+    productList: Object;
+  };
+}
+
+
 export default function FilterSection() {
 
   const router = useRouter();
 
   /*Redux Dispatch & Selector*/
   const dispatch = useDispatch();
-  const categoryData = useSelector((store) => store.category.categoryData);
-  const searchQuery = useSelector((store) => store.searchProduct.searchQuery);
-  const filterData = useSelector((store) => store.searchProduct.filterData);
-  const { data }: any = useSelector<any>((state) => state.appSlice.productList);
-  console.log('data:-',data)
-  debugger
-  
+  const categoryData = useSelector((store: RootState) => store.category.categoryData);
+  const searchQuery = useSelector((store: RootState) => store.searchProduct.searchQuery);
+  const filterData = useSelector((store: RootState) => store.searchProduct.filterData);
+  const allProduct = useSelector((state: RootState) => state.appSlice.productList);
+  const { data } = allProduct
   const productList = data;
+  console.log('productList ############', productList)
+  
+  
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
   const { setIsVerifiedFilled } = useVerifiedToolContextData();
@@ -46,7 +54,7 @@ export default function FilterSection() {
     dispatch(setSearchQuery(lowercaseSearchQuery))
 
     /* Filter data based on the updated search query */
-    const filteredResults = productList.length > 0 && productList?.filter((searchData: AirtableModel) => {
+    const filteredResults = productList && productList?.filter((searchData: AirtableModel) => {
       const tooldatalist = searchData.fields.Name.toLowerCase();
       return lowercaseSearchQuery && tooldatalist.includes(lowercaseSearchQuery);
     });
@@ -104,7 +112,7 @@ export default function FilterSection() {
   /*Get a List for Category*/
   const getListOfCategory = (): Set<string> => {
     const categoryItem = new Set<string>([]);
-    productList.length > 0 && productList?.map((item: AirtableModel) => {
+    productList?.length > 0 && productList?.map((item: AirtableModel) => {
       if (item?.fields?.Tags[0] !== undefined) {
         categoryItem.add(item?.fields?.Tags[0]);
       }
@@ -120,7 +128,6 @@ export default function FilterSection() {
       };
     }
   );
-
 
 
   return (

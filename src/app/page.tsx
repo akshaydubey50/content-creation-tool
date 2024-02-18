@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div>
       <HeroSection />
-       {/* <FilterSection /> */}
+       <FilterSection />
       <ProductList />
     </div>
   );
