@@ -29,18 +29,21 @@ import { Product } from "@/types/product";
 //   isVerified: boolean;
 // };
 
-export function ProductCard(product: any) {
+export function ProductCard(props: any) {
   const supabase = createClientComponentClient();
 
   const [userSession, setUserSession] = useState<Session>();
   const [isBookMarked, setIsBookMarked] = useState(false);
   const [likedTool, setLikedTool] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-
+  const { product } = props;
   const { id, fields } = product;
-  /* console.log("prod product.product.fields", product);
+  /*
+  console.log("prod product.product.fields", product);
   console.log("fields", fields);
-   */ const {
+  */ 
+
+  const {
     Tags,
     Price,
     Status,
