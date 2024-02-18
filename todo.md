@@ -6,7 +6,16 @@
       in the app
 - [ ] custom hook for user session also
 - [ ] handle login error more elegantly
-
+p
 product details page url will look like this 
 ::    /category/tool-name
 eg:- /others/gt-metrics
+
+- [ ] like count number -->
+
+-[ ] bookmark bug
+-[ ] like upvote
+-[ ] pagination
+-[ ] login/logout btn issue
+-[ ] code refactor
+

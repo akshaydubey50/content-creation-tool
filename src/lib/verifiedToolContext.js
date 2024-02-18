@@ -1,19 +1,25 @@
 import React, { useContext, createContext, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 export const VerifiedToolData = createContext();
 
 export function VerifiedToolContextProvider({ children }) {
   const router = useRouter();
-    const [isVerifiedFilled, setIsVerifiedFilled] = useState(false);
+  const pathname = usePathname();
 
-    const handleVerifiedClick = () => {
-      router.push('/');
-      setIsVerifiedFilled(!isVerifiedFilled);
-    };
-  
+  const [isVerifiedFilled, setIsVerifiedFilled] = useState(false);
+
+  const handleVerifiedClick = () => {
+    if (pathname !== "/") {
+      router.push("/");
+    }
+    setIsVerifiedFilled(!isVerifiedFilled);
+  };
+
   return (
     <>
-      <VerifiedToolData.Provider value={{ isVerifiedFilled,handleVerifiedClick,setIsVerifiedFilled }}>
+      <VerifiedToolData.Provider
+        value={{ isVerifiedFilled, handleVerifiedClick, setIsVerifiedFilled }}
+      >
         {children}
       </VerifiedToolData.Provider>
     </>

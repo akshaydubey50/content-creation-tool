@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useApiDataContext } from "@/lib/productContext";
 import AirtableModel from "@/models/airtableModel";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useParams } from "next/navigation";
 import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
 import SelectDropdown from "./SelectDropdown";
 
@@ -14,8 +14,11 @@ type Product = {
   tag: string;
   link: string;
 };
-export default function FilterSection({ setFilterData, setCategoryData, categoryData }: any) {
-  console.log('categoryData in filter component::', categoryData)
+export default function FilterSection({
+  setFilterData,
+  setCategoryData,
+  categoryData,
+}: any) {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryValue, setCategoryValue] = useState(categoryData || "Content");
   const { apiData } = useApiDataContext();
@@ -44,16 +47,15 @@ export default function FilterSection({ setFilterData, setCategoryData, category
       setFilterData(null);
     }
     setVisibleItem(9);
-
   };
 
   const getListOfCategory = (): Set<string> => {
     const categoryItem = new Set<string>([]);
-    apiData.map((item: AirtableModel) => {
+    /* apiData.map((item: AirtableModel) => {
       if (item.fields.Tags[0] !== undefined) {
         categoryItem.add(item.fields.Tags[0]);
       }
-    });
+    }); */
     return categoryItem;
   };
 
@@ -66,46 +68,42 @@ export default function FilterSection({ setFilterData, setCategoryData, category
       setFilterData("");
       setCategoryData(categoryVal);
       setCategoryValue(categoryVal);
-    setVisibleItem(9);
-
+      setVisibleItem(9);
     }
   };
   const clearFilter = () => {
-    router.push('/');
+    router.push("/");
     setCategoryValue("");
     setCategoryData("");
     setSearchQuery("");
     setVisibleItem(9);
     setFilterData([]);
   };
-  useEffect(() => {
-
-  }, [
+  useEffect(() => {}, [
     setCategoryValue,
     setCategoryData,
     setSearchQuery,
     setVisibleItem,
     setFilterData,
-  ])
+  ]);
 
   useEffect(() => {
     if (categoryData !== categoryValue) {
-      console.log('before::', categoryData, categoryValue)
+      // console.log("before::", categoryData, categoryValue);
 
       setCategoryValue(categoryData);
-      console.log('before after::', categoryData, categoryValue)
-
+      // console.log("before after::", categoryData, categoryValue);
     }
-  }, [
-    categoryData, categoryValue, setCategoryValue
-  ])
+  }, [categoryData, categoryValue, setCategoryValue]);
 
-  const categoryOptionsList = Array.from(getListOfCategory()).map((item: string, index: number) => {
-    return {
-      value: item,
-      label: item
-    };
-  });
+  const categoryOptionsList = Array.from(getListOfCategory()).map(
+    (item: string, index: number) => {
+      return {
+        value: item,
+        label: item,
+      };
+    }
+  );
 
   return (
     <>
@@ -123,7 +121,15 @@ export default function FilterSection({ setFilterData, setCategoryData, category
         <div className="col-span-1 ">
           <div className=" bg-DarkOrange  rounded-full  h-full">
             <SelectDropdown
-              key={categoryValue} placeholder="Select Category" options={categoryOptionsList} onChange={selectedCategory} value={categoryOptionsList.find(option => option.value === categoryValue) || null}
+              key={categoryValue}
+              placeholder="Select Category"
+              options={categoryOptionsList}
+              onChange={selectedCategory}
+              value={
+                categoryOptionsList.find(
+                  (option) => option.value === categoryValue
+                ) || null
+              }
             />
           </div>
         </div>
@@ -164,7 +170,15 @@ export default function FilterSection({ setFilterData, setCategoryData, category
         <div className="col-span-1">
           <div className="bg-DarkOrange  rounded-full text-white  w-full ">
             <SelectDropdown
-              key={categoryValue} placeholder="Select Category" options={categoryOptionsList} onChange={selectedCategory} value={categoryOptionsList.find(option => option.value === categoryValue) || null}
+              key={categoryValue}
+              placeholder="Select Category"
+              options={categoryOptionsList}
+              onChange={selectedCategory}
+              value={
+                categoryOptionsList.find(
+                  (option) => option.value === categoryValue
+                ) || null
+              }
             />
           </div>
         </div>
@@ -188,8 +202,6 @@ export default function FilterSection({ setFilterData, setCategoryData, category
             </div>
           </div>
         </div>
-
-
       </section>
     </>
   );
