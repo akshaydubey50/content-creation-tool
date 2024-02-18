@@ -8,6 +8,7 @@ import SelectDropdown from "./SelectDropdown";
 import { useSelector, useDispatch } from "react-redux";
 import { setCategoryData, clearCategoryData } from "@/lib/slice/categorySlice";
 import { setSearchQuery, setSearchFilterData, clearSearchFilterData } from "@/lib/slice/searchSlice"
+import ProductList from '../card/ProductList';
 
 type Product = {
   // url: string;
@@ -25,8 +26,11 @@ export default function FilterSection() {
   const categoryData = useSelector((store) => store.category.categoryData);
   const searchQuery = useSelector((store) => store.searchProduct.searchQuery);
   const filterData = useSelector((store) => store.searchProduct.filterData);
-  const productList = useSelector((store) => store.appSlice.productList)
-
+  const { data }: any = useSelector<any>((state) => state.appSlice.productList);
+  console.log('data:-',data)
+  debugger
+  
+  const productList = data;
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
   const { setIsVerifiedFilled } = useVerifiedToolContextData();
