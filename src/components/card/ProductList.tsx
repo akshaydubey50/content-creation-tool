@@ -149,7 +149,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
 
         {/* Render Load More Button for Similar Category Product  */}
-        {!id && visibleItem < dropDownCategoryArr!.length  && (<div onClick={loadMore}>
+        {!id && visibleItem < dropDownCategoryArr?.length  && (<div onClick={loadMore}>
           <Button value={`Load More Same Category Product ${productRecords?.length - visibleItem}`} />
         </div>)}
 
@@ -164,7 +164,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
         </div>)}
 
         {/*All Data Load Btn  */}
-        {!id && (dropDownCategoryArr.length <= 0 && inputSearchFilterArr?.length <= 0 && productSearchQuery.length === 0 && !isVerifiedCheck) && visibleItem <= data?.length && data?.length !== 0 && (
+        {!id && (dropDownCategoryArr?.length <= 0 && inputSearchFilterArr?.length <= 0 && productSearchQuery.length === 0 && !isVerifiedCheck) && visibleItem <= data?.length && data?.length !== 0 && (
           <div onClick={loadMore}>
             <Button value={`Load More   ${data?.length - visibleItem}`} />
           </div>
