@@ -22,10 +22,15 @@ const categorySlice = createSlice({
             state.categoryData = "";
         },
 
+        clearMatchedCategory: (state, action) => {
+            // tag base product data
+            state.matchedCategory = [];
+        },
+
     },
 
 })
 
 
-export const { setMatchedCategory, setCategoryData, clearCategoryData } = categorySlice.actions
+export const { setMatchedCategory, setCategoryData, clearCategoryData, clearMatchedCategory } = categorySlice.actions
 export default categorySlice.reducer

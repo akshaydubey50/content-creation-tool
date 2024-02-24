@@ -6,7 +6,7 @@ import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
 import SelectDropdown from "./SelectDropdown";
 import { useSelector, useDispatch } from "react-redux";
-import { setCategoryData, clearCategoryData } from "@/lib/slice/categorySlice";
+import { setCategoryData, clearCategoryData, setMatchedCategory, clearMatchedCategory } from "@/lib/slice/categorySlice";
 import { setSearchQuery, setSearchFilterData, clearSearchFilterData } from "@/lib/slice/searchSlice"
 
 
@@ -34,9 +34,8 @@ export default function FilterSection() {
   const searchQuery = useSelector((store: RootState) => store.searchProduct.searchQuery);
   const filterData = useSelector((store: RootState) => store.searchProduct.filterData);
   const allProduct = useSelector((state: RootState) => state.appSlice.productList);
-  const { data } = allProduct
+  const { data }:any = allProduct
   const productList = data;
-  console.log('productList ############', productList)
   
   
   /*Context Data*/
@@ -47,7 +46,8 @@ export default function FilterSection() {
   /*Search Functionality*/
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setSearchQuery(""))
-    dispatch(setCategoryData(""));
+    // dispatch(clearCategoryData());
+    // dispatch(clearMatchedCategory([]));
 
     const newSearch = event.target.value
     const lowercaseSearchQuery = newSearch && newSearch.toLowerCase();
@@ -56,9 +56,11 @@ export default function FilterSection() {
     /* Filter data based on the updated search query */
     const filteredResults = productList && productList?.filter((searchData: AirtableModel) => {
       const tooldatalist = searchData.fields.Name.toLowerCase();
-      return lowercaseSearchQuery && tooldatalist.includes(lowercaseSearchQuery);
+      if (lowercaseSearchQuery){
+        console.log('search',tooldatalist.includes(lowercaseSearchQuery))
+        return  tooldatalist.includes(lowercaseSearchQuery);
+      }
     });
-
 
     if (newSearch === "") {
       // If search is empty, show default data
@@ -68,9 +70,10 @@ export default function FilterSection() {
       dispatch(setSearchFilterData(filteredResults));
     } else {
       // If no results found, show no result message
-      dispatch(setSearchFilterData(null));
+      dispatch(setSearchFilterData([]));
     }
     setVisibleItem(9);
+
   };
 
 
@@ -79,13 +82,19 @@ export default function FilterSection() {
     if (selectedOption) {
       let categoryVal = selectedOption.value;
       let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
-      router.push(`/category/${formatedCategory}`);
       setIsVerifiedFilled(false);
-
+      
       dispatch(clearSearchFilterData());
-      dispatch(setCategoryData(categoryVal));
 
+      const filteredData = data?.filter((item: AirtableModel) =>
+        item.fields.Tags[0]?.toLowerCase().replace(/\s/g, "-") === formatedCategory
+      );
+      console.log('filteredData::', filteredData);
+      dispatch(setMatchedCategory(filteredData))
+
+      dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
+      router.push(`/category/${formatedCategory}`);
     }
   };
 
@@ -97,7 +106,10 @@ export default function FilterSection() {
       dispatch(clearSearchFilterData());
     }
     else if (categoryData.length > 0) {
+      console.log(categoryData)
       dispatch(clearCategoryData());
+      dispatch(clearMatchedCategory([]));
+
     }
     setVisibleItem(9);
   };
