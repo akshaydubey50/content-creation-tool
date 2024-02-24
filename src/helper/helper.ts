@@ -1,5 +1,12 @@
 import { Redis } from "@upstash/redis";
 import { RedisConf } from "@/conf/conf";
+import AirtableModel from "@/models/airtableModel";
+import {
+  createClientComponentClient,
+  createRouteHandlerClient,
+} from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import { Database } from "@/types/supabase";
 
 const redis = new Redis({
   url: RedisConf.URL,
@@ -20,3 +27,4 @@ export const DOMAIN_URL = () => {
     ? process.env.NEXT_PUBLIC_API_URL_DEV
     : process.env.NEXT_PUBLIC_API_URL_PROD;
 };
+

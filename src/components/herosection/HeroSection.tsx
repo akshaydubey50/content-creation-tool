@@ -12,7 +12,7 @@ import { fetchProductList } from "@/lib/slice/appSlice";
 export default function HeroSection() {
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   const { isLoading, isError, productList }: any = useSelector<any>(
-    (state) => state.appSlice
+    (store) => store.appSlice
   );
 
   const { data } = productList;
@@ -21,9 +21,7 @@ export default function HeroSection() {
   };
 
   const handleShowAllProduct = () => {
-    if (!data) {
-      dispatch(fetchProductList());
-    }
+    dispatch(fetchProductList());
   };
 
   return (

@@ -14,16 +14,17 @@ const appSlice = createSlice({
   name: "appSlice",
   initialState: {
     isLoading: false,
-    isError: false,
+    isError: "",
     productList: [],
   },
   extraReducers: (builder) => {
     builder.addCase(fetchProductList.fulfilled, (state, action) => {
-      state.isLoading = false;
       state.productList = action.payload;
+      state.isLoading = false;
     });
     builder.addCase(fetchProductList.pending, (state, action) => {
       state.isLoading = true;
+      state.isError = "";
     });
     builder.addCase(fetchProductList.rejected, (state, action) => {
       state.isLoading = false;

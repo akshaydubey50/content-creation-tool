@@ -1,6 +1,6 @@
 "use client";
 // React Component Import
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -29,19 +29,14 @@ import { Product } from "@/types/product";
 //   isVerified: boolean;
 // };
 
-export function ProductCard(props: any) {
-  const supabase = createClientComponentClient();
-
+export function ProductCard({ product, isBookmark }) {
+  console.log("bookmark", isBookmark);
   const [userSession, setUserSession] = useState<Session>();
   const [isBookMarked, setIsBookMarked] = useState(false);
   const [likedTool, setLikedTool] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { product } = props;
+
   const { id, fields } = product;
-  /*
-  console.log("prod product.product.fields", product);
-  console.log("fields", fields);
-  */ 
 
   const {
     Tags,
@@ -108,91 +103,10 @@ export function ProductCard(props: any) {
     }
   };
 
-  const handleBookMark = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    if (session?.user) {
-      const { data, error } = await supabase
-        .from("bookmark")
-        .select("id")
-        .eq("user_id", session.user?.id)
-        .eq("product_id", id);
-
-      if (error) {
-        console.error(error);
-      } else {
-        // product exist deleting
-        if (data.length === 1) {
-          const { error } = await supabase
-            .from("bookmark")
-            .delete()
-            .eq("user_id", session.user?.id)
-            .eq("product_id", id);
-          setIsBookMarked(false);
-        }
-        if (data.length === 0) {
-          const { data: bookmark, error: err } = await supabase
-            .from("bookmark")
-            .insert([{ user_id: session.user?.id, product_id: id }])
-            .select();
-          setIsBookMarked(true);
-          console.log("bookmark added to db::", bookmark);
-        }
-      }
-    } else {
-      setIsOpen(true);
-      console.log("sign in to bookmark the post");
-    }
-  };
-
-  const getSession = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (session !== null) {
-      setUserSession(session);
-    }
-  };
-
-  const handleLikedTool = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (session?.user) {
-      const { data, error } = await supabase
-        .from("likes")
-        .select("id")
-        .eq("user_id", session.user?.id)
-        .eq("product_id", id);
-
-      if (error) {
-        console.error(error);
-      } else {
-        // product exist deleting
-        if (data.length === 1) {
-          const { error } = await supabase
-            .from("likes")
-            .delete()
-            .eq("user_id", session.user?.id)
-            .eq("product_id", id);
-          setLikedTool(false);
-        }
-        if (data.length === 0) {
-          const { data: likes, error: err } = await supabase
-            .from("likes")
-            .insert([{ user_id: session.user?.id, product_id: id }])
-            .select();
-          setLikedTool(true);
-          console.log("like added to db::", likes);
-        }
-      }
-    } else {
-      setIsOpen(true);
-      console.log("sign in to like the post");
-    }
-  };
+  useEffect(() => {
+    console.log("rendering card with bookmark", isBookMarked);
+    setIsBookMarked(isBookmark);
+  }, [isBookmark]);
 
   return (
     <>
@@ -234,10 +148,10 @@ export function ProductCard(props: any) {
                     <MdVerified className="text-2xl text-DarkOrange" />
                   )} */}
                 </div>
-                {/* <button
+                <button
                   title="Bookmark"
                   type="button"
-                  onClick={handleLikedTool}
+                  onClick={addLikes}
                   className="flex items-center gap-x-1"
                 >
                   <p>
@@ -251,7 +165,7 @@ export function ProductCard(props: any) {
                 </button>
                 {isOpen && (
                   <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
-                )} */}
+                )}
               </div>
             </div>
             <div className="">
@@ -275,12 +189,12 @@ export function ProductCard(props: any) {
           justify-between items-center"
               >
                 <VisitWebsite url={WebsiteLink} />
-                <button title="Bookmark" type="button" onClick={addLikes}>
+                <button title="Bookmark" type="button" onClick={addBookmark}>
                   {isBookMarked ? (
                     <BsBookmarkFill className="text-3xl text-DarkOrange" />
                   ) : (
                     <BsBookmark className="text-3xl   text-black" />
-                  )}
+                  )}{" "}
                 </button>
               </div>
             </div>

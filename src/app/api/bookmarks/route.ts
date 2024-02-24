@@ -3,12 +3,11 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/supabase";
 import { NextResponse } from "next/server";
 import AirtableModel from "@/models/airtableModel";
-import { DOMAIN_URL, getCache, setCache } from "@/helper/helper";
+import { DOMAIN_URL } from "@/helper/helper";
 
 // get bookmark product list by user
 export async function GET() {
   const URL = DOMAIN_URL();
-  let start = Date.now();
 
   const supabase = createRouteHandlerClient<Database>({ cookies });
   const {
@@ -31,7 +30,7 @@ export async function GET() {
 
   let airtableProductList: AirtableModel[];
 
-  const res = await fetch("http://localhost:3000/api/tools");
+  const res = await fetch(URL + "/api/tools");
   const json = await res.json();
   airtableProductList = json["data"];
 
