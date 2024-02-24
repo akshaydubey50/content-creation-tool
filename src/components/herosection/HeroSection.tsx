@@ -2,16 +2,33 @@
 import React from "react";
 import { RiStackFill, RiSearchLine } from "react-icons/ri";
 import { BsBookmarkFill } from "react-icons/bs";
-import { VscVerifiedFilled } from "react-icons/vsc";
+import { VscVerifiedFilled, VscVerified } from "react-icons/vsc";
 import { GoHeartFill } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import { getBookmarkList } from "@/lib/slice/bookmarkSlice";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { fetchProductList } from "@/lib/slice/appSlice";
+import { clearProductVerifiedData, setIsVerifiedCheck } from "@/lib/slice/verifiedSlice";
+import AirtableModel from "@/models/airtableModel";
+import { setProductVerifiedData } from "@/lib/slice/verifiedSlice";
 
+interface RootState {
+ 
+  verifiedProduct: {
+    verifiedData: AirtableModel[];
+    isVerifiedCheck: Boolean
+  };
+  appSlice: {
+    productList: Object;
+  };
+}
 export default function HeroSection() {
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   const bookmarkList = useSelector<any>((store) => store.bookmark.bookmarkList);
+  const isVerifiedCheck = useSelector((store: RootState) => store.verifiedProduct.isVerifiedCheck)
+  const verifiedProductData = useSelector((store: RootState) => store.verifiedProduct.verifiedData)
+
+  
   const { isLoading, isError, productList }: any = useSelector<any>(
     (state) => state.appSlice
   );
@@ -26,7 +43,24 @@ export default function HeroSection() {
     if (!data) {
       dispatch(fetchProductList());
     }
+    if (isVerifiedCheck){
+      dispatch(setIsVerifiedCheck())
+      dispatch(clearProductVerifiedData())
+    }
+
   };
+
+  const verifiedProductHandler = () => {
+    const verifiedTool = data?.filter((item: AirtableModel) => item.fields.Verified)
+    return verifiedTool
+  }
+  
+  const verifiedIconHandler=()=>{
+    dispatch(setIsVerifiedCheck())
+    if (verifiedProductData.length <=0){
+      dispatch(setProductVerifiedData(verifiedProductHandler()))
+    }
+  }
 
   return (
     <main className="py-12 xl:py-20 bg-light-gray  ">
@@ -56,10 +90,7 @@ export default function HeroSection() {
                   <button
                     className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6  "bg-gray-200" : "bg-gray-300"
                      hover:bg-opacity-75 focus:outline-none`}
-                    onClick={() => {
-                      handleShowAllProduct();
-                      console.log("all clicked");
-                    }}
+                    onClick={handleShowAllProduct}
                   >
                     <RiStackFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
                     {/* {isAllFilled ? (
@@ -95,16 +126,13 @@ export default function HeroSection() {
                     className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6 
                     "bg-gray-200" : "bg-gray-300"
                      hover:bg-opacity-75 focus:outline-none`}
-                    onClick={() => {
-                      console.log("verified clikced");
-                    }}
+                    onClick={verifiedIconHandler}
                   >
-                    <VscVerifiedFilled className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    {/* {isVerifiedFilled ? (
+                    {isVerifiedCheck ? (
                       <VscVerifiedFilled className="text-2xl md:text-3xl lg:text-4xl text-black" />
                     ) : (
                       <VscVerified className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    )} */}
+                    )}
                   </button>
                   <p className="font-medium text-Title-Small xl:text-Title-Medium">
                     Verified

@@ -144,9 +144,9 @@ export function ProductCard(props: any) {
                     {Name}
                   </h1>
 
-                  {/* {isVerified && (
+                  {Verified && (
                     <MdVerified className="text-2xl text-DarkOrange" />
-                  )} */}
+                  )}
                 </div>
                 <button
                   title="Bookmark"
