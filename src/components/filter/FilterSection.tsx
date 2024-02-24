@@ -18,6 +18,9 @@ interface RootState {
     searchQuery: string;
     filterData: AirtableModel;
   };
+  verifiedProduct: {
+    verifiedData: AirtableModel;
+  };
   appSlice: {
     productList: Object;
   };
@@ -41,7 +44,6 @@ export default function FilterSection() {
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
   const { setIsVerifiedFilled } = useVerifiedToolContextData();
-
 
   /*Search Functionality*/
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,6 +77,7 @@ export default function FilterSection() {
     setVisibleItem(9);
 
   };
+
 
 
   /* Selected Category functionality */

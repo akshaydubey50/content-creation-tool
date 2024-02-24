@@ -21,6 +21,10 @@ interface RootState {
     searchQuery: string;
     searchFilterData: AirtableModel[];
   };
+  verifiedProduct: {
+    verifiedData: AirtableModel[]; 
+    isVerifiedCheck:Boolean
+  };
   appSlice: {
     productList: Object;
   };
@@ -37,7 +41,9 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const { data }: any = useSelector<any>((state) => state.appSlice.productList);
   const dropDownCategoryArr = useSelector((store: RootState) => store.category.matchedCategory);
   const inputSearchFilterArr = useSelector((store: RootState) => store.searchProduct.searchFilterData)
+  const verifiedProductArr = useSelector((store: RootState) => store.verifiedProduct.verifiedData)
   const productSearchQuery = useSelector((store: RootState) => store.searchProduct.searchQuery)
+  const isVerifiedCheck = useSelector((store: RootState) => store.verifiedProduct.isVerifiedCheck)
 
 
   const getProductByCategory = useCallback(
@@ -68,6 +74,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
 
   useEffect(() => {
+    console.log('isVerifiedCheck', isVerifiedCheck)
     const filterProductRecord = currentCategory ? getProductByCategory(currentCategory) : null;
     if (filterProductRecord && id) {
       /*product detail page similar category product listed data*/
@@ -85,12 +92,16 @@ export default function ProductList({ currentCategory }: ProductListProps) {
         setProductRecords([]);
       }
     }
+    else if (isVerifiedCheck && verifiedProductArr.length>0 ){
+      /*Verified Product*/ 
+      setProductRecords(verifiedProductArr);
+    }
     else if (data && !id) {
       /*All Data*/
       setProductRecords(data);
     }
     setVisibleItem(9);
-  }, [currentCategory, getProductByCategory, dropDownCategoryArr, setVisibleItem, data, id, inputSearchFilterArr]);
+  }, [currentCategory, getProductByCategory, dropDownCategoryArr, setVisibleItem, data, id, inputSearchFilterArr, isVerifiedCheck]);
 
   if (!data) {
     return <Loader />;
@@ -138,7 +149,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
 
         {/* Render Load More Button for Similar Category Product  */}
-        {!id && visibleItem < dropDownCategoryArr!.length && (<div onClick={loadMore}>
+        {!id && visibleItem < dropDownCategoryArr!.length  && (<div onClick={loadMore}>
           <Button value={`Load More Same Category Product ${productRecords?.length - visibleItem}`} />
         </div>)}
 
@@ -147,9 +158,15 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           <Button value={`Load More Search Product ${productRecords?.length - visibleItem}`} />
         </div>)}
 
-        {!id && (dropDownCategoryArr.length <= 0 && inputSearchFilterArr?.length <= 0 && productSearchQuery.length === 0) && visibleItem <= data?.length && data?.length !== 0 && (
+        {/* Verified Product Load Btn  */}
+        {isVerifiedCheck && visibleItem < verifiedProductArr?.length && (<div onClick={loadMore}>
+          <Button value={`Load More Verified Product ${productRecords?.length - visibleItem}`} />
+        </div>)}
+
+        {/*All Data Load Btn  */}
+        {!id && (dropDownCategoryArr.length <= 0 && inputSearchFilterArr?.length <= 0 && productSearchQuery.length === 0 && !isVerifiedCheck) && visibleItem <= data?.length && data?.length !== 0 && (
           <div onClick={loadMore}>
-            <Button value={`Load More All  ${data?.length - visibleItem}`} />
+            <Button value={`Load More   ${data?.length - visibleItem}`} />
           </div>
         )}
 
