@@ -85,19 +85,11 @@ export default function FilterSection() {
     if (selectedOption) {
       let categoryVal = selectedOption.value;
       let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
+      router.push(`/category/${formatedCategory}`);
       setIsVerifiedFilled(false);
-      
       dispatch(clearSearchFilterData());
-
-      const filteredData = data?.filter((item: AirtableModel) =>
-        item.fields.Tags[0]?.toLowerCase().replace(/\s/g, "-") === formatedCategory
-      );
-      console.log('filteredData::', filteredData);
-      dispatch(setMatchedCategory(filteredData))
-
       dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
-      router.push(`/category/${formatedCategory}`);
     }
   };
 
