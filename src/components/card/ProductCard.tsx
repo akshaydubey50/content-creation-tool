@@ -34,7 +34,7 @@ export function ProductCard(props: any) {
 
   const [userSession, setUserSession] = useState<Session>();
   const [isBookMarked, setIsBookMarked] = useState(false);
-  const [likedTool, setLikedTool] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const { product } = props;
   const { id, fields } = product;
@@ -83,114 +83,28 @@ export function ProductCard(props: any) {
   };
 
   const addLikes = async () => {
-    if (isBookMarked) {
-      setIsBookMarked(false);
+    if (isLiked) {
+      setIsLiked(false);
       console.log("deleting to likes");
       const res = await fetch("/api/likes/" + id, {
         method: "DELETE",
       });
       if (res.status !== 200) {
-        setIsBookMarked(true);
+        setIsLiked(true);
       }
-      setIsBookMarked(false);
+      setIsLiked(false);
       console.log("deleted to likes");
     } else {
-      setIsBookMarked(true);
+      setIsLiked(true);
       console.log("adding to likes");
       const res = await fetch("/api/likes/" + id, {
         method: "POST",
       });
       if (res.status !== 200) {
-        setIsBookMarked(false);
+        setIsLiked(false);
       }
-      setIsBookMarked(true);
+      setIsLiked(true);
       console.log("added to likes");
-    }
-  };
-
-  const handleBookMark = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    if (session?.user) {
-      const { data, error } = await supabase
-        .from("bookmark")
-        .select("id")
-        .eq("user_id", session.user?.id)
-        .eq("product_id", id);
-
-      if (error) {
-        console.error(error);
-      } else {
-        // product exist deleting
-        if (data.length === 1) {
-          const { error } = await supabase
-            .from("bookmark")
-            .delete()
-            .eq("user_id", session.user?.id)
-            .eq("product_id", id);
-          setIsBookMarked(false);
-        }
-        if (data.length === 0) {
-          const { data: bookmark, error: err } = await supabase
-            .from("bookmark")
-            .insert([{ user_id: session.user?.id, product_id: id }])
-            .select();
-          setIsBookMarked(true);
-          console.log("bookmark added to db::", bookmark);
-        }
-      }
-    } else {
-      setIsOpen(true);
-      console.log("sign in to bookmark the post");
-    }
-  };
-
-  const getSession = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (session !== null) {
-      setUserSession(session);
-    }
-  };
-
-  const handleLikedTool = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (session?.user) {
-      const { data, error } = await supabase
-        .from("likes")
-        .select("id")
-        .eq("user_id", session.user?.id)
-        .eq("product_id", id);
-
-      if (error) {
-        console.error(error);
-      } else {
-        // product exist deleting
-        if (data.length === 1) {
-          const { error } = await supabase
-            .from("likes")
-            .delete()
-            .eq("user_id", session.user?.id)
-            .eq("product_id", id);
-          setLikedTool(false);
-        }
-        if (data.length === 0) {
-          const { data: likes, error: err } = await supabase
-            .from("likes")
-            .insert([{ user_id: session.user?.id, product_id: id }])
-            .select();
-          setLikedTool(true);
-          console.log("like added to db::", likes);
-        }
-      }
-    } else {
-      setIsOpen(true);
-      console.log("sign in to like the post");
     }
   };
 
@@ -208,7 +122,7 @@ export function ProductCard(props: any) {
             },
           }}
         >
-          <section className="  border-b border-black border-solid">
+          <section className="border-b border-black border-solid">
             <Image
               src={ToolImage}
               alt="logo banner"
@@ -234,14 +148,14 @@ export function ProductCard(props: any) {
                     <MdVerified className="text-2xl text-DarkOrange" />
                   )} */}
                 </div>
-                {/* <button
+                <button
                   title="Bookmark"
                   type="button"
-                  onClick={handleLikedTool}
+                  onClick={addLikes}
                   className="flex items-center gap-x-1"
                 >
                   <p>
-                    {likedTool ? (
+                    {isLiked ? (
                       <AiFillHeart className="text-3xl text-DarkOrange" />
                     ) : (
                       <AiOutlineHeart className="text-3xl   text-black" />
@@ -251,7 +165,7 @@ export function ProductCard(props: any) {
                 </button>
                 {isOpen && (
                   <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
-                )} */}
+                )} 
               </div>
             </div>
             <div className="">
@@ -262,7 +176,7 @@ export function ProductCard(props: any) {
             <div className="tool-btn-section pb-7">
               <p className="my-6 ">
                 <Link
-                  className=" bg-white rounded-full  text-tags font-medium border 
+                  className="bg-white rounded-full  text-tags font-medium border 
                 border-solid border-black px-5 py-1"
                   href={`/category/${formattedTag}`}
                   prefetch={true}
@@ -275,7 +189,7 @@ export function ProductCard(props: any) {
           justify-between items-center"
               >
                 <VisitWebsite url={WebsiteLink} />
-                <button title="Bookmark" type="button" onClick={addLikes}>
+                <button title="Bookmark" type="button" onClick={addBookmark}>
                   {isBookMarked ? (
                     <BsBookmarkFill className="text-3xl text-DarkOrange" />
                   ) : (

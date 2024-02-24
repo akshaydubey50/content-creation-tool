@@ -23,6 +23,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/helper/helper.js", "src/app/layout.js", "src/lib/verifiedToolContext.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/helper/helper.js", "src/app/layout.js", "src/lib/verifiedToolContext.js", "src/lib/slice/categorySlice.js"],
   "exclude": ["node_modules"]
 }

@@ -29,16 +29,16 @@ export default function RootLayout({
       <body className="font-poppins">
         {/* <ProductContextProvider>
           <LikedToolContextProvider>
-            <VerifiedToolContextProvider>
-              <VisibleItemContextProvider> */}
+        <VisibleItemContextProvider> */}
+        <VerifiedToolContextProvider>
         <VisibleItemContextProvider>
           <Provider store={appStore}>
             <Navbar />
             <main>{children}</main>
           </Provider>
         </VisibleItemContextProvider>
+        </VerifiedToolContextProvider>
         {/*  </VisibleItemContextProvider>
-            </VerifiedToolContextProvider>
           </LikedToolContextProvider>
         </ProductContextProvider> */}
         <Footer />

@@ -11,6 +11,7 @@ import { fetchProductList } from "@/lib/slice/appSlice";
 
 export default function HeroSection() {
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
+  const bookmarkList = useSelector<any>((store) => store.bookmark.bookmarkList);
   const { isLoading, isError, productList }: any = useSelector<any>(
     (state) => state.appSlice
   );
@@ -18,6 +19,7 @@ export default function HeroSection() {
   const { data } = productList;
   const handleBookmark = () => {
     dispatch(getBookmarkList());
+    console.log('bookmarkList #########', bookmarkList)
   };
 
   const handleShowAllProduct = () => {
@@ -109,6 +111,7 @@ export default function HeroSection() {
                   </p>
                 </div>
 
+                {/*
                 <div className="flex flex-col place-items-center  space-y-4 cursor-pointer">
                   <button
                     className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6 
@@ -119,16 +122,17 @@ export default function HeroSection() {
                     }}
                   >
                     <GoHeartFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    {/*  {islikeFilled ? (
+                      {islikeFilled ? (
                       <GoHeartFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
                     ) : (
                       <GoHeart className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    )} */}
+                    )} 
                   </button>
                   <p className="font-medium text-Title-Small xl:text-Title-Medium">
                     Liked
                   </p>
                 </div>
+                    */}
 
                 <div className="flex flex-col place-items-center  space-y-4 cursor-pointer">
                   <button
