@@ -1,11 +1,26 @@
-const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
-
-const fetchVerified = createAsyncThunk("", () => {});
+import { createSlice } from "@reduxjs/toolkit";
 
 const verifiedSlice = createSlice({
-  name: "verfied",
-  initialState: {},
-  extraReducers: (builder) => {},
-});
+  name: "verified",
+  initialState: {
+    verifiedData: [],
+    isVerifiedCheck: false
+  },
+  reducers: {
+    setProductVerifiedData: (state, action) => {
+      state.verifiedData = action.payload;
+    },
+    clearProductVerifiedData: (state) => {
+      state.verifiedData.length = 0;
+    },
+    setIsVerifiedCheck: (state) => {
+      state.isVerifiedCheck = !state.isVerifiedCheck;
+    },
 
-export default verifiedSlice.reducer;
+  },
+
+})
+
+
+export const { setProductVerifiedData, clearProductVerifiedData, setIsVerifiedCheck } = verifiedSlice.actions
+export default verifiedSlice.reducer

@@ -3,7 +3,7 @@ import appSlice from "./slice/appSlice";
 import bookmarkSlice from "./slice/bookmarkSlice";
 import categorySlice from "./slice/categorySlice";
 import searchSlice from "./slice/searchSlice"
-
+import verifiedSlice from "@/lib/slice/verifiedSlice"
 
 const appStore = configureStore({
   reducer: {
@@ -11,6 +11,7 @@ const appStore = configureStore({
     appSlice: appSlice,
     category: categorySlice,
     searchProduct: searchSlice,
+    verifiedProduct: verifiedSlice
   },
 });
 

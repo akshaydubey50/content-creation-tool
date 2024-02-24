@@ -18,6 +18,9 @@ interface RootState {
     searchQuery: string;
     filterData: AirtableModel;
   };
+  verifiedProduct: {
+    verifiedData: AirtableModel;
+  };
   appSlice: {
     productList: Object;
   };
@@ -41,7 +44,6 @@ export default function FilterSection() {
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
   const { setIsVerifiedFilled } = useVerifiedToolContextData();
-
 
   /*Search Functionality*/
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,24 +79,17 @@ export default function FilterSection() {
   };
 
 
+
   /* Selected Category functionality */
   const selectedCategory = (selectedOption: any) => {
     if (selectedOption) {
       let categoryVal = selectedOption.value;
       let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
+      router.push(`/category/${formatedCategory}`);
       setIsVerifiedFilled(false);
-      
       dispatch(clearSearchFilterData());
-
-      const filteredData = data?.filter((item: AirtableModel) =>
-        item.fields.Tags[0]?.toLowerCase().replace(/\s/g, "-") === formatedCategory
-      );
-      console.log('filteredData::', filteredData);
-      dispatch(setMatchedCategory(filteredData))
-
       dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
-      router.push(`/category/${formatedCategory}`);
     }
   };
 
