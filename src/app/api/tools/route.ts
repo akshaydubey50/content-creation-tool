@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import AirtableModel from "@/models/airtableModel";
 import axios from "axios";
 import { AirtableConf } from "@/conf/conf";
-import { getCache, setCache } from "@/helper/helper";
 
 export async function GET() { 
   const headers = {
@@ -11,8 +10,9 @@ export async function GET() {
 
   try {
     let airtableProductList: AirtableModel[] = [];
-    let cacheData = await getCache("airtableProductList");
+    // let cacheData = await getCache("airtableProductList");
 
+    let cacheData =null
     if (cacheData !== null) {
       return NextResponse.json(
         {
@@ -47,7 +47,7 @@ export async function GET() {
       }
     } while (offset);
 
-    await setCache("airtableProductList", airtableProductList);
+    // await setCache("airtableProductList", airtableProductList);
 
     return NextResponse.json(
       {
