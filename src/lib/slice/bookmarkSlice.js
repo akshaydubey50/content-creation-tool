@@ -12,11 +12,11 @@ export const getBookmarkList = createAsyncThunk(
 
 export const addBookmark = createAsyncThunk(
   "bookmark/addBookmark",
-  async (productId) => {
+  async (productId, { dispatch }) => {
     const response = await fetch("/api/bookmarks/" + productId, {
       method: "POST",
     });
-
+    dispatch(getBookmarkList());
     if (!response.ok) {
       throw new Error("Failed to add bookmark");
     }
@@ -26,11 +26,13 @@ export const addBookmark = createAsyncThunk(
 
 export const deleteBookmark = createAsyncThunk(
   "bookmark/deleteBookmark",
-  async (productId) => {
+  async (productId, { dispatch }) => {
     console.log("productId", productId);
     const response = await fetch("/api/bookmarks/" + productId, {
       method: "DELETE",
     });
+
+    dispatch(getBookmarkList());
 
     if (!response.ok) {
       throw new Error("Failed to add bookmark");
@@ -53,6 +55,10 @@ const bookmarkSlice = createSlice({
     },
     clearBookmarkList: (state) => {
       state.bookmarkList.length = 0;
+    },
+
+    updateBookmarkList(state, action) {
+      state.bookmarkList = action.payload;
     },
     /*  toggleBookmark(state, action) {
       const productId = action.payload;
@@ -107,9 +113,9 @@ const bookmarkSlice = createSlice({
       .addCase(deleteBookmark.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
-      })
+      });
 
-      .addMatcher(
+    /* .addMatcher(
         (action) =>
           [addBookmark.fulfilled, deleteBookmark.fulfilled].includes(
             action.type
@@ -117,7 +123,7 @@ const bookmarkSlice = createSlice({
         (state, action) => {
           getBookmarkList()(state.dispatch, state.getState);
         }
-      );
+      ); */
   },
 });
 

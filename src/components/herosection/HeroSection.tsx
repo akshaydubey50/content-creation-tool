@@ -77,9 +77,10 @@ export default function HeroSection() {
       // dispatch(clearProductVerifiedData());
     } else {
       dispatch(setIsBookmarkCheck());
-      if (bookmarkList.length <= 0) {
+      /* if (bookmarkList.length == 0) {
         dispatch(getBookmarkList());
-      }
+      } */
+      dispatch(getBookmarkList());
     }
   };
 

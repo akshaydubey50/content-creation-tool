@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import appSlice from "./slice/appSlice";
-import bookmarkSlice from "./slice/bookmarkSlice";
+import bookmarkSlice, { getBookmarkList } from "./slice/bookmarkSlice";
 import categorySlice from "./slice/categorySlice";
 import searchSlice from "./slice/searchSlice";
 import verifiedSlice from "@/lib/slice/verifiedSlice";
@@ -15,4 +15,12 @@ const appStore = configureStore({
   },
 });
 
+// appStore.subscribe(() => {
+//   const data = appStore.getState().bookmark.bookmarkList;
+//   console.log("APPSOTE BOOKMARK SUBSRIBE BEFORE", data);
+//   // appStore.bookmark.dispatch(getBookmarkList());
+//   getBookmarkList();
+//   console.log("APPSOTE BOOKMARK SUBSRIBE AFTER", data);
+//   getBookmarkList();
+// });
 export default appStore;

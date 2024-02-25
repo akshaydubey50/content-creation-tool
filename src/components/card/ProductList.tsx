@@ -26,9 +26,11 @@ interface RootState {
     verifiedData: AirtableModel[];
     isVerifiedCheck: Boolean;
   };
-  bookmarkProduct: {
+  bookmark: {
     isBookmarkChecked: Boolean;
     bookmarkList: [];
+    status: string;
+    error: string | null;
   };
   appSlice: {
     productList: Object;
@@ -57,10 +59,15 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const isVerifiedCheck = useSelector(
     (store: RootState) => store.verifiedProduct.isVerifiedCheck
   );
-  const bookmarkList = useSelector<any>((store) => store.bookmark.bookmarkList);
+  const bookmarkList = useSelector(
+    (store: RootState) => store.bookmark.bookmarkList
+  );
 
-  const isBookmark = useSelector<any>(
-    (store) => store.bookmark.isBookmarkChecked
+  const isBookmark = useSelector(
+    (store: RootState) => store.bookmark.isBookmarkChecked
+  );
+  const bookmarkLoadingStatus = useSelector<any>(
+    (store) => store.bookmark.status
   );
   const getProductByCategory = useCallback(
     (categoryType: string): AirtableModel[] | null => {
@@ -89,6 +96,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   useEffect(() => {
     console.log("isVerifiedCheck", isVerifiedCheck);
+    console.log("isBookmarkChedk", isBookmark);
     const filterProductRecord = currentCategory
       ? getProductByCategory(currentCategory)
       : null;
@@ -108,7 +116,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
       ) {
         setProductRecords([]);
       }
-    } else if (isBookmark && bookmarkList?.length > 0) {
+    } else if (isBookmark && bookmarkList.length > 0) {
       setProductRecords(bookmarkList);
     } else if (isVerifiedCheck && verifiedProductArr.length > 0) {
       /*Verified Product*/
@@ -132,6 +140,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     productRecords,
     productSearchQuery.length,
     verifiedProductArr,
+    bookmarkLoadingStatus,
   ]);
 
   if (!data) {
@@ -144,6 +153,12 @@ export default function ProductList({ currentCategory }: ProductListProps) {
         className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
                   lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0"
       >
+        {bookmarkLoadingStatus === "succeeded" && bookmarkList.length == 0 && (
+          <>No Bookmark yet</>
+        )}
+        {bookmarkLoadingStatus === "loading" && isBookmark && (
+          <>Loading BookmarkList...</>
+        )}
         {productRecords.length > 0 &&
           productRecords.slice(0, visibleItem).map((item: AirtableModel) => {
             if (
@@ -168,9 +183,6 @@ export default function ProductList({ currentCategory }: ProductListProps) {
               );
             }
           })}
-        {productRecords.length == 0 && isBookmark == true && (
-          <>No Bookmark yet</>
-        )}
       </main>
       {productSearchQuery.length > 0 && productRecords.length == 0 && (
         <>
