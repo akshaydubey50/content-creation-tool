@@ -87,7 +87,7 @@ const bookmarkSlice = createSlice({
       .addCase(addBookmark.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.bookmarkList.push(action.payload);
-        getBookmarkList();
+        // getBookmarkList();
       })
       .addCase(addBookmark.rejected, (state, action) => {
         state.status = "failed";
@@ -102,7 +102,7 @@ const bookmarkSlice = createSlice({
         state.bookmarkList = state.bookmarkList.filter(
           (bookmark) => bookmark.id !== action.payload
         );
-        getBookmarkList();
+        // getBookmarkList();
       })
       .addCase(deleteBookmark.rejected, (state, action) => {
         state.status = "failed";

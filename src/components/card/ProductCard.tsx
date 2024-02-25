@@ -19,7 +19,11 @@ import VisitWebsite from "../visit-website/VisitWebsite";
 import AirtableModel from "@/models/airtableModel";
 import { Product } from "@/types/product";
 import { useDispatch } from "react-redux";
-import { deleteBookmark, addBookmark } from "@/lib/slice/bookmarkSlice";
+import {
+  deleteBookmark,
+  addBookmark,
+  getBookmarkList,
+} from "@/lib/slice/bookmarkSlice";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 
 // type Product = {
@@ -45,10 +49,6 @@ export function ProductCard(props: any) {
   const { product } = props;
   const { id, fields } = product;
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
-  /*
-  console.log("prod product.product.fields", product);
-  console.log("fields", fields);
-  */
 
   const {
     Tags,
@@ -92,8 +92,13 @@ export function ProductCard(props: any) {
   const handleBookmarkClick = () => {
     if (isBookMarked && id) {
       dispatch(deleteBookmark(id));
+      setIsBookMarked(false);
+
+      // dispatch(getBookmarkList());
     } else {
       dispatch(addBookmark(id));
+      setIsBookMarked(true);
+      // dispatch(getBookmarkList());
     }
   };
 

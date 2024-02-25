@@ -28,7 +28,7 @@ interface RootState {
   };
   bookmark: {
     isBookmarkChecked: boolean;
-    // bookmarkList: ;
+    bookmarkList: AirtableModel[];
   };
   appSlice: {
     productList: Object;
@@ -38,7 +38,9 @@ export default function HeroSection() {
   const supabase = createClientComponentClient();
 
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
-  const bookmarkList = useSelector<any>((store) => store.bookmark.bookmarkList);
+  const bookmarkList = useSelector(
+    (store: RootState) => store.bookmark.bookmarkList
+  );
   const isBookmark = useSelector<any>(
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
@@ -61,21 +63,23 @@ export default function HeroSection() {
     }
     if (isVerifiedCheck) {
       dispatch(setIsVerifiedCheck());
-      // dispatch(clearProductVerifiedData());
+      dispatch(clearProductVerifiedData());
     }
     if (isBookmark) {
       dispatch(setIsBookmarkCheck());
-      // dispatch(clearBookmarkList());
+      dispatch(clearBookmarkList());
     }
   };
 
   const handleBookmark = async () => {
     if (isVerifiedCheck) {
       dispatch(setIsVerifiedCheck());
-    }
-    dispatch(setIsBookmarkCheck());
-    if (bookmarkList.length <= 0) {
-      dispatch(getBookmarkList());
+      dispatch(clearProductVerifiedData());
+    } else {
+      dispatch(setIsBookmarkCheck());
+      if (bookmarkList.length <= 0) {
+        dispatch(getBookmarkList());
+      }
     }
   };
 
@@ -89,6 +93,7 @@ export default function HeroSection() {
   const verifiedIconHandler = () => {
     if (isBookmark) {
       dispatch(setIsBookmarkCheck());
+      dispatch(clearBookmarkList());
     }
     dispatch(setIsVerifiedCheck());
     if (verifiedProductData.length <= 0) {
