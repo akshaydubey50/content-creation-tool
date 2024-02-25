@@ -28,7 +28,7 @@ interface RootState {
 
 
 export default function FilterSection() {
-
+const [isMounted,SetIsMounted]=useState(false)
   const router = useRouter();
 
   /*Redux Dispatch & Selector*/
@@ -116,6 +116,10 @@ export default function FilterSection() {
     filterData,
   ]);
 
+  useEffect(()=>{
+   SetIsMounted(true) 
+  },[])
+
   /*Get a List for Category*/
   const getListOfCategory = (): Set<string> => {
     const categoryItem = new Set<string>([]);
@@ -152,7 +156,7 @@ export default function FilterSection() {
         </div>
         <div className="col-span-1 ">
           <div className=" bg-DarkOrange  rounded-full  h-full">
-            <SelectDropdown
+            {isMounted && <SelectDropdown
               key={categoryData}
               placeholder="Select Category"
               options={categoryOptionsList}
@@ -162,7 +166,7 @@ export default function FilterSection() {
                   (option) => option.value === categoryData
                 ) || null
               }
-            />
+            />}
           </div>
         </div>
         <div className="col-span-1 font-medium">
@@ -199,7 +203,7 @@ export default function FilterSection() {
         </div>
         <div className="col-span-1">
           <div className="bg-DarkOrange  rounded-full text-white  w-full ">
-            <SelectDropdown
+            {isMounted && <SelectDropdown
               key={categoryData}
               placeholder="Select Category"
               options={categoryOptionsList}
@@ -209,7 +213,7 @@ export default function FilterSection() {
                   (option) => option.value === categoryData
                 ) || null
               }
-            />
+            />}
           </div>
         </div>
         <div className="col-span-1 text-white font-semibold">

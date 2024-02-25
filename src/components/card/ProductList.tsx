@@ -121,10 +121,11 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     } else if (isVerifiedCheck && verifiedProductArr.length > 0) {
       /*Verified Product*/
       setProductRecords(verifiedProductArr);
-    } else if (data && !id) {
+    } else if (!isBookmark && data && !id) {
       /*All Data*/
       setProductRecords(data);
     }
+  
     // setVisibleItem(9);/
   }, [
     currentCategory,
@@ -137,6 +138,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     isVerifiedCheck,
     isBookmark,
     bookmarkList,
+    bookmarkList.length,
     productRecords,
     productSearchQuery.length,
     verifiedProductArr,
@@ -146,27 +148,18 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   if (!data) {
     return <Loader />;
   }
+  if (isBookmark && bookmarkLoadingStatus === "loading"){
+    return <Loader />;
+  }
+  
 
   return (
     <>
       <main
         className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
-                  lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0"
-      >
-        {bookmarkLoadingStatus === "succeeded" && bookmarkList.length == 0 && (
-          <>
-            <h1 className="text-3xl font-bold  text-center">No Bookmark yet</h1>
-          </>
-        )}
-        {bookmarkLoadingStatus === "loading" && isBookmark && bookmarkList && (
-          <>
-            <h1 className="text-3xl font-bold  text-center">
-              Loading BookmarkList...
-            </h1>
-          </>
-        )}
-        {productRecords.length > 0 &&
-          productRecords.slice(0, visibleItem).map((item: AirtableModel) => {
+                  lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0">
+        {productRecords?.length > 0  &&
+          productRecords?.slice(0, visibleItem).map((item: AirtableModel) => {
             if (
               !id &&
               !dropDownCategoryArr &&
@@ -206,6 +199,18 @@ export default function ProductList({ currentCategory }: ProductListProps) {
               &quot;{productSearchQuery}&quot;{" "}
             </span>
             found
+          </h1>
+        </>
+      )}
+      {bookmarkLoadingStatus === "succeeded" && bookmarkList.length == 0 && isBookmark && (
+        <>
+          <h1 className="text-3xl font-bold  text-center">No Bookmark yet</h1>
+        </>
+      )}
+      {bookmarkLoadingStatus === "loading" && isBookmark && bookmarkList && (
+        <>
+          <h1 className="text-3xl font-bold  text-center">
+            Loading BookmarkList...
           </h1>
         </>
       )}
