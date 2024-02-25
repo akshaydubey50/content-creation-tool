@@ -37,17 +37,16 @@ import { ThunkDispatch } from "@reduxjs/toolkit";
 // };
 
 export function ProductCard(props: any) {
-  const supabase = createClientComponentClient();
-
-  const [userSession, setUserSession] = useState<Session>();
-
+  const { bookmarkList } = props;
   const { isBookmark } = props;
-
-  const [isBookMarked, setIsBookMarked] = useState(isBookmark);
+  // const [isBookMarked, setIsBookMarked] = useState(isBookmark);
   const [isLiked, setIsLiked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const { product } = props;
   const { id, fields } = product;
+  const [isBookMarked, setIsBookMarked] = useState(() =>
+    isProductBookmarked(id, bookmarkList)
+  );
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
 
   const {
@@ -92,13 +91,10 @@ export function ProductCard(props: any) {
   const handleBookmarkClick = () => {
     if (isBookMarked && id) {
       dispatch(deleteBookmark(id));
-      setIsBookMarked(false);
-
-      // dispatch(getBookmarkList());
+      setIsBookMarked(!isBookMarked);
     } else {
       dispatch(addBookmark(id));
-      setIsBookMarked(true);
-      // dispatch(getBookmarkList());
+      setIsBookMarked(!isBookMarked);
     }
   };
 
@@ -127,6 +123,14 @@ export function ProductCard(props: any) {
       console.log("added to likes");
     }
   };
+
+  useEffect(() => {}, [
+    setIsBookMarked,
+    isBookMarked,
+    id,
+    isProductBookmarked,
+    bookmarkList,
+  ]);
 
   return (
     <>
@@ -227,4 +231,15 @@ export function ProductCard(props: any) {
       </div>
     </>
   );
+
+  function isProductBookmarked(
+    productId: string,
+    bookmarkList: AirtableModel[]
+  ) {
+    if (bookmarkList) {
+      // return bookmarkList?.some((bookmark) => bookmark?.id === product.id);
+      return bookmarkList.some((bookmark) => bookmark?.id === productId);
+    }
+    return false;
+  }
 }

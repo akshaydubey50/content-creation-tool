@@ -125,7 +125,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
       /*All Data*/
       setProductRecords(data);
     }
-    setVisibleItem(9);
+    // setVisibleItem(9);/
   }, [
     currentCategory,
     getProductByCategory,
@@ -154,10 +154,16 @@ export default function ProductList({ currentCategory }: ProductListProps) {
                   lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0"
       >
         {bookmarkLoadingStatus === "succeeded" && bookmarkList.length == 0 && (
-          <>No Bookmark yet</>
+          <>
+            <h1 className="text-3xl font-bold  text-center">No Bookmark yet</h1>
+          </>
         )}
-        {bookmarkLoadingStatus === "loading" && isBookmark && (
-          <>Loading BookmarkList...</>
+        {bookmarkLoadingStatus === "loading" && isBookmark && bookmarkList && (
+          <>
+            <h1 className="text-3xl font-bold  text-center">
+              Loading BookmarkList...
+            </h1>
+          </>
         )}
         {productRecords.length > 0 &&
           productRecords.slice(0, visibleItem).map((item: AirtableModel) => {
@@ -171,14 +177,21 @@ export default function ProductList({ currentCategory }: ProductListProps) {
                   key={item.id}
                   product={item}
                   isBookmark={isProductBookmarked(item, bookmarkList)}
+                  bookmarkList={bookmarkList}
                 />
               );
             } else {
+              console.log(
+                "For item else condition ",
+                item?.fields?.Name,
+                isProductBookmarked(item, bookmarkList)
+              );
               return (
                 <ProductCard
                   key={item.id}
                   product={item}
                   isBookmark={isProductBookmarked(item, bookmarkList)}
+                  bookmarkList={bookmarkList}
                 />
               );
             }
