@@ -124,13 +124,9 @@ export function ProductCard(props: any) {
     }
   };
 
-  useEffect(() => {}, [
-    setIsBookMarked,
-    isBookMarked,
-    id,
-    isProductBookmarked,
-    bookmarkList,
-  ]);
+  useEffect(() => {
+    setIsBookMarked(isProductBookmarked(id, bookmarkList));
+  }, [setIsBookMarked, isBookMarked, id, isProductBookmarked, bookmarkList]);
 
   return (
     <>
