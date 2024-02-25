@@ -1,66 +1,100 @@
 "use client";
 import React from "react";
 import { RiStackFill, RiSearchLine } from "react-icons/ri";
-import { BsBookmarkFill } from "react-icons/bs";
+import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { VscVerifiedFilled, VscVerified } from "react-icons/vsc";
 import { GoHeartFill } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
-import { getBookmarkList } from "@/lib/slice/bookmarkSlice";
+import {
+  clearBookmarkList,
+  getBookmarkList,
+  setBookmarkList,
+} from "@/lib/slice/bookmarkSlice";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { fetchProductList } from "@/lib/slice/appSlice";
-import { clearProductVerifiedData, setIsVerifiedCheck } from "@/lib/slice/verifiedSlice";
+import {
+  clearProductVerifiedData,
+  setIsVerifiedCheck,
+} from "@/lib/slice/verifiedSlice";
 import AirtableModel from "@/models/airtableModel";
 import { setProductVerifiedData } from "@/lib/slice/verifiedSlice";
+import { setIsBookmarkCheck } from "@/lib/slice/bookmarkSlice";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 interface RootState {
- 
   verifiedProduct: {
     verifiedData: AirtableModel[];
-    isVerifiedCheck: Boolean
+    isVerifiedCheck: Boolean;
+  };
+  bookmark: {
+    isBookmarkChecked: boolean;
+    // bookmarkList: ;
   };
   appSlice: {
     productList: Object;
   };
 }
 export default function HeroSection() {
+  const supabase = createClientComponentClient();
+
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   const bookmarkList = useSelector<any>((store) => store.bookmark.bookmarkList);
-  const isVerifiedCheck = useSelector((store: RootState) => store.verifiedProduct.isVerifiedCheck)
-  const verifiedProductData = useSelector((store: RootState) => store.verifiedProduct.verifiedData)
+  const isBookmark = useSelector<any>(
+    (store: RootState) => store.bookmark.isBookmarkChecked
+  );
+  const isVerifiedCheck = useSelector(
+    (store: RootState) => store.verifiedProduct.isVerifiedCheck
+  );
+  const verifiedProductData = useSelector(
+    (store: RootState) => store.verifiedProduct.verifiedData
+  );
 
-  
   const { isLoading, isError, productList }: any = useSelector<any>(
     (state) => state.appSlice
   );
 
   const { data } = productList;
-  const handleBookmark = () => {
-    dispatch(getBookmarkList());
-    console.log('bookmarkList #########', bookmarkList)
-  };
 
   const handleShowAllProduct = () => {
     if (!data) {
       dispatch(fetchProductList());
     }
-    if (isVerifiedCheck){
-      dispatch(setIsVerifiedCheck())
-      dispatch(clearProductVerifiedData())
+    if (isVerifiedCheck) {
+      dispatch(setIsVerifiedCheck());
+      // dispatch(clearProductVerifiedData());
     }
+    if (isBookmark) {
+      dispatch(setIsBookmarkCheck());
+      // dispatch(clearBookmarkList());
+    }
+  };
 
+  const handleBookmark = async () => {
+    if (isVerifiedCheck) {
+      dispatch(setIsVerifiedCheck());
+    }
+    dispatch(setIsBookmarkCheck());
+    if (bookmarkList.length <= 0) {
+      dispatch(getBookmarkList());
+    }
   };
 
   const verifiedProductHandler = () => {
-    const verifiedTool = data?.filter((item: AirtableModel) => item.fields.Verified)
-    return verifiedTool
-  }
-  
-  const verifiedIconHandler=()=>{
-    dispatch(setIsVerifiedCheck())
-    if (verifiedProductData.length <=0){
-      dispatch(setProductVerifiedData(verifiedProductHandler()))
+    const verifiedTool = data?.filter(
+      (item: AirtableModel) => item.fields.Verified
+    );
+    return verifiedTool;
+  };
+
+  const verifiedIconHandler = () => {
+    if (isBookmark) {
+      dispatch(setIsBookmarkCheck());
     }
-  }
+    dispatch(setIsVerifiedCheck());
+    if (verifiedProductData.length <= 0) {
+      dispatch(setProductVerifiedData(verifiedProductHandler()));
+    }
+  };
 
   return (
     <main className="py-12 xl:py-20 bg-light-gray  ">
@@ -110,12 +144,12 @@ export default function HeroSection() {
                     } hover:bg-opacity-75 focus:outline-none`}
                     onClick={handleBookmark}
                   >
-                    <BsBookmarkFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    {/*  {isBookMarkFilled ? (
+                    {/* <BsBookmarkFill className="text-2xl md:text-3xl lg:text-4xl text-black" /> */}
+                    {isBookmark ? (
                       <BsBookmarkFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
                     ) : (
                       <BsBookmark className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    )} */}
+                    )}
                   </button>
                   <p className="font-medium text-Title-Small xl:text-Title-Medium">
                     Bookmark

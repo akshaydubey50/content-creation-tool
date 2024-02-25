@@ -1,6 +1,6 @@
 "use client";
 // React Component Import
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -18,6 +18,9 @@ import LikedBookmarkModal from "../modal/LikedBookmarkModal";
 import VisitWebsite from "../visit-website/VisitWebsite";
 import AirtableModel from "@/models/airtableModel";
 import { Product } from "@/types/product";
+import { useDispatch } from "react-redux";
+import { deleteBookmark, addBookmark } from "@/lib/slice/bookmarkSlice";
+import { ThunkDispatch } from "@reduxjs/toolkit";
 
 // type Product = {
 //   id: string;
@@ -33,15 +36,19 @@ export function ProductCard(props: any) {
   const supabase = createClientComponentClient();
 
   const [userSession, setUserSession] = useState<Session>();
-  const [isBookMarked, setIsBookMarked] = useState(false);
+
+  const { isBookmark } = props;
+
+  const [isBookMarked, setIsBookMarked] = useState(isBookmark);
   const [isLiked, setIsLiked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const { product } = props;
   const { id, fields } = product;
+  const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   /*
   console.log("prod product.product.fields", product);
   console.log("fields", fields);
-  */ 
+  */
 
   const {
     Tags,
@@ -52,11 +59,11 @@ export function ProductCard(props: any) {
     Description,
     ToolImage,
     Verified,
-  } = fields;
+  } = fields!;
   const formattedTitle = Name.toLowerCase().replace(/\s/g, "-");
   const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
 
-  const addBookmark = async () => {
+  const addBookmarkdemo = useCallback(async () => {
     if (isBookMarked) {
       setIsBookMarked(false);
       console.log("deleting to bookmark");
@@ -79,6 +86,14 @@ export function ProductCard(props: any) {
       }
       setIsBookMarked(true);
       console.log("added to bookmark");
+    }
+  }, [isBookMarked, id]);
+
+  const handleBookmarkClick = () => {
+    if (isBookMarked && id) {
+      dispatch(deleteBookmark(id));
+    } else {
+      dispatch(addBookmark(id));
     }
   };
 
@@ -165,7 +180,7 @@ export function ProductCard(props: any) {
                 </button>
                 {isOpen && (
                   <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
-                )} 
+                )}
               </div>
             </div>
             <div className="">
@@ -189,7 +204,11 @@ export function ProductCard(props: any) {
           justify-between items-center"
               >
                 <VisitWebsite url={WebsiteLink} />
-                <button title="Bookmark" type="button" onClick={addBookmark}>
+                <button
+                  title="Bookmark"
+                  type="button"
+                  onClick={handleBookmarkClick}
+                >
                   {isBookMarked ? (
                     <BsBookmarkFill className="text-3xl text-DarkOrange" />
                   ) : (

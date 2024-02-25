@@ -4,7 +4,7 @@ const verifiedSlice = createSlice({
   name: "verified",
   initialState: {
     verifiedData: [],
-    isVerifiedCheck: false
+    isVerifiedCheck: false,
   },
   reducers: {
     setProductVerifiedData: (state, action) => {
@@ -16,11 +16,12 @@ const verifiedSlice = createSlice({
     setIsVerifiedCheck: (state) => {
       state.isVerifiedCheck = !state.isVerifiedCheck;
     },
-
   },
+});
 
-})
-
-
-export const { setProductVerifiedData, clearProductVerifiedData, setIsVerifiedCheck } = verifiedSlice.actions
-export default verifiedSlice.reducer
+export const {
+  setProductVerifiedData,
+  clearProductVerifiedData,
+  setIsVerifiedCheck,
+} = verifiedSlice.actions;
+export default verifiedSlice.reducer;
