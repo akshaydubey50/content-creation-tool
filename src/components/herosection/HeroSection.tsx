@@ -74,7 +74,7 @@ export default function HeroSection() {
   const handleBookmark = async () => {
     if (isVerifiedCheck) {
       dispatch(setIsVerifiedCheck());
-      dispatch(clearProductVerifiedData());
+      // dispatch(clearProductVerifiedData());
     } else {
       dispatch(setIsBookmarkCheck());
       if (bookmarkList.length <= 0) {
@@ -93,7 +93,7 @@ export default function HeroSection() {
   const verifiedIconHandler = () => {
     if (isBookmark) {
       dispatch(setIsBookmarkCheck());
-      dispatch(clearBookmarkList());
+      // dispatch(clearBookmarkList());
     }
     dispatch(setIsVerifiedCheck());
     if (verifiedProductData.length <= 0) {
