@@ -1,14 +1,13 @@
 "use client";
 import AirtableModel from "@/models/airtableModel";
 import React, { useEffect, useRef, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
-import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
 import SelectDropdown from "./SelectDropdown";
 import { useSelector, useDispatch } from "react-redux";
-import { setCategoryData, clearCategoryData, setMatchedCategory, clearMatchedCategory } from "@/lib/slice/categorySlice";
+import { setCategoryData, clearCategoryData, clearMatchedCategory } from "@/lib/slice/categorySlice";
 import { setSearchQuery, setSearchFilterData, clearSearchFilterData } from "@/lib/slice/searchSlice"
-
+import { setIsVerifiedCheck} from "@/lib/slice/verifiedSlice";
 
 interface RootState {
   category: {
@@ -20,6 +19,7 @@ interface RootState {
   };
   verifiedProduct: {
     verifiedData: AirtableModel;
+    isVerifiedCheck: Boolean;
   };
   appSlice: {
     productList: Object;
@@ -37,13 +37,15 @@ const [isMounted,SetIsMounted]=useState(false)
   const searchQuery = useSelector((store: RootState) => store.searchProduct.searchQuery);
   const filterData = useSelector((store: RootState) => store.searchProduct.filterData);
   const allProduct = useSelector((state: RootState) => state.appSlice.productList);
+  const isVerifiedCheck = useSelector(
+    (store: RootState) => store.verifiedProduct.isVerifiedCheck
+  );
   const { data }:any = allProduct
   const productList = data;
   
   
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
-  const { setIsVerifiedFilled } = useVerifiedToolContextData();
 
   /*Search Functionality*/
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,7 +88,7 @@ const [isMounted,SetIsMounted]=useState(false)
       let categoryVal = selectedOption.value;
       let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
       router.push(`/category/${formatedCategory}`);
-      setIsVerifiedFilled(false);
+      dispatch(setIsVerifiedCheck());
       dispatch(clearSearchFilterData());
       dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
