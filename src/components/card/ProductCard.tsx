@@ -25,6 +25,7 @@ import {
   getBookmarkList,
 } from "@/lib/slice/bookmarkSlice";
 import { ThunkDispatch } from "@reduxjs/toolkit";
+import Loader from "../common/Loader/Loader";
 
 // type Product = {
 //   id: string;
@@ -38,8 +39,6 @@ import { ThunkDispatch } from "@reduxjs/toolkit";
 
 export function ProductCard(props: any) {
   const { bookmarkList } = props;
-  const { isBookmark } = props;
-  // const [isBookMarked, setIsBookMarked] = useState(isBookmark);
   const [isLiked, setIsLiked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const { product } = props;
@@ -51,8 +50,6 @@ export function ProductCard(props: any) {
 
   const {
     Tags,
-    Price,
-    Status,
     Name,
     WebsiteLink,
     Description,
@@ -62,39 +59,14 @@ export function ProductCard(props: any) {
   const formattedTitle = Name.toLowerCase().replace(/\s/g, "-");
   const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
 
-  const addBookmarkdemo = useCallback(async () => {
-    if (isBookMarked) {
-      setIsBookMarked(false);
-      console.log("deleting to bookmark");
-      const res = await fetch("/api/bookmarks/" + id, {
-        method: "DELETE",
-      });
-      if (res.status !== 200) {
-        setIsBookMarked(true);
-      }
-      setIsBookMarked(false);
-      console.log("deleting to bookmark");
-    } else {
-      setIsBookMarked(true);
-      console.log("adding to bookmark");
-      const res = await fetch("/api/bookmarks/" + id, {
-        method: "POST",
-      });
-      if (res.status !== 200) {
-        setIsBookMarked(false);
-      }
-      setIsBookMarked(true);
-      console.log("added to bookmark");
-    }
-  }, [isBookMarked, id]);
 
   const handleBookmarkClick = () => {
     if (isBookMarked && id) {
+      setIsBookMarked(!isBookMarked);
       dispatch(deleteBookmark(id));
-      setIsBookMarked(!isBookMarked);
     } else {
-      dispatch(addBookmark(id));
       setIsBookMarked(!isBookMarked);
+      dispatch(addBookmark(id));
     }
   };
 

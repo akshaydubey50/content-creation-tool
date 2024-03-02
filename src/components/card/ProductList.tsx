@@ -69,6 +69,10 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const bookmarkLoadingStatus = useSelector<any>(
     (store) => store.bookmark.status
   );
+
+  const getListBookmarkStatus = useSelector<any>(
+    (store) => store.bookmark.getListStatus
+  );
   const getProductByCategory = useCallback(
     (categoryType: string): AirtableModel[] | null => {
       if (categoryType !== "") {
@@ -116,7 +120,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
       ) {
         setProductRecords([]);
       }
-    } else if (isBookmark && bookmarkList.length > 0) {
+    } else if (isBookmark && bookmarkList) {
       setProductRecords(bookmarkList);
     } else if (isVerifiedCheck && verifiedProductArr.length > 0) {
       /*Verified Product*/
@@ -126,7 +130,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
       setProductRecords(data);
     }
   
-    // setVisibleItem(9);/
+    setVisibleItem(9);
   }, [
     currentCategory,
     getProductByCategory,
@@ -151,7 +155,10 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   if (isBookmark && bookmarkLoadingStatus === "loading"){
     return <Loader />;
   }
-  
+  if (getListBookmarkStatus === "loading") {
+    return <Loader />;
+  }
+
 
   return (
     <>
@@ -207,13 +214,6 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           <h1 className="text-3xl font-bold  text-center">No Bookmark yet</h1>
         </>
       )}
-      {bookmarkLoadingStatus === "loading" && isBookmark && bookmarkList && (
-        <>
-          <h1 className="text-3xl font-bold  text-center">
-            Loading BookmarkList...
-          </h1>
-        </>
-      )}
 
       <LoadMoreBtn />
     </>
@@ -232,6 +232,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   function LoadMoreBtn() {
     return (
       <>
+      
         {/* Render Load More Button for Similar Category Product  */}
         {id && visibleItem < productRecords!.length && (
           <div onClick={loadMore}>
@@ -265,12 +266,13 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           </div>
         )}
 
+
         {/* Bookmark Product Load Btn  */}
         {isBookmark && visibleItem < bookmarkList?.length && (
           <div onClick={loadMore}>
             <Button
               value={`Load More Bookmark Product ${
-                productRecords?.length - visibleItem
+                bookmarkList?.length - visibleItem
               }`}
             />
           </div>
