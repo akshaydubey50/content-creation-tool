@@ -24,7 +24,9 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     (store: RootState) => store.user
   );
 
-  const { productList } = useSelector((state: RootState) => state.product);
+  const productList = useSelector(
+    (state: RootState) => state.product.productList
+  );
   const dropDownCategoryArr = useSelector(
     (store: RootState) => store.category.matchedCategory
   );
@@ -193,16 +195,6 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     </>
   );
 
-  function isProductBookmarked(
-    product: AirtableModel,
-    bookmarkList: AirtableModel[]
-  ) {
-    if (bookmarkList) {
-      return bookmarkList?.some((bookmark) => bookmark?.id === product.id);
-    }
-    return false;
-  }
-
   function LoadMoreBtn() {
     return (
       <>
@@ -279,4 +271,14 @@ export default function ProductList({ currentCategory }: ProductListProps) {
       </>
     );
   }
+}
+
+export function isProductBookmarked(
+  product: AirtableModel,
+  bookmarkList: AirtableModel[]
+) {
+  if (bookmarkList) {
+    return bookmarkList?.some((bookmark) => bookmark?.id === product.id);
+  }
+  return false;
 }
