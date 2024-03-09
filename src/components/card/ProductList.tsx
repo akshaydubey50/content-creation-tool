@@ -73,6 +73,9 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const getListBookmarkStatus = useSelector<any>(
     (store) => store.bookmark.getListStatus
   );
+  const userAuthData = useSelector(
+    (store: RootState) => store.user.userSession
+  );
   const getProductByCategory = useCallback(
     (categoryType: string): AirtableModel[] | null => {
       if (categoryType !== "") {
@@ -95,7 +98,9 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   useEffect(() => {
     dispatch(fetchProductList());
-    dispatch(getBookmarkList());
+    if(userAuthData){
+      dispatch(getBookmarkList());
+    }
   }, [dispatch]);
 
   useEffect(() => {

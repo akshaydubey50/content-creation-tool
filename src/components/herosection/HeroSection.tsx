@@ -1,45 +1,31 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
+import AirtableModel from "@/models/airtableModel";
 import { RiStackFill, RiSearchLine } from "react-icons/ri";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { VscVerifiedFilled, VscVerified } from "react-icons/vsc";
 import { GoHeartFill } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  clearBookmarkList,
-  getBookmarkList,
-  setBookmarkList,
-} from "@/lib/slice/bookmarkSlice";
-import { ThunkDispatch } from "@reduxjs/toolkit";
-import { fetchProductList } from "@/lib/slice/appSlice";
-import {
-  clearProductVerifiedData,
-  setIsVerifiedCheck,
-} from "@/lib/slice/verifiedSlice";
-import AirtableModel from "@/models/airtableModel";
-import { setProductVerifiedData } from "@/lib/slice/verifiedSlice";
+import { clearBookmarkList, getBookmarkList } from "@/lib/slice/bookmarkSlice";
+import { fetchProductList } from "@/lib/slice/productSlice";
+import { AppDispatch, RootState } from "@/lib/store";
+import { clearProductVerifiedList, setIsVerifiedChecked} from "@/lib/slice/verifiedSlice";
+import { setProductVerifiedList } from "@/lib/slice/verifiedSlice";
 import { setIsBookmarkCheck } from "@/lib/slice/bookmarkSlice";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import LikedBookmarkModal from "../modal/LikedBookmarkModal";
 
-interface RootState {
-  verifiedProduct: {
-    verifiedData: AirtableModel[];
-    isVerifiedCheck: Boolean;
-  };
-  bookmark: {
-    isBookmarkChecked: boolean;
-    bookmarkList: AirtableModel[];
-  };
-  appSlice: {
-    productList: Object;
-  };
-}
 export default function HeroSection() {
-  const supabase = createClientComponentClient();
+  const dispatch: AppDispatch = useDispatch();
+  const [isOpen, setIsOpen] = useState(false)
 
-  const dispatch: ThunkDispatch<any, any, any> = useDispatch();
-  const bookmarkList = useSelector(
-    (store: RootState) => store.bookmark.bookmarkList
+  const isUserLoggedIn = useSelector(
+    (store: RootState) => store.user.isUserAuthenticated
+  );
+  const userAuthData = useSelector(
+    (store: RootState) => store.user.userSession
+  );
+  const { isUserAuthenticated, error, userSession } = useSelector(
+    (store: RootState) => store.user
   );
   const isBookmark = useSelector<any>(
     (store: RootState) => store.bookmark.isBookmarkChecked
@@ -51,9 +37,8 @@ export default function HeroSection() {
     (store: RootState) => store.verifiedProduct.verifiedData
   );
 
-  const { isLoading, isError, productList }: any = useSelector<any>(
-    (state) => state.appSlice
-  );
+
+  const { productList } = useSelector((state: RootState) => state.product);
 
   const { data } = productList;
 
@@ -72,15 +57,21 @@ export default function HeroSection() {
   };
 
   const handleBookmark = async () => {
-    if (isVerifiedCheck) {
-      dispatch(setIsVerifiedCheck());
-      // dispatch(clearProductVerifiedData());
-    } else {
-      dispatch(setIsBookmarkCheck());
-      /* if (bookmarkList.length == 0) {
+    if (!userAuthData) {
+      return setIsOpen(true)
+    }
+    else{
+
+      if (!isBookmarked && isUserAuthenticated) {
+        dispatch(setIsBookmarkCheck());
         dispatch(getBookmarkList());
-      } */
-      dispatch(getBookmarkList());
+      }
+      if (isBookmarked) {
+        dispatch(setIsBookmarkCheck());
+      }
+      if (isVerifiedCheck) {
+        dispatch(setIsVerifiedChecked());
+      }
     }
   };
 
@@ -103,6 +94,8 @@ export default function HeroSection() {
   };
 
   return (
+    <>
+
     <main className="py-12 xl:py-20 bg-light-gray  ">
       <section className="flex  flex-col place-items-center space-y-10 xl:space-y-14  px-4 md:px-8 xl:px-10">
         <div className="flex-1">
@@ -160,6 +153,8 @@ export default function HeroSection() {
                   <p className="font-medium text-Title-Small xl:text-Title-Medium">
                     Bookmark
                   </p>
+                    {!userAuthData && isOpen && <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />}
+
                 </div>
                 <div className="flex flex-col place-items-center  space-y-4 cursor-pointer">
                   <button
@@ -228,5 +223,7 @@ export default function HeroSection() {
         </div>
       </section>
     </main>
+    </>
   );
+
 }
