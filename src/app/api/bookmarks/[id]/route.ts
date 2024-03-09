@@ -27,10 +27,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ msg: "Something went wrong" }, { status: 400 });
   }
 
-  return NextResponse.json(
-    { data: `Product bookmarked ${id}` },
-    { status: 201 }
-  );
+  return NextResponse.json({ data: "Product bookmarked" }, { status: 201 });
 }
 
 export async function DELETE(request: Request) {
@@ -54,7 +51,7 @@ export async function DELETE(request: Request) {
   if (err) {
     return NextResponse.json(
       {
-        msg: `Product not deleted `,
+        msg: "Something went wrong or Product not bookmarked",
       },
       {
         status: 400,
@@ -63,7 +60,7 @@ export async function DELETE(request: Request) {
   }
 
   return NextResponse.json(
-    { data: `Bookmark Product deleted ${id}` },
+    { data: "Bookmark Product deleted" },
     { status: 201 }
   );
 }

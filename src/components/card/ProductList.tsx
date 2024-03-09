@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import Button from "@/components/common/Button";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
@@ -7,9 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProductList } from "@/lib/slice/productSlice";
 import AirtableModel from "@/models/airtableModel";
 import { ProductCard } from "./ProductCard";
-import Loader from "../common/Loader/Loader";
 import { getBookmarkList, setBookmarkList } from "@/lib/slice/bookmarkSlice";
-import Shimmer from "../common/Shimmer";
+import Loader from "../common/Loader/Loader";
 import { RootState, AppDispatch } from "@/lib/store";
 
 interface ProductListProps {
@@ -17,8 +16,6 @@ interface ProductListProps {
 }
 
 export default function ProductList({ currentCategory }: ProductListProps) {
-  // remove
-  // const [productRecords, setProductRecords] = useState<AirtableModel[]>([]);
   const id = useSearchParams().get("id");
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();
 
@@ -35,13 +32,13 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     (store: RootState) => store.search.searchFilterList
   );
   const verifiedProductArr = useSelector(
-    (store: RootState) => store.verifiedProduct.verifiedProductList
+    (store: RootState) => store.verifiedProduct.verifiedData
   );
   const productSearchQuery = useSelector(
     (store: RootState) => store.search.searchQuery
   );
   const isVerifiedCheck = useSelector(
-    (store: RootState) => store.verifiedProduct.isVerifiedChecked
+    (store: RootState) => store.verifiedProduct.isVerifiedCheck
   );
   const bookmarkList = useSelector(
     (store: RootState) => store.bookmark.bookmarkList
@@ -50,9 +47,17 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const isBookmark = useSelector(
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
-  const bookmarkLoadingStatus = useSelector(
-    (store: RootState) => store.bookmark.status
+  const bookmarkLoadingStatus = useSelector<any>(
+    (store) => store.bookmark.status
   );
+
+  const getListBookmarkStatus = useSelector<any>(
+    (store) => store.bookmark.getListStatus
+  );
+  const userAuthData = useSelector(
+    (store: RootState) => store.user.userSession
+  );
+
   const getProductByCategory = useCallback(
     (categoryType: string): AirtableModel[] | null => {
       if (categoryType !== "") {
@@ -74,10 +79,14 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   }
 
   useEffect(() => {
-    console.log("Useeffect is running");
     dispatch(fetchProductList());
-    dispatch(getBookmarkList());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (userAuthData) {
+      dispatch(getBookmarkList());
+    }
+  }, [dispatch, userAuthData]);
 
   const filteredProductRecords = useMemo(() => {
     if (currentCategory) {
@@ -116,7 +125,12 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   if (productList.length === 0) {
     return <Loader />;
-    // return <Shimmer />;
+  }
+  if (isBookmark && bookmarkLoadingStatus === "loading") {
+    return <Loader />;
+  }
+  if (getListBookmarkStatus === "loading") {
+    return <Loader />;
   }
 
   return (
@@ -125,22 +139,10 @@ export default function ProductList({ currentCategory }: ProductListProps) {
         className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
                   lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0"
       >
-        {bookmarkLoadingStatus === "succeeded" && bookmarkList?.length == 0 && (
-          <>
-            <h1 className="text-3xl font-bold  text-center">No Bookmark yet</h1>
-          </>
-        )}
-        {bookmarkLoadingStatus === "loading" && isBookmark && bookmarkList && (
-          <>
-            <h1 className="text-3xl font-bold  text-center">
-              Loading BookmarkList...
-            </h1>
-          </>
-        )}
         {filteredProductRecords &&
-          filteredProductRecords.length > 0 &&
+          filteredProductRecords?.length > 0 &&
           filteredProductRecords
-            .slice(0, visibleItem)
+            ?.slice(0, visibleItem)
             .map((item: AirtableModel) => {
               if (
                 id &&
@@ -156,11 +158,6 @@ export default function ProductList({ currentCategory }: ProductListProps) {
                   />
                 );
               } else {
-                console.log(
-                  "For item else condition",
-                  item?.fields?.Name,
-                  isProductBookmarked(item, bookmarkList)
-                );
                 return (
                   <ProductCard
                     key={item.id}
@@ -174,7 +171,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
       </main>
       {productSearchQuery.length > 0 && filteredProductRecords?.length == 0 && (
         <>
-          <h1 className="text-3xl   text-center">
+          <h1 className="text-3xl text-center">
             No Search
             <span className="font-bold">
               {" "}
@@ -184,6 +181,13 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           </h1>
         </>
       )}
+      {isBookmark &&
+        getListBookmarkStatus === "succeeded" &&
+        bookmarkList.length == 0 && (
+          <>
+            <h1 className="text-3xl font-bold  text-center">No Bookmark yet</h1>
+          </>
+        )}
 
       <LoadMoreBtn />
     </>
@@ -240,7 +244,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           <div onClick={loadMore}>
             <Button
               value={`Load More Bookmark Product ${
-                filteredProductRecords!.length - visibleItem
+                bookmarkList?.length - visibleItem
               }`}
             />
           </div>
@@ -257,7 +261,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           </div>
         )}
 
-        {/*All productList Load Btn  */}
+        {/*All Data Load Btn  */}
         {!id &&
           dropDownCategoryArr?.length <= 0 &&
           inputSearchFilterArr?.length <= 0 &&

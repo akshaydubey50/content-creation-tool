@@ -5,8 +5,9 @@ import ProductList from "@/components/card/ProductList";
 import AirtableModel from "@/models/airtableModel";
 import { useSearchParams } from "next/navigation";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
-import { useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
+
 
 export default function ProductDetail() {
   const id = useSearchParams().get("id");
@@ -50,7 +51,7 @@ export default function ProductDetail() {
           <span className="text-DarkOrange">{product!.fields.Tags}</span> Tools
         </h1>
       )}
-      <ProductList currentCategory={currentCategory} />
+      <ProductList currentCategory={currentCategory}/>
     </>
   );
 }

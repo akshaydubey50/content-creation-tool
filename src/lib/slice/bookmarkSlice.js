@@ -13,7 +13,6 @@ export const getBookmarkList = createAsyncThunk(
 export const addBookmark = createAsyncThunk(
   "bookmark/addBookmark",
   async (productId, { dispatch }) => {
-    // check if user is sign in or not
     const response = await fetch("/api/bookmarks/" + productId, {
       method: "POST",
     });
@@ -28,7 +27,6 @@ export const addBookmark = createAsyncThunk(
 export const deleteBookmark = createAsyncThunk(
   "bookmark/deleteBookmark",
   async (productId, { dispatch }) => {
-    // check if user is sign in or not
     console.log("productId", productId);
     const response = await fetch("/api/bookmarks/" + productId, {
       method: "DELETE",
@@ -44,11 +42,12 @@ export const deleteBookmark = createAsyncThunk(
 );
 
 const bookmarkSlice = createSlice({
-  name: "bookmarkSlice",
+  name: "bookmark",
   initialState: {
     isBookmarkChecked: false,
     bookmarkList: [],
     status: "idle",
+    getListStatus:"idle",
     error: null,
   },
   reducers: {
@@ -78,14 +77,14 @@ const bookmarkSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getBookmarkList.pending, (state, action) => {
-        state.status = "loading";
+        state.getListStatus = "loading";
       })
       .addCase(getBookmarkList.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.getListStatus = "succeeded";
         state.bookmarkList = action.payload;
       })
       .addCase(getBookmarkList.rejected, (state, action) => {
-        state.status = "failed";
+        state.getListStatus = "failed";
         state.error = action.error.message;
       })
 

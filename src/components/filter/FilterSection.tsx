@@ -5,58 +5,45 @@ import { useRouter } from "next/navigation";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import SelectDropdown from "./SelectDropdown";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setCategoryData,
-  clearCategoryData,
-  setMatchedCategory,
-  clearMatchedCategory,
-} from "@/lib/slice/categorySlice";
-import {
-  setSearchQuery,
-  setSearchFilterList,
-  clearSearchFilterList,
-} from "@/lib/slice/searchSlice";
+import { setCategoryData, clearCategoryData, clearMatchedCategory } from "@/lib/slice/categorySlice";
+import {  setSearchQuery, setSearchFilterList,  clearSearchFilterList,  } from "@/lib/slice/searchSlice"
+import { setIsVerifiedCheck} from "@/lib/slice/verifiedSlice";
 import { RootState, AppDispatch } from "@/lib/store";
 
+
+
 export default function FilterSection() {
+const [isMounted,SetIsMounted]=useState(false)
   const router = useRouter();
 
   /*Redux Dispatch & Selector*/
-  const dispatch: AppDispatch = useDispatch();
-  const categoryData = useSelector(
-    (store: RootState) => store.category.categoryData
-  );
-  const searchQuery = useSelector(
-    (store: RootState) => store.search.searchQuery
-  );
-  const filterData = useSelector(
-    (store: RootState) => store.search.searchFilterList
-  );
+  const dispatch = useDispatch();
+  const categoryData = useSelector((store: RootState) => store.category.categoryData);
+  const searchQuery = useSelector((store: RootState) => store.search.searchQuery);
+  const filterData = useSelector((store: RootState) => store.search.searchFilterList);
   const { productList } = useSelector((state: RootState) => state.product);
-
+  
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
 
   /*Search Functionality*/
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchQuery(""));
+    dispatch(setSearchQuery(""))
     // dispatch(clearCategoryData());
     // dispatch(clearMatchedCategory([]));
 
-    const newSearch = event.target.value;
+    const newSearch = event.target.value
     const lowercaseSearchQuery = newSearch && newSearch.toLowerCase();
-    dispatch(setSearchQuery(lowercaseSearchQuery));
+    dispatch(setSearchQuery(lowercaseSearchQuery))
 
     /* Filter data based on the updated search query */
-    const filteredResults =
-      productList &&
-      productList?.filter((searchData: AirtableModel) => {
-        const tooldatalist = searchData.fields.Name.toLowerCase();
-        if (lowercaseSearchQuery) {
-          console.log("search", tooldatalist.includes(lowercaseSearchQuery));
-          return tooldatalist.includes(lowercaseSearchQuery);
-        }
-      });
+    const filteredResults = productList && productList?.filter((searchData: AirtableModel) => {
+      const tooldatalist = searchData.fields.Name.toLowerCase();
+      if (lowercaseSearchQuery){
+        console.log('search',tooldatalist.includes(lowercaseSearchQuery))
+        return  tooldatalist.includes(lowercaseSearchQuery);
+      }
+    });
 
     if (newSearch === "") {
       // If search is empty, show default data
@@ -69,7 +56,10 @@ export default function FilterSection() {
       dispatch(setSearchFilterList([]));
     }
     setVisibleItem(9);
+
   };
+
+
 
   /* Selected Category functionality */
   const selectedCategory = (selectedOption: any) => {
@@ -77,7 +67,7 @@ export default function FilterSection() {
       let categoryVal = selectedOption.value;
       let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
       router.push(`/category/${formatedCategory}`);
-      // setIsVerifiedFilled(false);
+      dispatch(setIsVerifiedCheck());
       dispatch(clearSearchFilterList());
       dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
@@ -90,25 +80,35 @@ export default function FilterSection() {
     if (searchQuery.length > 0) {
       dispatch(setSearchQuery(""));
       dispatch(clearSearchFilterList());
-    } else if (categoryData.length > 0) {
-      console.log(categoryData);
+    }
+    else if (categoryData.length > 0) {
+      console.log(categoryData)
       dispatch(clearCategoryData());
       dispatch(clearMatchedCategory([]));
+
     }
     setVisibleItem(9);
   };
 
-  useEffect(() => {}, [setVisibleItem, searchQuery, categoryData, filterData]);
+  useEffect(() => { }, [
+    setVisibleItem,
+    searchQuery,
+    categoryData,
+    filterData,
+  ]);
+
+  useEffect(()=>{
+   SetIsMounted(true) 
+  },[])
 
   /*Get a List for Category*/
   const getListOfCategory = (): Set<string> => {
     const categoryItem = new Set<string>([]);
-    productList?.length > 0 &&
-      productList?.map((item: AirtableModel) => {
-        if (item?.fields?.Tags[0] !== undefined) {
-          categoryItem.add(item?.fields?.Tags[0]);
-        }
-      });
+    productList?.length > 0 && productList?.map((item: AirtableModel) => {
+      if (item?.fields?.Tags[0] !== undefined) {
+        categoryItem.add(item?.fields?.Tags[0]);
+      }
+    });
     return categoryItem;
   };
 
@@ -120,6 +120,7 @@ export default function FilterSection() {
       };
     }
   );
+
 
   return (
     <>
@@ -136,7 +137,7 @@ export default function FilterSection() {
         </div>
         <div className="col-span-1 ">
           <div className=" bg-DarkOrange  rounded-full  h-full">
-            <SelectDropdown
+            {isMounted && <SelectDropdown
               key={categoryData}
               placeholder="Select Category"
               options={categoryOptionsList}
@@ -146,7 +147,7 @@ export default function FilterSection() {
                   (option) => option.value === categoryData
                 ) || null
               }
-            />
+            />}
           </div>
         </div>
         <div className="col-span-1 font-medium">
@@ -183,7 +184,7 @@ export default function FilterSection() {
         </div>
         <div className="col-span-1">
           <div className="bg-DarkOrange  rounded-full text-white  w-full ">
-            <SelectDropdown
+            {isMounted && <SelectDropdown
               key={categoryData}
               placeholder="Select Category"
               options={categoryOptionsList}
@@ -193,7 +194,7 @@ export default function FilterSection() {
                   (option) => option.value === categoryData
                 ) || null
               }
-            />
+            />}
           </div>
         </div>
         <div className="col-span-1 text-white font-semibold">

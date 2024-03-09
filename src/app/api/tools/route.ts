@@ -3,7 +3,7 @@ import AirtableModel from "@/models/airtableModel";
 import axios from "axios";
 import { AirtableConf } from "@/conf/conf";
 
-export async function GET() {
+export async function GET() { 
   const headers = {
     Authorization: `Bearer ${AirtableConf.BEARER_TOKEN}`,
   };
@@ -12,7 +12,7 @@ export async function GET() {
     let airtableProductList: AirtableModel[] = [];
     // let cacheData = await getCache("airtableProductList");
 
-    let cacheData = null;
+    let cacheData =null
     if (cacheData !== null) {
       return NextResponse.json(
         {

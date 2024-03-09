@@ -31,7 +31,7 @@ export async function GET() {
 
   let airtableProductList: AirtableModel[];
 
-  const res = await fetch(URL + "/api/tools");
+  const res = await fetch("http://localhost:3000/api/tools");
   const json = await res.json();
   airtableProductList = json["data"];
 

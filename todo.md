@@ -6,14 +6,18 @@
       in the app
 - [ ] custom hook for user session also
 - [ ] handle login error more elegantly
-      p
-      product details page url will look like this
-      :: /category/tool-name
-      eg:- /others/gt-metrics
+p
+product details page url will look like this 
+::    /category/tool-name
+eg:- /others/gt-metrics
 
 - [ ] like count number -->
 
--[ ] bookmark bug -[ ] like upvote -[ ] pagination -[ ] login/logout btn issue -[ ] code refactor
+-[ ] bookmark bug
+-[ ] like upvote
+-[ ] pagination
+-[ ] login/logout btn issue
+-[ ] code refactor
 
 -[] [Fixed] [P1] details infinte loop. Ankit
 -[] [P1] bookmark updation should be done faster first update the state in UI then N/w call
