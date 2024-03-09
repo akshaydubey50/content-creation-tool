@@ -47,7 +47,7 @@ const bookmarkSlice = createSlice({
     isBookmarkChecked: false,
     bookmarkList: [],
     status: "idle",
-    getListStatus:"idle",
+    getListStatus: "idle",
     error: null,
   },
   reducers: {
@@ -61,18 +61,6 @@ const bookmarkSlice = createSlice({
     updateBookmarkList(state, action) {
       state.bookmarkList = action.payload;
     },
-    /*  toggleBookmark(state, action) {
-      const productId = action.payload;
-      const index = state.bookmarkList.findIndex(
-        (item) => item.id === productId
-      );
-
-      if (index !== -1) {
-        state.bookmarkList.splice(index, 1);
-      } else {
-        state.bookmarkList.push({ id: productId });
-      }
-    }, */
   },
   extraReducers: (builder) => {
     builder
@@ -94,7 +82,6 @@ const bookmarkSlice = createSlice({
       .addCase(addBookmark.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.bookmarkList.push(action.payload);
-        // getBookmarkList();
       })
       .addCase(addBookmark.rejected, (state, action) => {
         state.status = "failed";
@@ -109,22 +96,11 @@ const bookmarkSlice = createSlice({
         state.bookmarkList = state.bookmarkList.filter(
           (bookmark) => bookmark.id !== action.payload
         );
-        // getBookmarkList();
       })
       .addCase(deleteBookmark.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });
-
-    /* .addMatcher(
-        (action) =>
-          [addBookmark.fulfilled, deleteBookmark.fulfilled].includes(
-            action.type
-          ),
-        (state, action) => {
-          getBookmarkList()(state.dispatch, state.getState);
-        }
-      ); */
   },
 });
 

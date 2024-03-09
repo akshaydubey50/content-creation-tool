@@ -32,13 +32,13 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     (store: RootState) => store.search.searchFilterList
   );
   const verifiedProductArr = useSelector(
-    (store: RootState) => store.verifiedProduct.verifiedData
+    (store: RootState) => store.verifiedProduct.verifiedProductList
   );
   const productSearchQuery = useSelector(
     (store: RootState) => store.search.searchQuery
   );
   const isVerifiedCheck = useSelector(
-    (store: RootState) => store.verifiedProduct.isVerifiedCheck
+    (store: RootState) => store.verifiedProduct.isVerifiedChecked
   );
   const bookmarkList = useSelector(
     (store: RootState) => store.bookmark.bookmarkList
