@@ -209,7 +209,13 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           </h1>
         </>
       )}
-      {bookmarkLoadingStatus === "succeeded" && bookmarkList.length == 0 && isBookmark && (
+      {isBookmark && bookmarkLoadingStatus === "succeeded" && bookmarkList.length == 0  && (
+        <>
+          <h1 className="text-3xl font-bold  text-center">No Bookmark yet</h1>
+        </>
+      )}
+
+      {isBookmark && getListBookmarkStatus === "succeeded" && bookmarkList.length == 0 && (
         <>
           <h1 className="text-3xl font-bold  text-center">No Bookmark yet</h1>
         </>
