@@ -10,6 +10,13 @@ import { ImCross } from "react-icons/im";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { Auth } from "@supabase/auth-ui-react";
+import {
+  error,
+  isUserAuthenticated,
+  isUserLoggedInSlice,
+} from "@/lib/slice/userSlice";
+import { AppDispatch, RootState } from "@/lib/store";
+import { useDispatch, useSelector } from "react-redux";
 
 interface MenuItem {
   id: number;
@@ -20,18 +27,34 @@ export default function Navbar() {
   const supabase = createClientComponentClient();
   const [session, setSession] = useState<Session>();
   const [isActiveMenu, setIsActiveMenu] = useState(0);
+  const dispatch: AppDispatch = useDispatch();
+  const { isUserAuthenticated, error, userSession } = useSelector(
+    (store: RootState) => store.user
+  );
 
-  useEffect(() => { 
+  useEffect(() => {
+    console.log(
+      "isUserAuthenticated, error, userSession",
+      isUserAuthenticated,
+      error,
+      userSession
+    );
+    dispatch(isUserLoggedInSlice());
+    console.log(
+      "isUserAuthenticated, error, userSession",
+      isUserAuthenticated,
+      error,
+      userSession
+    );
     localStorage.setItem("isActiveMenu", String(isActiveMenu));
-  }, [isActiveMenu]);
-
+  }, [isActiveMenu, dispatch]);
 
   const memoizedIsUserLoggedIn = useCallback(isUserLoggedIn, [supabase.auth]);
   async function isUserLoggedIn() {
     const {
       data: { session },
     } = await supabase.auth.getSession();
-    if (session) { 
+    if (session) {
       setSession(session);
     }
     return session;
@@ -63,7 +86,7 @@ export default function Navbar() {
   const [isPopupOpen, setPopupOpen] = useState(false);
 
   const handleNavbarMenu = (index: number) => {
-    console.log('index::', index)
+    console.log("index::", index);
     setIsActiveMenu(index);
   };
 
@@ -205,11 +228,16 @@ export default function Navbar() {
                     fontWeight: "bold",
                     fontSize: "1.2rem",
                   },
-                  anchor: { color: "#FF8C00",fontSize:"1rem",textDecorationLine:"none",fontWeight:600 },
+                  anchor: {
+                    color: "#FF8C00",
+                    fontSize: "1rem",
+                    textDecorationLine: "none",
+                    fontWeight: 600,
+                  },
                   label: {
                     color: "black",
                     fontWeight: "bold",
-                    fontSize: "1.2rem"
+                    fontSize: "1.2rem",
                   },
                   container: { width: "flex" },
                 },

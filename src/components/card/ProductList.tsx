@@ -1,60 +1,44 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import Button from "@/components/common/Button";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductList } from "@/lib/slice/appSlice";
-import { ThunkDispatch } from "@reduxjs/toolkit";
+import { fetchProductList } from "@/lib/slice/productSlice";
 import AirtableModel from "@/models/airtableModel";
 import { ProductCard } from "./ProductCard";
-import Loader from "../common/Loader/Loader";
 import { getBookmarkList, setBookmarkList } from "@/lib/slice/bookmarkSlice";
+import Loader from "../common/Loader/Loader";
+import Shimmer from "../common/Shimmer";
+import { RootState, AppDispatch } from "@/lib/store";
 
 interface ProductListProps {
   currentCategory?: string;
 }
-interface RootState {
-  category: {
-    matchedCategory: AirtableModel[];
-  };
-  searchProduct: {
-    searchQuery: string;
-    searchFilterData: AirtableModel[];
-  };
-  verifiedProduct: {
-    verifiedData: AirtableModel[];
-    isVerifiedCheck: Boolean;
-  };
-  bookmark: {
-    isBookmarkChecked: Boolean;
-    bookmarkList: [];
-    status: string;
-    error: string | null;
-  };
-  appSlice: {
-    productList: Object;
-  };
-}
 
 export default function ProductList({ currentCategory }: ProductListProps) {
-  const [productRecords, setProductRecords] = useState<AirtableModel[]>([]);
+  // remove
+  // const [productRecords, setProductRecords] = useState<AirtableModel[]>([]);
   const id = useSearchParams().get("id");
   const { visibleItem, setVisibleItem } = useVisibleItemContextData();
 
-  const dispatch: ThunkDispatch<any, any, any> = useDispatch();
-  const { data }: any = useSelector<any>((state) => state.appSlice.productList);
+  const dispatch: AppDispatch = useDispatch();
+  const { isUserAuthenticated, error, userSession } = useSelector(
+    (store: RootState) => store.user
+  );
+
+  const { productList } = useSelector((state: RootState) => state.product);
   const dropDownCategoryArr = useSelector(
     (store: RootState) => store.category.matchedCategory
   );
   const inputSearchFilterArr = useSelector(
-    (store: RootState) => store.searchProduct.searchFilterData
+    (store: RootState) => store.search.searchFilterList
   );
   const verifiedProductArr = useSelector(
     (store: RootState) => store.verifiedProduct.verifiedData
   );
   const productSearchQuery = useSelector(
-    (store: RootState) => store.searchProduct.searchQuery
+    (store: RootState) => store.search.searchQuery
   );
   const isVerifiedCheck = useSelector(
     (store: RootState) => store.verifiedProduct.isVerifiedCheck
@@ -73,13 +57,12 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const getListBookmarkStatus = useSelector<any>(
     (store) => store.bookmark.getListStatus
   );
-  const userAuthData = useSelector(
-    (store: RootState) => store.user.userSession
-  );
+  const userAuthData = useSelector((store: RootState) => store.user.userSession);
+
   const getProductByCategory = useCallback(
     (categoryType: string): AirtableModel[] | null => {
       if (categoryType !== "") {
-        return data?.filter((item: AirtableModel) => {
+        return productList?.filter((item: AirtableModel) => {
           if (item?.fields?.Tags[0] === categoryType && item?.id !== id) {
             return categoryType;
           }
@@ -87,74 +70,64 @@ export default function ProductList({ currentCategory }: ProductListProps) {
       }
       return null;
     },
-    [data, id]
+    [productList, id]
   );
 
   async function loadMore() {
-    if (visibleItem < data!.length) {
+    if (visibleItem < productList!.length) {
       setVisibleItem(visibleItem + 9);
     }
   }
 
   useEffect(() => {
     dispatch(fetchProductList());
-    if(userAuthData){
-      dispatch(getBookmarkList());
-    }
+  
   }, [dispatch]);
 
   useEffect(() => {
-    console.log("isVerifiedCheck", isVerifiedCheck);
-    console.log("isBookmarkChedk", isBookmark);
-    const filterProductRecord = currentCategory
-      ? getProductByCategory(currentCategory)
-      : null;
-    if (filterProductRecord && id) {
-      /*product detail page similar category product listed data*/
-      setProductRecords(filterProductRecord);
-    } else if (dropDownCategoryArr?.length > 0 && !id) {
-      /*dropdown base filtered product data*/
-      setProductRecords(dropDownCategoryArr);
-    } else if (productSearchQuery.length > 0 && inputSearchFilterArr) {
-      /*search input filtered product data*/
-      if (inputSearchFilterArr.length > 0) {
-        setProductRecords(inputSearchFilterArr);
-      } else if (
-        productSearchQuery.length > 0 &&
-        inputSearchFilterArr.length == 0
-      ) {
-        setProductRecords([]);
-      }
-    } else if (isBookmark && bookmarkList) {
-      setProductRecords(bookmarkList);
-    } else if (isVerifiedCheck && verifiedProductArr.length > 0) {
-      /*Verified Product*/
-      setProductRecords(verifiedProductArr);
-    } else if (!isBookmark && data && !id) {
-      /*All Data*/
-      setProductRecords(data);
+    if (userAuthData) {
+      dispatch(getBookmarkList());
     }
-  
-    setVisibleItem(9);
+  }, [dispatch, userAuthData]);
+
+
+  const filteredProductRecords = useMemo(() => {
+    if (currentCategory) {
+      // Product detail page similar category product listed productList
+      return getProductByCategory(currentCategory);
+    } else if (dropDownCategoryArr?.length > 0 && !id) {
+      // Dropdown base filtered product productList
+      return dropDownCategoryArr;
+    } else if (productSearchQuery.length > 0 && inputSearchFilterArr) {
+      // Search input filtered product productList
+      return inputSearchFilterArr.length > 0 ? inputSearchFilterArr : [];
+    } else if (isUserAuthenticated && isBookmark && bookmarkList?.length > 0) {
+      return bookmarkList;
+    } else if (isVerifiedCheck && verifiedProductArr.length > 0) {
+      // Verified Product
+      return verifiedProductArr;
+    } else if (productList && !id) {
+      // All productList
+      return productList;
+    }
+    return [];
   }, [
     currentCategory,
     getProductByCategory,
     dropDownCategoryArr,
-    setVisibleItem,
-    data,
     id,
     inputSearchFilterArr,
-    isVerifiedCheck,
+    isUserAuthenticated,
     isBookmark,
     bookmarkList,
-    bookmarkList.length,
-    productRecords,
-    productSearchQuery.length,
+    isVerifiedCheck,
     verifiedProductArr,
-    bookmarkLoadingStatus,
+    productList,
+    productSearchQuery.length,
   ]);
 
-  if (!data) {
+
+  if (productList.length === 0) {
     return <Loader />;
   }
   if (isBookmark && bookmarkLoadingStatus === "loading"){
@@ -164,17 +137,18 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     return <Loader />;
   }
 
+  console.log('filteredProductRecords:-',filteredProductRecords)
 
   return (
     <>
       <main
         className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
                   lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0">
-        {productRecords?.length > 0  &&
-          productRecords?.slice(0, visibleItem).map((item: AirtableModel) => {
+        {filteredProductRecords && filteredProductRecords?.length > 0  &&
+          filteredProductRecords?.slice(0, visibleItem).map((item: AirtableModel) => {
             if (
-              !id &&
-              !dropDownCategoryArr &&
+              id &&
+              dropDownCategoryArr &&
               item?.fields?.Description?.trim() !== ""
             ) {
               return (
@@ -202,7 +176,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
             }
           })}
       </main>
-      {productSearchQuery.length > 0 && productRecords.length == 0 && (
+      {productSearchQuery.length > 0 && filteredProductRecords?.length == 0 && (
         <>
           <h1 className="text-3xl   text-center">
             No Search
@@ -245,11 +219,11 @@ export default function ProductList({ currentCategory }: ProductListProps) {
       <>
       
         {/* Render Load More Button for Similar Category Product  */}
-        {id && visibleItem < productRecords!.length && (
+        {id && visibleItem < filteredProductRecords!.length && (
           <div onClick={loadMore}>
             <Button
               value={`Load More Similar Category Product ${
-                productRecords?.length - visibleItem
+                filteredProductRecords!.length - visibleItem
               }`}
             />
           </div>
@@ -260,7 +234,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           <div onClick={loadMore}>
             <Button
               value={`Load More Same Category Product ${
-                productRecords?.length - visibleItem
+                filteredProductRecords!.length - visibleItem
               }`}
             />
           </div>
@@ -271,7 +245,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           <div onClick={loadMore}>
             <Button
               value={`Load More Search Product ${
-                productRecords?.length - visibleItem
+                filteredProductRecords!.length - visibleItem
               }`}
             />
           </div>
@@ -294,7 +268,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           <div onClick={loadMore}>
             <Button
               value={`Load More Verified Product ${
-                productRecords?.length - visibleItem
+                filteredProductRecords!.length - visibleItem
               }`}
             />
           </div>
@@ -307,10 +281,10 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           productSearchQuery.length === 0 &&
           !isVerifiedCheck &&
           !isBookmark &&
-          visibleItem <= data?.length &&
-          data?.length !== 0 && (
+          visibleItem <= productList?.length &&
+          productList?.length !== 0 && (
             <div onClick={loadMore}>
-              <Button value={`Load More   ${data?.length - visibleItem}`} />
+              <Button value={`Load More   ${productList?.length - visibleItem}`} />
             </div>
           )}
       </>

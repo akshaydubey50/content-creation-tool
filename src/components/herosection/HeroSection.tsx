@@ -9,8 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearBookmarkList, getBookmarkList } from "@/lib/slice/bookmarkSlice";
 import { fetchProductList } from "@/lib/slice/productSlice";
 import { AppDispatch, RootState } from "@/lib/store";
-import { clearProductVerifiedList, setIsVerifiedChecked} from "@/lib/slice/verifiedSlice";
-import { setProductVerifiedList } from "@/lib/slice/verifiedSlice";
+import { clearProductVerifiedData, setIsVerifiedCheck } from "@/lib/slice/verifiedSlice";
+import { setProductVerifiedData } from "@/lib/slice/verifiedSlice";
 import { setIsBookmarkCheck } from "@/lib/slice/bookmarkSlice";
 import LikedBookmarkModal from "../modal/LikedBookmarkModal";
 
@@ -62,15 +62,15 @@ export default function HeroSection() {
     }
     else{
 
-      if (!isBookmarked && isUserAuthenticated) {
+      if (!isBookmark && isUserAuthenticated) {
         dispatch(setIsBookmarkCheck());
         dispatch(getBookmarkList());
       }
-      if (isBookmarked) {
+      if (isBookmark) {
         dispatch(setIsBookmarkCheck());
       }
       if (isVerifiedCheck) {
-        dispatch(setIsVerifiedChecked());
+        dispatch(setIsVerifiedCheck());
       }
     }
   };

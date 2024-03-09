@@ -24,14 +24,15 @@ import { useVisibleItemContextData } from "@/lib/visibleItemContext";
  * Redux Import
  * */ 
 import { setCategoryData, setMatchedCategory } from "@/lib/slice/categorySlice";
-import { clearSearchFilterData } from "@/lib/slice/searchSlice";
+import { clearSearchFilterList } from "@/lib/slice/searchSlice";
+import { RootState, AppDispatch } from "@/lib/store";
 
 
 export default function ToolDetails() {
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const categoryData = useSelector<any>((state) => state.category.categoryData)
-  const { data }: any = useSelector<any>((state) => state.appSlice.productList);
+  const productList = useSelector((state: RootState) => state.product.productList);
 
   const { setVisibleItem } = useVisibleItemContextData();
   const pathName = usePathname();
@@ -42,7 +43,7 @@ export default function ToolDetails() {
     if (urlData.length > 0) {
       const getCurrentCategory = urlData[urlData.length - 1];
       // Filter data directly based on the current category in the URL
-      const filteredData = data?.filter((item: AirtableModel) =>
+      const filteredData = productList?.filter((item: AirtableModel) =>
         item.fields.Tags[0]?.toLowerCase().replace(/\s/g, "-") === getCurrentCategory
       );
       console.log('filteredData::', filteredData);
@@ -50,7 +51,7 @@ export default function ToolDetails() {
     }
 
     // url params value set to category dropdown
-    const paramData = data?.find((item: AirtableModel) => {
+    const paramData = productList?.find((item: AirtableModel) => {
       let urlParamCategoryName = param.name;
       if (param.name && param.name.includes('%26')) {
         urlParamCategoryName = param.name.replace(/%26/g, '&');
@@ -61,7 +62,7 @@ export default function ToolDetails() {
 
     // from paramData we can get the current category base on url param
     const getParamBaseCategory = paramData?.fields.Tags[0];
-    dispatch(clearSearchFilterData())
+    dispatch(clearSearchFilterList())
     dispatch(setCategoryData(getParamBaseCategory))
   }
 
@@ -69,7 +70,7 @@ export default function ToolDetails() {
     setVisibleItem(9);
     categoryTypeHandler();
 
-  }, [data, pathName, param.name, setVisibleItem]);
+  }, [productList, pathName, param.name, setVisibleItem]);
 
   return (
     <>

@@ -6,25 +6,10 @@ import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import SelectDropdown from "./SelectDropdown";
 import { useSelector, useDispatch } from "react-redux";
 import { setCategoryData, clearCategoryData, clearMatchedCategory } from "@/lib/slice/categorySlice";
-import { setSearchQuery, setSearchFilterData, clearSearchFilterData } from "@/lib/slice/searchSlice"
+import {  setSearchQuery, setSearchFilterList,  clearSearchFilterList,  } from "@/lib/slice/searchSlice"
 import { setIsVerifiedCheck} from "@/lib/slice/verifiedSlice";
+import { RootState, AppDispatch } from "@/lib/store";
 
-interface RootState {
-  category: {
-    categoryData: string;
-  };
-  searchProduct: {
-    searchQuery: string;
-    filterData: AirtableModel;
-  };
-  verifiedProduct: {
-    verifiedData: AirtableModel;
-    isVerifiedCheck: Boolean;
-  };
-  appSlice: {
-    productList: Object;
-  };
-}
 
 
 export default function FilterSection() {
@@ -34,15 +19,9 @@ const [isMounted,SetIsMounted]=useState(false)
   /*Redux Dispatch & Selector*/
   const dispatch = useDispatch();
   const categoryData = useSelector((store: RootState) => store.category.categoryData);
-  const searchQuery = useSelector((store: RootState) => store.searchProduct.searchQuery);
-  const filterData = useSelector((store: RootState) => store.searchProduct.filterData);
-  const allProduct = useSelector((state: RootState) => state.appSlice.productList);
-  const isVerifiedCheck = useSelector(
-    (store: RootState) => store.verifiedProduct.isVerifiedCheck
-  );
-  const { data }:any = allProduct
-  const productList = data;
-  
+  const searchQuery = useSelector((store: RootState) => store.search.searchQuery);
+  const filterData = useSelector((store: RootState) => store.search.searchFilterList);
+  const { productList } = useSelector((state: RootState) => state.product);
   
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
@@ -68,13 +47,13 @@ const [isMounted,SetIsMounted]=useState(false)
 
     if (newSearch === "") {
       // If search is empty, show default data
-      dispatch(clearSearchFilterData());
+      dispatch(clearSearchFilterList());
     } else if (filteredResults.length > 0) {
       // If there are filtered results, update filtered data
-      dispatch(setSearchFilterData(filteredResults));
+      dispatch(setSearchFilterList(filteredResults));
     } else {
       // If no results found, show no result message
-      dispatch(setSearchFilterData([]));
+      dispatch(setSearchFilterList([]));
     }
     setVisibleItem(9);
 
@@ -89,7 +68,7 @@ const [isMounted,SetIsMounted]=useState(false)
       let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
       router.push(`/category/${formatedCategory}`);
       dispatch(setIsVerifiedCheck());
-      dispatch(clearSearchFilterData());
+      dispatch(clearSearchFilterList());
       dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
     }
@@ -100,7 +79,7 @@ const [isMounted,SetIsMounted]=useState(false)
     router.push("/");
     if (searchQuery.length > 0) {
       dispatch(setSearchQuery(""));
-      dispatch(clearSearchFilterData());
+      dispatch(clearSearchFilterList());
     }
     else if (categoryData.length > 0) {
       console.log(categoryData)
