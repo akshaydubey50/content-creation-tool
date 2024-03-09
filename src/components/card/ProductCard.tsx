@@ -17,23 +17,24 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import LikedBookmarkModal from "../modal/LikedBookmarkModal";
 import VisitWebsite from "../visit-website/VisitWebsite";
 import AirtableModel from "@/models/airtableModel";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/lib/store";
 import { deleteBookmark, addBookmark } from "@/lib/slice/bookmarkSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/lib/store";
+
 
 export function ProductCard(props: any) {
-  const { bookmarkList } = props;
-  const { isBookmark } = props;
-  // const [isBookMarked, setIsBookMarked] = useState(isBookmark);
+  const { bookmarkList, isBookmark, product } = props;
+  const { id, fields } = product;
   const [isLiked, setIsLiked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { product } = props;
-  const { id, fields } = product;
   const [isBookMarked, setIsBookMarked] = useState(() =>
     isProductBookmarked(id, bookmarkList)
   );
   const dispatch: AppDispatch = useDispatch();
-
+  
+  const userAuthData = useSelector(
+    (store: RootState) => store.user.userSession
+  );
   const {
     Tags,
     Price,
@@ -48,39 +49,51 @@ export function ProductCard(props: any) {
   const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
 
   const handleBookmarkClick = () => {
-    if (isBookMarked && id) {
-      dispatch(deleteBookmark(id));
-      setIsBookMarked(!isBookMarked);
-    } else {
-      dispatch(addBookmark(id));
-      setIsBookMarked(!isBookMarked);
+    if (!userAuthData) {
+     return  setIsOpen(true)
     }
+    else {
+      if (isBookMarked && id) {
+        dispatch(deleteBookmark(id));
+        setIsBookMarked(!isBookMarked);
+      } else {
+        dispatch(addBookmark(id));
+        setIsBookMarked(!isBookMarked);
+      }
+    }
+
   };
 
   const addLikes = async () => {
-    if (isLiked) {
-      setIsLiked(false);
-      console.log("deleting to likes");
-      const res = await fetch("/api/likes/" + id, {
-        method: "DELETE",
-      });
-      if (res.status !== 200) {
-        setIsLiked(true);
-      }
-      setIsLiked(false);
-      console.log("deleted to likes");
-    } else {
-      setIsLiked(true);
-      console.log("adding to likes");
-      const res = await fetch("/api/likes/" + id, {
-        method: "POST",
-      });
-      if (res.status !== 200) {
-        setIsLiked(false);
-      }
-      setIsLiked(true);
-      console.log("added to likes");
+    if (!userAuthData) {
+      return setIsOpen(true)
     }
+    else{
+      if (isLiked) {
+        setIsLiked(false);
+        console.log("deleting to likes");
+        const res = await fetch("/api/likes/" + id, {
+          method: "DELETE",
+        });
+        if (res.status !== 200) {
+          setIsLiked(true);
+        }
+        setIsLiked(false);
+        console.log("deleted to likes");
+      } else {
+        setIsLiked(true);
+        console.log("adding to likes");
+        const res = await fetch("/api/likes/" + id, {
+          method: "POST",
+        });
+        if (res.status !== 200) {
+          setIsLiked(false);
+        }
+        setIsLiked(true);
+        console.log("added to likes");
+      }
+    }
+    
   };
 
   useEffect(() => {
@@ -142,9 +155,7 @@ export function ProductCard(props: any) {
                   </p>
                   <p className="">1</p>
                 </button>
-                {isOpen && (
-                  <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
-                )}
+                {!userAuthData && isOpen && <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />}
               </div>
             </div>
             <div className="">
@@ -179,6 +190,8 @@ export function ProductCard(props: any) {
                     <BsBookmark className="text-3xl   text-black" />
                   )}
                 </button>
+                {!userAuthData && isOpen && <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />}
+
               </div>
             </div>
           </div>
