@@ -1,27 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const verifiedSlice = createSlice({
-  name: "verified",
+const verifiedProductSlice = createSlice({
+  name: "verifiedProductSlice",
   initialState: {
-    verifiedData: [],
-    isVerifiedCheck: false,
+    verifiedProductList: [],
+    isVerifiedChecked: false,
   },
   reducers: {
-    setProductVerifiedData: (state, action) => {
-      state.verifiedData = action.payload;
+    setProductVerifiedList: (state, action) => {
+      state.verifiedProductList = action.payload;
     },
-    clearProductVerifiedData: (state) => {
-      state.verifiedData.length = 0;
+    clearProductVerifiedList: (state) => {
+      state.verifiedProductList.length = 0;
     },
-    setIsVerifiedCheck: (state) => {
-      state.isVerifiedCheck = !state.isVerifiedCheck;
+    setIsVerifiedChecked: (state) => {
+      state.isVerifiedChecked = !state.isVerifiedChecked;
     },
   },
 });
 
 export const {
-  setProductVerifiedData,
-  clearProductVerifiedData,
-  setIsVerifiedCheck,
-} = verifiedSlice.actions;
-export default verifiedSlice.reducer;
+  setProductVerifiedList,
+  clearProductVerifiedList,
+  setIsVerifiedChecked,
+} = verifiedProductSlice.actions;
+export default verifiedProductSlice.reducer;

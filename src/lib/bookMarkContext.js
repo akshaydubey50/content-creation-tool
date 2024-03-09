@@ -5,16 +5,16 @@ export const bookMarkedData = createContext();
 
 export function BookMarkedToolContextProvider({ children }) {
   const router = useRouter();
-    const pathname = usePathname();
+  const pathname = usePathname();
 
   const [isBookMarkFilled, setIsBookMarkFilled] = useState(false);
-    const [bookMarkedTool, setBookMarkedTool] = useState([]);
+  const [bookMarkedTool, setBookMarkedTool] = useState([]);
 
   const supabase = createClientComponentClient();
 
   const handleBookMarkedClick = async () => {
-    if(pathname !== '/'){
-        router.push("/");
+    if (pathname !== "/") {
+      router.push("/");
     }
 
     const {

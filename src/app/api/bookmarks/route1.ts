@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 import AirtableModel from "@/models/airtableModel";
 import { DOMAIN_URL, getCache, setCache } from "@/helper/helper";
 
-// get likes product list by user
+// get bookmark product list by user
 export async function GET() {
   const URL = DOMAIN_URL();
   let start = Date.now();
@@ -18,9 +18,9 @@ export async function GET() {
   // if no user cookies
   if (!user) throw Error("user not found");
 
-  // get likes list from db
+  // get bookmark list from db
   const { data, error } = await supabase
-    .from("likes")
+    .from("bookmark")
     .select("product_id")
     .eq("user_id", user?.id);
 
@@ -44,7 +44,10 @@ export async function GET() {
   );
 
   if (!filterProductList) {
-    return NextResponse.json({ msg: "No likes product yet" }, { status: 200 });
+    return NextResponse.json(
+      { msg: "No bookmark product yet" },
+      { status: 200 }
+    );
   }
 
   //call airtable api and do filteration and return the list of bookmark

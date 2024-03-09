@@ -8,7 +8,7 @@ import { fetchProductList } from "@/lib/slice/productSlice";
 import AirtableModel from "@/models/airtableModel";
 import { ProductCard } from "./ProductCard";
 import Loader from "../common/Loader/Loader";
-import { getBookmarkList, setBookmarkList } from "@/lib/slice/bookmarkSlice";
+import { getBookmarkList } from "@/lib/slice/bookmarkSlice";
 import Shimmer from "../common/Shimmer";
 import { RootState, AppDispatch } from "@/lib/store";
 
@@ -17,10 +17,13 @@ interface ProductListProps {
 }
 
 export default function ProductList({ currentCategory }: ProductListProps) {
-  // remove
-  // const [productRecords, setProductRecords] = useState<AirtableModel[]>([]);
+  //   added
+  const [visibleItem, setVisibleItem] = useState(9);
   const id = useSearchParams().get("id");
-  const { visibleItem, setVisibleItem } = useVisibleItemContextData();
+  const {
+    visibleItem: contextVisibleItem,
+    setVisibleItem: setContextVisibleItem,
+  } = useVisibleItemContextData();
 
   const dispatch: AppDispatch = useDispatch();
   const { isUserAuthenticated, error, userSession } = useSelector(
@@ -53,6 +56,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const bookmarkLoadingStatus = useSelector(
     (store: RootState) => store.bookmark.status
   );
+
   const getProductByCategory = useCallback(
     (categoryType: string): AirtableModel[] | null => {
       if (categoryType !== "") {
@@ -66,18 +70,6 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     },
     [productList, id]
   );
-
-  async function loadMore() {
-    if (visibleItem < productList!.length) {
-      setVisibleItem(visibleItem + 9);
-    }
-  }
-
-  useEffect(() => {
-    console.log("Useeffect is running");
-    dispatch(fetchProductList());
-    dispatch(getBookmarkList());
-  }, [dispatch]);
 
   const filteredProductRecords = useMemo(() => {
     if (currentCategory) {
@@ -114,9 +106,28 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     productSearchQuery.length,
   ]);
 
+  useEffect(() => {
+    console.log("running dispatch useEffect");
+    dispatch(fetchProductList());
+    dispatch(getBookmarkList());
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log("running context visible item useEffect");
+    if (contextVisibleItem) {
+      setVisibleItem(contextVisibleItem);
+    }
+  }, [contextVisibleItem]);
+
+  const loadMore = () => {
+    if (visibleItem < filteredProductRecords.length) {
+      setVisibleItem((prevVisibleItem) => prevVisibleItem + 9);
+      setContextVisibleItem(visibleItem + 9);
+    }
+  };
+
   if (productList.length === 0) {
     return <Loader />;
-    // return <Shimmer />;
   }
 
   return (
@@ -125,11 +136,14 @@ export default function ProductList({ currentCategory }: ProductListProps) {
         className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
                   lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0"
       >
-        {bookmarkLoadingStatus === "succeeded" && bookmarkList?.length == 0 && (
-          <>
-            <h1 className="text-3xl font-bold  text-center">No Bookmark yet</h1>
-          </>
-        )}
+        {bookmarkLoadingStatus === "succeeded" &&
+          bookmarkList?.length === 0 && (
+            <>
+              <h1 className="text-3xl font-bold  text-center">
+                No Bookmark yet
+              </h1>
+            </>
+          )}
         {bookmarkLoadingStatus === "loading" && isBookmark && bookmarkList && (
           <>
             <h1 className="text-3xl font-bold  text-center">
@@ -137,8 +151,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
             </h1>
           </>
         )}
-        {filteredProductRecords &&
-          filteredProductRecords.length > 0 &&
+        {filteredProductRecords.length > 0 &&
           filteredProductRecords
             .slice(0, visibleItem)
             .map((item: AirtableModel) => {
@@ -156,11 +169,6 @@ export default function ProductList({ currentCategory }: ProductListProps) {
                   />
                 );
               } else {
-                console.log(
-                  "For item else condition",
-                  item?.fields?.Name,
-                  isProductBookmarked(item, bookmarkList)
-                );
                 return (
                   <ProductCard
                     key={item.id}
@@ -172,7 +180,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
               }
             })}
       </main>
-      {productSearchQuery.length > 0 && filteredProductRecords?.length == 0 && (
+      {productSearchQuery.length > 0 && filteredProductRecords.length === 0 && (
         <>
           <h1 className="text-3xl   text-center">
             No Search
@@ -185,7 +193,19 @@ export default function ProductList({ currentCategory }: ProductListProps) {
         </>
       )}
 
-      <LoadMoreBtn />
+      <LoadMoreBtn
+        visibleItem={visibleItem}
+        filteredProductRecords={filteredProductRecords}
+        loadMore={loadMore}
+        id={id}
+        dropDownCategoryArr={dropDownCategoryArr}
+        inputSearchFilterArr={inputSearchFilterArr}
+        isBookmark={isBookmark}
+        bookmarkList={bookmarkList}
+        isVerifiedCheck={isVerifiedCheck}
+        verifiedProductArr={verifiedProductArr}
+        productList={productList}
+      />
     </>
   );
 
@@ -193,86 +213,109 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     product: AirtableModel,
     bookmarkList: AirtableModel[]
   ) {
-    if (bookmarkList) {
-      return bookmarkList?.some((bookmark) => bookmark?.id === product.id);
-    }
-    return false;
+    return bookmarkList?.some((bookmark) => bookmark?.id === product.id);
   }
+}
 
-  function LoadMoreBtn() {
-    return (
-      <>
-        {/* Render Load More Button for Similar Category Product  */}
-        {id && visibleItem < filteredProductRecords!.length && (
+interface LoadMoreBtnProps {
+  visibleItem: number;
+  filteredProductRecords: AirtableModel[];
+  loadMore: () => void;
+  id?: string | null;
+  dropDownCategoryArr: AirtableModel[];
+  inputSearchFilterArr: AirtableModel[];
+  isBookmark: boolean;
+  bookmarkList: AirtableModel[];
+  isVerifiedCheck: boolean;
+  verifiedProductArr: AirtableModel[];
+  productList: AirtableModel[];
+}
+
+function LoadMoreBtn({
+  visibleItem,
+  filteredProductRecords,
+  loadMore,
+  id,
+  dropDownCategoryArr,
+  inputSearchFilterArr,
+  isBookmark,
+  bookmarkList,
+  isVerifiedCheck,
+  verifiedProductArr,
+  productList,
+}: LoadMoreBtnProps) {
+  return (
+    <>
+      {/* Render Load More Button for Similar Category Product  */}
+      {id && visibleItem < filteredProductRecords.length && (
+        <div onClick={loadMore}>
+          <Button
+            value={`Load More Similar Category Product ${
+              filteredProductRecords.length - visibleItem
+            }`}
+          />
+        </div>
+      )}
+
+      {/* Render Load More Button for Similar Category Product  */}
+      {!id && visibleItem < dropDownCategoryArr?.length && (
+        <div onClick={loadMore}>
+          <Button
+            value={`Load More Same Category Product ${
+              filteredProductRecords.length - visibleItem
+            }`}
+          />
+        </div>
+      )}
+
+      {/* Render Load More Button for Search Product  */}
+      {!id && visibleItem < inputSearchFilterArr?.length && (
+        <div onClick={loadMore}>
+          <Button
+            value={`Load More Search Product ${
+              filteredProductRecords.length - visibleItem
+            }`}
+          />
+        </div>
+      )}
+
+      {/* Bookmark Product Load Btn  */}
+      {isBookmark && visibleItem < bookmarkList?.length && (
+        <div onClick={loadMore}>
+          <Button
+            value={`Load More Bookmark Product ${
+              filteredProductRecords.length - visibleItem
+            }`}
+          />
+        </div>
+      )}
+
+      {/* Verified Product Load Btn  */}
+      {isVerifiedCheck && visibleItem < verifiedProductArr?.length && (
+        <div onClick={loadMore}>
+          <Button
+            value={`Load More Verified Product ${
+              filteredProductRecords.length - visibleItem
+            }`}
+          />
+        </div>
+      )}
+
+      {/*All productList Load Btn  */}
+      {!id &&
+        dropDownCategoryArr?.length <= 0 &&
+        inputSearchFilterArr?.length <= 0 &&
+        // productSearchQuery.length === 0 &&
+        !isVerifiedCheck &&
+        !isBookmark &&
+        visibleItem <= productList?.length &&
+        productList?.length !== 0 && (
           <div onClick={loadMore}>
             <Button
-              value={`Load More Similar Category Product ${
-                filteredProductRecords!.length - visibleItem
-              }`}
+              value={`Load More   ${productList?.length - visibleItem}`}
             />
           </div>
         )}
-
-        {/* Render Load More Button for Similar Category Product  */}
-        {!id && visibleItem < dropDownCategoryArr?.length && (
-          <div onClick={loadMore}>
-            <Button
-              value={`Load More Same Category Product ${
-                filteredProductRecords!.length - visibleItem
-              }`}
-            />
-          </div>
-        )}
-
-        {/* Render Load More Button for Search Product  */}
-        {!id && visibleItem < inputSearchFilterArr?.length && (
-          <div onClick={loadMore}>
-            <Button
-              value={`Load More Search Product ${
-                filteredProductRecords!.length - visibleItem
-              }`}
-            />
-          </div>
-        )}
-
-        {/* Bookmark Product Load Btn  */}
-        {isBookmark && visibleItem < bookmarkList?.length && (
-          <div onClick={loadMore}>
-            <Button
-              value={`Load More Bookmark Product ${
-                filteredProductRecords!.length - visibleItem
-              }`}
-            />
-          </div>
-        )}
-
-        {/* Verified Product Load Btn  */}
-        {isVerifiedCheck && visibleItem < verifiedProductArr?.length && (
-          <div onClick={loadMore}>
-            <Button
-              value={`Load More Verified Product ${
-                filteredProductRecords!.length - visibleItem
-              }`}
-            />
-          </div>
-        )}
-
-        {/*All productList Load Btn  */}
-        {!id &&
-          dropDownCategoryArr?.length <= 0 &&
-          inputSearchFilterArr?.length <= 0 &&
-          productSearchQuery.length === 0 &&
-          !isVerifiedCheck &&
-          !isBookmark &&
-          visibleItem <= productList?.length &&
-          productList?.length !== 0 && (
-            <div onClick={loadMore}>
-              <Button
-                value={`Load More   ${productList?.length - visibleItem}`}
-              />
-            </div>
-          )}
-      </>
-    );
-  }
+    </>
+  );
 }

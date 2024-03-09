@@ -3,102 +3,80 @@ import React from "react";
 import { RiStackFill, RiSearchLine } from "react-icons/ri";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { VscVerifiedFilled, VscVerified } from "react-icons/vsc";
-import { GoHeartFill } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
+import { clearBookmarkList, getBookmarkList } from "@/lib/slice/bookmarkSlice";
+import { fetchProductList } from "@/lib/slice/productSlice";
+import { AppDispatch, RootState } from "@/lib/store";
 import {
-  clearBookmarkList,
-  getBookmarkList,
-  setBookmarkList,
-} from "@/lib/slice/bookmarkSlice";
-import { ThunkDispatch } from "@reduxjs/toolkit";
-import { fetchProductList } from "@/lib/slice/appSlice";
-import {
-  clearProductVerifiedData,
-  setIsVerifiedCheck,
+  clearProductVerifiedList,
+  setIsVerifiedChecked,
 } from "@/lib/slice/verifiedSlice";
 import AirtableModel from "@/models/airtableModel";
-import { setProductVerifiedData } from "@/lib/slice/verifiedSlice";
+import { setProductVerifiedList } from "@/lib/slice/verifiedSlice";
 import { setIsBookmarkCheck } from "@/lib/slice/bookmarkSlice";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-interface RootState {
-  verifiedProduct: {
-    verifiedData: AirtableModel[];
-    isVerifiedCheck: Boolean;
-  };
-  bookmark: {
-    isBookmarkChecked: boolean;
-    bookmarkList: AirtableModel[];
-  };
-  appSlice: {
-    productList: Object;
-  };
-}
 export default function HeroSection() {
-  const supabase = createClientComponentClient();
+  const dispatch: AppDispatch = useDispatch();
 
-  const dispatch: ThunkDispatch<any, any, any> = useDispatch();
-  const bookmarkList = useSelector(
-    (store: RootState) => store.bookmark.bookmarkList
+  const { isUserAuthenticated, error, userSession } = useSelector(
+    (store: RootState) => store.user
   );
-  const isBookmark = useSelector<any>(
+
+  const isBookmarked = useSelector<any>(
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
   const isVerifiedCheck = useSelector(
-    (store: RootState) => store.verifiedProduct.isVerifiedCheck
+    (store: RootState) => store.verifiedProduct.isVerifiedChecked
   );
   const verifiedProductData = useSelector(
-    (store: RootState) => store.verifiedProduct.verifiedData
+    (store: RootState) => store.verifiedProduct.verifiedProductList
   );
 
-  const { isLoading, isError, productList }: any = useSelector<any>(
-    (state) => state.appSlice
-  );
+  const { productList } = useSelector((state: RootState) => state.product);
 
-  const { data } = productList;
+  console.log("productList", productList);
 
   const handleShowAllProduct = () => {
-    if (!data) {
+    if (!productList) {
       dispatch(fetchProductList());
     }
     if (isVerifiedCheck) {
-      dispatch(setIsVerifiedCheck());
-      dispatch(clearProductVerifiedData());
+      dispatch(setIsVerifiedChecked());
+      dispatch(clearProductVerifiedList());
     }
-    if (isBookmark) {
+    if (isBookmarked && isUserAuthenticated) {
       dispatch(setIsBookmarkCheck());
       dispatch(clearBookmarkList());
     }
   };
 
   const handleBookmark = async () => {
-    if (isVerifiedCheck) {
-      dispatch(setIsVerifiedCheck());
-      // dispatch(clearProductVerifiedData());
-    } else {
+    if (!isBookmarked && isUserAuthenticated) {
       dispatch(setIsBookmarkCheck());
-      /* if (bookmarkList.length == 0) {
-        dispatch(getBookmarkList());
-      } */
       dispatch(getBookmarkList());
+    }
+    if (isBookmarked) {
+      dispatch(setIsBookmarkCheck());
+    }
+    if (isVerifiedCheck) {
+      dispatch(setIsVerifiedChecked());
     }
   };
 
   const verifiedProductHandler = () => {
-    const verifiedTool = data?.filter(
+    const verifiedTool = productList?.filter(
       (item: AirtableModel) => item.fields.Verified
     );
     return verifiedTool;
   };
 
   const verifiedIconHandler = () => {
-    if (isBookmark) {
+    if (isBookmarked) {
       dispatch(setIsBookmarkCheck());
-      // dispatch(clearBookmarkList());
     }
-    dispatch(setIsVerifiedCheck());
+    dispatch(setIsVerifiedChecked());
     if (verifiedProductData.length <= 0) {
-      dispatch(setProductVerifiedData(verifiedProductHandler()));
+      dispatch(setProductVerifiedList(verifiedProductHandler()));
     }
   };
 
@@ -151,7 +129,7 @@ export default function HeroSection() {
                     onClick={handleBookmark}
                   >
                     {/* <BsBookmarkFill className="text-2xl md:text-3xl lg:text-4xl text-black" /> */}
-                    {isBookmark ? (
+                    {isBookmarked ? (
                       <BsBookmarkFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
                     ) : (
                       <BsBookmark className="text-2xl md:text-3xl lg:text-4xl text-black" />

@@ -27,20 +27,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable}`}>
       <body className="font-poppins">
-        {/* <ProductContextProvider>
-          <LikedToolContextProvider>
-        <VisibleItemContextProvider> */}
-        <VerifiedToolContextProvider>
         <VisibleItemContextProvider>
           <Provider store={appStore}>
             <Navbar />
             <main>{children}</main>
           </Provider>
         </VisibleItemContextProvider>
-        </VerifiedToolContextProvider>
-        {/*  </VisibleItemContextProvider>
-          </LikedToolContextProvider>
-        </ProductContextProvider> */}
         <Footer />
       </body>
     </html>

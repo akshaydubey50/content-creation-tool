@@ -1,84 +1,75 @@
 "use client";
 import AirtableModel from "@/models/airtableModel";
 import React, { useEffect, useRef, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
-import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
 import SelectDropdown from "./SelectDropdown";
 import { useSelector, useDispatch } from "react-redux";
-import { setCategoryData, clearCategoryData, setMatchedCategory, clearMatchedCategory } from "@/lib/slice/categorySlice";
-import { setSearchQuery, setSearchFilterData, clearSearchFilterData } from "@/lib/slice/searchSlice"
-
-
-interface RootState {
-  category: {
-    categoryData: string;
-  };
-  searchProduct: {
-    searchQuery: string;
-    filterData: AirtableModel;
-  };
-  verifiedProduct: {
-    verifiedData: AirtableModel;
-  };
-  appSlice: {
-    productList: Object;
-  };
-}
-
+import {
+  setCategoryData,
+  clearCategoryData,
+  setMatchedCategory,
+  clearMatchedCategory,
+} from "@/lib/slice/categorySlice";
+import {
+  setSearchQuery,
+  setSearchFilterList,
+  clearSearchFilterList,
+} from "@/lib/slice/searchSlice";
+import { RootState, AppDispatch } from "@/lib/store";
 
 export default function FilterSection() {
-
   const router = useRouter();
 
   /*Redux Dispatch & Selector*/
-  const dispatch = useDispatch();
-  const categoryData = useSelector((store: RootState) => store.category.categoryData);
-  const searchQuery = useSelector((store: RootState) => store.searchProduct.searchQuery);
-  const filterData = useSelector((store: RootState) => store.searchProduct.filterData);
-  const allProduct = useSelector((state: RootState) => state.appSlice.productList);
-  const { data }:any = allProduct
-  const productList = data;
-  
-  
+  const dispatch: AppDispatch = useDispatch();
+  const categoryData = useSelector(
+    (store: RootState) => store.category.categoryData
+  );
+  const searchQuery = useSelector(
+    (store: RootState) => store.search.searchQuery
+  );
+  const filterData = useSelector(
+    (store: RootState) => store.search.searchFilterList
+  );
+  const { productList } = useSelector((state: RootState) => state.product);
+
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
-  const { setIsVerifiedFilled } = useVerifiedToolContextData();
 
   /*Search Functionality*/
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchQuery(""))
+    dispatch(setSearchQuery(""));
     // dispatch(clearCategoryData());
     // dispatch(clearMatchedCategory([]));
 
-    const newSearch = event.target.value
+    const newSearch = event.target.value;
     const lowercaseSearchQuery = newSearch && newSearch.toLowerCase();
-    dispatch(setSearchQuery(lowercaseSearchQuery))
+    dispatch(setSearchQuery(lowercaseSearchQuery));
 
     /* Filter data based on the updated search query */
-    const filteredResults = productList && productList?.filter((searchData: AirtableModel) => {
-      const tooldatalist = searchData.fields.Name.toLowerCase();
-      if (lowercaseSearchQuery){
-        console.log('search',tooldatalist.includes(lowercaseSearchQuery))
-        return  tooldatalist.includes(lowercaseSearchQuery);
-      }
-    });
+    const filteredResults =
+      productList &&
+      productList?.filter((searchData: AirtableModel) => {
+        const tooldatalist = searchData.fields.Name.toLowerCase();
+        if (lowercaseSearchQuery) {
+          console.log("search", tooldatalist.includes(lowercaseSearchQuery));
+          return tooldatalist.includes(lowercaseSearchQuery);
+        }
+      });
 
     if (newSearch === "") {
       // If search is empty, show default data
-      dispatch(clearSearchFilterData());
+      dispatch(clearSearchFilterList());
     } else if (filteredResults.length > 0) {
       // If there are filtered results, update filtered data
-      dispatch(setSearchFilterData(filteredResults));
+      dispatch(setSearchFilterList(filteredResults));
     } else {
       // If no results found, show no result message
-      dispatch(setSearchFilterData([]));
+      dispatch(setSearchFilterList([]));
     }
     setVisibleItem(9);
-
   };
-
-
 
   /* Selected Category functionality */
   const selectedCategory = (selectedOption: any) => {
@@ -86,8 +77,8 @@ export default function FilterSection() {
       let categoryVal = selectedOption.value;
       let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
       router.push(`/category/${formatedCategory}`);
-      setIsVerifiedFilled(false);
-      dispatch(clearSearchFilterData());
+      // setIsVerifiedFilled(false);
+      dispatch(clearSearchFilterList());
       dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
     }
@@ -98,32 +89,26 @@ export default function FilterSection() {
     router.push("/");
     if (searchQuery.length > 0) {
       dispatch(setSearchQuery(""));
-      dispatch(clearSearchFilterData());
-    }
-    else if (categoryData.length > 0) {
-      console.log(categoryData)
+      dispatch(clearSearchFilterList());
+    } else if (categoryData.length > 0) {
+      console.log(categoryData);
       dispatch(clearCategoryData());
       dispatch(clearMatchedCategory([]));
-
     }
     setVisibleItem(9);
   };
 
-  useEffect(() => { }, [
-    setVisibleItem,
-    searchQuery,
-    categoryData,
-    filterData,
-  ]);
+  useEffect(() => {}, [setVisibleItem, searchQuery, categoryData, filterData]);
 
   /*Get a List for Category*/
   const getListOfCategory = (): Set<string> => {
     const categoryItem = new Set<string>([]);
-    productList?.length > 0 && productList?.map((item: AirtableModel) => {
-      if (item?.fields?.Tags[0] !== undefined) {
-        categoryItem.add(item?.fields?.Tags[0]);
-      }
-    });
+    productList?.length > 0 &&
+      productList?.map((item: AirtableModel) => {
+        if (item?.fields?.Tags[0] !== undefined) {
+          categoryItem.add(item?.fields?.Tags[0]);
+        }
+      });
     return categoryItem;
   };
 
@@ -135,7 +120,6 @@ export default function FilterSection() {
       };
     }
   );
-
 
   return (
     <>

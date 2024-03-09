@@ -5,25 +5,25 @@ import ProductList from "@/components/card/ProductList";
 import AirtableModel from "@/models/airtableModel";
 import { useSearchParams } from "next/navigation";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
-import {  useSelector } from "react-redux";
-
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
 
 export default function ProductDetail() {
   const id = useSearchParams().get("id");
-  const { data }: any = useSelector<any>((state) => state.appSlice.productList);
+  const { productList } = useSelector((state: RootState) => state.product);
   const [product, setProductData] = useState<AirtableModel>();
   const { setVisibleItem } = useVisibleItemContextData();
   const currentCategory = product && product!.fields.Tags[0];
 
   const getProductFromId = useCallback(() => {
-    const productMatched = data?.find(
+    const productMatched = productList?.find(
       (product: AirtableModel) => product.id === id
     );
     // console.log('@@productMatched',productMatched)
     if (productMatched) {
       setProductData(productMatched);
     }
-  }, [id, data]);
+  }, [id, productList]);
 
   useEffect(() => {
     setVisibleItem(9);
@@ -31,7 +31,7 @@ export default function ProductDetail() {
     if (!product) {
       getProductFromId();
     }
-  }, [product, id, data, getProductFromId, setVisibleItem]);
+  }, [product, id, productList, getProductFromId, setVisibleItem]);
 
   return (
     <>
@@ -50,7 +50,7 @@ export default function ProductDetail() {
           <span className="text-DarkOrange">{product!.fields.Tags}</span> Tools
         </h1>
       )}
-      <ProductList currentCategory={currentCategory}/>
+      <ProductList currentCategory={currentCategory} />
     </>
   );
 }

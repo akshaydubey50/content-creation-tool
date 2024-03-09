@@ -3,58 +3,78 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/supabase";
 import { NextResponse } from "next/server";
 import AirtableModel from "@/models/airtableModel";
-import { DOMAIN_URL, getCache, setCache } from "@/helper/helper";
+import { DOMAIN_URL } from "@/helper/helper";
 
-// get bookmark product list by user
-export async function GET() {
-  const URL = DOMAIN_URL();
-  let start = Date.now();
-
+// Utility function to fetch bookmarked products from Supabase
+async function fetchBookmarkedProducts(user: any): Promise<Set<string>> {
   const supabase = createRouteHandlerClient<Database>({ cookies });
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  // if no user cookies
-  if (!user) throw Error("user not found");
-
-  // get bookmark list from db
   const { data, error } = await supabase
     .from("bookmark")
     .select("product_id")
-    .eq("user_id", user?.id);
+    .eq("user_id", user.id);
 
-  //if something went wrong while fetching the data from db
-  if (error) throw Error(error.message);
-
-  const productSet = new Set(data.map((item) => item.product_id));
-
-  let airtableProductList: AirtableModel[];
-
-  const res = await fetch("http://localhost:3000/api/tools");
-  const json = await res.json();
-  airtableProductList = json["data"];
-
-  const filterProductList = airtableProductList.filter(
-    (product: AirtableModel) => {
-      if (productSet.has(product.id)) {
-        return product;
-      }
-    }
-  );
-
-  if (!filterProductList) {
-    return NextResponse.json(
-      { msg: "No bookmark product yet" },
-      { status: 200 }
-    );
+  if (error) {
+    throw new Error(`Failed to fetch bookmarks: ${error.message}`);
   }
 
-  //call airtable api and do filteration and return the list of bookmark
-  return NextResponse.json(
-    {
-      data: filterProductList,
-    },
-    { status: 200 }
-  );
+  return new Set(data.map((item) => item.product_id));
+}
+
+// Utility function to fetch products from Airtable
+async function fetchAirtableProducts(): Promise<AirtableModel[]> {
+  const URL = DOMAIN_URL();
+  const res = await fetch(URL + "/api/tools");
+  if (!res.ok) {
+    throw new Error(`Failed to fetch Airtable products: ${res.statusText}`);
+  }
+  const json = await res.json();
+  return json["data"];
+}
+
+// Utility function to get user from cookies
+async function getUserFromCookies(cookies: any): Promise<any> {
+  const supabase = createRouteHandlerClient<Database>({ cookies });
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error) {
+    throw new Error(`Failed to get user: ${error.message}`);
+  }
+
+  return data?.user;
+}
+
+// Main function to handle GET requests
+export async function GET() {
+  try {
+    const user = await getUserFromCookies(cookies);
+    if (!user) {
+      return NextResponse.json({ msg: "User not found" }, { status: 401 });
+    }
+
+    // const cachedBookmarks = getCache("bookmarks");
+    let bookmarkedProductIds: Set<string>;
+    /*  if (cachedBookmarks) {
+      bookmarkedProductIds = new Set(cachedBookmarks);
+    } else {
+      bookmarkedProductIds = await fetchBookmarkedProducts(user);
+      setCache("bookmarks", Array.from(bookmarkedProductIds));
+    } */
+    bookmarkedProductIds = await fetchBookmarkedProducts(user);
+    const airtableProducts = await fetchAirtableProducts();
+    const bookmarkedProducts = airtableProducts.filter((product) =>
+      bookmarkedProductIds.has(product.id)
+    );
+
+    if (bookmarkedProducts.length === 0) {
+      return NextResponse.json(
+        { msg: "No bookmarked products found" },
+        { status: 200 }
+      );
+    }
+
+    return NextResponse.json({ data: bookmarkedProducts }, { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ msg: "An error occurred" }, { status: 500 });
+  }
 }

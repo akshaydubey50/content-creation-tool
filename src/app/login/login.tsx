@@ -46,7 +46,7 @@ const LoginPopup = ({ isPopupOpenn }: any) => {
           <div className="bg-white p-8 md:w-2/5 lg:w-2/5 mt-12 rounded shadow-md z-20 relative">
             <Auth
               supabaseClient={supabase}
-              providers={["google"]}
+              providers={["google", "facebook", "twitter"]}
               redirectTo={`/auth/callback`}
               magicLink={true}
               appearance={{

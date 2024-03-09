@@ -17,24 +17,9 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import LikedBookmarkModal from "../modal/LikedBookmarkModal";
 import VisitWebsite from "../visit-website/VisitWebsite";
 import AirtableModel from "@/models/airtableModel";
-import { Product } from "@/types/product";
 import { useDispatch } from "react-redux";
-import {
-  deleteBookmark,
-  addBookmark,
-  getBookmarkList,
-} from "@/lib/slice/bookmarkSlice";
-import { ThunkDispatch } from "@reduxjs/toolkit";
-
-// type Product = {
-//   id: string;
-//   url: string;
-//   title: string;
-//   description: string;
-//   tag: string;
-//   link: string;
-//   isVerified: boolean;
-// };
+import { AppDispatch } from "@/lib/store";
+import { deleteBookmark, addBookmark } from "@/lib/slice/bookmarkSlice";
 
 export function ProductCard(props: any) {
   const { bookmarkList } = props;
@@ -47,7 +32,7 @@ export function ProductCard(props: any) {
   const [isBookMarked, setIsBookMarked] = useState(() =>
     isProductBookmarked(id, bookmarkList)
   );
-  const dispatch: ThunkDispatch<any, any, any> = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const {
     Tags,
@@ -61,32 +46,6 @@ export function ProductCard(props: any) {
   } = fields!;
   const formattedTitle = Name.toLowerCase().replace(/\s/g, "-");
   const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
-
-  const addBookmarkdemo = useCallback(async () => {
-    if (isBookMarked) {
-      setIsBookMarked(false);
-      console.log("deleting to bookmark");
-      const res = await fetch("/api/bookmarks/" + id, {
-        method: "DELETE",
-      });
-      if (res.status !== 200) {
-        setIsBookMarked(true);
-      }
-      setIsBookMarked(false);
-      console.log("deleting to bookmark");
-    } else {
-      setIsBookMarked(true);
-      console.log("adding to bookmark");
-      const res = await fetch("/api/bookmarks/" + id, {
-        method: "POST",
-      });
-      if (res.status !== 200) {
-        setIsBookMarked(false);
-      }
-      setIsBookMarked(true);
-      console.log("added to bookmark");
-    }
-  }, [isBookMarked, id]);
 
   const handleBookmarkClick = () => {
     if (isBookMarked && id) {
@@ -126,7 +85,7 @@ export function ProductCard(props: any) {
 
   useEffect(() => {
     setIsBookMarked(isProductBookmarked(id, bookmarkList));
-  }, [setIsBookMarked, isBookMarked, id, isProductBookmarked, bookmarkList]);
+  }, [setIsBookMarked, isBookMarked, id, bookmarkList]);
 
   return (
     <>

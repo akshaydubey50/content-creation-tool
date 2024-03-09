@@ -13,6 +13,7 @@ export const getBookmarkList = createAsyncThunk(
 export const addBookmark = createAsyncThunk(
   "bookmark/addBookmark",
   async (productId, { dispatch }) => {
+    // check if user is sign in or not
     const response = await fetch("/api/bookmarks/" + productId, {
       method: "POST",
     });
@@ -27,6 +28,7 @@ export const addBookmark = createAsyncThunk(
 export const deleteBookmark = createAsyncThunk(
   "bookmark/deleteBookmark",
   async (productId, { dispatch }) => {
+    // check if user is sign in or not
     console.log("productId", productId);
     const response = await fetch("/api/bookmarks/" + productId, {
       method: "DELETE",
@@ -42,7 +44,7 @@ export const deleteBookmark = createAsyncThunk(
 );
 
 const bookmarkSlice = createSlice({
-  name: "bookmark",
+  name: "bookmarkSlice",
   initialState: {
     isBookmarkChecked: false,
     bookmarkList: [],
