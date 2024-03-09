@@ -37,8 +37,6 @@ export function ProductCard(props: any) {
   );
   const {
     Tags,
-    Price,
-    Status,
     Name,
     WebsiteLink,
     Description,
@@ -47,6 +45,7 @@ export function ProductCard(props: any) {
   } = fields!;
   const formattedTitle = Name.toLowerCase().replace(/\s/g, "-");
   const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
+
 
   const handleBookmarkClick = () => {
     if (!userAuthData) {
@@ -98,7 +97,7 @@ export function ProductCard(props: any) {
 
   useEffect(() => {
     setIsBookMarked(isProductBookmarked(id, bookmarkList));
-  }, [setIsBookMarked, isBookMarked, id, bookmarkList]);
+  }, [setIsBookMarked, isBookMarked, id, isProductBookmarked, bookmarkList]);
 
   return (
     <>

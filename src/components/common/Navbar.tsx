@@ -119,11 +119,10 @@ export default function Navbar() {
               <li
                 key={menu.id}
                 className={`px-6 py-2  text-black   rounded-full hover:bg-DarkOrange hover:text-white cursor-pointer
-                ${
-                  isActiveMenu === index
+                ${isActiveMenu === index
                     ? "bg-DarkOrange text-white  "
                     : "text-black"
-                }`}
+                  }`}
                 onClick={() => handleNavbarMenu(index)}
               >
                 <Link href={menu.href}>{menu.label}</Link>
@@ -156,9 +155,8 @@ export default function Navbar() {
       </nav>
       {/* Mobile View Sidebar */}
       <aside
-        className={`fixed top-0 z-40 h-full w-screen bg-white text-black text-Title-Large transform transition-transform duration-500 overflow-hidden ${
-          isMenu ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 z-40 h-full w-screen bg-white text-black text-Title-Large transform transition-transform duration-500 overflow-hidden ${isMenu ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="p-3 flex my-2">
           <h2 className="text-Title-Larger font-bold">Content Creation</h2>

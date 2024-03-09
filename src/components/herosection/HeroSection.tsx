@@ -4,12 +4,13 @@ import AirtableModel from "@/models/airtableModel";
 import { RiStackFill, RiSearchLine } from "react-icons/ri";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { VscVerifiedFilled, VscVerified } from "react-icons/vsc";
+import { GoHeartFill } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import { clearBookmarkList, getBookmarkList } from "@/lib/slice/bookmarkSlice";
 import { fetchProductList } from "@/lib/slice/productSlice";
 import { AppDispatch, RootState } from "@/lib/store";
-import { clearProductVerifiedList, setIsVerifiedChecked} from "@/lib/slice/verifiedSlice";
-import { setProductVerifiedList } from "@/lib/slice/verifiedSlice";
+import { clearProductVerifiedData, setIsVerifiedCheck } from "@/lib/slice/verifiedSlice";
+import { setProductVerifiedData } from "@/lib/slice/verifiedSlice";
 import { setIsBookmarkCheck } from "@/lib/slice/bookmarkSlice";
 import LikedBookmarkModal from "../modal/LikedBookmarkModal";
 
@@ -26,31 +27,30 @@ export default function HeroSection() {
   const { isUserAuthenticated, error, userSession } = useSelector(
     (store: RootState) => store.user
   );
-
-  const isBookmarked = useSelector<any>(
+  const isBookmark = useSelector<any>(
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
   const isVerifiedCheck = useSelector(
-    (store: RootState) => store.verifiedProduct.isVerifiedChecked
+    (store: RootState) => store.verifiedProduct.isVerifiedCheck
   );
   const verifiedProductData = useSelector(
-    (store: RootState) => store.verifiedProduct.verifiedProductList
+    (store: RootState) => store.verifiedProduct.verifiedData
   );
 
 
   const { productList } = useSelector((state: RootState) => state.product);
 
-  console.log("productList", productList);
+  const { data } = productList;
 
   const handleShowAllProduct = () => {
-    if (!productList) {
+    if (!data) {
       dispatch(fetchProductList());
     }
     if (isVerifiedCheck) {
-      dispatch(setIsVerifiedChecked());
-      dispatch(clearProductVerifiedList());
+      dispatch(setIsVerifiedCheck());
+      dispatch(clearProductVerifiedData());
     }
-    if (isBookmarked && isUserAuthenticated) {
+    if (isBookmark) {
       dispatch(setIsBookmarkCheck());
       dispatch(clearBookmarkList());
     }
@@ -62,33 +62,34 @@ export default function HeroSection() {
     }
     else{
 
-      if (!isBookmarked && isUserAuthenticated) {
+      if (!isBookmark && isUserAuthenticated) {
         dispatch(setIsBookmarkCheck());
         dispatch(getBookmarkList());
       }
-      if (isBookmarked) {
+      if (isBookmark) {
         dispatch(setIsBookmarkCheck());
       }
       if (isVerifiedCheck) {
-        dispatch(setIsVerifiedChecked());
+        dispatch(setIsVerifiedCheck());
       }
     }
   };
 
   const verifiedProductHandler = () => {
-    const verifiedTool = productList?.filter(
+    const verifiedTool = data?.filter(
       (item: AirtableModel) => item.fields.Verified
     );
     return verifiedTool;
   };
 
   const verifiedIconHandler = () => {
-    if (isBookmarked) {
+    if (isBookmark) {
       dispatch(setIsBookmarkCheck());
+      // dispatch(clearBookmarkList());
     }
-    dispatch(setIsVerifiedChecked());
+    dispatch(setIsVerifiedCheck());
     if (verifiedProductData.length <= 0) {
-      dispatch(setProductVerifiedList(verifiedProductHandler()));
+      dispatch(setProductVerifiedData(verifiedProductHandler()));
     }
   };
 
@@ -143,7 +144,7 @@ export default function HeroSection() {
                     onClick={handleBookmark}
                   >
                     {/* <BsBookmarkFill className="text-2xl md:text-3xl lg:text-4xl text-black" /> */}
-                    {isBookmarked ? (
+                    {isBookmark ? (
                       <BsBookmarkFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
                     ) : (
                       <BsBookmark className="text-2xl md:text-3xl lg:text-4xl text-black" />
