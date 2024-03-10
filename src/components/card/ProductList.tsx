@@ -100,7 +100,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     } else if (productSearchQuery.length > 0 && inputSearchFilterArr) {
       // Search input filtered product productList
       return inputSearchFilterArr.length > 0 ? inputSearchFilterArr : [];
-    } else if (isUserAuthenticated && isBookmark && bookmarkList?.length > 0) {
+    } else if (isUserAuthenticated && isBookmark && bookmarkList) {
       return bookmarkList;
     } else if (isVerifiedCheck && verifiedProductArr.length > 0) {
       // Verified Product
@@ -125,7 +125,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     productSearchQuery.length,
   ]);
 
-  if (productList.length === 0) {
+  if (filteredProductRecords!.length === 0) {
     return <Loader />;
   }
   if (isBookmark && bookmarkLoadingStatus === "loading") {
