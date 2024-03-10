@@ -100,7 +100,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     } else if (productSearchQuery.length > 0 && inputSearchFilterArr) {
       // Search input filtered product productList
       return inputSearchFilterArr.length > 0 ? inputSearchFilterArr : [];
-    } else if (isUserAuthenticated && isBookmark && bookmarkList?.length > 0) {
+    } else if (isUserAuthenticated && isBookmark && bookmarkList) {
       return bookmarkList;
     } else if (isVerifiedCheck && verifiedProductArr.length > 0) {
       // Verified Product

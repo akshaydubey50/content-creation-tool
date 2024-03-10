@@ -49,13 +49,15 @@ export function ProductCard(props: any) {
 
   const handleBookmarkClick = () => {
     if (!userAuthData) {
-     return  setIsOpen(true)
+       setIsOpen(true)
     }
     else {
       if (isBookMarked && id) {
+        // @ts-ignore
         dispatch(deleteBookmark(id));
         setIsBookMarked(!isBookMarked);
       } else {
+        // @ts-ignore
         dispatch(addBookmark(id));
         setIsBookMarked(!isBookMarked);
       }
