@@ -1,10 +1,10 @@
 "use client";
-
 import "./globals.css";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
 import { Poppins } from "next/font/google";
 import { VisibleItemContextProvider } from "@/lib/visibleItemContext";
+import { Analytics } from "@vercel/analytics/react";
 
 import { Provider } from "react-redux";
 import appStore from "@/lib/store";
@@ -31,6 +31,7 @@ export default function RootLayout({
           </Provider>
         </VisibleItemContextProvider>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
