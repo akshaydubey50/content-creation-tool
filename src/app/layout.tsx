@@ -5,7 +5,7 @@ import Footer from "@/components/common/Footer";
 import { Poppins } from "next/font/google";
 import { VisibleItemContextProvider } from "@/lib/visibleItemContext";
 import { Analytics } from "@vercel/analytics/react";
-
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Provider } from "react-redux";
 import appStore from "@/lib/store";
 
@@ -31,6 +31,7 @@ export default function RootLayout({
           </Provider>
         </VisibleItemContextProvider>
         <Footer />
+        <SpeedInsights />
         <Analytics />
       </body>
     </html>
