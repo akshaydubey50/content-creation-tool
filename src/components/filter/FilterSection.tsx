@@ -1,111 +1,127 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useApiDataContext } from "@/lib/productContext";
 import AirtableModel from "@/models/airtableModel";
+import React, { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
-import { useRouter, useParams } from 'next/navigation';
-import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
 import SelectDropdown from "./SelectDropdown";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setCategoryData,
+  clearCategoryData,
+  clearMatchedCategory,
+} from "@/lib/slice/categorySlice";
+import {
+  setSearchQuery,
+  setSearchFilterList,
+  clearSearchFilterList,
+} from "@/lib/slice/searchSlice";
+import { setIsVerifiedChecked } from "@/lib/slice/verifiedSlice";
+import { RootState, AppDispatch } from "@/lib/store";
 
-type Product = {
-  // url: string;
-  title: string;
-  description: string;
-  tag: string;
-  link: string;
-};
-export default function FilterSection({ setFilterData, setCategoryData, categoryData }: any) {
-  console.log('categoryData in filter component::', categoryData)
-  const [searchQuery, setSearchQuery] = useState("");
-  const [categoryValue, setCategoryValue] = useState(categoryData || "Content");
-  const { apiData } = useApiDataContext();
-  const { visibleItem, setVisibleItem } = useVisibleItemContextData();
+export default function FilterSection() {
+  const [isMounted, SetIsMounted] = useState(false);
   const router = useRouter();
 
-  const { setIsVerifiedFilled } = useVerifiedToolContextData();
+  /*Redux Dispatch & Selector*/
+  const dispatch = useDispatch();
+  const categoryData = useSelector(
+    (store: RootState) => store.category.categoryData
+  );
+  const searchQuery = useSelector(
+    (store: RootState) => store.search.searchQuery
+  );
+  const filterData = useSelector(
+    (store: RootState) => store.search.searchFilterList
+  );
+  const { productList } = useSelector((state: RootState) => state.product);
 
-  const handleSearch = (e: any) => {
-    setCategoryValue("");
-    setCategoryData("");
-    const newSearch = e.target.value;
-    setSearchQuery(newSearch);
-    const lowercaseSearchQuery = newSearch.toLowerCase();
+  /*Context Data*/
+  const { setVisibleItem } = useVisibleItemContextData();
 
-    // Filter data based on the updated search query
-    const filteredResults = apiData.filter((searchData: any) => {
-      const tooldatalist = searchData.fields.Name.toLowerCase();
-      return tooldatalist.includes(lowercaseSearchQuery);
-    });
+  /*Search Functionality*/
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSearchQuery(""));
 
-    if (filteredResults.length > 0) {
-      // Update filteredData state
-      setFilterData(filteredResults);
+    const newSearch = event.target.value;
+    const lowercaseSearchQuery = newSearch && newSearch.toLowerCase();
+    dispatch(setSearchQuery(lowercaseSearchQuery));
+
+    /* Filter data based on the updated search query */
+    const filteredResults =
+      productList &&
+      productList?.filter((searchData: AirtableModel) => {
+        const tooldatalist = searchData.fields.Name.toLowerCase();
+        if (lowercaseSearchQuery) {
+          console.log("search", tooldatalist.includes(lowercaseSearchQuery));
+          return tooldatalist.includes(lowercaseSearchQuery);
+        }
+      });
+
+    if (newSearch === "") {
+      // If search is empty, show default data
+      dispatch(clearSearchFilterList());
+    } else if (filteredResults.length > 0) {
+      // If there are filtered results, update filtered data
+      dispatch(setSearchFilterList(filteredResults));
     } else {
-      setFilterData(null);
+      // If no results found, show no result message
+      dispatch(setSearchFilterList([]));
     }
     setVisibleItem(9);
-
   };
 
-  const getListOfCategory = (): Set<string> => {
-    const categoryItem = new Set<string>([]);
-    apiData.map((item: AirtableModel) => {
-      if (item.fields.Tags[0] !== undefined) {
-        categoryItem.add(item.fields.Tags[0]);
-      }
-    });
-    return categoryItem;
-  };
-
+  /* Selected Category functionality */
   const selectedCategory = (selectedOption: any) => {
     if (selectedOption) {
       let categoryVal = selectedOption.value;
       let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
       router.push(`/category/${formatedCategory}`);
-      setIsVerifiedFilled(false);
-      setFilterData("");
-      setCategoryData(categoryVal);
-      setCategoryValue(categoryVal);
-    setVisibleItem(9);
-
+      dispatch(clearSearchFilterList());
+      dispatch(setCategoryData(categoryVal));
+      setVisibleItem(9);
     }
   };
+
+  /*Clear Filter*/
   const clearFilter = () => {
-    router.push('/');
-    setCategoryValue("");
-    setCategoryData("");
-    setSearchQuery("");
-    setVisibleItem(9);
-    setFilterData([]);
-  };
-  useEffect(() => {
-
-  }, [
-    setCategoryValue,
-    setCategoryData,
-    setSearchQuery,
-    setVisibleItem,
-    setFilterData,
-  ])
-
-  useEffect(() => {
-    if (categoryData !== categoryValue) {
-      console.log('before::', categoryData, categoryValue)
-
-      setCategoryValue(categoryData);
-      console.log('before after::', categoryData, categoryValue)
-
+    router.push("/");
+    if (searchQuery.length > 0) {
+      dispatch(setSearchQuery(""));
+      dispatch(clearSearchFilterList());
+    } else if (categoryData.length > 0) {
+      console.log(categoryData);
+      dispatch(clearCategoryData());
+      dispatch(clearMatchedCategory([]));
     }
-  }, [
-    categoryData, categoryValue, setCategoryValue
-  ])
+    setVisibleItem(9);
+  };
 
-  const categoryOptionsList = Array.from(getListOfCategory()).map((item: string, index: number) => {
-    return {
-      value: item,
-      label: item
-    };
-  });
+  useEffect(() => {}, [setVisibleItem, searchQuery, categoryData, filterData]);
+
+  useEffect(() => {
+    SetIsMounted(true);
+  }, []);
+
+  /*Get a List for Category*/
+  const getListOfCategory = (): Set<string> => {
+    const categoryItem = new Set<string>([]);
+    productList?.length > 0 &&
+      productList?.map((item: AirtableModel) => {
+        if (item?.fields?.Tags[0] !== undefined) {
+          categoryItem.add(item?.fields?.Tags[0]);
+        }
+      });
+    return categoryItem;
+  };
+
+  const categoryOptionsList = Array.from(getListOfCategory()).map(
+    (item: string, index: number) => {
+      return {
+        value: item,
+        label: item,
+      };
+    }
+  );
 
   return (
     <>
@@ -122,9 +138,19 @@ export default function FilterSection({ setFilterData, setCategoryData, category
         </div>
         <div className="col-span-1 ">
           <div className=" bg-DarkOrange  rounded-full  h-full">
-            <SelectDropdown
-              key={categoryValue} placeholder="Select Category" options={categoryOptionsList} onChange={selectedCategory} value={categoryOptionsList.find(option => option.value === categoryValue) || null}
-            />
+            {isMounted && (
+              <SelectDropdown
+                key={categoryData}
+                placeholder="Select Category"
+                options={categoryOptionsList}
+                onChange={selectedCategory}
+                value={
+                  categoryOptionsList.find(
+                    (option) => option.value === categoryData
+                  ) || null
+                }
+              />
+            )}
           </div>
         </div>
         <div className="col-span-1 font-medium">
@@ -140,7 +166,6 @@ export default function FilterSection({ setFilterData, setCategoryData, category
         <div className="col-span-1 font-medium">
           <div className=" text-black py-0.5 ">
             <input
-              value={searchQuery}
               onChange={handleSearch}
               className="rounded-full w-full  border-2 outline-none px-3 py-2 font-medium border-black border-solid"
               type="text"
@@ -157,15 +182,24 @@ export default function FilterSection({ setFilterData, setCategoryData, category
             className="rounded-full w-full  border-2 outline-none p-3 font-medium border-black border-solid"
             type="text"
             placeholder="Search"
-            value={searchQuery}
             onChange={handleSearch}
           />
         </div>
         <div className="col-span-1">
           <div className="bg-DarkOrange  rounded-full text-white  w-full ">
-            <SelectDropdown
-              key={categoryValue} placeholder="Select Category" options={categoryOptionsList} onChange={selectedCategory} value={categoryOptionsList.find(option => option.value === categoryValue) || null}
-            />
+            {isMounted && (
+              <SelectDropdown
+                key={categoryData}
+                placeholder="Select Category"
+                options={categoryOptionsList}
+                onChange={selectedCategory}
+                value={
+                  categoryOptionsList.find(
+                    (option) => option.value === categoryData
+                  ) || null
+                }
+              />
+            )}
           </div>
         </div>
         <div className="col-span-1 text-white font-semibold">
@@ -188,8 +222,6 @@ export default function FilterSection({ setFilterData, setCategoryData, category
             </div>
           </div>
         </div>
-
-
       </section>
     </>
   );

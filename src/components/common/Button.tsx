@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-export default function CTAButton({value}:any) {
+export default function Button({ value }: any) {
   return (
     <React.Fragment>
       <div

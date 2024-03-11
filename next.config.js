@@ -2,9 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  experimental: {
+  /*  experimental: {
     serverActions: true,
-  },
+  }, */
   images: {
     domains: [
       "getlasso.co",

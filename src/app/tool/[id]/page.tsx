@@ -1,38 +1,38 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import ProductToolBanner from "@/components/product-tool/ProductToolBanner";
-import ProudctCard from "@/components/card/ProductCard";
-import { useApiDataContext } from "@/lib/productContext";
+import ProductList from "@/components/card/ProductList";
 import AirtableModel from "@/models/airtableModel";
 import { useSearchParams } from "next/navigation";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
+import {  useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
 
-export default function ToolDetails() {
+
+export default function ProductDetail() {
   const id = useSearchParams().get("id");
-  const { apiData } = useApiDataContext();
+  const { productList } = useSelector((state: RootState) => state.product);
   const [product, setProductData] = useState<AirtableModel>();
-  const localCategoryData = product && product!.fields.Tags[0];
-  const { visibleItem, setVisibleItem } = useVisibleItemContextData();
-
-  // console.log("localcatgeory", localCategoryData);
+  const { setVisibleItem } = useVisibleItemContextData();
+  const currentCategory = product && product!.fields.Tags[0];
 
   const getProductFromId = useCallback(() => {
-    const productMatched = apiData.find(
+    const productMatched = productList?.find(
       (product: AirtableModel) => product.id === id
     );
     // console.log('@@productMatched',productMatched)
     if (productMatched) {
       setProductData(productMatched);
     }
-  }, [id, apiData]);
+  }, [id, productList]);
 
   useEffect(() => {
-    setVisibleItem(9); 
+    setVisibleItem(9);
 
     if (!product) {
       getProductFromId();
     }
-  }, [product, id, apiData, getProductFromId]);
+  }, [product, id, productList, getProductFromId, setVisibleItem]);
 
   return (
     <>
@@ -51,7 +51,7 @@ export default function ToolDetails() {
           <span className="text-DarkOrange">{product!.fields.Tags}</span> Tools
         </h1>
       )}
-      <ProudctCard categoryData={localCategoryData} filterData={[]} />
+      <ProductList currentCategory={currentCategory}/>
     </>
   );
 }

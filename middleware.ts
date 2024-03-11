@@ -1,17 +1,16 @@
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { NextResponse } from "next/server";
 
 import type { NextRequest } from "next/server";
 import type { Database } from "@/types/supabase";
+import { cookies } from "next/headers";
 
-export async function middleware(req: NextRequest) {
-  console.log("req is in middleware");
-  console.log(req);
-  // Add the likes table to the supabase client.
-
-  const res = NextResponse.next();
-  const supabase = createMiddlewareClient<Database>({ req, res });
-  await supabase.auth.getSession();
-  await supabase.from("likes");
-  return res;
+export async function middleware(req: NextRequest, res: NextResponse  ) {
+  if (
+    req.nextUrl.pathname.includes("/api/bookmarks") ||
+    req.nextUrl.pathname.includes("/api/likes")
+  ) {
+    console.log("req.nextUrl.pathname", req.nextUrl.pathname);
+    console.log("req.nextUrl.pathname", req.nextUrl.pathname);
+  }
 }

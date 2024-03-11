@@ -1,241 +1,204 @@
 "use client";
+// React Component Import
 import React, { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+
+// Backend Data Import
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Session } from "@supabase/supabase-js";
+
+// Icon's Import
+import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
+import { MdVerified } from "react-icons/md";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+
+// Project  Component Import
+import LikedBookmarkModal from "../modal/LikedBookmarkModal";
+import VisitWebsite from "../visit-website/VisitWebsite";
 import AirtableModel from "@/models/airtableModel";
-import CTAButton from "../button/CTAButton";
-import { useApiDataContext } from "@/lib/productContext";
-import { useVisibleItemContextData } from "@/lib/visibleItemContext";
-import { useSearchParams } from "next/navigation";
-import { useVerifiedToolContextData } from "@/lib/verifiedToolContext";
-import { ContentToolCard } from "./ContentToolCard";
-import Loader from "../spinner-loader/Loader";
+import { deleteBookmark, addBookmark } from "@/lib/slice/bookmarkSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/lib/store";
 
-
-export default function ProudctCard({ filterData, categoryData, isFromUrl = false }: any) {
-  const { apiData } = useApiDataContext();
-  const { isVerifiedFilled, setIsVerifiedFilled } =
-    useVerifiedToolContextData();
-  const { visibleItem, setVisibleItem } = useVisibleItemContextData();
-  const id = useSearchParams().get("id");
-  const [isLoading, setIsLoading] = useState(true);
-
-  async function loadMore() {
-    if (
-      (isFromUrl && categoryData !== undefined) && visibleItem < categoryData!.length
-    ) {
-      setVisibleItem(visibleItem + 9);
-    }
-    if (
-      !isFromUrl && getProductByCategory(categoryData) !== null &&
-      visibleItem < getProductByCategory(categoryData)!.length
-    ) {
-      setVisibleItem(visibleItem + 9);
-    }
-    if (visibleItem < filterData!.length || visibleItem < apiData?.length) {
-      setVisibleItem(visibleItem + 9);
-    }
-    if (isVerifiedFilled && (visibleItem < verifiedTool()?.length)) {
-      setVisibleItem(visibleItem + 9);
-    }
-  }
-
-  const getProductByCategory = useCallback(
-    (categoryType: string): AirtableModel[] | null => {
-      if (categoryType !== "") {
-        return apiData.filter((item: AirtableModel) => {
-          if (item?.fields?.Tags[0] === categoryType && item?.id !== id) {
-            return categoryType;
-          }
-        });
-      }
-      return null;
-    },
-    [apiData, id]
+export function ProductCard(props: any) {
+  const { bookmarkList, isBookmark, product } = props;
+  const { id, fields } = product;
+  const [isLiked, setIsLiked] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isBookMarked, setIsBookMarked] = useState(() =>
+    isProductBookmarked(id, bookmarkList)
   );
+  const dispatch: AppDispatch = useDispatch();
 
+  const userAuthData = useSelector(
+    (store: RootState) => store.user.userSession
+  );
+  const { Tags, Name, WebsiteLink, Description, ToolImage, Verified } = fields!;
+  const formattedTitle = Name.toLowerCase().replace(/\s/g, "-");
+  const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
 
-  const verifiedTool=()=>{
-    let verifyTool = apiData.filter((item: AirtableModel) => item.fields.Verified).map((item: AirtableModel) => (
-      <ContentToolCard
-        key={item.id}
-        id={item.id}
-        url={item.fields.ToolImage}
-        title={item.fields.Name}
-        description={item.fields.Description}
-        tag={item.fields.Tags}
-        link={item.fields.WebsiteLink}
-        isVerified={item.fields?.Verified}
-      />))
-      console.log('verifyTool:::',verifyTool)
-      return verifyTool
-  }
+  const handleBookmarkClick = () => {
+    if (!userAuthData) {
+      return setIsOpen(true);
+    } else {
+      if (isBookMarked && id) {
+        // @ts-ignore
+        dispatch(deleteBookmark(id));
+        setIsBookMarked(!isBookMarked);
+      } else {
+        // @ts-ignore
+        dispatch(addBookmark(id));
+        setIsBookMarked(!isBookMarked);
+      }
+    }
+  };
 
-
+  const addLikes = async () => {
+    if (!userAuthData) {
+      return setIsOpen(true);
+    } else {
+      if (isLiked) {
+        setIsLiked(false);
+        console.log("deleting to likes");
+        const res = await fetch("/api/likes/" + id, {
+          method: "DELETE",
+        });
+        if (res.status !== 200) {
+          setIsLiked(true);
+        }
+        setIsLiked(false);
+        console.log("deleted to likes");
+      } else {
+        setIsLiked(true);
+        console.log("adding to likes");
+        const res = await fetch("/api/likes/" + id, {
+          method: "POST",
+        });
+        if (res.status !== 200) {
+          setIsLiked(false);
+        }
+        setIsLiked(true);
+        console.log("added to likes");
+      }
+    }
+  };
 
   useEffect(() => {
-    getProductByCategory(categoryData);
-    setIsLoading(false);
-    console.log('card visibleItem:::::::', (visibleItem));
-  }, [filterData, categoryData, visibleItem, getProductByCategory]);
+    setIsBookMarked(isProductBookmarked(id, bookmarkList));
+  }, [setIsBookMarked, isBookMarked, id, isProductBookmarked, bookmarkList]);
 
   return (
     <>
-      {isLoading ? (<Loader />) : (
-        <main
-          className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
-      lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0"
+      <div
+        className="rounded-2xl max-w-sm  flex flex-col  border border-black 
+          border-solid  shadow-2xl"
+      >
+        <Link
+          href={{
+            pathname: `/tool/${formattedTitle}`,
+            query: {
+              id: id,
+            },
+          }}
         >
-          {/* All data cards listed when filter & category values is empty all data listed on api call */}
-          {filterData?.length <= 0 &&
-            categoryData?.length <= 0 &&
-            !isVerifiedFilled &&
-            apiData &&
-            apiData.slice(0, visibleItem).map((item: AirtableModel) => {
-              if (item?.fields?.Description?.trim() !== "") {
-                // console.log(item);
-                return (
-                  <ContentToolCard
-                    key={item.id}
-                    id={item.id}
-                    url={item.fields.ToolImage}
-                    title={item.fields.Name}
-                    description={item.fields.Description}
-                    tag={item.fields.Tags}
-                    link={item.fields.WebsiteLink}
-                    isVerified={item.fields?.Verified}
-                  />
-                );
-              }
-            })}
-
-          {/*on  Category card listed choosing dropdown value */}
-          {!isVerifiedFilled &&
-            getProductByCategory(categoryData) &&
-            getProductByCategory(categoryData)
-              ?.slice(0, visibleItem)
-              .map((item) => {
-                return (
-                  <ContentToolCard
-                    key={item.id}
-                    id={item.id}
-                    url={item.fields.ToolImage}
-                    title={item.fields.Name}
-                    description={item.fields.Description}
-                    tag={item.fields.Tags}
-                    link={item.fields.WebsiteLink}
-                    isVerified={item.fields?.Verified}
-                  />
-                );
-              })}
-
-          {/* Displaying filtered data if input field has some value*/}
-          {filterData?.length > 0 &&
-            !isVerifiedFilled &&
-            filterData.slice(0, visibleItem).map((item: AirtableModel) => {
-              if (item?.fields?.Description?.trim() !== "") {
-                // console.log(item);
-                return (
-                  <ContentToolCard
-                    key={item.id}
-                    id={item.id}
-                    url={item.fields.ToolImage}
-                    title={item.fields.Name}
-                    description={item.fields.Description}
-                    tag={item.fields.Tags}
-                    link={item.fields.WebsiteLink}
-                    isVerified={item.fields?.Verified}
-
-                  />
-                );
-              }
-            })}
-
-          {/* Verify Icon base filter data  */}
-          {isVerifiedFilled && verifiedTool().slice(0, visibleItem)}
-
-          {/* Category Page filter Data base on url last pathname */}
-          {isFromUrl && categoryData !== undefined && categoryData?.slice(0, visibleItem).map((item: AirtableModel) => {
-            return (
-              <ContentToolCard
-                key={item.id}
-                id={item.id}
-                url={item.fields.ToolImage}
-                title={item.fields.Name}
-                description={item.fields.Description}
-                tag={item.fields.Tags}
-                link={item.fields.WebsiteLink}
-                isVerified={item.fields?.Verified}
-              />
-            );
-          })}
-
-          {!apiData && !filterData &&
-            !categoryData && !isFromUrl && (
-              <Loader />
-            )}
-        </main>
-      )}
-      {filterData === null && (
-        <div>
-          <h1 className="text-3xl font-bold  text-center">
-            {" "}
-            No search result found
-          </h1>
-        </div>
-      )}
-
-
-      {/* Load More Button for Category Base Dropdown Value  */}
-      {(isFromUrl && categoryData !== undefined) && visibleItem < categoryData!.length && (
-        <div onClick={loadMore}>
-          <CTAButton
-            value={`Load More Category ${categoryData!.length - visibleItem
-              }`}
-          />
-        </div>
-      )
-        ||
-        (getProductByCategory(categoryData) &&
-          !(getProductByCategory(categoryData)!.length === visibleItem) &&
-          visibleItem < getProductByCategory(categoryData)!.length) && (
-          <div onClick={loadMore}>
-            <CTAButton
-              value={`Load More Category ${getProductByCategory(categoryData)!.length - visibleItem
-                }`}
+          <section className="border-b border-black border-solid">
+            <Image
+              src={ToolImage}
+              alt="logo banner"
+              loading="lazy"
+              width="1280"
+              height="720"
+              decoding="async"
+              data-nimg="1"
+              className="rounded-t-2xl w-full object-cover"
             />
+          </section>
+        </Link>
+        <section className="bg-light-gray pt-7 px-5 rounded-b-2xl h-full">
+          <div className="flex flex-col justify-between h-full">
+            <div className="">
+              <div className="pb-4 flex flex-1 flex-row justify-between">
+                <div className="flex items-center gap-x-2">
+                  <h1 className="font-bold text-Title-Medium md:text-Title-Large">
+                    {Name}
+                  </h1>
+
+                  {Verified && (
+                    <MdVerified className="text-2xl text-DarkOrange" />
+                  )}
+                </div>
+                <button
+                  title="Bookmark"
+                  type="button"
+                  onClick={addLikes}
+                  className="flex items-center gap-x-1"
+                >
+                  <p>
+                    {isLiked ? (
+                      <AiFillHeart className="text-3xl text-DarkOrange" />
+                    ) : (
+                      <AiOutlineHeart className="text-3xl   text-black" />
+                    )}
+                  </p>
+                  <p className="">1</p>
+                </button>
+                {!userAuthData && isOpen && (
+                  <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
+                )}
+              </div>
+            </div>
+            <div className="">
+              <div className="text-Description">
+                <p>{Description}</p>
+              </div>
+            </div>
+            <div className="tool-btn-section pb-7">
+              <p className="my-6 ">
+                <Link
+                  className="bg-white rounded-full  text-tags font-medium border 
+                border-solid border-black px-5 py-1"
+                  href={`/category/${formattedTag}`}
+                  prefetch={true}
+                >
+                  {Tags}
+                </Link>
+              </p>
+              <div
+                className="text-white text-Title-Medium  flex 
+          justify-between items-center"
+              >
+                <VisitWebsite url={WebsiteLink} />
+                <button
+                  title="Bookmark"
+                  type="button"
+                  onClick={handleBookmarkClick}
+                >
+                  {isBookMarked ? (
+                    <BsBookmarkFill className="text-3xl text-DarkOrange" />
+                  ) : (
+                    <BsBookmark className="text-3xl   text-black" />
+                  )}
+                </button>
+                {!userAuthData && isOpen && (
+                  <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
+                )}
+              </div>
+            </div>
           </div>
-        )}
-
-
-      {/* Load More Button for Filter/Search Base  Value  */}
-      {visibleItem < filterData?.length && (
-        <div onClick={loadMore}>
-          <CTAButton
-            value={`Load More Filter ${filterData?.length - visibleItem}`}
-          />
-        </div>
-      )}
-
-      {isVerifiedFilled && (visibleItem < verifiedTool()?.length) && (
-        <div onClick={loadMore}>
-          <CTAButton
-            value={`Load More Verified Tool's ${verifiedTool()?.length - visibleItem}`}
-          />
-        </div>
-      )}
-
-
-      {/* Load More Button for All Data */}
-      {visibleItem <= apiData?.length && !isFromUrl && !isVerifiedFilled &&
-        (getProductByCategory(categoryData) === null ||
-          getProductByCategory(categoryData)!.length === 0) &&
-        filterData?.length === 0 && (
-          <div onClick={loadMore}>
-            <CTAButton
-              value={`Load More All ${apiData?.length - visibleItem}`}
-            />
-          </div>
-        )}
+        </section>
+      </div>
     </>
   );
-}
 
+  function isProductBookmarked(
+    productId: string,
+    bookmarkList: AirtableModel[]
+  ) {
+    if (bookmarkList) {
+      // return bookmarkList?.some((bookmark) => bookmark?.id === product.id);
+      return bookmarkList.some((bookmark) => bookmark?.id === productId);
+    }
+    return false;
+  }
+}
