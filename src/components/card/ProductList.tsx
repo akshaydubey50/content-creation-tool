@@ -111,7 +111,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     }
   }, [dispatch, userAuthData]);
 
-  if (productList.length === 0) {
+  if (filteredProductRecords!.length === 0) {
     return <Loader />;
   }
   if (isBookmark && bookmarkLoadingStatus === "loading") {
