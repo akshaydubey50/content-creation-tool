@@ -43,6 +43,7 @@ export default function ProductDetail() {
           description={product!.fields.Description}
           tag={product!.fields.Tags}
           link={product!.fields.WebsiteLink}
+          id={product!.id}
         />
       )}
       {product && (

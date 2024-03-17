@@ -20,6 +20,7 @@ import AirtableModel from "@/models/airtableModel";
 import { deleteBookmark, addBookmark } from "@/lib/slice/bookmarkSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/store";
+import { isProductBookmarked } from "@/helper/helper"
 
 export function ProductCard(props: any) {
   const { bookmarkList, isBookmark, product } = props;
@@ -40,8 +41,9 @@ export function ProductCard(props: any) {
 
   const handleBookmarkClick = () => {
     if (!userAuthData) {
-      return setIsOpen(true);
-    } else {
+       setIsOpen(true)
+    }
+    else {
       if (isBookMarked && id) {
         // @ts-ignore
         dispatch(deleteBookmark(id));
@@ -86,7 +88,7 @@ export function ProductCard(props: any) {
 
   useEffect(() => {
     setIsBookMarked(isProductBookmarked(id, bookmarkList));
-  }, [setIsBookMarked, isBookMarked, id, isProductBookmarked, bookmarkList]);
+  }, [setIsBookMarked, isBookMarked, id, bookmarkList]);
 
   return (
     <>
@@ -191,14 +193,5 @@ export function ProductCard(props: any) {
     </>
   );
 
-  function isProductBookmarked(
-    productId: string,
-    bookmarkList: AirtableModel[]
-  ) {
-    if (bookmarkList) {
-      // return bookmarkList?.some((bookmark) => bookmark?.id === product.id);
-      return bookmarkList.some((bookmark) => bookmark?.id === productId);
-    }
-    return false;
-  }
+ 
 }

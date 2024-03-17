@@ -16,6 +16,7 @@ import {
 } from "@/lib/slice/verifiedSlice";
 import { setIsBookmarkCheck } from "@/lib/slice/bookmarkSlice";
 import LikedBookmarkModal from "../modal/LikedBookmarkModal";
+import { setSearchInputFocus, scrollPage } from "@/lib/slice/searchSlice";
 
 export default function HeroSection() {
   const dispatch: AppDispatch = useDispatch();
@@ -90,6 +91,10 @@ export default function HeroSection() {
     }
   };
 
+  const searchIconHandler =()=>{
+    dispatch(setSearchInputFocus())
+    dispatch(scrollPage(700))
+  }
   return (
     <>
       <main className="py-12 xl:py-20 bg-light-gray  ">
@@ -201,9 +206,7 @@ export default function HeroSection() {
                     <button
                       className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6  "bg-gray-200" : "bg-gray-300"
                     hover:bg-opacity-75 focus:outline-none`}
-                      onClick={() => {
-                        console.log("search clicked");
-                      }}
+                      onClick={searchIconHandler}
                     >
                       {" "}
                       <RiSearchLine className="text-2xl md:text-3xl lg:text-4xl text-black" />

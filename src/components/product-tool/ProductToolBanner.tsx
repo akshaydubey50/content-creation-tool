@@ -7,8 +7,12 @@ import { Product } from "@/types/product";
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
 import LikedBookmarkModal from "@/components/modal/LikedBookmarkModal";
+import { deleteBookmark, addBookmark } from "@/lib/slice/bookmarkSlice";
 import { useRouter } from "next/navigation";
-import AirtableModel from "@/models/airtableModel";
+import {  useDispatch, useSelector } from "react-redux";
+import {  RootState } from "@/lib/store";
+import { isProductBookmarked } from "@/helper/helper"
+
 
 export default function ProductToolBanner({
   url,
@@ -16,13 +20,39 @@ export default function ProductToolBanner({
   description,
   tag,
   link,
+  id
 }: Product) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isBookMarked, setIsBookMarked] = useState(false);
+  const bookmarkList =useSelector((state:RootState)=>state.bookmark.bookmarkList)
+  // const [isBookMarked, setIsBookMarked] = useState(false);
+  const [isBookMarked, setIsBookMarked] = useState(() =>
+    isProductBookmarked(id, bookmarkList)
+  );
+  
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  const userAuthData = useSelector(
+    (store: RootState) => store.user.userSession
+  );
 
   const handleBookMark = () => {
-    setIsOpen(true);
+
+    if (!userAuthData) {
+      setIsOpen(true)
+    }
+    else{
+      if (isBookMarked && id) {
+        // @ts-ignore
+        dispatch(deleteBookmark(id));
+        setIsBookMarked(!isBookMarked);
+      } else {
+        // @ts-ignore
+        dispatch(addBookmark(id));
+        setIsBookMarked(!isBookMarked);
+      }
+    }
+
     setIsBookMarked(!isBookMarked);
   };
   const formattedTag = tag[0].toLowerCase().replace(/\s/g, "-");
@@ -30,29 +60,65 @@ export default function ProductToolBanner({
   const goToCategory = () => {
     router.push(`/category/${formattedTag}`);
   };
+
+  useEffect(() => {
+    setIsBookMarked(isProductBookmarked(id, bookmarkList));
+  }, [setIsBookMarked, isBookMarked, id, bookmarkList]);
   return (
     <>
       <main className="bg-light-gray  p-10 md:px-10 md:py-16 md:mb-12 xl:px-10-percent ">
         <Breadcrumb tag={tag} title={title} />
         <div
-          className="affiliate-tool-container  space-y-8 flex flex-col 
+          className="affiliate-tool-container   space-y-8 flex flex-col 
         lg:flex-row my-12"
         >
+          {/* Image Container */}
           <div
-            className="aftl-left-section border border-black border-solid 
-          rounded-t-xl  xl:w-45%"
+            className="aftl-left-section   xl:w-45%"
           >
-            <Image
-              src={url}
-              alt="logo bannero"
-              loading="lazy"
-              width="1280"
-              height="720"
-              decoding="async"
-              data-nimg="1"
-              className="rounded-t-xl w-full h-full  object-cover"
-            />
+            <div className="border border-black border-solid 
+          rounded-t-xl">
+              <Image
+                src={url}
+                alt="logo bannero"
+                loading="lazy"
+                width="1280"
+                height="720"
+                decoding="async"
+                data-nimg="1"
+                className="rounded-t-xl w-full h-full  object-cover"
+              />
+            </div>
+           
+            <div className="flex justify-between pt-6 items-center text-white  max-w-7xl">
+             <div className="w-1/2">
+                <Link
+                  href={link}
+                  target="_blank"
+                  className="flex rounded-full font-semibold bg-DarkOrange items-center justify-around  md:text-2xl px-4 md:px-6  md:py-4 space-x-4  py-2"
+                >
+                  <p className="flex-1 text-center">Visit Website</p>
+                  <div>
+                    <FiArrowUpRight className="text-white text-2xl md:text-4xl " />
+                  </div>
+                </Link>
+             </div>
+              <div className="ml-auto">
+                <button title="Bookmark" type="button" onClick={handleBookMark}>
+                  {isBookMarked ? (
+                    <BsBookmarkFill className="text-4xl text-DarkOrange" />
+                  ) : (
+                    <BsBookmark className="text-4xl   text-black" />
+                  )}
+                </button>{" "}
+              </div>
+              {isOpen && (
+                <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
+              )}
+            </div>
+
           </div>
+
           <div className="aftl-right-section  xl:w-30%">
             <div className="flex flex-col flex-1 space-y-4 mb-6 ">
               <h1 className="text-Heading-Medium md:text-Heading-Large font-bold">
@@ -86,30 +152,6 @@ export default function ProductToolBanner({
           </div>
         </div>
 
-        <div className="flex justify-between  items-center text-white lg:w-1/2 max-w-7xl">
-          <Link
-            href={link}
-            target="_blank"
-            className="flex rounded-full font-semibold bg-DarkOrange items-center justify-around  md:text-2xl px-4 md:px-6  md:py-4 space-x-4 w-4/5 py-2"
-          >
-            <p className="flex-1 text-center">Visit Website</p>
-            <div>
-              <FiArrowUpRight className="text-white text-2xl md:text-4xl " />
-            </div>
-          </Link>
-          <div className="ml-auto">
-            <button title="Bookmark" type="button" onClick={handleBookMark}>
-              {isBookMarked ? (
-                <BsBookmarkFill className="text-3xl text-DarkOrange" />
-              ) : (
-                <BsBookmark className="text-3xl   text-black" />
-              )}
-            </button>{" "}
-          </div>
-          {isOpen && (
-            <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
-          )}
-        </div>
       </main>
     </>
   );
