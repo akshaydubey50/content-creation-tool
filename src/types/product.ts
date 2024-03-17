@@ -4,4 +4,5 @@ export type Product = {
   description: string;
   tag: string;
   link: string;
+  id:string
 };
