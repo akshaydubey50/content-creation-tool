@@ -1,43 +1,47 @@
 "use client";
 import AirtableModel from "@/models/airtableModel";
 import React, { useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 
 /**
  * React Component Import
- * */ 
+ * */
 import HeroSection from "@/components/herosection/HeroSection";
 import FilterSection from "@/components/filter/FilterSection";
 import ProductList from "@/components/card/ProductList";
 
 /**
  * NextJs Route Hook Import
- * */ 
+ * */
 import { usePathname, useParams } from "next/navigation";
 
 /**
  * Context Data Import
- * */ 
+ * */
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 
 /**
  * Redux Import
- * */ 
+ * */
 import { setCategoryData, setMatchedCategory } from "@/lib/slice/categorySlice";
 import { clearSearchFilterList } from "@/lib/slice/searchSlice";
 import { RootState, AppDispatch } from "@/lib/store";
 
-
 export default function ToolDetails() {
-
   const dispatch: AppDispatch = useDispatch();
-  const categoryData = useSelector<any>((state) => state.category.categoryData)
-  const productList = useSelector((state: RootState) => state.product.productList);
+  const categoryData = useSelector(
+    (store: RootState) => store.category.categoryData
+  );
+  const productList: AirtableModel[] = useSelector(
+    (store: RootState) => store.product.productList
+  );
 
   const { setVisibleItem } = useVisibleItemContextData();
   const pathName = usePathname();
   const param = useParams();
 
+  const categoryTypeHandler = useCallback(() => {
+    const urlData = pathName.split("/").filter((item) => item !== "");
   const categoryTypeHandler = useCallback(() => {
     const urlData = pathName.split("/").filter((item) => item !== "");
     if (urlData.length > 0) {
@@ -47,11 +51,28 @@ export default function ToolDetails() {
         (item: AirtableModel) =>
           item.fields.Tags[0]?.toLowerCase().replace(/\s/g, "-") ===
           getCurrentCategory
+      const filteredData = productList?.filter(
+        (item: AirtableModel) =>
+          item.fields.Tags[0]?.toLowerCase().replace(/\s/g, "-") ===
+          getCurrentCategory
       );
+      dispatch(setMatchedCategory(filteredData));
       dispatch(setMatchedCategory(filteredData));
     }
 
     // url params value set to category dropdown
+    const paramData: AirtableModel | undefined = productList?.find(
+      (item: AirtableModel) => {
+        let urlParamCategoryName = param.name;
+        if (param.name && param.name.includes("%26")) {
+          urlParamCategoryName = param.name.replace(/%26/g, "&");
+        }
+        let contexApiData = item.fields?.Tags[0]
+          ?.toLowerCase()
+          .replace(/\s/g, "-");
+        return contexApiData === urlParamCategoryName;
+      }
+    );
     const paramData: AirtableModel | undefined = productList?.find(
       (item: AirtableModel) => {
         let urlParamCategoryName = param.name;
@@ -76,8 +97,7 @@ export default function ToolDetails() {
   useEffect(() => {
     setVisibleItem(9);
     categoryTypeHandler();
-
-  }, [productList, pathName, param.name, setVisibleItem]);
+  }, [setVisibleItem, categoryTypeHandler]);
 
   return (
     <>

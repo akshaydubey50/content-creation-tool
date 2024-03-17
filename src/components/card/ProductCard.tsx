@@ -31,21 +31,13 @@ export function ProductCard(props: any) {
     isProductBookmarked(id, bookmarkList)
   );
   const dispatch: AppDispatch = useDispatch();
-  
+
   const userAuthData = useSelector(
     (store: RootState) => store.user.userSession
   );
-  const {
-    Tags,
-    Name,
-    WebsiteLink,
-    Description,
-    ToolImage,
-    Verified,
-  } = fields!;
+  const { Tags, Name, WebsiteLink, Description, ToolImage, Verified } = fields!;
   const formattedTitle = Name.toLowerCase().replace(/\s/g, "-");
   const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
-
 
   const handleBookmarkClick = () => {
     if (!userAuthData) {
@@ -62,14 +54,12 @@ export function ProductCard(props: any) {
         setIsBookMarked(!isBookMarked);
       }
     }
-
   };
 
   const addLikes = async () => {
     if (!userAuthData) {
-      return setIsOpen(true)
-    }
-    else{
+      return setIsOpen(true);
+    } else {
       if (isLiked) {
         setIsLiked(false);
         console.log("deleting to likes");
@@ -94,7 +84,6 @@ export function ProductCard(props: any) {
         console.log("added to likes");
       }
     }
-    
   };
 
   useEffect(() => {
@@ -156,7 +145,9 @@ export function ProductCard(props: any) {
                   </p>
                   <p className="">1</p>
                 </button>
-                {!userAuthData && isOpen && <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />}
+                {!userAuthData && isOpen && (
+                  <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
+                )}
               </div>
             </div>
             <div className="">
@@ -191,8 +182,9 @@ export function ProductCard(props: any) {
                     <BsBookmark className="text-3xl   text-black" />
                   )}
                 </button>
-                {!userAuthData && isOpen && <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />}
-
+                {!userAuthData && isOpen && (
+                  <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
+                )}
               </div>
             </div>
           </div>

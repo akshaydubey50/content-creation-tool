@@ -67,7 +67,6 @@ export default function FilterSection() {
       let categoryVal = selectedOption.value;
       let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
       router.push(`/category/${formatedCategory}`);
-      // dispatch(setIsVerifiedChecked());
       dispatch(clearSearchFilterList());
       dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
