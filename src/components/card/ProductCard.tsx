@@ -21,6 +21,7 @@ import { deleteBookmark, addBookmark } from "@/lib/slice/bookmarkSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/store";
 import { isProductBookmarked } from "@/helper/helper"
+import useUpvoteCount from "@/hooks/useUpvoteCount";
 
 export function ProductCard(props: any) {
   const { bookmarkList, isBookmark, product } = props;
@@ -31,7 +32,9 @@ export function ProductCard(props: any) {
     isProductBookmarked(id, bookmarkList)
   );
   const dispatch: AppDispatch = useDispatch();
-
+  const totalCountHook = useUpvoteCount(id);
+  console.log('totalCountHook', )
+  
   const userAuthData = useSelector(
     (store: RootState) => store.user.userSession
   );
@@ -41,7 +44,7 @@ export function ProductCard(props: any) {
 
   const handleBookmarkClick = () => {
     if (!userAuthData) {
-       setIsOpen(true)
+      setIsOpen(true)
     }
     else {
       if (isBookMarked && id) {
@@ -86,9 +89,32 @@ export function ProductCard(props: any) {
     }
   };
 
+
+  const checkMethod = () => {
+    const supabaseClient = createClientComponentClient();
+
+    const channel = supabaseClient
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: "likes"
+        },
+         (payload: any) => {
+          
+        }
+      )
+      .subscribe()
+
+    // console.log('channel',channel)
+  }
+
   useEffect(() => {
     setIsBookMarked(isProductBookmarked(id, bookmarkList));
   }, [setIsBookMarked, isBookMarked, id, bookmarkList]);
+
 
   return (
     <>
@@ -143,7 +169,7 @@ export function ProductCard(props: any) {
                       <AiOutlineHeart className="text-3xl   text-black" />
                     )}
                   </p>
-                  <p className="">1</p>
+                  <p className="">{totalCountHook.totalCount}</p>
                 </button>
                 {!userAuthData && isOpen && (
                   <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -193,5 +219,5 @@ export function ProductCard(props: any) {
     </>
   );
 
- 
+
 }

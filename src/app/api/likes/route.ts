@@ -47,7 +47,7 @@ export async function GET() {
     return NextResponse.json({ msg: "No likes product yet" }, { status: 200 });
   }
 
-  //call airtable api and do filteration and return the list of bookmark
+  //call airtable api and do filteration and return the list of likes
   return NextResponse.json(
     {
       data: filterProductList,

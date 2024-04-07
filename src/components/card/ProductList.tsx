@@ -9,6 +9,8 @@ import { getBookmarkList, setBookmarkList } from "@/lib/slice/bookmarkSlice";
 import Loader from "../common/Loader/Loader";
 import { RootState, AppDispatch } from "@/lib/store";
 import Pagination from "../pagination/Pagination";
+import { productUpVoteTotalCountById } from "@/helper/helper"
+
 
 interface ProductListProps {
   currentCategory?: string;
@@ -110,6 +112,8 @@ export default function ProductList({ currentCategory }: ProductListProps) {
       dispatch(getBookmarkList());
     }
   }, [dispatch, userAuthData]);
+
+
 
   if (filteredProductRecords!.length === 0) {
     return <Loader />;
