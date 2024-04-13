@@ -5,12 +5,12 @@ import { RootState } from "@/lib/store";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 
-const useUpvoteCount = (id: string) => {
+const useUpvoteCount = (id: any) => {
     const supabase = createClientComponentClient();
     const [totalCount, setTotalCount] = useState(0);
     const userAuthData = useSelector((store: RootState) => store.user.userSession);
 
-    const productUpVoteCount: any = async () => {
+    const productUpVoteCount = async () => {
         const productTotalCount: any = await productUpVoteTotalCountById();
         const upvoteCount = productTotalCount[id];
         if (productTotalCount.hasOwnProperty(id)) {
@@ -22,6 +22,10 @@ const useUpvoteCount = (id: string) => {
             return 0
         }
     }
+
+    useEffect(() => {
+        productUpVoteCount()
+    }, [id])
 
     const updateUpVoteCount = async (id: string) => {
         if (!userAuthData) {
@@ -56,13 +60,6 @@ const useUpvoteCount = (id: string) => {
             return upvote
         }
     }
-
-
-    useEffect(() => {
-        productUpVoteCount(id)
-    }, [id])
-
-
 
     return {
         totalCount,

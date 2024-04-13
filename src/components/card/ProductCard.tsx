@@ -23,7 +23,6 @@ import { AppDispatch, RootState } from "@/lib/store";
 import { isProductBookmarked, isProductLikedByUser } from "@/helper/helper"
 import useUpvoteCount from "@/hooks/useUpvoteCount";
 
-export const dynamic = 'force-dynamic'
 
 export function ProductCard(props: any) {
   const { bookmarkList, isBookmark, product } = props;
@@ -84,14 +83,15 @@ export function ProductCard(props: any) {
           table: "likes"
         },
         async (payload: any) => {
+          
           await productUpVoteCount()
         }
       )
       .subscribe()
 
-    return () => {
-      channel.unsubscribe();
-    };
+    // return () => {
+    //   channel.unsubscribe();
+    // };
   }
 
   const likedByUser = async (id: number) => {
@@ -104,9 +104,6 @@ export function ProductCard(props: any) {
     setIsBookMarked(isProductBookmarked(id, bookmarkList));
   }, [setIsBookMarked, isBookMarked, id, bookmarkList]);
 
-  useEffect(() => {
-    productCountHandler()
-  }, [id])
 
   useEffect(() => {
     likedByUser(id)
