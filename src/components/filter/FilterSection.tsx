@@ -15,45 +15,35 @@ import {
   setSearchFilterList,
   clearSearchFilterList,
 } from "@/lib/slice/searchSlice";
-import { setIsVerifiedChecked } from "@/lib/slice/verifiedSlice";
 import { RootState, AppDispatch } from "@/lib/store";
+import {  scrollPage } from "@/lib/slice/searchSlice";
 
 export default function FilterSection() {
   const [isMounted, SetIsMounted] = useState(false);
   const router = useRouter();
-
+  const searchRef = useRef<HTMLInputElement>(null);
   /*Redux Dispatch & Selector*/
   const dispatch = useDispatch();
-  const categoryData = useSelector(
-    (store: RootState) => store.category.categoryData
-  );
-  const searchQuery = useSelector(
-    (store: RootState) => store.search.searchQuery
-  );
-  const filterData = useSelector(
-    (store: RootState) => store.search.searchFilterList
-  );
+  const categoryData = useSelector((store: RootState) => store.category.categoryData);
+  const searchQuery = useSelector((store: RootState) => store.search.searchQuery);
+  const filterData = useSelector((store: RootState) => store.search.searchFilterList);
   const { productList } = useSelector((state: RootState) => state.product);
+  const searchToFocusInput = useSelector((state: RootState) => state.search.searchToFocus)
+  const scrollPosition = useSelector((state: RootState) => state.search.scrollPosition);
 
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
 
   /*Search Functionality*/
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchQuery(""));
-
-    const newSearch = event.target.value;
-    const lowercaseSearchQuery = newSearch && newSearch.toLowerCase();
-    dispatch(setSearchQuery(lowercaseSearchQuery));
+  const handleSearch = () => {
+    const newSearch = searchRef.current!.value.toLowerCase();
+    dispatch(setSearchQuery(newSearch));
 
     /* Filter data based on the updated search query */
-    const filteredResults =
-      productList &&
-      productList?.filter((searchData: AirtableModel) => {
+    const filteredResults = productList &&productList?.filter((searchData: AirtableModel) => {
         const tooldatalist = searchData.fields.Name.toLowerCase();
-        if (lowercaseSearchQuery) {
-          console.log("search", tooldatalist.includes(lowercaseSearchQuery));
-          return tooldatalist.includes(lowercaseSearchQuery);
+        if (newSearch) {
+          return tooldatalist.includes(newSearch);
         }
       });
 
@@ -67,6 +57,7 @@ export default function FilterSection() {
       // If no results found, show no result message
       dispatch(setSearchFilterList([]));
     }
+
     setVisibleItem(9);
   };
 
@@ -89,18 +80,16 @@ export default function FilterSection() {
       dispatch(setSearchQuery(""));
       dispatch(clearSearchFilterList());
     } else if (categoryData.length > 0) {
-      console.log(categoryData);
       dispatch(clearCategoryData());
       dispatch(clearMatchedCategory([]));
     }
+    if (searchRef.current!.value){
+      searchRef.current!.value = ''; 
+      searchRef.current!.innerText = ''; 
+    }
+
     setVisibleItem(9);
   };
-
-  useEffect(() => {}, [setVisibleItem, searchQuery, categoryData, filterData]);
-
-  useEffect(() => {
-    SetIsMounted(true);
-  }, []);
 
   /*Get a List for Category*/
   const getListOfCategory = (): Set<string> => {
@@ -123,11 +112,25 @@ export default function FilterSection() {
     }
   );
 
+  useEffect(() => {}, [setVisibleItem, searchQuery, categoryData, filterData]);
+
+  useEffect(() => {
+    SetIsMounted(true);
+  }, []);
+
+  useEffect(()=>{
+    if (searchToFocusInput){
+      searchRef.current?.focus()
+    }
+    window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
+  }, [searchToFocusInput, scrollPosition])
+
+
   return (
     <>
       <section className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 px-10 py-5 md:gap-4  mx-auto text-white  lg:max-w-5xl xl:max-w-6xl   text-Title-Small lg:text-Title-Small">
         <div className="col-span-1 ">
-          <div className="">
+          <div>
             <button
               className="bg-DarkOrange  px-5 lg:px-8 py-3 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-semibold w-full text-center "
               onClick={clearFilter}
@@ -166,6 +169,7 @@ export default function FilterSection() {
         <div className="col-span-1 font-medium">
           <div className=" text-black py-0.5 ">
             <input
+              ref={searchRef}
               onChange={handleSearch}
               className="rounded-full w-full  border-2 outline-none px-3 py-2 font-medium border-black border-solid"
               type="text"

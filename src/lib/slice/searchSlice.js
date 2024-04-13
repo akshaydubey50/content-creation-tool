@@ -5,6 +5,8 @@ const searchSlice = createSlice({
     initialState: {
         searchQuery: "",
         searchFilterList: [],
+        searchToFocus:false,
+        scrollPosition:0
     },
     reducers: {
         setSearchQuery: (state, action) => {
@@ -16,10 +18,16 @@ const searchSlice = createSlice({
         clearSearchFilterList: (state) => {
             state.searchFilterList = [];
         },
+        setSearchInputFocus:(state)=>{
+            state.searchToFocus = !state.searchToFocus
+        },
+        scrollPage:(state,action)=>{
+            state.scrollPosition = action.payload
+        }
     },
 });
 
-export const { setSearchQuery, setSearchFilterList, clearSearchFilterList } =
+export const { setSearchQuery, setSearchFilterList, clearSearchFilterList, setSearchInputFocus, scrollPage } =
     searchSlice.actions;
 
 export default searchSlice.reducer;

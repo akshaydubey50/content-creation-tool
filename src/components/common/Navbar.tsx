@@ -33,19 +33,7 @@ export default function Navbar() {
   );
 
   useEffect(() => {
-    console.log(
-      "isUserAuthenticated, error, userSession",
-      isUserAuthenticated,
-      error,
-      userSession
-    );
     dispatch(isUserLoggedInSlice());
-    console.log(
-      "isUserAuthenticated, error, userSession",
-      isUserAuthenticated,
-      error,
-      userSession
-    );
     localStorage.setItem("isActiveMenu", String(isActiveMenu));
   }, [isActiveMenu, dispatch]);
 
@@ -64,7 +52,6 @@ export default function Navbar() {
     const {
       data: { session },
     } = await supabase.auth.getSession();
-    console.log("logout session", session);
     if (session) {
       await supabase.auth.signOut();
     }
@@ -86,7 +73,6 @@ export default function Navbar() {
   const [isPopupOpen, setPopupOpen] = useState(false);
 
   const handleNavbarMenu = (index: number) => {
-    console.log("index::", index);
     setIsActiveMenu(index);
   };
 

@@ -21,7 +21,6 @@ export async function POST(request: Request) {
     .from("likes")
     .insert([{ user_id: user?.id, product_id: id }])
     .select();
-  console.log("likes", likes);
 
   if (err) {
     return NextResponse.json({ msg: "Something went wrong" }, { status: 400 });

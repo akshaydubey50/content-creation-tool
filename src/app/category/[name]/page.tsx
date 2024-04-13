@@ -32,7 +32,7 @@ export default function ToolDetails() {
   const categoryData = useSelector(
     (store: RootState) => store.category.categoryData
   );
-  const productList: AirtableModel[] = useSelector(
+  const productList: AirtableModel[] | null = useSelector(
     (store: RootState) => store.product.productList
   );
 
@@ -45,16 +45,16 @@ export default function ToolDetails() {
     if (urlData.length > 0) {
       const getCurrentCategory = urlData[urlData.length - 1];
       // Filter data directly based on the current category in the URL
-      const filteredData = productList?.filter(
+      const filteredData = productList!.filter(
         (item: AirtableModel) =>
           item.fields.Tags[0]?.toLowerCase().replace(/\s/g, "-") ===
-          getCurrentCategory
-      );
+          getCurrentCategory)
+      
       dispatch(setMatchedCategory(filteredData));
     }
 
     // url params value set to category dropdown
-    const paramData: AirtableModel | undefined = productList?.find(
+    const paramData: AirtableModel | undefined = productList!.find(
       (item: AirtableModel) => {
         let urlParamCategoryName = param.name;
         if (param.name && param.name.includes("%26")) {
@@ -66,14 +66,13 @@ export default function ToolDetails() {
         return contexApiData === urlParamCategoryName;
       }
     );
-
     // from paramData we can get the current category base on url param
     if (paramData) {
-      const getParamBaseCategory = paramData.fields?.Tags[0];
+      const getParamBaseCategory = paramData['fields']['Tags'][0];
       dispatch(clearSearchFilterList());
       dispatch(setCategoryData(getParamBaseCategory));
     }
-    }, [pathName, productList, param.name, dispatch]);
+  }, [pathName, productList, param.name, dispatch]);
 
   useEffect(() => {
     setVisibleItem(9);

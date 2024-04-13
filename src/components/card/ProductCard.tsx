@@ -20,6 +20,8 @@ import AirtableModel from "@/models/airtableModel";
 import { deleteBookmark, addBookmark } from "@/lib/slice/bookmarkSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/store";
+import { isProductBookmarked, isProductLikedByUser } from "@/helper/helper"
+import useUpvoteCount from "@/hooks/useUpvoteCount";
 
 export function ProductCard(props: any) {
   const { bookmarkList, isBookmark, product } = props;
@@ -30,6 +32,7 @@ export function ProductCard(props: any) {
     isProductBookmarked(id, bookmarkList)
   );
   const dispatch: AppDispatch = useDispatch();
+  const { totalCount, updateUpVoteCount, productUpVoteCount } = useUpvoteCount(id);
 
   const userAuthData = useSelector(
     (store: RootState) => store.user.userSession
@@ -40,8 +43,9 @@ export function ProductCard(props: any) {
 
   const handleBookmarkClick = () => {
     if (!userAuthData) {
-      return setIsOpen(true);
-    } else {
+      setIsOpen(true)
+    }
+    else {
       if (isBookMarked && id) {
         // @ts-ignore
         dispatch(deleteBookmark(id));
@@ -58,35 +62,52 @@ export function ProductCard(props: any) {
     if (!userAuthData) {
       return setIsOpen(true);
     } else {
-      if (isLiked) {
-        setIsLiked(false);
-        console.log("deleting to likes");
-        const res = await fetch("/api/likes/" + id, {
-          method: "DELETE",
-        });
-        if (res.status !== 200) {
-          setIsLiked(true);
-        }
-        setIsLiked(false);
-        console.log("deleted to likes");
-      } else {
-        setIsLiked(true);
-        console.log("adding to likes");
-        const res = await fetch("/api/likes/" + id, {
-          method: "POST",
-        });
-        if (res.status !== 200) {
-          setIsLiked(false);
-        }
-        setIsLiked(true);
-        console.log("added to likes");
-      }
+      updateUpVoteCount(id)
+      productCountHandler()
+      setIsLiked(!isLiked)
     }
   };
 
+
+  const productCountHandler = () => {
+    const supabaseClient = createClientComponentClient();
+
+    const channel = supabaseClient
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: "likes"
+        },
+        async (payload: any) => {
+          await productUpVoteCount()
+        }
+      )
+      .subscribe()
+
+    return () => {
+      channel.unsubscribe();
+    };
+  }
+
+  const likedByUser = async (id:number) => {
+    const booleanVal = await isProductLikedByUser(id)
+    setIsLiked(booleanVal)
+  }
+
   useEffect(() => {
     setIsBookMarked(isProductBookmarked(id, bookmarkList));
-  }, [setIsBookMarked, isBookMarked, id, isProductBookmarked, bookmarkList]);
+  }, [setIsBookMarked, isBookMarked, id, bookmarkList]);
+
+  useEffect(() => {
+    productCountHandler()
+  }, [id])
+
+  useEffect(()=>{
+    likedByUser(id)
+  },[id])
 
   return (
     <>
@@ -129,9 +150,10 @@ export function ProductCard(props: any) {
                   )}
                 </div>
                 <button
-                  title="Bookmark"
+                  title="Likes"
                   type="button"
                   onClick={addLikes}
+
                   className="flex items-center gap-x-1"
                 >
                   <p>
@@ -141,7 +163,7 @@ export function ProductCard(props: any) {
                       <AiOutlineHeart className="text-3xl   text-black" />
                     )}
                   </p>
-                  <p className="">1</p>
+                  <p className="">{totalCount}</p>
                 </button>
                 {!userAuthData && isOpen && (
                   <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -186,19 +208,10 @@ export function ProductCard(props: any) {
               </div>
             </div>
           </div>
-        </section>
-      </div>
+        </section >
+      </div >
     </>
   );
 
-  function isProductBookmarked(
-    productId: string,
-    bookmarkList: AirtableModel[]
-  ) {
-    if (bookmarkList) {
-      // return bookmarkList?.some((bookmark) => bookmark?.id === product.id);
-      return bookmarkList.some((bookmark) => bookmark?.id === productId);
-    }
-    return false;
-  }
+
 }

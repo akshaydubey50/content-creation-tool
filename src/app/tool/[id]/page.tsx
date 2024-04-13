@@ -17,10 +17,7 @@ export default function ProductDetail() {
   const currentCategory = product && product!.fields.Tags[0];
 
   const getProductFromId = useCallback(() => {
-    const productMatched = productList?.find(
-      (product: AirtableModel) => product.id === id
-    );
-    // console.log('@@productMatched',productMatched)
+    const productMatched = productList!.find((product: AirtableModel) => product.id === id);
     if (productMatched) {
       setProductData(productMatched);
     }
@@ -43,6 +40,7 @@ export default function ProductDetail() {
           description={product!.fields.Description}
           tag={product!.fields.Tags}
           link={product!.fields.WebsiteLink}
+          id={product!.id}
         />
       )}
       {product && (
