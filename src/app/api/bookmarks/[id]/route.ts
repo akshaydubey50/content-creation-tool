@@ -21,7 +21,6 @@ export async function POST(request: Request) {
     .from("bookmark")
     .insert([{ user_id: user?.id, product_id: id }])
     .select();
-  console.log("bookmark", bookmark);
 
   if (err) {
     return NextResponse.json({ msg: "Something went wrong" }, { status: 400 });

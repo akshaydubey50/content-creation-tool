@@ -10,6 +10,7 @@ import Loader from "../common/Loader/Loader";
 import { RootState, AppDispatch } from "@/lib/store";
 import Pagination from "../pagination/Pagination";
 
+
 interface ProductListProps {
   currentCategory?: string;
 }
@@ -111,9 +112,16 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     }
   }, [dispatch, userAuthData]);
 
-  if (filteredProductRecords!.length === 0) {
+
+  // issue with these if condition while search tool and checking bookmarklist loader Ui shown
+  // if (filteredProductRecords!.length === 0) {
+  //   return <Loader />;
+  // }
+
+  if (!productList) {
     return <Loader />;
   }
+
   if (isBookmark && bookmarkLoadingStatus === "loading") {
     return <Loader />;
   }

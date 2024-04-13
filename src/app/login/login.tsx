@@ -12,7 +12,6 @@ const LoginPopup = ({ isPopupOpenn }: any) => {
   const supabase = createClientComponentClient();
   const [user, setUser] = useState("");
 
-  // console.log("LoginPopup isPopupOpen", isPopupOpen);
   const togglePopup = () => {
     setPopupOpen(!isPopupOpen);
   };
