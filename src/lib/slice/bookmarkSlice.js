@@ -27,7 +27,6 @@ export const addBookmark = createAsyncThunk(
 export const deleteBookmark = createAsyncThunk(
   "bookmark/deleteBookmark",
   async (productId, { dispatch }) => {
-    console.log("productId", productId);
     const response = await fetch("/api/bookmarks/" + productId, {
       method: "DELETE",
     });

@@ -9,7 +9,6 @@ import { getBookmarkList, setBookmarkList } from "@/lib/slice/bookmarkSlice";
 import Loader from "../common/Loader/Loader";
 import { RootState, AppDispatch } from "@/lib/store";
 import Pagination from "../pagination/Pagination";
-import { productUpVoteTotalCountById } from "@/helper/helper"
 
 
 interface ProductListProps {
@@ -114,10 +113,15 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   }, [dispatch, userAuthData]);
 
 
+  // issue with these if condition while search tool and checking bookmarklist loader Ui shown
+  // if (filteredProductRecords!.length === 0) {
+  //   return <Loader />;
+  // }
 
-  if (filteredProductRecords!.length === 0) {
+  if (!productList) {
     return <Loader />;
   }
+
   if (isBookmark && bookmarkLoadingStatus === "loading") {
     return <Loader />;
   }

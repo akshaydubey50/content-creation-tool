@@ -80,7 +80,6 @@ export default function FilterSection() {
       dispatch(setSearchQuery(""));
       dispatch(clearSearchFilterList());
     } else if (categoryData.length > 0) {
-      console.log(categoryData);
       dispatch(clearCategoryData());
       dispatch(clearMatchedCategory([]));
     }
