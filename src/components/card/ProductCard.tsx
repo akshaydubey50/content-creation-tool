@@ -23,6 +23,8 @@ import { AppDispatch, RootState } from "@/lib/store";
 import { isProductBookmarked, isProductLikedByUser } from "@/helper/helper"
 import useUpvoteCount from "@/hooks/useUpvoteCount";
 
+export const dynamic = 'force-dynamic'
+
 export function ProductCard(props: any) {
   const { bookmarkList, isBookmark, product } = props;
   const { id, fields } = product;
@@ -40,7 +42,7 @@ export function ProductCard(props: any) {
   const { Tags, Name, WebsiteLink, Description, ToolImage, Verified } = fields!;
   const formattedTitle = Name.toLowerCase().replace(/\s/g, "-");
   const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
-
+  
   const handleBookmarkClick = () => {
     if (!userAuthData) {
       setIsOpen(true)
@@ -92,10 +94,11 @@ export function ProductCard(props: any) {
     };
   }
 
-  const likedByUser = async (id:number) => {
+  const likedByUser = async (id: number) => {
     const booleanVal = await isProductLikedByUser(id)
     setIsLiked(booleanVal)
   }
+
 
   useEffect(() => {
     setIsBookMarked(isProductBookmarked(id, bookmarkList));
@@ -105,9 +108,10 @@ export function ProductCard(props: any) {
     productCountHandler()
   }, [id])
 
-  useEffect(()=>{
+  useEffect(() => {
     likedByUser(id)
-  },[id])
+  }, [id])
+
 
   return (
     <>
@@ -141,7 +145,7 @@ export function ProductCard(props: any) {
             <div className="">
               <div className="pb-4 flex flex-1 flex-row justify-between">
                 <div className="flex items-center gap-x-2">
-                  <h1 className="font-bold text-Title-Medium md:text-Title-Large">
+                  <h1 className="font-bold text-Title-Medium md:text-Title-Large h-8">
                     {Name}
                   </h1>
 
@@ -171,8 +175,8 @@ export function ProductCard(props: any) {
               </div>
             </div>
             <div className="">
-              <div className="text-Description">
-                <p>{Description}</p>
+              <div className="text-Description h-16 mt-6">
+                <p className="line-clamp-3">{Description}</p>
               </div>
             </div>
             <div className="tool-btn-section pb-7">
