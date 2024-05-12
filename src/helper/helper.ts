@@ -43,14 +43,13 @@ export const productUpVoteTotalCountById = async () => {
   const { data, error } = await supabase
     .from("likes")
     .select('user_id, product_id');
-
-  const productUpVoteCount = await data?.reduce((counts: any, upvote: any) => {
+    const productUpVoteCount = await data?.reduce((counts: any, upvote: any) => {
     const { product_id } = upvote
     counts[product_id] = (counts[product_id] || 0) + 1;
     return counts;
   }, [])
   return productUpVoteCount
-}
+}     
 
 export const isProductLikedByUser = async (productId: number) => {
   const {
