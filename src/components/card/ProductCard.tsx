@@ -23,9 +23,9 @@ import { AppDispatch, RootState } from "@/lib/store";
 import { isProductBookmarked, isProductLikedByUser } from "@/helper/helper"
 import useUpvoteCount from "@/hooks/useUpvoteCount";
 
-
 export function ProductCard(props: any) {
-  const { bookmarkList, isBookmark, product } = props;
+  const supabaseClient = createClientComponentClient();
+  const { bookmarkList, product } = props;
   const { id, fields } = product;
   const [isLiked, setIsLiked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -41,6 +41,7 @@ export function ProductCard(props: any) {
   const { Tags, Name, WebsiteLink, Description, ToolImage, Verified } = fields!;
   const formattedTitle = Name.toLowerCase().replace(/\s/g, "-");
   const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
+
   
   const handleBookmarkClick = () => {
     if (!userAuthData) {
@@ -59,40 +60,16 @@ export function ProductCard(props: any) {
     }
   };
 
-  const addLikes = async () => {
+  const handleLikes = async () => {
     if (!userAuthData) {
       return setIsOpen(true);
     } else {
       updateUpVoteCount(id)
-      productCountHandler()
       setIsLiked(!isLiked)
     }
   };
 
 
-  const productCountHandler = () => {
-    const supabaseClient = createClientComponentClient();
-
-    const channel = supabaseClient
-      .channel('schema-db-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: "likes"
-        },
-        async (payload: any) => {
-          
-          await productUpVoteCount()
-        }
-      )
-      .subscribe()
-
-    // return () => {
-    //   channel.unsubscribe();
-    // };
-  }
 
   const likedByUser = async (id: number) => {
     const booleanVal = await isProductLikedByUser(id)
@@ -153,7 +130,7 @@ export function ProductCard(props: any) {
                 <button
                   title="Likes"
                   type="button"
-                  onClick={addLikes}
+                  onClick={handleLikes}
 
                   className="flex items-center gap-x-1"
                 >
