@@ -38,7 +38,7 @@ export default function ToolDetails() {
 
   const { setVisibleItem } = useVisibleItemContextData();
   const pathName = usePathname();
-  const param = useParams();
+  const param:any = useParams();
 
   const categoryTypeHandler = useCallback(() => {
     const urlData = pathName.split("/").filter((item) => item !== "");
@@ -58,7 +58,7 @@ export default function ToolDetails() {
       (item: AirtableModel) => {
         let urlParamCategoryName = param.name;
         if (param.name && param.name.includes("%26")) {
-          urlParamCategoryName = param.name.replace(/%26/g, "&");
+          urlParamCategoryName = param.name?.replace(/%26/g, "&");
         }
         let contexApiData = item.fields?.Tags[0]
           ?.toLowerCase()
