@@ -1,5 +1,6 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { useVisibleItemContextData } from '@/lib/visibleItemContext';
 // import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
 interface LikedBookmarkModalProps {
@@ -9,7 +10,9 @@ interface LikedBookmarkModalProps {
 
 export default function LikedBookmarkModal({isOpen, setIsOpen}:LikedBookmarkModalProps) {
 
-  const cancelButtonRef = useRef(null)
+  const cancelButtonRef = useRef(null);
+  const { showLoginForm, setShowLoginForm } = useVisibleItemContextData();
+
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -56,7 +59,10 @@ export default function LikedBookmarkModal({isOpen, setIsOpen}:LikedBookmarkModa
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-DarkOrange px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-light-yellow sm:ml-3 sm:w-auto"
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => {
+                      setShowLoginForm(true)
+                      setIsOpen(false);
+                    }}
                   >
                     Login
                   </button>

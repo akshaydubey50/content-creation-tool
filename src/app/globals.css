@@ -8,14 +8,13 @@
   box-sizing: border-box;
 }
 body {
-    overflow-x: hidden;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
-.aftl-right-section{
+.aftl-right-section {
   margin-left: 5%;
 }
-
-
 
 @layer utilities {
   .textShadow {
