@@ -1,13 +1,10 @@
-"use client";
 import "./globals.css";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
 import { Poppins } from "next/font/google";
-import { VisibleItemContextProvider } from "@/lib/visibleItemContext";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Provider } from "react-redux";
-import appStore from "@/lib/store";
+import Providers from "@/providers/Providers";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -15,6 +12,11 @@ const poppins = Poppins({
   variable: "--font-poppins",
   weight: ["400", "700"],
 });
+
+export const metadata = {
+  title: 'Content Creation Tool',
+  description: 'Dummy description'
+}
 
 export default function RootLayout({
   children,
@@ -24,13 +26,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable}`}>
       <body className="font-poppins">
-        <VisibleItemContextProvider>
-          <Provider store={appStore}>
+        <div className='flex flex-col min-h-screen'>
+          <Providers>
             <Navbar />
-            <main>{children}</main>
-          </Provider>
-        </VisibleItemContextProvider>
-        <Footer />
+            <main className="pt-[40px] lg:pt-[90px] flex-1">{children}</main>
+          </Providers>
+          <Footer />
+        </div>
         <SpeedInsights />
         <Analytics />
       </body>

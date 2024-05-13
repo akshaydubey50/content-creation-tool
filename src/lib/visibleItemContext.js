@@ -4,10 +4,10 @@ export const VisibleItemData = createContext();
 
 export function VisibleItemContextProvider({ children }) {
   const [visibleItem, setVisibleItem] = useState(9);
- 
+  const [showLoginForm, setShowLoginForm] = useState(false);
   return (
     <>
-      <VisibleItemData.Provider value={{ visibleItem,setVisibleItem }}>
+      <VisibleItemData.Provider value={{ visibleItem,setVisibleItem,showLoginForm, setShowLoginForm }}>
         {children}
       </VisibleItemData.Provider>
     </>

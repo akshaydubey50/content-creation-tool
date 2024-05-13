@@ -180,9 +180,9 @@ export function ProductCard(props: any) {
                     <BsBookmark className="text-3xl   text-black" />
                   )}
                 </button>
-                {!userAuthData && isOpen && (
+                {/* {!userAuthData && isOpen && (
                   <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
-                )}
+                )} */}
               </div>
             </div>
           </div>

@@ -17,7 +17,10 @@ import {
 } from "@/lib/slice/userSlice";
 import { AppDispatch, RootState } from "@/lib/store";
 import { useDispatch, useSelector } from "react-redux";
-
+import { useVisibleItemContextData } from "@/lib/visibleItemContext";
+import { usePathname } from "next/navigation";
+import * as RoutePath from "@/constants/RoutePath";
+import { Popover } from "@headlessui/react";
 interface MenuItem {
   id: number;
   label: string;
@@ -31,6 +34,9 @@ export default function Navbar() {
   const { isUserAuthenticated, error, userSession } = useSelector(
     (store: RootState) => store.user
   );
+
+  const pathName = usePathname();
+  const { showLoginForm, setShowLoginForm } = useVisibleItemContextData();
 
   useEffect(() => {
     dispatch(isUserLoggedInSlice());
@@ -64,9 +70,9 @@ export default function Navbar() {
   }, [session, isUserLoggedIn, logout]);
 
   const menuItem: MenuItem[] = [
-    { id: 1, label: "All Program", href: "/" },
-    { id: 2, label: "Contact", href: "/" },
-    { id: 3, label: "Post a Program", href: "/post-a-program" },
+    { id: 1, label: "All Program", href: RoutePath.HomePage },
+    { id: 2, label: "Contact", href: RoutePath.Contact },
+    { id: 3, label: "Post a Program", href: RoutePath.PostProgram },
   ];
 
   const [isMenu, setIsMenu] = useState(false);
@@ -77,7 +83,7 @@ export default function Navbar() {
   };
 
   const togglePopup = () => {
-    setPopupOpen(!isPopupOpen);
+    setShowLoginForm(!showLoginForm);
   };
 
   function hamburgerHandler() {
@@ -90,7 +96,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="bg-white z-30 relative shadow-md w-full px-5 xl:px-10">
+      <header className="bg-white fixed z-9 shadow-md w-full px-5 xl:px-10">
         <div className="flex justify-between items-center py-4 lg:px-4 lg:py-6">
           <div>
             <Link href="/">
@@ -100,34 +106,32 @@ export default function Navbar() {
             </Link>
           </div>
           {/* menubar in large screen */}
-          <ul className="hidden text-Title-Large lg:flex flex-1 flex-wrap justify-end font-semibold gap-x-8 text-black items-baseline">
-            {menuItem.map((menu, index) => (
-              <li
-                key={menu.id}
-                className={`px-6 py-2  text-black   rounded-full hover:bg-DarkOrange hover:text-white cursor-pointer
-                ${isActiveMenu === index
-                    ? "bg-DarkOrange text-white  "
-                    : "text-black"
-                  }`}
-                onClick={() => handleNavbarMenu(index)}
-              >
-                <Link href={menu.href}>{menu.label}</Link>
-              </li>
-            ))}
-            {session && (
-              <li
-                className="outline-6  text-black  px-4 py-2 rounded-lg hover:text-white
-               hover:outline hover:outline-2 hover:bg-[#FF8C00]"
-              >
-                <button onClick={logout}>Logout</button>
-              </li>
-            )}
-            {!session && (
-              <li className="bg-[#FF8C00] px-4 py-2 text-white rounded-lg hover:text-black hover:bg-white hover:outline hover:outline-2">
-                <button onClick={togglePopup}>Login</button>
-              </li>
-            )}
-          </ul>
+          <nav>
+            <ul className="hidden text-Title-Large lg:flex flex-1 flex-wrap justify-end font-semibold gap-x-4 text-black items-baseline">
+              {menuItem.map((menu, index) => (
+                <li
+                  key={menu.id}
+                >
+                  <Link className={`px-6 py-2 text-base text-black   rounded-full hover:bg-DarkOrange hover:text-white cursor-pointer
+                ${pathName === menu.href
+                      ? "bg-DarkOrange text-white  "
+                      : "text-black"
+                    }`} href={menu.href} onClick={() => handleNavbarMenu(index)}>{menu.label}</Link>
+                </li>
+              ))}
+              {session && (
+                <li>
+                  <button className="outline-6 text-black  px-4 py-2 rounded-lg hover:text-white hover:outline hover:outline-2 hover:bg-[#FF8C00]"
+                    onClick={logout}>Logout</button>
+                </li>
+              )}
+              {!session && (
+                <li>
+                  <button className="bg-[#FF8C00] text-base px-4 py-2 text-white rounded-lg hover:text-black hover:bg-white hover:outline hover:outline-2" onClick={togglePopup}>Login</button>
+                </li>
+              )}
+            </ul>
+          </nav>
           <div className="block lg:hidden">
             <button
               title="menu"
@@ -138,7 +142,7 @@ export default function Navbar() {
             </button>
           </div>
         </div>
-      </nav>
+      </header>
       {/* Mobile View Sidebar */}
       <aside
         className={`fixed top-0 z-40 h-full w-screen bg-white text-black text-Title-Large transform transition-transform duration-500 overflow-hidden ${isMenu ? "translate-x-0" : "-translate-x-full"
@@ -189,7 +193,7 @@ export default function Navbar() {
           )}
         </ul>
       </aside>
-      {isPopupOpen && (
+      {showLoginForm && (
         <div className=" fixed inset-0 flex items-center justify-center z-10">
           {/* Fixed background overlay with slight blur */}
           <div
