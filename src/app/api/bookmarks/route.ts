@@ -27,6 +27,7 @@ export async function GET() {
   //if something went wrong while fetching the data from db
   if (error) throw Error(error.message);
 
+  console.log('bookmark data',data)
   const productSet = new Set(data.map((item) => item.product_id));
 
   let airtableProductList: AirtableModel[];
