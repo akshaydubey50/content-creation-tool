@@ -96,7 +96,7 @@ export default function FilterSection() {
     const categoryItem = new Set<string>([]);
     productList?.length > 0 &&
       productList?.map((item: AirtableModel) => {
-        if (item?.fields?.Tags[0] !== undefined) {
+        if (item?.fields?.Tags !== undefined ) {
           categoryItem.add(item?.fields?.Tags[0]);
         }
       });
