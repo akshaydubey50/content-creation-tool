@@ -38,8 +38,9 @@ export function ProductCard(props: any) {
   const userAuthData = useSelector(
     (store: RootState) => store.user.userSession
   );
+  
   const { Tags, Name, WebsiteLink, Description, ToolImage, Verified } = fields!;
-  const formattedTitle = Name.toLowerCase().replace(/\s/g, "-");
+  const formattedTitle = Name?.toLowerCase().replace(/\s/g, "-");
   const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
 
   
