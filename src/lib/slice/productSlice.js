@@ -2,7 +2,7 @@ const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
 // get data from airtable list
 export const fetchProductList = createAsyncThunk("fetch/toolList", async () => {
-    const response = await fetch("/api/tools");
+    const response = await fetch("/api/tools",{cache:"no-store"});
     const responseBody = await response.json();
     return responseBody.data;
 });
