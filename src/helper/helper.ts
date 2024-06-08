@@ -33,7 +33,6 @@ export const isProductBookmarked = (
   bookmarkList: AirtableModel[]
 ) => {
   if (bookmarkList) {
-    // return bookmarkList?.some((bookmark) => bookmark?.id === product.id);
     return bookmarkList.some((bookmark) => bookmark?.id === productId);
   }
   return false;
@@ -49,7 +48,7 @@ export const productUpVoteTotalCountById = async () => {
     counts[product_id] = (counts[product_id] || 0) + 1;
     return counts;
   }, [])
-  console.log('log 1 ###',productUpVoteCount)
+  // console.log('log 1 ###',productUpVoteCount)
   return productUpVoteCount
 }     
 
@@ -66,7 +65,7 @@ export const isProductLikedByUser = async (productId: number) => {
     .select()
     .eq("user_id", user?.id)
     .eq("product_id", productId);
-  console.log("log 2 ###")
+  // console.log("log 2 ###")
   if (likes == null || likes.length == 0) return false
   if (likes[0]['product_id'] == productId) {
     return true
@@ -87,7 +86,7 @@ export const isProductBookmarkedByUser = async (productId: number) => {
     .select()
     .eq("user_id", user?.id)
     .eq("product_id", productId);
-  console.log("log 2 ###")
+  // console.log("log 2 ###")
   if (likes == null || likes.length == 0) return false
   if (likes[0]['product_id'] == productId) {
     return true
