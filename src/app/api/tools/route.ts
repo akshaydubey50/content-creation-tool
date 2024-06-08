@@ -44,7 +44,7 @@ export async function GET() {
     let offset: string | null = null;
 
     do {
-      const response = await axios.get(
+      const response:any = await axios.get(
         `${AirtableConf.BASE_URL}/${AirtableConf.BASE_ID}/${AirtableConf.TABLE_ID}`,
         {
           headers,
