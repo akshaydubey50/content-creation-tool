@@ -14,6 +14,7 @@ const useUpvoteCount = (id: any) => {
         // Get's the product count
         const productTotalCount: any = await productUpVoteTotalCountById();
         const upvoteCount = productTotalCount[id];
+        // console.log("log 3 ###")
         if (productTotalCount.hasOwnProperty(id)) {
             setTotalCount(upvoteCount);
             return upvoteCount
@@ -37,7 +38,7 @@ const useUpvoteCount = (id: any) => {
         if (error) {
             throw new Error('Something went wrong')
         }
-
+        console.log("log 4 ###")
         if (likes.length === 0) {
             const { data: upvote, error: err } = await supabase
             .from("likes")

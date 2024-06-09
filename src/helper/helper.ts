@@ -33,12 +33,12 @@ export const isProductBookmarked = (
   bookmarkList: AirtableModel[]
 ) => {
   if (bookmarkList) {
-    // return bookmarkList?.some((bookmark) => bookmark?.id === product.id);
     return bookmarkList.some((bookmark) => bookmark?.id === productId);
   }
   return false;
 }
 
+// Give All Product Data Count entered in db
 export const productUpVoteTotalCountById = async () => {
   const { data, error } = await supabase
     .from("likes")
@@ -48,9 +48,11 @@ export const productUpVoteTotalCountById = async () => {
     counts[product_id] = (counts[product_id] || 0) + 1;
     return counts;
   }, [])
+  // console.log('log 1 ###',productUpVoteCount)
   return productUpVoteCount
 }     
 
+// Check product_id  is saved in db or not
 export const isProductLikedByUser = async (productId: number) => {
   const {
     data: { user },
@@ -63,11 +65,33 @@ export const isProductLikedByUser = async (productId: number) => {
     .select()
     .eq("user_id", user?.id)
     .eq("product_id", productId);
-
+  // console.log("log 2 ###")
   if (likes == null || likes.length == 0) return false
   if (likes[0]['product_id'] == productId) {
     return true
   }
   return false
 }
+
+// Check product_id  is saved in db or not
+export const isProductBookmarkedByUser = async (productId: number) => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    throw new Error('User Not Signed In')
+  }
+  const { data: likes, error: error } = await supabase
+    .from("bookmark")
+    .select()
+    .eq("user_id", user?.id)
+    .eq("product_id", productId);
+  // console.log("log 2 ###")
+  if (likes == null || likes.length == 0) return false
+  if (likes[0]['product_id'] == productId) {
+    return true
+  }
+  return false
+}
+
 
