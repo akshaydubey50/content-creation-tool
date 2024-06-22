@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
+    "@million/lint": "^1.0.0-rc.26",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@reduxjs/toolkit": "^2.1.0",
@@ -33,6 +34,7 @@
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
     "lucide-react": "^0.395.0",
+    "mongoose": "^8.4.3",
     "next": "^14.2.3",
     "next-auth": "^4.24.7",
     "postcss": "8.4.25",
