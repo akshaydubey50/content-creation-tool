@@ -3,8 +3,10 @@ import { NextResponse } from "next/server";
 import AirtableModel from "@/models/airtable.model";
 import axios from "axios";
 import { AirtableConf } from "@/conf/conf";
+import connectDB from "@/lib/dbConnect";
 
 export async function GET() {
+  await connectDB();
   const headers = {
     Authorization: `Bearer ${AirtableConf.BEARER_TOKEN}`,
   };
