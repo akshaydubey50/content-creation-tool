@@ -1,5 +1,5 @@
 "use client";
-import AirtableModel from "@/models/airtableModel";
+import AirtableModel from "@/models/airtable.model";
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -23,9 +23,12 @@ import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 /**
  * Redux Import
  * */
-import { setCategoryData, setMatchedCategory } from "@/lib/slice/categorySlice";
-import { clearSearchFilterList } from "@/lib/slice/searchSlice";
-import { RootState, AppDispatch } from "@/lib/store";
+import {
+  setCategoryData,
+  setMatchedCategory,
+} from "@/redux/slice/category/categorySlice";
+import { clearSearchFilterList } from "@/redux/slice/search/searchSlice";
+import { RootState, AppDispatch } from "@/redux/store";
 
 export default function ToolDetails() {
   const dispatch: AppDispatch = useDispatch();
@@ -38,7 +41,7 @@ export default function ToolDetails() {
 
   const { setVisibleItem } = useVisibleItemContextData();
   const pathName = usePathname();
-  const param:any = useParams();
+  const param: any = useParams();
 
   const categoryTypeHandler = useCallback(() => {
     const urlData = pathName.split("/").filter((item) => item !== "");
@@ -48,8 +51,9 @@ export default function ToolDetails() {
       const filteredData = productList!.filter(
         (item: AirtableModel) =>
           item.fields.Tags[0]?.toLowerCase().replace(/\s/g, "-") ===
-          getCurrentCategory)
-      
+          getCurrentCategory
+      );
+
       dispatch(setMatchedCategory(filteredData));
     }
 
@@ -68,7 +72,7 @@ export default function ToolDetails() {
     );
     // from paramData we can get the current category base on url param
     if (paramData) {
-      const getParamBaseCategory = paramData['fields']['Tags'][0];
+      const getParamBaseCategory = paramData["fields"]["Tags"][0];
       dispatch(clearSearchFilterList());
       dispatch(setCategoryData(getParamBaseCategory));
     }

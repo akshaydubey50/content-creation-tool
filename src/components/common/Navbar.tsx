@@ -14,8 +14,8 @@ import {
   error,
   isUserAuthenticated,
   isUserLoggedInSlice,
-} from "@/lib/slice/userSlice";
-import { AppDispatch, RootState } from "@/lib/store";
+} from "@/redux/slice/user/userSlice";
+import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import { usePathname } from "next/navigation";
@@ -109,25 +109,39 @@ export default function Navbar() {
           <nav>
             <ul className="hidden text-Title-Large lg:flex flex-1 flex-wrap justify-end font-semibold gap-x-4 text-black items-baseline">
               {menuItem.map((menu, index) => (
-                <li
-                  key={menu.id}
-                >
-                  <Link className={`px-6 py-2 text-base text-black   rounded-full hover:bg-DarkOrange hover:text-white cursor-pointer
-                ${pathName === menu.href
-                      ? "bg-DarkOrange text-white  "
-                      : "text-black"
-                    }`} href={menu.href} onClick={() => handleNavbarMenu(index)}>{menu.label}</Link>
+                <li key={menu.id}>
+                  <Link
+                    className={`px-6 py-2 text-base text-black   rounded-full hover:bg-DarkOrange hover:text-white cursor-pointer
+                ${
+                  pathName === menu.href
+                    ? "bg-DarkOrange text-white  "
+                    : "text-black"
+                }`}
+                    href={menu.href}
+                    onClick={() => handleNavbarMenu(index)}
+                  >
+                    {menu.label}
+                  </Link>
                 </li>
               ))}
               {session && (
                 <li>
-                  <button className="outline-6 text-black  px-4 py-2 rounded-lg hover:text-white hover:outline hover:outline-2 hover:bg-[#FF8C00]"
-                    onClick={logout}>Logout</button>
+                  <button
+                    className="outline-6 text-black  px-4 py-2 rounded-lg hover:text-white hover:outline hover:outline-2 hover:bg-[#FF8C00]"
+                    onClick={logout}
+                  >
+                    Logout
+                  </button>
                 </li>
               )}
               {!session && (
                 <li>
-                  <button className="bg-[#FF8C00] text-base px-4 py-2 text-white rounded-lg hover:text-black hover:bg-white hover:outline hover:outline-2" onClick={togglePopup}>Login</button>
+                  <button
+                    className="bg-[#FF8C00] text-base px-4 py-2 text-white rounded-lg hover:text-black hover:bg-white hover:outline hover:outline-2"
+                    onClick={togglePopup}
+                  >
+                    Login
+                  </button>
                 </li>
               )}
             </ul>
@@ -145,8 +159,9 @@ export default function Navbar() {
       </header>
       {/* Mobile View Sidebar */}
       <aside
-        className={`fixed top-0 z-40 h-full w-screen bg-white text-black text-Title-Large transform transition-transform duration-500 overflow-hidden ${isMenu ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`fixed top-0 z-40 h-full w-screen bg-white text-black text-Title-Large transform transition-transform duration-500 overflow-hidden ${
+          isMenu ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         <div className="p-3 flex my-2">
           <h2 className="text-Title-Larger font-bold">Content Creation</h2>

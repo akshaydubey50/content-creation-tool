@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
-import AirtableModel from "@/models/airtableModel";
+import AirtableModel from "@/models/airtable.model";
 import axios from "axios";
 import { AirtableConf } from "@/conf/conf";
 
@@ -13,7 +13,7 @@ export async function GET() {
     let airtableProductList: AirtableModel[] = [];
     // let cacheData = await getCache("airtableProductList");
 
-    let cacheData = null
+    let cacheData = null;
     if (cacheData !== null) {
       return NextResponse.json(
         {

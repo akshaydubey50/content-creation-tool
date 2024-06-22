@@ -16,11 +16,14 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 // Project  Component Import
 import LikedBookmarkModal from "../modal/LikedBookmarkModal";
 import VisitWebsite from "../visit-website/VisitWebsite";
-import AirtableModel from "@/models/airtableModel";
-import { deleteBookmark, addBookmark } from "@/lib/slice/bookmarkSlice";
+import AirtableModel from "@/models/airtable.model";
+import {
+  deleteBookmark,
+  addBookmark,
+} from "@/redux/slice/bookmark/bookmarkSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/lib/store";
-import { isProductBookmarked, isProductLikedByUser } from "@/helper/helper"
+import { AppDispatch, RootState } from "@/redux/store";
+import { isProductBookmarked, isProductLikedByUser } from "@/helper/helper";
 import useUpvoteCount from "@/hooks/useUpvoteCount";
 
 export function ProductCard(props: any) {
@@ -33,22 +36,21 @@ export function ProductCard(props: any) {
     isProductBookmarked(id, bookmarkList)
   );
   const dispatch: AppDispatch = useDispatch();
-  const { totalCount, updateUpVoteCount, productUpVoteCount } = useUpvoteCount(id);
+  const { totalCount, updateUpVoteCount, productUpVoteCount } =
+    useUpvoteCount(id);
 
   const userAuthData = useSelector(
     (store: RootState) => store.user.userSession
   );
-  
+
   const { Tags, Name, WebsiteLink, Description, ToolImage, Verified } = fields!;
   const formattedTitle = Name?.toLowerCase().replace(/\s/g, "-");
   const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
 
-  
   const handleBookmarkClick = () => {
     if (!userAuthData) {
-      setIsOpen(true)
-    }
-    else {
+      setIsOpen(true);
+    } else {
       if (isBookMarked && id) {
         // @ts-ignore
         dispatch(deleteBookmark(id));
@@ -65,28 +67,23 @@ export function ProductCard(props: any) {
     if (!userAuthData) {
       return setIsOpen(true);
     } else {
-      updateUpVoteCount(id)
-      setIsLiked(!isLiked)
+      updateUpVoteCount(id);
+      setIsLiked(!isLiked);
     }
   };
 
-
-
   const likedByUser = async (id: number) => {
-    const booleanVal = await isProductLikedByUser(id)
-    setIsLiked(booleanVal)
-  }
-
+    const booleanVal = await isProductLikedByUser(id);
+    setIsLiked(booleanVal);
+  };
 
   useEffect(() => {
     setIsBookMarked(isProductBookmarked(id, bookmarkList));
   }, [setIsBookMarked, isBookMarked, id, bookmarkList]);
 
-
   useEffect(() => {
-    likedByUser(id)
-  }, [id])
-
+    likedByUser(id);
+  }, [id]);
 
   return (
     <>
@@ -132,7 +129,6 @@ export function ProductCard(props: any) {
                   title="Likes"
                   type="button"
                   onClick={handleLikes}
-
                   className="flex items-center gap-x-1"
                 >
                   <p>
@@ -187,10 +183,8 @@ export function ProductCard(props: any) {
               </div>
             </div>
           </div>
-        </section >
-      </div >
+        </section>
+      </div>
     </>
   );
-
-
 }

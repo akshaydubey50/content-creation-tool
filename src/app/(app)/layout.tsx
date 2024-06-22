@@ -1,4 +1,3 @@
-import "./globals.css";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
 import { Poppins } from "next/font/google";
@@ -24,19 +23,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${poppins.variable}`}>
-      <body className="font-poppins">
-        {" "}
-        <Providers>
-          <Navbar />
-          <div className="flex flex-col min-h-screen justify-center">
-            {children}
-          </div>{" "}
-          <Footer />
-        </Providers>
-        <SpeedInsights />
-        <Analytics />
-      </body>
-    </html>
+    <>
+      {/* <Navbar /> */}
+      <main className="pt-[40px] lg:pt-[90px] flex-1">{children}</main>
+      {/* <Footer /> */}
+    </>
   );
 }

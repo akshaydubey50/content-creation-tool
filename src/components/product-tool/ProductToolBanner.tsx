@@ -7,12 +7,14 @@ import { Product } from "@/types/product";
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
 import LikedBookmarkModal from "@/components/modal/LikedBookmarkModal";
-import { deleteBookmark, addBookmark } from "@/lib/slice/bookmarkSlice";
+import {
+  deleteBookmark,
+  addBookmark,
+} from "@/redux/slice/bookmark/bookmarkSlice";
 import { useRouter } from "next/navigation";
-import {  useDispatch, useSelector } from "react-redux";
-import {  RootState } from "@/lib/store";
-import { isProductBookmarked } from "@/helper/helper"
-
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { isProductBookmarked } from "@/helper/helper";
 
 export default function ProductToolBanner({
   url,
@@ -20,15 +22,17 @@ export default function ProductToolBanner({
   description,
   tag,
   link,
-  id
+  id,
 }: Product) {
   const [isOpen, setIsOpen] = useState(false);
-  const bookmarkList =useSelector((state:RootState)=>state.bookmark.bookmarkList)
+  const bookmarkList = useSelector(
+    (state: RootState) => state.bookmark.bookmarkList
+  );
   // const [isBookMarked, setIsBookMarked] = useState(false);
   const [isBookMarked, setIsBookMarked] = useState(() =>
     isProductBookmarked(id, bookmarkList)
   );
-  
+
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -37,11 +41,9 @@ export default function ProductToolBanner({
   );
 
   const handleBookMark = () => {
-
     if (!userAuthData) {
-      setIsOpen(true)
-    }
-    else{
+      setIsOpen(true);
+    } else {
       if (isBookMarked && id) {
         // @ts-ignore
         dispatch(deleteBookmark(id));
@@ -73,11 +75,11 @@ export default function ProductToolBanner({
         lg:flex-row my-12"
         >
           {/* Image Container */}
-          <div
-            className="aftl-left-section   xl:w-45%"
-          >
-            <div className="border border-black border-solid 
-          rounded-t-xl">
+          <div className="aftl-left-section   xl:w-45%">
+            <div
+              className="border border-black border-solid 
+          rounded-t-xl"
+            >
               <Image
                 src={url}
                 alt="logo bannero"
@@ -89,9 +91,9 @@ export default function ProductToolBanner({
                 className="rounded-t-xl w-full h-full  object-cover"
               />
             </div>
-           
+
             <div className="flex justify-between pt-6 items-center text-white  max-w-7xl">
-             <div className="w-1/2">
+              <div className="w-1/2">
                 <Link
                   href={link}
                   target="_blank"
@@ -102,7 +104,7 @@ export default function ProductToolBanner({
                     <FiArrowUpRight className="text-white text-2xl md:text-4xl " />
                   </div>
                 </Link>
-             </div>
+              </div>
               <div className="ml-auto">
                 <button title="Bookmark" type="button" onClick={handleBookMark}>
                   {isBookMarked ? (
@@ -116,7 +118,6 @@ export default function ProductToolBanner({
                 <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
               )}
             </div>
-
           </div>
 
           <div className="aftl-right-section  xl:w-30%">
@@ -151,7 +152,6 @@ export default function ProductToolBanner({
             </div>
           </div>
         </div>
-
       </main>
     </>
   );

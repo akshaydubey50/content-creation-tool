@@ -1,5 +1,5 @@
 "use client";
-import AirtableModel from "@/models/airtableModel";
+import AirtableModel from "@/models/airtable.model";
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
@@ -9,14 +9,14 @@ import {
   setCategoryData,
   clearCategoryData,
   clearMatchedCategory,
-} from "@/lib/slice/categorySlice";
+} from "@/redux/slice/category/categorySlice";
 import {
   setSearchQuery,
   setSearchFilterList,
   clearSearchFilterList,
-} from "@/lib/slice/searchSlice";
-import { RootState, AppDispatch } from "@/lib/store";
-import {  scrollPage } from "@/lib/slice/searchSlice";
+  scrollPage,
+} from "@/redux/slice/search/searchSlice";
+import { RootState, AppDispatch } from "@/redux/store";
 
 export default function FilterSection() {
   const [isMounted, SetIsMounted] = useState(false);
@@ -24,12 +24,22 @@ export default function FilterSection() {
   const searchRef = useRef<HTMLInputElement>(null);
   /*Redux Dispatch & Selector*/
   const dispatch = useDispatch();
-  const categoryData = useSelector((store: RootState) => store.category.categoryData);
-  const searchQuery = useSelector((store: RootState) => store.search.searchQuery);
-  const filterData = useSelector((store: RootState) => store.search.searchFilterList);
+  const categoryData = useSelector(
+    (store: RootState) => store.category.categoryData
+  );
+  const searchQuery = useSelector(
+    (store: RootState) => store.search.searchQuery
+  );
+  const filterData = useSelector(
+    (store: RootState) => store.search.searchFilterList
+  );
   const { productList } = useSelector((state: RootState) => state.product);
-  const searchToFocusInput = useSelector((state: RootState) => state.search.searchToFocus)
-  const scrollPosition = useSelector((state: RootState) => state.search.scrollPosition);
+  const searchToFocusInput = useSelector(
+    (state: RootState) => state.search.searchToFocus
+  );
+  const scrollPosition = useSelector(
+    (state: RootState) => state.search.scrollPosition
+  );
 
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
@@ -40,7 +50,9 @@ export default function FilterSection() {
     dispatch(setSearchQuery(newSearch));
 
     /* Filter data based on the updated search query */
-    const filteredResults = productList &&productList?.filter((searchData: AirtableModel) => {
+    const filteredResults =
+      productList &&
+      productList?.filter((searchData: AirtableModel) => {
         const tooldatalist = searchData.fields.Name.toLowerCase();
         if (newSearch) {
           return tooldatalist.includes(newSearch);
@@ -83,9 +95,9 @@ export default function FilterSection() {
       dispatch(clearCategoryData());
       dispatch(clearMatchedCategory([]));
     }
-    if (searchRef.current!.value){
-      searchRef.current!.value = ''; 
-      searchRef.current!.innerText = ''; 
+    if (searchRef.current!.value) {
+      searchRef.current!.value = "";
+      searchRef.current!.innerText = "";
     }
 
     setVisibleItem(9);
@@ -96,7 +108,7 @@ export default function FilterSection() {
     const categoryItem = new Set<string>([]);
     productList?.length > 0 &&
       productList?.map((item: AirtableModel) => {
-        if (item?.fields?.Tags !== undefined ) {
+        if (item?.fields?.Tags !== undefined) {
           categoryItem.add(item?.fields?.Tags[0]);
         }
       });
@@ -118,13 +130,12 @@ export default function FilterSection() {
     SetIsMounted(true);
   }, []);
 
-  useEffect(()=>{
-    if (searchToFocusInput){
-      searchRef.current?.focus()
+  useEffect(() => {
+    if (searchToFocusInput) {
+      searchRef.current?.focus();
     }
-    window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
-  }, [searchToFocusInput, scrollPosition])
-
+    window.scrollTo({ top: scrollPosition, behavior: "smooth" });
+  }, [searchToFocusInput, scrollPosition]);
 
   return (
     <>
