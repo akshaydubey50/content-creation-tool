@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -10,8 +11,30 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import axios from "axios";
+import { useState } from "react";
+import { SignInResponse, signIn } from "next-auth/react";
+import { redirect, useRouter } from "next/navigation";
 
 export default function Page() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const route = useRouter();
+
+  const handleSignIn = async () => {
+    const response = await signIn("credentials", {
+      redirect: false,
+      email: email,
+      password: password,
+    });
+    console.log("reponse", response);
+
+    if (response?.url) {
+      route.push("/");
+    }
+  };
+
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
@@ -28,6 +51,8 @@ export default function Page() {
               id="email"
               type="email"
               placeholder="m@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -38,9 +63,15 @@ export default function Page() {
                 Forgot your password?
               </Link>
             </div>
-            <Input id="password" type="password" required />
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
-          <Button type="submit" className="w-full">
+          <Button onClick={handleSignIn} type="submit" className="w-full">
             Login
           </Button>
           <Button variant="outline" className="w-full">
@@ -49,7 +80,7 @@ export default function Page() {
         </div>
         <div className="mt-4 text-center text-sm">
           Don&apos;t have an account?{" "}
-          <Link href="#" className="underline">
+          <Link href={"/signup"} className="underline">
             Sign up
           </Link>
         </div>
