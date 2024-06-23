@@ -12,11 +12,10 @@ import {
   addBookmark,
 } from "@/redux/slice/bookmark/bookmarkSlice";
 import { useRouter } from "next/navigation";
-import {  useDispatch, useSelector } from "react-redux";
-import {  RootState } from "@/lib/store";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 import { isProductBookmarked } from "@/helper/helper";
 import { MdVerified } from "react-icons/md";
-
 
 export default function ProductToolBanner({
   url,
@@ -24,7 +23,8 @@ export default function ProductToolBanner({
   description,
   tag,
   link,
-  id, verified
+  id,
+  verified,
 }: Product) {
   const [isOpen, setIsOpen] = useState(false);
   const bookmarkList = useSelector(
@@ -78,11 +78,11 @@ export default function ProductToolBanner({
         lg:flex-row my-12"
           >
             {/* Image Container */}
-            <div
-              className="aftl-left-section   xl:w-45%"
-            >
-              <div className="border border-black border-solid 
-          rounded-t-xl">
+            <div className="aftl-left-section   xl:w-45%">
+              <div
+                className="border border-black border-solid 
+          rounded-t-xl"
+              >
                 <Image
                   src={url}
                   alt="logo bannero"
@@ -109,7 +109,11 @@ export default function ProductToolBanner({
                   </Link>
                 </div>
                 <div className="ml-auto">
-                  <button title="Bookmark" type="button" onClick={handleBookMark}>
+                  <button
+                    title="Bookmark"
+                    type="button"
+                    onClick={handleBookMark}
+                  >
                     {isBookMarked ? (
                       <BsBookmarkFill className="text-4xl text-DarkOrange" />
                     ) : (
@@ -121,7 +125,6 @@ export default function ProductToolBanner({
                   <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
                 )}
               </div>
-
             </div>
 
             <div className="aftl-right-section  xl:w-30%">
@@ -161,8 +164,7 @@ export default function ProductToolBanner({
               </div>
             </div>
           </div>
-
-      </div>
+        </div>
       </main>
     </>
   );

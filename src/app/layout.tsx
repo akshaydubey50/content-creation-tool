@@ -30,11 +30,7 @@ export default function RootLayout({
         {" "}
         <Authprovider>
           <Providers>
-            {/* <Navbar /> */}
-            {/* <div className="flex flex-col min-h-screen justify-center"> */}
-            {children}
-            {/* </div>{" "} */}
-            {/* <Footer /> */}
+            <main>{children}</main>
           </Providers>
         </Authprovider>
         <SpeedInsights />
