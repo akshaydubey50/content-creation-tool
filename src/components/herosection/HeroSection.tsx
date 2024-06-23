@@ -103,7 +103,7 @@ export default function HeroSection() {
   }
   return (
     <>
-      <main className="py-12 xl:py-20 bg-light-gray  xl:mt-10">
+      <main className="py-12 xl:py-20 bg-light-gray ">
         <section className="flex  flex-col place-items-center space-y-10 xl:space-y-14  px-4 md:px-8 xl:px-10">
           <div className="flex-1">
             <div className="flex flex-col space-y-4 text-center">
