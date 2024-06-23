@@ -1,5 +1,5 @@
 "use client";
-import AirtableModel from "@/models/airtableModel";
+import AirtableModel from "@/models/airtable.model";
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
@@ -9,14 +9,14 @@ import {
   setCategoryData,
   clearCategoryData,
   clearMatchedCategory,
-} from "@/lib/slice/categorySlice";
+} from "@/redux/slice/category/categorySlice";
 import {
   setSearchQuery,
   setSearchFilterList,
   clearSearchFilterList,
-} from "@/lib/slice/searchSlice";
-import { RootState, AppDispatch } from "@/lib/store";
-import { scrollPage } from "@/lib/slice/searchSlice";
+  scrollPage,
+} from "@/redux/slice/search/searchSlice";
+import { RootState, AppDispatch } from "@/redux/store";
 
 export default function FilterSection() {
   const [isMounted, SetIsMounted] = useState(false);
@@ -24,12 +24,22 @@ export default function FilterSection() {
   const searchRef = useRef<HTMLInputElement>(null);
   /*Redux Dispatch & Selector*/
   const dispatch = useDispatch();
-  const categoryData = useSelector((store: RootState) => store.category.categoryData);
-  const searchQuery = useSelector((store: RootState) => store.search.searchQuery);
-  const filterData = useSelector((store: RootState) => store.search.searchFilterList);
+  const categoryData = useSelector(
+    (store: RootState) => store.category.categoryData
+  );
+  const searchQuery = useSelector(
+    (store: RootState) => store.search.searchQuery
+  );
+  const filterData = useSelector(
+    (store: RootState) => store.search.searchFilterList
+  );
   const { productList } = useSelector((state: RootState) => state.product);
-  const searchToFocusInput = useSelector((state: RootState) => state.search.searchToFocus)
-  const scrollPosition = useSelector((state: RootState) => state.search.scrollPosition);
+  const searchToFocusInput = useSelector(
+    (state: RootState) => state.search.searchToFocus
+  );
+  const scrollPosition = useSelector(
+    (state: RootState) => state.search.scrollPosition
+  );
 
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();

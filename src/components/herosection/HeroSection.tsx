@@ -1,22 +1,28 @@
 "use client";
 import React, { useState } from "react";
-import AirtableModel from "@/models/airtableModel";
+import AirtableModel from "@/models/airtable.model";
 import { RiStackFill, RiSearchLine } from "react-icons/ri";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { VscVerifiedFilled, VscVerified } from "react-icons/vsc";
 import { GoHeartFill } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
-import { clearBookmarkList, getBookmarkList } from "@/lib/slice/bookmarkSlice";
-import { fetchProductList } from "@/lib/slice/productSlice";
-import { AppDispatch, RootState } from "@/lib/store";
+import {
+  clearBookmarkList,
+  getBookmarkList,
+} from "@/redux/slice/bookmark/bookmarkSlice";
+import { fetchProductList } from "@/redux/slice/product/productSlice";
+import { AppDispatch, RootState } from "@/redux/store";
 import {
   clearProductVerifiedList,
   setIsVerifiedChecked,
   setProductVerifiedList,
-} from "@/lib/slice/verifiedSlice";
-import { setIsBookmarkCheck } from "@/lib/slice/bookmarkSlice";
+} from "@/redux/slice/verified/verifiedSlice";
+import { setIsBookmarkCheck } from "@/redux/slice/bookmark/bookmarkSlice";
 import LikedBookmarkModal from "../modal/LikedBookmarkModal";
-import { setSearchInputFocus, scrollPage } from "@/lib/slice/searchSlice";
+import {
+  setSearchInputFocus,
+  scrollPage,
+} from "@/redux/slice/search/searchSlice";
 
 export default function HeroSection() {
   const dispatch: AppDispatch = useDispatch();

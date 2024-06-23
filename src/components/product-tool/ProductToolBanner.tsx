@@ -7,7 +7,10 @@ import { Product } from "@/types/product";
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
 import LikedBookmarkModal from "@/components/modal/LikedBookmarkModal";
-import { deleteBookmark, addBookmark } from "@/lib/slice/bookmarkSlice";
+import {
+  deleteBookmark,
+  addBookmark,
+} from "@/redux/slice/bookmark/bookmarkSlice";
 import { useRouter } from "next/navigation";
 import {  useDispatch, useSelector } from "react-redux";
 import {  RootState } from "@/lib/store";
@@ -24,12 +27,14 @@ export default function ProductToolBanner({
   id, verified
 }: Product) {
   const [isOpen, setIsOpen] = useState(false);
-  const bookmarkList =useSelector((state:RootState)=>state.bookmark.bookmarkList)
+  const bookmarkList = useSelector(
+    (state: RootState) => state.bookmark.bookmarkList
+  );
   // const [isBookMarked, setIsBookMarked] = useState(false);
   const [isBookMarked, setIsBookMarked] = useState(() =>
     isProductBookmarked(id, bookmarkList)
   );
-  
+
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -38,11 +43,9 @@ export default function ProductToolBanner({
   );
 
   const handleBookMark = () => {
-
     if (!userAuthData) {
-      setIsOpen(true)
-    }
-    else{
+      setIsOpen(true);
+    } else {
       if (isBookMarked && id) {
         // @ts-ignore
         dispatch(deleteBookmark(id));

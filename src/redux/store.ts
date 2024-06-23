@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userSlice from "@/lib/slice/userSlice";
-import productSlice from "@/lib/slice/productSlice";
-import bookmarkSlice from "@/lib/slice/bookmarkSlice";
-import categorySlice from "@/lib/slice/categorySlice";
-import searchSlice from "@/lib/slice/searchSlice";
-import verifiedProductSlice from "@/lib/slice/verifiedSlice";
+import userSlice from "@/redux/slice/user/userSlice";
+import productSlice from "@/redux/slice/product/productSlice";
+import bookmarkSlice from "@/redux/slice/bookmark/bookmarkSlice";
+import categorySlice from "@/redux/slice/category/categorySlice";
+import searchSlice from "@/redux/slice/search/searchSlice";
+import verifiedProductSlice from "@/redux/slice/verified/verifiedSlice";
 
 const appStore = configureStore({
   reducer: {

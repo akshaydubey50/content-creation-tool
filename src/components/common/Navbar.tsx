@@ -14,13 +14,14 @@ import {
   error,
   isUserAuthenticated,
   isUserLoggedInSlice,
-} from "@/lib/slice/userSlice";
-import { AppDispatch, RootState } from "@/lib/store";
+} from "@/redux/slice/user/userSlice";
+import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import * as RoutePath from "@/constants/RoutePath";
 import { Popover } from "@headlessui/react";
+import { signOut, useSession } from "next-auth/react";
 interface MenuItem {
   id: number;
   label: string;
@@ -28,13 +29,16 @@ interface MenuItem {
 }
 export default function Navbar() {
   const supabase = createClientComponentClient();
-  const [session, setSession] = useState<Session>();
+
+  // use nextauth session
+  // const [session, setSession] = useState<Session>();
   const [isActiveMenu, setIsActiveMenu] = useState(0);
   const dispatch: AppDispatch = useDispatch();
-  const { isUserAuthenticated, error, userSession } = useSelector(
+  //why user is store in redux
+ /*  const { isUserAuthenticated, error, userSession } = useSelector(
     (store: RootState) => store.user
   );
-
+ */
   const pathName = usePathname();
   const { showLoginForm, setShowLoginForm } = useVisibleItemContextData();
 
@@ -43,8 +47,8 @@ export default function Navbar() {
     localStorage.setItem("isActiveMenu", String(isActiveMenu));
   }, [isActiveMenu, dispatch]);
 
-  const memoizedIsUserLoggedIn = useCallback(isUserLoggedIn, [supabase.auth]);
-  async function isUserLoggedIn() {
+  // const memoizedIsUserLoggedIn = useCallback(isUserLoggedIn, [supabase.auth]);
+  /* async function isUserLoggedIn() {
     const {
       data: { session },
     } = await supabase.auth.getSession();
@@ -52,22 +56,22 @@ export default function Navbar() {
       setSession(session);
     }
     return session;
-  }
+  } */
 
-  async function logout() {
+  /*  async function logout() {
     const {
       data: { session },
     } = await supabase.auth.getSession();
     if (session) {
       await supabase.auth.signOut();
     }
-  }
+  } */
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (!session) {
       memoizedIsUserLoggedIn();
     }
-  }, [session, isUserLoggedIn, logout]);
+  }, [session, isUserLoggedIn, logout]); */
 
   const menuItem: MenuItem[] = [
     { id: 1, label: "All Program", href: RoutePath.HomePage },
@@ -76,7 +80,12 @@ export default function Navbar() {
   ];
 
   const [isMenu, setIsMenu] = useState(false);
-  const [isPopupOpen, setPopupOpen] = useState(false);
+  // const [isPopupOpen, setPopupOpen] = useState(false);
+
+  const { data: session } = useSession();
+  console.log("session", session);
+
+  const router = useRouter();
 
   const handleNavbarMenu = (index: number) => {
     setIsActiveMenu(index);
@@ -93,6 +102,13 @@ export default function Navbar() {
   function crossHandler() {
     setIsMenu(false);
   }
+
+  const handleSignIn = () => {
+    router.push("/signin");
+  };
+  const handleSignout = () => {
+    signOut();
+  };
 
   return (
     <>
@@ -205,7 +221,11 @@ export default function Navbar() {
           {session && (
             <li className="py-3 px-3 font-medium">
               <span className="px-4 border-l-4 border-DarkOrange border-solid">
-                <button onClick={logout}>Logout</button>
+                <button
+                // onClick={logout}
+                >
+                  Logout
+                </button>
               </span>
             </li>
           )}
