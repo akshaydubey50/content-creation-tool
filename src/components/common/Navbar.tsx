@@ -134,12 +134,12 @@ export default function Navbar() {
               )}
               {!session && (
                 <li>
-                  <button className="text-black font-semibold  px-6 py-2  rounded-full bg-gray-100 hover:shadow-2xl hover:shadow-gray-100  hover:bg-gray-200" onClick={togglePopup}>Login</button>
+                  <button className="text-black font-semibold  px-6 py-2  rounded-lg  bg-gray-100 hover:shadow-2xl hover:shadow-gray-100  hover:bg-gray-200" onClick={togglePopup}>Login</button>
                 </li>
               )}
 
               <li>
-                <button className="text-white font-semibold bg-black  px-6 py-2 hover:bg-DarkOrange hover:text-white   rounded-lg  " onClick={togglePopup}>Sign Up</button>
+                <button className="text-white font-semibold bg-black  px-6 py-2  hover:bg-DarkOrange hover:text-white   rounded-lg  " onClick={togglePopup}>Sign Up</button>
               </li>
             </ul>
           </div>

@@ -16,7 +16,7 @@ import {
   clearSearchFilterList,
 } from "@/lib/slice/searchSlice";
 import { RootState, AppDispatch } from "@/lib/store";
-import {  scrollPage } from "@/lib/slice/searchSlice";
+import { scrollPage } from "@/lib/slice/searchSlice";
 
 export default function FilterSection() {
   const [isMounted, SetIsMounted] = useState(false);
@@ -40,12 +40,12 @@ export default function FilterSection() {
     dispatch(setSearchQuery(newSearch));
 
     /* Filter data based on the updated search query */
-    const filteredResults = productList &&productList?.filter((searchData: AirtableModel) => {
-        const tooldatalist = searchData.fields.Name.toLowerCase();
-        if (newSearch) {
-          return tooldatalist.includes(newSearch);
-        }
-      });
+    const filteredResults = productList && productList?.filter((searchData: AirtableModel) => {
+      const tooldatalist = searchData.fields.Name.toLowerCase();
+      if (newSearch) {
+        return tooldatalist.includes(newSearch);
+      }
+    });
 
     if (newSearch === "") {
       // If search is empty, show default data
@@ -62,7 +62,7 @@ export default function FilterSection() {
   };
 
   /* Selected Category functionality */
-   const selectedCategory = (selectedOption: any) => {
+  const selectedCategory = (selectedOption: any) => {
     if (selectedOption) {
       let categoryVal = selectedOption.value;
       let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
@@ -70,6 +70,8 @@ export default function FilterSection() {
       dispatch(clearSearchFilterList());
       dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
+      dispatch(scrollPage(600))
+
     }
   };
 
@@ -83,9 +85,9 @@ export default function FilterSection() {
       dispatch(clearCategoryData());
       dispatch(clearMatchedCategory([]));
     }
-    if (searchRef.current!.value){
-      searchRef.current!.value = ''; 
-      searchRef.current!.innerText = ''; 
+    if (searchRef.current!.value) {
+      searchRef.current!.value = '';
+      searchRef.current!.innerText = '';
     }
 
     setVisibleItem(9);
@@ -96,7 +98,7 @@ export default function FilterSection() {
     const categoryItem = new Set<string>([]);
     productList?.length > 0 &&
       productList?.map((item: AirtableModel) => {
-        if (item?.fields?.Tags !== undefined ) {
+        if (item?.fields?.Tags !== undefined) {
           categoryItem.add(item?.fields?.Tags[0]);
         }
       });
@@ -112,18 +114,20 @@ export default function FilterSection() {
     }
   );
 
-  useEffect(() => {}, [setVisibleItem, searchQuery, categoryData, filterData]);
 
   useEffect(() => {
     SetIsMounted(true);
   }, []);
 
-  useEffect(()=>{
-    if (searchToFocusInput){
+  useEffect(() => {
+    if (searchToFocusInput) {
       searchRef.current?.focus()
     }
+  }, [searchToFocusInput])
+
+  useEffect(() => {
     window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
-  }, [searchToFocusInput, scrollPosition])
+  }, [categoryData, scrollPosition])
 
 
   return (

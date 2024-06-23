@@ -25,15 +25,15 @@ export default function Breadcrumb({ tag, title }: HyperHead) {
   };
   return (
     <>
-      <p className=" md:text-xl font-medium pt-8 cursor-pointer">
-        <span onClick={handleGoBack}>
+      <p className="font-medium pt-8 cursor-pointer">
+        <span onClick={handleGoBack} className="hover:border-b-2 hover:border-DarkOrange">
         Content Tools
         </span>
           {" > "} 
-         <span onClick={()=> selectedCategory(tag)}>
+        <span onClick={() => selectedCategory(tag)} className="hover:border-b-2 hover:border-DarkOrange">
          {tag} 
          </span>
-         {" > "} <span className="font-bold">{title}</span>
+         {" > "} <span className="font-semibold">{title}</span>
       </p>
     </>
   );
