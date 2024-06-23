@@ -96,42 +96,54 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="bg-white fixed z-9 shadow-md w-full px-5 xl:px-10">
-        <div className="flex justify-between items-center py-4 lg:px-4 lg:py-6">
+      <header className="bg-white fixed z-10 shadow-md w-full px-5 xl:px-10 ">
+
+        <div className="flex  max-w-7xl  mx-auto justify-between items-center  py-4 lg:px-2 lg:py-4">
           <div>
             <Link href="/">
-              <h2 className="text-Title-Large lg:text-Title-Larger font-bold">
+              <h2 className="text-Title-Large  font-bold">
                 Content Creation
               </h2>
             </Link>
           </div>
           {/* menubar in large screen */}
           <nav>
-            <ul className="hidden text-Title-Large lg:flex flex-1 flex-wrap justify-end font-semibold gap-x-4 text-black items-baseline">
+            <ul className="hidden text-Title-Medium lg:flex flex-1 flex-wrap justify-end font-medium gap-6  text-black items-baseline">
               {menuItem.map((menu, index) => (
                 <li
                   key={menu.id}
                 >
-                  <Link className={`px-6 py-2 text-base text-black   rounded-full hover:bg-DarkOrange hover:text-white cursor-pointer
+                  <Link className={`  text-black    hover:border-b-4 hover:border-DarkOrange  cursor-pointer
                 ${pathName === menu.href
-                      ? "bg-DarkOrange text-white  "
+                      ? "border-b-4 border-DarkOrange text-black  "
                       : "text-black"
                     }`} href={menu.href} onClick={() => handleNavbarMenu(index)}>{menu.label}</Link>
                 </li>
               ))}
+
+            </ul>
+          </nav>
+
+          <div className="hidden lg:block">
+            <ul className="flex space-x-6">
               {session && (
                 <li>
-                  <button className="outline-6 text-black  px-4 py-2 rounded-lg hover:text-white hover:outline hover:outline-2 hover:bg-[#FF8C00]"
+                  <button className="text-white font-semibold bg-black  px-6 py-2 hover:bg-DarkOrange hover:text-white   rounded-lg"
                     onClick={logout}>Logout</button>
                 </li>
               )}
               {!session && (
                 <li>
-                  <button className="bg-[#FF8C00] text-base px-4 py-2 text-white rounded-lg hover:text-black hover:bg-white hover:outline hover:outline-2" onClick={togglePopup}>Login</button>
+                  <button className="text-black font-semibold  px-6 py-2  rounded-full bg-gray-100 hover:shadow-2xl hover:shadow-gray-100  hover:bg-gray-200" onClick={togglePopup}>Login</button>
                 </li>
               )}
+
+              <li>
+                <button className="text-white font-semibold bg-black  px-6 py-2 hover:bg-DarkOrange hover:text-white   rounded-lg  " onClick={togglePopup}>Sign Up</button>
+              </li>
             </ul>
-          </nav>
+          </div>
+
           <div className="block lg:hidden">
             <button
               title="menu"
@@ -142,10 +154,16 @@ export default function Navbar() {
             </button>
           </div>
         </div>
+
       </header>
+
+
+
+
+
       {/* Mobile View Sidebar */}
       <aside
-        className={`fixed top-0 z-40 h-full w-screen bg-white text-black text-Title-Large transform transition-transform duration-500 overflow-hidden ${isMenu ? "translate-x-0" : "-translate-x-full"
+        className={`fixed top-0 z-40 h-full w-screen bg-white text-black text-Title-Large transform transition-transform duration-500 overscroll-none ${isMenu ? "translate-x-0" : "-translate-x-full"
           }`}
       >
         <div className="p-3 flex my-2">
@@ -252,6 +270,8 @@ export default function Navbar() {
           </div>
         </div>
       )}
+
+
     </>
   );
 }
