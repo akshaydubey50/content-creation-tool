@@ -26,7 +26,7 @@ export default function Breadcrumb({ tag, title }: HyperHead) {
   };
   return (
     <>
-      <p className="font-medium pt-8 cursor-pointer">
+      <p className="font-medium cursor-pointer">
         <span
           onClick={handleGoBack}
           className="hover:border-b-2 hover:border-DarkOrange"
