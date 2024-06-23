@@ -42,6 +42,7 @@ export default function ProductDetail() {
           tag={product!.fields.Tags}
           link={product!.fields.WebsiteLink}
           id={product!.id}
+          verified={product!.fields.Verified}
         />
       )}
       {product && (

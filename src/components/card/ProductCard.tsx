@@ -89,7 +89,7 @@ export function ProductCard(props: any) {
     <>
       <div
         className="rounded-2xl max-w-sm  flex flex-col  border border-black 
-          border-solid  shadow-2xl"
+          border-solid  shadow-lg"
       >
         <Link
           href={{
