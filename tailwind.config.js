@@ -21,17 +21,17 @@ module.exports = {
       fontFamily:{
         poppins: ['var(--font-poppins)'],
       },
-      fontSize:{
-        'Heading-Small':'1.25rem',
-        'Heading-Medium':'1.875rem',
-        'Heading-Large':'3rem',
-        'Title-Small':'1rem',
-        'Title-Medium':'1.15rem',
-        'Title-Large':'1.25rem',
-        'Title-Larger':'1.5rem',
-        'Description':'1rem',
-        'Description-Large':'1.25rem',
-        'tags':'0.9rem',
+      fontSize: {
+        'Heading-Small': 'clamp(1rem, 2vw, 1.25rem)',
+        'Heading-Medium': 'clamp(1.5rem, 3vw, 1.875rem)',
+        'Heading-Large': 'clamp(2rem, 5vw, 3rem)',
+        'Title-Small': 'clamp(0.875rem, 1.5vw, 1rem)',
+        'Title-Medium': 'clamp(1rem, 1.75vw, 1.15rem)',
+        'Title-Large': 'clamp(1.125rem, 2vw, 1.25rem)',
+        'Title-Larger': 'clamp(1.25rem, 2.5vw, 2rem)',
+        'Description': 'clamp(0.875rem, 1.5vw, 1rem)',
+        'Description-Large': 'clamp(1rem, 2vw, 1.25rem)',
+        'tags': 'clamp(0.75rem, 1.25vw, 0.9rem)'
       },
       lineHeight:{
         '45':'2.813rem',
@@ -39,7 +39,15 @@ module.exports = {
       },
       spacing: {
         '10-percent': '10%',
-      }
+      },
+      animation: {
+        shine: "shine 1s",
+      },
+      keyframes: {
+        shine: {
+          "100%": { left: "125%" },
+        },
+      },
     },
   },
   plugins: [],

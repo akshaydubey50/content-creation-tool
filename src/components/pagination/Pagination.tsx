@@ -16,10 +16,10 @@ function Pagination({ currentPage, totalItems, onPageChange }: PaginationProps) 
     };
 
     return (
-        <div className='flex justify-center my-6 gap-6'>
+        <div className='flex flex-col md:flex-row justify-center my-6 gap-6 py-5 px-10 lg:px-8 2xl:px-0'>
             <button className={`px-4 py-2   rounded-md font-semibold shadow-lg ${isFirstPage ? 'cursor-not-allowed' : 'cursor-pointer'}  ${isFirstPage ? 'bg-white text-DarkOrange border border-DarkOrange ' : 'bg-DarkOrange text-white'}  `} disabled={isFirstPage} onClick={() => handlePageChange(1)}>&lt;&lt; First</button>
             <button className={` px-4 py-2  rounded-md font-semibold shadow-lg  ${isFirstPage ? 'cursor-not-allowed' : 'cursor-pointer'}  ${isFirstPage ? 'bg-white text-DarkOrange border border-DarkOrange' : 'bg-DarkOrange text-white'}  `} disabled={isFirstPage} onClick={() => handlePageChange(currentPage - 1)}>&lt; Prev</button>
-            <div className="flex space-between items-center">
+            <div className="flex space-between items-center justify-center">
                 Page: {currentPage} of {totalPages}
             </div>
             <button className={`px-4 py-2  rounded-md font-semibold shadow-lg ${isLastPage ? 'cursor-not-allowed' : 'cursor-pointer'}  ${isLastPage ? 'bg-white text-DarkOrange border border-DarkOrange' : 'bg-DarkOrange text-white'}  `} disabled={isLastPage} onClick={() => handlePageChange(currentPage + 1)}>Next &gt;</button>
