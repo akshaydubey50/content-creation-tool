@@ -11,11 +11,11 @@ export default function SelectDropdown(props:any) {
     option: (styles:any, { isSelected }:any) => {
       return {
         ...styles,
-        backgroundColor: isSelected ? "#FF8C00" : "#FFF",
+        backgroundColor: isSelected ? "#FF8C00" : "#eee",
         color:isSelected ? "#FFF":"#FF8C00",
         fontSize: isSelected ? "17px" : "15px",
         borderBottom:"1px solid #FF8C00",
-        padding: "12px 20px",
+        padding: "12px",
         cursor:"pointer",
         fontWeight: 600,
         ":hover": {
@@ -41,6 +41,7 @@ export default function SelectDropdown(props:any) {
       padding: "12px",
       textAlign: "center", 
       fontWeight: 600,
+
     }),
     dropdownIndicator: (provided:any) => ({
       ...provided,
@@ -52,8 +53,8 @@ export default function SelectDropdown(props:any) {
     }),
     menuList: (provided:any) => ({
       ...provided,
-      backgroundColor: "#FFF",
-      padding: "16px",
+      backgroundColor: "#eee",
+      padding: "12px",
       borderRadius:"20px",
       msOverflowStyle: 'none',
       scrollbarWidth: 'none',

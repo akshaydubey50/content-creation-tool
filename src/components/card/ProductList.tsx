@@ -35,6 +35,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const userAuthData = useSelector((store: RootState) => store.user.userSession);
   const bookmarkLoadingStatus = useSelector((store: RootState) => store.bookmark.status);
   const getListBookmarkStatus = useSelector((store: RootState) => store.bookmark.getListStatus);
+  
 
   const itemsPerPage = 9;
   const handlePageChange = (page: number) => {
@@ -64,6 +65,8 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
 
   const filteredProductRecords = useMemo(() => {
+    setCurrentPage(1)
+
     if (currentCategory) {
       // Product detail page similar category product listed productList
       return getProductByCategory(currentCategory);
@@ -82,6 +85,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
       // All productList
       return productList;
     }
+
     return [];
   }, [
     currentCategory,
@@ -131,6 +135,10 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   return (
     <>
+    {/* Search Result Text */}
+      {/* {productSearchQuery.length > 0 && <p className="text-center text-2xl  ">Search Result
+        <span className="font-semibold text-4xl">
+           {productSearchQuery} </span></p>} */}
       <main
         className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
                   lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0"

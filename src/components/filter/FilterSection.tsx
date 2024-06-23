@@ -62,7 +62,7 @@ export default function FilterSection() {
   };
 
   /* Selected Category functionality */
-  const selectedCategory = (selectedOption: any) => {
+   const selectedCategory = (selectedOption: any) => {
     if (selectedOption) {
       let categoryVal = selectedOption.value;
       let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
@@ -128,19 +128,19 @@ export default function FilterSection() {
 
   return (
     <>
-      <section className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 px-10 py-5 md:gap-4  mx-auto text-white  lg:max-w-5xl xl:max-w-6xl   text-Title-Small lg:text-Title-Small">
-        <div className="col-span-1 ">
+      <section className="hidden md:flex flex-wrap justify-center px-10 py-5 md:gap-4  mx-auto text-white  lg:max-w-5xl xl:max-w-6xl   text-Title-Small lg:text-Title-Small">
+        <div className="">
           <div>
             <button
-              className="bg-DarkOrange  px-5 lg:px-8 py-3 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-semibold w-full text-center "
+              className="bg-DarkOrange  px-5 lg:px-8 py-3 rounded-full   focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-semibold w-full text-center "
               onClick={clearFilter}
             >
               All
             </button>
           </div>
         </div>
-        <div className="col-span-1 ">
-          <div className=" bg-DarkOrange  rounded-full  h-full">
+        <div className="basis-1/5 z-0">
+          <div className=" bg-DarkOrange  rounded-full    h-full">
             {isMounted && (
               <SelectDropdown
                 key={categoryData}
@@ -156,22 +156,22 @@ export default function FilterSection() {
             )}
           </div>
         </div>
-        <div className="col-span-1 font-medium">
+        <div className=" font-medium">
           <div className="">
             <button
-              className="bg-DarkOrange whitespace-nowrap px-5  py-3 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-semibold w-full text-center"
+              className="bg-DarkOrange whitespace-nowrap px-5  py-3 rounded-full   focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-semibold w-full text-center"
               onClick={clearFilter}
             >
               Clear Filters
             </button>
           </div>
         </div>
-        <div className="col-span-1 font-medium">
+        <div className="basis-2/5 font-medium">
           <div className=" text-black py-0.5 ">
             <input
               ref={searchRef}
               onChange={handleSearch}
-              className="rounded-full w-full  border-2 outline-none px-3 py-2 font-medium border-black border-solid"
+              className="rounded-xl  w-full  border-2 outline-none px-4 py-2 font-medium border-black border-solid"
               type="text"
               placeholder="Search By Tool Name"
             />
@@ -183,14 +183,14 @@ export default function FilterSection() {
       <section className="grid grid-cols-1 md:hidden py-[25px]  gap-3 text-Title-Small lg:text-Title-Large max-w-md mx-auto px-[30px]">
         <div className="col-span-1">
           <input
-            className="rounded-full w-full  border-2 outline-none p-3 font-medium border-black border-solid"
+            className="rounded-xl  w-full  border-2 outline-none p-3 font-medium border-black border-solid"
             type="text"
             placeholder="Search"
             onChange={handleSearch}
           />
         </div>
         <div className="col-span-1">
-          <div className="bg-DarkOrange  rounded-full text-white  w-full ">
+          <div className="bg-DarkOrange  rounded-full  text-white  w-full ">
             {isMounted && (
               <SelectDropdown
                 key={categoryData}
@@ -210,7 +210,7 @@ export default function FilterSection() {
           <div className=" grid grid-cols-2 gap-x-4">
             <div className="col-span-1">
               <button
-                className="w-full bg-DarkOrange   p-3 rounded-full focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 "
+                className="w-full bg-DarkOrange   p-3 rounded-full   focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 "
                 onClick={clearFilter}
               >
                 All
@@ -218,7 +218,7 @@ export default function FilterSection() {
             </div>
             <div className="col-span-1">
               <button
-                className="w-full bg-DarkOrange whitespace-nowrap p-3 rounded-full  focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 "
+                className="w-full bg-DarkOrange whitespace-nowrap p-3 rounded-full    focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 "
                 onClick={clearFilter}
               >
                 Clear Filters
