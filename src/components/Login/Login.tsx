@@ -5,7 +5,7 @@ export default function Login() {
     <>
       <div
         id="loginPopup"
-        className="fixed inset-0 flex items-center justify-center z-10"
+        className="fixed inset-0 flex items-center justify-center z-10 "
       >
         <div className="fixed inset-0 bg-black opacity-50"></div>
 

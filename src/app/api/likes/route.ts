@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/supabase";
 import { NextResponse } from "next/server";
-import AirtableModel from "@/models/airtableModel";
+import AirtableModel from "@/models/airtable.model";
 import { DOMAIN_URL, getCache, setCache } from "@/helper/helper";
 
 // get likes product list by user

@@ -7,13 +7,15 @@ import { Product } from "@/types/product";
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
 import LikedBookmarkModal from "@/components/modal/LikedBookmarkModal";
-import { deleteBookmark, addBookmark } from "@/lib/slice/bookmarkSlice";
+import {
+  deleteBookmark,
+  addBookmark,
+} from "@/redux/slice/bookmark/bookmarkSlice";
 import { useRouter } from "next/navigation";
-import {  useDispatch, useSelector } from "react-redux";
-import {  RootState } from "@/lib/store";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 import { isProductBookmarked } from "@/helper/helper";
 import { MdVerified } from "react-icons/md";
-
 
 export default function ProductToolBanner({
   url,
@@ -21,15 +23,18 @@ export default function ProductToolBanner({
   description,
   tag,
   link,
-  id, verified
+  id,
+  verified,
 }: Product) {
   const [isOpen, setIsOpen] = useState(false);
-  const bookmarkList =useSelector((state:RootState)=>state.bookmark.bookmarkList)
+  const bookmarkList = useSelector(
+    (state: RootState) => state.bookmark.bookmarkList
+  );
   // const [isBookMarked, setIsBookMarked] = useState(false);
   const [isBookMarked, setIsBookMarked] = useState(() =>
     isProductBookmarked(id, bookmarkList)
   );
-  
+
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -38,11 +43,9 @@ export default function ProductToolBanner({
   );
 
   const handleBookMark = () => {
-
     if (!userAuthData) {
-      setIsOpen(true)
-    }
-    else{
+      setIsOpen(true);
+    } else {
       if (isBookMarked && id) {
         // @ts-ignore
         dispatch(deleteBookmark(id));
@@ -67,19 +70,19 @@ export default function ProductToolBanner({
   }, [setIsBookMarked, isBookMarked, id, bookmarkList]);
   return (
     <>
-      <main className="bg-light-gray   p-10 md:px-10 md:py-16 md:mb-12 xl:px-10-percent ">
+      <main className="bg-light-gray   p-10 md:px-10 md:py-16 md:mb-12  ">
         <div className="max-w-7xl mx-auto">
           <Breadcrumb tag={tag} title={title} />
           <div
-            className="affiliate-tool-container   space-y-8 flex flex-col 
+            className="affiliate-tool-container lg:space-x-8  xl:space-y-8 flex flex-col 
         lg:flex-row my-12"
           >
             {/* Image Container */}
-            <div
-              className="aftl-left-section   xl:w-45%"
-            >
-              <div className="border border-black border-solid 
-          rounded-t-xl">
+            <div className="aftl-left-section   xl:w-45%">
+              <div
+                className="border border-black border-solid 
+          rounded-t-xl"
+              >
                 <Image
                   src={url}
                   alt="logo bannero"
@@ -93,11 +96,11 @@ export default function ProductToolBanner({
               </div>
 
               <div className="flex justify-between pt-6 items-center text-white  max-w-7xl">
-                <div className="basis-2/5">
+                <div className="xl:basis-2/5">
                   <Link
                     href={link}
                     target="_blank"
-                    className="flex rounded-full font-semibold bg-DarkOrange items-center justify-around  md:text-xl px-4 md:px-4  md:py-3 space-x-4  py-2"
+                    className="flex rounded-full font-semibold bg-DarkOrange items-center justify-around  text-sm lg:text-xl px-4 md:px-4  md:py-3 space-x-4  py-2"
                   >
                     <p className="flex-1 text-center">Visit Website</p>
                     <div>
@@ -105,12 +108,16 @@ export default function ProductToolBanner({
                     </div>
                   </Link>
                 </div>
-                <div className="ml-auto">
-                  <button title="Bookmark" type="button" onClick={handleBookMark}>
+                <div className="ml-auto mt-2">
+                  <button
+                    title="Bookmark"
+                    type="button"
+                    onClick={handleBookMark}
+                  >
                     {isBookMarked ? (
-                      <BsBookmarkFill className="text-4xl text-DarkOrange" />
+                      <BsBookmarkFill className="text-xl md:text-2xl xl:text-4xl text-DarkOrange" />
                     ) : (
-                      <BsBookmark className="text-4xl   text-black" />
+                        <BsBookmark className="text-xl md:text-2xl xl:text-4xl   text-black" />
                     )}
                   </button>{" "}
                 </div>
@@ -118,7 +125,6 @@ export default function ProductToolBanner({
                   <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
                 )}
               </div>
-
             </div>
 
             <div className="aftl-right-section  xl:w-30%">
@@ -158,8 +164,7 @@ export default function ProductToolBanner({
               </div>
             </div>
           </div>
-
-      </div>
+        </div>
       </main>
     </>
   );
