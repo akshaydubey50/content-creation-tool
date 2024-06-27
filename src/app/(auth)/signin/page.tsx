@@ -15,12 +15,15 @@ import axios from "axios";
 import { useState } from "react";
 import { SignInResponse, signIn } from "next-auth/react";
 import { redirect, useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { setUserAuth } from "@/redux/slice/user/userSlice";
 
 export default function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const route = useRouter();
+  const dispatch = useDispatch();
+
 
   const handleSignIn = async () => {
     const response = await signIn("credentials", {
@@ -28,6 +31,7 @@ export default function Page() {
       email: email,
       password: password,
     });
+    dispatch(setUserAuth(response))
     console.log("reponse", response);
 
     if (response?.url) {
@@ -36,55 +40,57 @@ export default function Page() {
   };
 
   return (
-    <Card className="mx-auto max-w-sm">
-      <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
-        <CardDescription>
-          Enter your email below to login to your account
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="m@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Password</Label>
-              <Link href="#" className="ml-auto inline-block text-sm underline">
-                Forgot your password?
-              </Link>
+    <section className="h-screen flex items-center  ">
+      <Card className="mx-auto max-w-sm shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]	">
+        <CardHeader>
+          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardDescription>
+            Enter your email below to login to your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="grid gap-2">
+              <div className="flex items-center">
+                <Label htmlFor="password">Password</Label>
+                <Link href="#" className="ml-auto inline-block text-sm underline">
+                  Forgot your password?
+                </Link>
+              </div>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <Button variant="outline"  onClick={handleSignIn} type="submit" className="w-full">
+              Login
+            </Button>
+            <Button variant="outline" className="w-full">
+              Login with Google
+            </Button>
           </div>
-          <Button onClick={handleSignIn} type="submit" className="w-full">
-            Login
-          </Button>
-          <Button variant="outline" className="w-full">
-            Login with Google
-          </Button>
-        </div>
-        <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{" "}
-          <Link href={"/signup"} className="underline">
-            Sign up
-          </Link>
-        </div>
-      </CardContent>
-    </Card>
+          <div className="mt-4 text-center text-sm">
+            Don&apos;t have an account?{" "}
+            <Link href={"/signup"} className="underline">
+              Sign up
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    </section>
   );
 }
