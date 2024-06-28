@@ -22,9 +22,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const dispatch: AppDispatch = useDispatch();
-  const { isUserAuthenticated, error, userSession } = useSelector(
-    (store: RootState) => store.user
-  );
+  const { isUserAuthenticated } = useSelector((store: RootState) => store.user);
 
   const productList = useSelector(
     (state: RootState) => state.product.productList

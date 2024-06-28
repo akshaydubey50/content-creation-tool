@@ -10,11 +10,7 @@ import { ImCross } from "react-icons/im";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { Auth } from "@supabase/auth-ui-react";
-import {
-  error,
-  isUserAuthenticated,
-  isUserLoggedInSlice,
-} from "@/redux/slice/user/userSlice";
+// import { isUserAuthenticated,} from "@/redux/slice/user/userSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";

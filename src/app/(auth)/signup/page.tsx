@@ -66,12 +66,13 @@ export default function Page() {
               <Input
                 id="password"
                 type="password"
+                placeholder="Enter Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
-            <Button onClick={handleSignUp} type="submit" className="w-full">
+            <Button onClick={handleSignUp} variant="outline" type="submit" className="w-full">
               Create an account
             </Button>
 
