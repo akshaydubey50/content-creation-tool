@@ -39,16 +39,17 @@ export function ProductCard(props: any) {
   const { totalCount, updateUpVoteCount, productUpVoteCount } =
     useUpvoteCount(id);
 
-  const userAuthData = useSelector(
-    (store: RootState) => store.user.userSession
+  const userAuthData:any = useSelector(
+    (store: RootState) => store.user.isUserAuthenticated
   );
 
+  console.log('userAuthData',userAuthData)
   const { Tags, Name, WebsiteLink, Description, ToolImage, Verified } = fields!;
   const formattedTitle = Name?.toLowerCase().replace(/\s/g, "-");
   const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
 
   const handleBookmarkClick = () => {
-    if (!userAuthData) {
+    if (!userAuthData?.ok) {
       setIsOpen(true);
     } else {
       if (isBookMarked && id) {
@@ -64,7 +65,7 @@ export function ProductCard(props: any) {
   };
 
   const handleLikes = async () => {
-    if (!userAuthData) {
+    if (!userAuthData?.ok) {
       return setIsOpen(true);
     } else {
       updateUpVoteCount(id);
@@ -140,7 +141,7 @@ export function ProductCard(props: any) {
                   </p>
                   <p className="">{totalCount}</p>
                 </button>
-                {!userAuthData && isOpen && (
+                {!userAuthData?.ok && isOpen && (
                   <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
                 )}
               </div>

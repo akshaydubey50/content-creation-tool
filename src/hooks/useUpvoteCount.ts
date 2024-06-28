@@ -7,8 +7,8 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 const useUpvoteCount = (id: any) => {
   const supabase = createClientComponentClient();
   const [totalCount, setTotalCount] = useState(0);
-  const userAuthData = useSelector(
-    (store: RootState) => store.user.userSession
+  const { isUserAuthenticated } = useSelector(
+    (store: RootState) => store.user
   );
 
   const productUpVoteCount = async () => {

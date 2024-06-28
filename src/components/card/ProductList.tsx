@@ -22,9 +22,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const dispatch: AppDispatch = useDispatch();
-  const { isUserAuthenticated, error, userSession } = useSelector(
-    (store: RootState) => store.user
-  );
+  const { isUserAuthenticated } = useSelector((store: RootState) => store.user);
 
   const productList = useSelector(
     (state: RootState) => state.product.productList
@@ -50,8 +48,8 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const isBookmark = useSelector(
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
-  const userAuthData = useSelector(
-    (store: RootState) => store.user.userSession
+  const userAuthData:any = useSelector(
+    (store: RootState) => store.user.isUserAuthenticated
   );
   const bookmarkLoadingStatus = useSelector(
     (store: RootState) => store.bookmark.status
@@ -136,7 +134,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   }, [dispatch]);
 
   useEffect(() => {
-    if (userAuthData) {
+    if (userAuthData?.ok) {
       dispatch(getBookmarkList());
     }
   }, [dispatch, userAuthData]);

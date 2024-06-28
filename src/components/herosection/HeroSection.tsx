@@ -31,10 +31,10 @@ export default function HeroSection() {
   const isUserLoggedIn = useSelector(
     (store: RootState) => store.user.isUserAuthenticated
   );
-  const userAuthData = useSelector(
-    (store: RootState) => store.user.userSession
-  );
-  const { isUserAuthenticated, error, userSession } = useSelector(
+  // const userAuthData = useSelector(
+  //   (store: RootState) => store.user.userSession
+  // );
+  const { isUserAuthenticated } = useSelector(
     (store: RootState) => store.user
   );
   const isBookmark = useSelector<any>(
@@ -64,7 +64,7 @@ export default function HeroSection() {
   };
 
   const handleBookmark = async () => {
-    if (!userAuthData) {
+    if (!isUserAuthenticated) {
       return setIsOpen(true);
     } else {
       if (!isBookmark && isUserAuthenticated) {
@@ -160,7 +160,7 @@ export default function HeroSection() {
                     <p className="font-medium text-Title-Small xl:text-Title-Medium">
                       Bookmark
                     </p>
-                    {!userAuthData && isOpen && (
+                    {!isUserAuthenticated && isOpen && (
                       <LikedBookmarkModal
                         isOpen={isOpen}
                         setIsOpen={setIsOpen}
@@ -185,29 +185,6 @@ export default function HeroSection() {
                     </p>
                   </div>
 
-                  {/*
-                <div className="flex flex-col place-items-center  space-y-4 cursor-pointer">
-                  <button
-                    className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6 
-                     "bg-gray-200" : "bg-gray-300"
-                     hover:bg-opacity-75 focus:outline-none`}
-                    onClick={() => {
-                      console.log("Liked btn clicked");
-                    }}
-                  >
-                    <GoHeartFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                      {islikeFilled ? (
-                      <GoHeartFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    ) : (
-                      <GoHeart className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    )} 
-                  </button>
-                  <p className="font-medium text-Title-Small xl:text-Title-Medium">
-                    Liked
-                  </p>
-                </div>
-                    */}
-
                   <div className="flex flex-col place-items-center  space-y-4 cursor-pointer">
                     <button
                       className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6  "bg-gray-200" : "bg-gray-300"
@@ -216,11 +193,6 @@ export default function HeroSection() {
                     >
                       {" "}
                       <RiSearchLine className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                      {/*  {isSearchFilled ? (
-                      <RiSearchLine className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    ) : (
-                      <RiSearchLine className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    )} */}
                     </button>
                     <p className="font-medium text-Title-Small xl:text-Title-Medium">
                       Search
