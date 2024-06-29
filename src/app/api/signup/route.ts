@@ -1,8 +1,10 @@
+import connectDB from "@/lib/dbConnect";
 import UserModel from "@/models/user/User.model";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
+  await connectDB();
   //get email and password
   //check if email exist
   //if exit throw error
