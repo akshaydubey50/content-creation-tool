@@ -9,8 +9,10 @@ export async function GET(req: NextRequest) {
   await connectDB();
 
   const token = await getToken({ req: req });
+  console.log('token ####', token)
 
   if (!token) {
+    console.log('token undefined',token)
     return NextResponse.json(
       { success: false, msg: "Unauthorized access" },
       { status: 400 }
@@ -53,7 +55,7 @@ export async function GET(req: NextRequest) {
 
     if (bookmarks.length === 0) {
       return NextResponse.json(
-        { success: true, msg: "No product bookmarked" },
+        { success: true, bookmarks:null, msg: "No product bookmarked" },
         { status: 200 }
       );
     }

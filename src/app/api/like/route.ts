@@ -30,23 +30,25 @@ export async function GET(req: NextRequest) {
     }
 
     const likes = await LikeModel.aggregate([
+     
       {
-        $match: {
-          userId: new mongoose.Types.ObjectId(user?._id),
+        $group: {
+          _id: "$productId",
+          count: { $sum: 1 }
         },
       },
       {
         $group: {
           _id: null,
-          productIds: { $addToSet: "$productId" },
-          totalLikes: { $sum: 1 },
+          products: { $push: { productId: "$_id", count: "$count" } },
+          totalLikes: { $sum: "$count" },
         },
       },
       {
         $project: {
           _id: 0,
-          productIds: "$productIds",
-          totalLikes: "$totalLikes",
+          products: 1,
+          totalLikes: 1,
         },
       },
     ]);

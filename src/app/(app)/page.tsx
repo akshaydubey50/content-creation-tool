@@ -5,6 +5,7 @@ import FilterSection from "@/components/filter/FilterSection";
 export const dynamic = 'force-dynamic'
 
 export default function Home() {
+ 
   return (
     <div className="mb-8">
       <HeroSection />
