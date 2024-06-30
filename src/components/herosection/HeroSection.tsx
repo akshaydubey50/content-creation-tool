@@ -29,9 +29,9 @@ export default function HeroSection() {
   const dispatch: AppDispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
 
-  const {data:session}= useSession();
+  const { data: session } = useSession();
 
-const isBookmark = useSelector<any>(
+  const isBookmark = useSelector<any>(
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
   const isVerifiedCheck = useSelector(
@@ -91,7 +91,7 @@ const isBookmark = useSelector<any>(
     }
   };
 
-  const searchIconHandler =()=>{
+  const searchIconHandler = () => {
     dispatch(setSearchInputFocus())
     dispatch(scrollPage(400))
   }
@@ -102,17 +102,16 @@ const isBookmark = useSelector<any>(
           <div className="flex-1">
             <div className="flex flex-col space-y-4 text-center">
               <h1 className="font-bold text-2xl leading-9 md:text-4xl md:leading-45 xl:text-6xl xl:leading-90 ">
-                Discover{" "}
+                Discover  {" "}
                 <span className="text-DarkOrange">
                   200+ Content Creation Tools
                 </span>
                 <br />
-                to Fuel Your Creativity.
+                for Content Creators.
               </h1>
-              <h5 className="text-base  xl:text-3xl xl:leading-45">
-                Search our massive database of the best and highest-
-                <br />
-                paying affiliate programs.
+              <h5 className="text-base mx-auto xl:text-3xl xl:leading-45 px-2 max-w-lg xl:max-w-4xl">
+                Directory of 200+ content creation tools designed to streamline
+                 your process and enhance productivity.
               </h5>
             </div>
           </div>
@@ -127,7 +126,7 @@ const isBookmark = useSelector<any>(
                       onClick={handleShowAllProduct}
                     >
                       <RiStackFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    
+
                     </button>
                     <p className="font-medium text-Title-Small xl:text-Title-Medium">
                       All
