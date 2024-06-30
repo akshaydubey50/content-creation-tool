@@ -38,12 +38,12 @@ export default function ProductToolBanner({
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const userAuthData = useSelector(
-    (store: RootState) => store.user.userSession
+  const { isUserAuthenticated } = useSelector(
+    (store: RootState) => store.user
   );
 
   const handleBookMark = () => {
-    if (!userAuthData) {
+    if (!isUserAuthenticated) {
       setIsOpen(true);
     } else {
       if (isBookMarked && id) {
@@ -74,7 +74,7 @@ export default function ProductToolBanner({
         <div className="max-w-7xl mx-auto">
           <Breadcrumb tag={tag} title={title} />
           <div
-            className="affiliate-tool-container lg:space-x-8  xl:space-y-8 flex flex-col 
+            className="affiliate-tool-container lg:space-x-8  xl:space-y-0 flex flex-col 
         lg:flex-row my-12"
           >
             {/* Image Container */}
@@ -91,50 +91,37 @@ export default function ProductToolBanner({
                   height="720"
                   decoding="async"
                   data-nimg="1"
-                  className="rounded-t-xl w-full h-full  object-cover"
+                  className="rounded-t-xl  h-full  object-cover"
                 />
-              </div>
-
-              <div className="flex justify-between pt-6 items-center text-white  max-w-7xl">
-                <div className="xl:basis-2/5">
-                  <Link
-                    href={link}
-                    target="_blank"
-                    className="flex rounded-full font-semibold bg-DarkOrange items-center justify-around  text-sm lg:text-xl px-4 md:px-4  md:py-3 space-x-4  py-2"
-                  >
-                    <p className="flex-1 text-center">Visit Website</p>
-                    <div>
-                      <FiArrowUpRight className="text-white text-2xl md:text-3xl  " />
-                    </div>
-                  </Link>
-                </div>
-                <div className="ml-auto mt-2">
-                  <button
-                    title="Bookmark"
-                    type="button"
-                    onClick={handleBookMark}
-                  >
-                    {isBookMarked ? (
-                      <BsBookmarkFill className="text-xl md:text-2xl xl:text-4xl text-DarkOrange" />
-                    ) : (
-                        <BsBookmark className="text-xl md:text-2xl xl:text-4xl   text-black" />
-                    )}
-                  </button>{" "}
-                </div>
-                {isOpen && (
-                  <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
-                )}
-              </div>
+              </div>  
             </div>
 
             <div className="aftl-right-section  xl:w-30%">
-              <div className="flex flex-col flex-1 space-y-4 mb-6 ">
-                <div className="flex gap-8 items-center">
-                  <h1 className="text-Heading-Medium md:text-Heading-Large font-bold">
-                    {title}
-                  </h1>
-                  {verified && (
-                    <MdVerified className="text-4xl text-DarkOrange" />
+              <div className="flex flex-col flex-1 space-y-4  mb-6 ">
+                <div className="flex items-center  justify-between">
+                  <div className="flex gap-2 items-center">
+                    <h1 className="text-Heading-Medium xl:text-Heading-Large font-bold">
+                      {title}
+                    </h1>
+                    {verified && (
+                      <MdVerified className="text-2xl text-DarkOrange" />
+                    )}
+                 </div>
+                  <div className="mt-2">
+                    <button
+                      title="Bookmark"
+                      type="button"
+                      onClick={handleBookMark}
+                    >
+                      {isBookMarked ? (
+                        <BsBookmarkFill className="text-xl md:text-2xl xl:text-3xl text-DarkOrange"/>
+                      ) : (
+                          <BsBookmark className="text-xl md:text-2xl xl:text-3xl   text-black" />
+                      )}
+                    </button>{" "}
+                  </div>
+                  {isOpen && (
+                    <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
                   )}
                 </div>
                 <p className="ml-0 text-Description lg:text-Description-Large">
@@ -143,8 +130,8 @@ export default function ProductToolBanner({
               </div>
               <div className="aftl-category   flex flex-1 text-xl space-x-4 ">
                 <div
-                  className=" rounded-full bg-white border border-solid
-               border-black text-center cursor-pointer hover:bg-DarkOrange hover:text-white hover:border-DarkOrange"
+                  className=" rounded-lg bg-white border border-solid text-DarkOrange
+               border-DarkOrange text-center cursor-pointer hover:bg-DarkOrange hover:text-white hover:border-DarkOrange"
                 >
                   <button
                     className="text-sm px-6 py-2 md:px-10 md:py-2 font-bold w-fit"
@@ -154,13 +141,28 @@ export default function ProductToolBanner({
                   </button>
                 </div>
                 <div
-                  className="rounded-full  bg-gray-400 text-white border border-solid
-               border-black text-center"
+                  className="rounded-lg  bg-white    text-DarkOrange border 
+               border-DarkOrange hover:bg-DarkOrange hover:text-white text-center"
                 >
                   <button className="text-sm px-6 py-2 md:px-10 md:py-2 font-bold w-fit">
                     Free
                   </button>
                 </div>
+              </div>
+              <div className="flex justify-between pt-6 items-center text-white  max-w-lg">
+                <div className="text-white text-2xl  hover:text-DarkOrange">
+                  <Link
+                    href={link}
+                    target="_blank"
+                    className=" hover:bg-white  border border-DarkOrange flex rounded-md font-semibold bg-DarkOrange items-center justify-around  text-sm lg:text-lg px-4 space-x-2  py-2"
+                  >
+                    <p className="flex-1 text-center">Visit Website</p>
+                    <div>
+                      <FiArrowUpRight className="text-2xl hover:text-DarkOrange" />
+                    </div>
+                  </Link>
+                </div>
+              
               </div>
             </div>
           </div>

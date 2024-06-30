@@ -10,11 +10,7 @@ import { ImCross } from "react-icons/im";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { Auth } from "@supabase/auth-ui-react";
-import {
-  error,
-  isUserAuthenticated,
-  isUserLoggedInSlice,
-} from "@/redux/slice/user/userSlice";
+// import { isUserAuthenticated,} from "@/redux/slice/user/userSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
@@ -35,7 +31,7 @@ export default function Navbar() {
   const { showLoginForm, setShowLoginForm } = useVisibleItemContextData();
 
   useEffect(() => {
-    dispatch(isUserLoggedInSlice());
+    // dispatch(isUserLoggedInSlice());
     localStorage.setItem("isActiveMenu", String(isActiveMenu));
   }, [isActiveMenu, dispatch]);
 
@@ -81,7 +77,7 @@ export default function Navbar() {
         <div className="flex  max-w-7xl  mx-auto justify-between items-center  py-4 lg:px-2 lg:py-4">
           <div>
             <Link href="/">
-              <h2 className="text-Title-Large  font-bold">Content Creation</h2>
+              <h2 className="text-Title-Large  font-bold">Content Tool</h2>
             </Link>
           </div>
           {/* menubar in large screen */}

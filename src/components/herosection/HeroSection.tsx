@@ -23,21 +23,15 @@ import {
   setSearchInputFocus,
   scrollPage,
 } from "@/redux/slice/search/searchSlice";
+import { useSession } from "next-auth/react";
 
 export default function HeroSection() {
   const dispatch: AppDispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
 
-  const isUserLoggedIn = useSelector(
-    (store: RootState) => store.user.isUserAuthenticated
-  );
-  const userAuthData = useSelector(
-    (store: RootState) => store.user.userSession
-  );
-  const { isUserAuthenticated, error, userSession } = useSelector(
-    (store: RootState) => store.user
-  );
-  const isBookmark = useSelector<any>(
+  const {data:session}= useSession();
+
+const isBookmark = useSelector<any>(
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
   const isVerifiedCheck = useSelector(
@@ -64,10 +58,10 @@ export default function HeroSection() {
   };
 
   const handleBookmark = async () => {
-    if (!userAuthData) {
+    if (!session) {
       return setIsOpen(true);
     } else {
-      if (!isBookmark && isUserAuthenticated) {
+      if (!isBookmark && session) {
         dispatch(setIsBookmarkCheck());
         dispatch(getBookmarkList());
       }
@@ -133,11 +127,7 @@ export default function HeroSection() {
                       onClick={handleShowAllProduct}
                     >
                       <RiStackFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                      {/* {isAllFilled ? (
-                      <RiStackFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    ) : (
-                      <PiStack className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    )} */}
+                    
                     </button>
                     <p className="font-medium text-Title-Small xl:text-Title-Medium">
                       All
@@ -150,7 +140,6 @@ export default function HeroSection() {
                     } hover:bg-opacity-75 focus:outline-none`}
                       onClick={handleBookmark}
                     >
-                      {/* <BsBookmarkFill className="text-2xl md:text-3xl lg:text-4xl text-black" /> */}
                       {isBookmark ? (
                         <BsBookmarkFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
                       ) : (
@@ -160,7 +149,7 @@ export default function HeroSection() {
                     <p className="font-medium text-Title-Small xl:text-Title-Medium">
                       Bookmark
                     </p>
-                    {!userAuthData && isOpen && (
+                    {!session && isOpen && (
                       <LikedBookmarkModal
                         isOpen={isOpen}
                         setIsOpen={setIsOpen}
@@ -185,29 +174,6 @@ export default function HeroSection() {
                     </p>
                   </div>
 
-                  {/*
-                <div className="flex flex-col place-items-center  space-y-4 cursor-pointer">
-                  <button
-                    className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6 
-                     "bg-gray-200" : "bg-gray-300"
-                     hover:bg-opacity-75 focus:outline-none`}
-                    onClick={() => {
-                      console.log("Liked btn clicked");
-                    }}
-                  >
-                    <GoHeartFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                      {islikeFilled ? (
-                      <GoHeartFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    ) : (
-                      <GoHeart className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    )} 
-                  </button>
-                  <p className="font-medium text-Title-Small xl:text-Title-Medium">
-                    Liked
-                  </p>
-                </div>
-                    */}
-
                   <div className="flex flex-col place-items-center  space-y-4 cursor-pointer">
                     <button
                       className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6  "bg-gray-200" : "bg-gray-300"
@@ -216,11 +182,6 @@ export default function HeroSection() {
                     >
                       {" "}
                       <RiSearchLine className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                      {/*  {isSearchFilled ? (
-                      <RiSearchLine className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    ) : (
-                      <RiSearchLine className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    )} */}
                     </button>
                     <p className="font-medium text-Title-Small xl:text-Title-Medium">
                       Search
