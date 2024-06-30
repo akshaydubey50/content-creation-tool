@@ -23,21 +23,15 @@ import {
   setSearchInputFocus,
   scrollPage,
 } from "@/redux/slice/search/searchSlice";
+import { useSession } from "next-auth/react";
 
 export default function HeroSection() {
   const dispatch: AppDispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
 
-  const isUserLoggedIn = useSelector(
-    (store: RootState) => store.user.isUserAuthenticated
-  );
-  // const userAuthData = useSelector(
-  //   (store: RootState) => store.user.userSession
-  // );
-  const { isUserAuthenticated } = useSelector(
-    (store: RootState) => store.user
-  );
-  const isBookmark = useSelector<any>(
+  const {data:session}= useSession();
+
+const isBookmark = useSelector<any>(
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
   const isVerifiedCheck = useSelector(
@@ -64,10 +58,10 @@ export default function HeroSection() {
   };
 
   const handleBookmark = async () => {
-    if (!isUserAuthenticated) {
+    if (!session) {
       return setIsOpen(true);
     } else {
-      if (!isBookmark && isUserAuthenticated) {
+      if (!isBookmark && session) {
         dispatch(setIsBookmarkCheck());
         dispatch(getBookmarkList());
       }
@@ -133,11 +127,7 @@ export default function HeroSection() {
                       onClick={handleShowAllProduct}
                     >
                       <RiStackFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                      {/* {isAllFilled ? (
-                      <RiStackFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    ) : (
-                      <PiStack className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    )} */}
+                    
                     </button>
                     <p className="font-medium text-Title-Small xl:text-Title-Medium">
                       All
@@ -150,7 +140,6 @@ export default function HeroSection() {
                     } hover:bg-opacity-75 focus:outline-none`}
                       onClick={handleBookmark}
                     >
-                      {/* <BsBookmarkFill className="text-2xl md:text-3xl lg:text-4xl text-black" /> */}
                       {isBookmark ? (
                         <BsBookmarkFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
                       ) : (
@@ -160,7 +149,7 @@ export default function HeroSection() {
                     <p className="font-medium text-Title-Small xl:text-Title-Medium">
                       Bookmark
                     </p>
-                    {!isUserAuthenticated && isOpen && (
+                    {!session && isOpen && (
                       <LikedBookmarkModal
                         isOpen={isOpen}
                         setIsOpen={setIsOpen}

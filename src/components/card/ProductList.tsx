@@ -9,9 +9,12 @@ import {
   getBookmarkList,
   setBookmarkList,
 } from "@/redux/slice/bookmark/bookmarkSlice";
+import {getUpvoteList} from "@/redux/slice/upvote/upvoteSlice"
 import Loader from "../common/Loader/Loader";
 import { RootState, AppDispatch } from "@/redux/store";
 import Pagination from "../pagination/Pagination";
+import { useSession } from "next-auth/react";
+import { isProductUpvoted } from "@/helper/helper";
 
 interface ProductListProps {
   currentCategory?: string;
@@ -23,7 +26,8 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   const dispatch: AppDispatch = useDispatch();
   const { isUserAuthenticated } = useSelector((store: RootState) => store.user);
-
+  const {data:session} =useSession();
+  // console.log('getAuthSession', getAuthSession)
   const productList = useSelector(
     (state: RootState) => state.product.productList
   );
@@ -42,21 +46,13 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const isVerifiedCheck = useSelector(
     (store: RootState) => store.verifiedProduct.isVerifiedChecked
   );
-  const bookmarkList = useSelector(
-    (store: RootState) => store.bookmark.bookmarkList
-  );
+  const bookmarkList:any = useSelector((store: RootState) => store.bookmark.bookmarkList);
+  
   const isBookmark = useSelector(
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
-  const userAuthData:any = useSelector(
-    (store: RootState) => store.user.isUserAuthenticated
-  );
-  const bookmarkLoadingStatus = useSelector(
-    (store: RootState) => store.bookmark.status
-  );
-  const getListBookmarkStatus = useSelector(
-    (store: RootState) => store.bookmark.getListStatus
-  );
+ 
+  const upVotedList:any=useSelector((store:RootState)=>store.upvote.upvoteList) 
 
   const itemsPerPage = 9;
   const handlePageChange = (page: number) => {
@@ -99,13 +95,18 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     } else if (productSearchQuery.length > 0 && inputSearchFilterArr) {
       // Search input filtered product productList
       return inputSearchFilterArr.length > 0 ? inputSearchFilterArr : [];
-    } else if (isUserAuthenticated && isBookmark && bookmarkList) {
-      return bookmarkList;
+    } else if (session && isBookmark && bookmarkList) {
+      const getBookmarkedList = productList.filter((item:AirtableModel)=>{
+        if (bookmarkList?.includes(item?.id)){
+          return item
+        }
+      }) 
+      return getBookmarkedList
     } else if (isVerifiedCheck && verifiedProductArr.length > 0) {
       // Verified Product
       return verifiedProductArr;
     } else if (productList && !id) {
-      // All productList
+      // All productList  
       return productList;
     }
 
@@ -116,7 +117,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     dropDownCategoryArr,
     id,
     inputSearchFilterArr,
-    isUserAuthenticated,
+    session,
     isBookmark,
     bookmarkList,
     isVerifiedCheck,
@@ -131,29 +132,36 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   useEffect(() => {
     dispatch(fetchProductList());
+
   }, [dispatch]);
 
   useEffect(() => {
-    if (userAuthData?.ok) {
+    if (session?.user){
       dispatch(getBookmarkList());
+      dispatch(getUpvoteList())
     }
-  }, [dispatch, userAuthData]);
 
-  // issue with these if condition while search tool and checking bookmarklist loader Ui shown
-  // if (filteredProductRecords!.length === 0) {
-  //   return <Loader />;
-  // }
+  }, [dispatch, session ]);
+
 
   if (!productList) {
     return <Loader />;
   }
 
-  if (isBookmark && bookmarkLoadingStatus === "loading") {
-    return <Loader />;
-  }
-  if (getListBookmarkStatus === "loading") {
-    return <Loader />;
-  }
+  // if (isBookmark && bookmarkLoadingStatus === "loading") {
+  //   return <Loader />;
+  // }
+  // if (getListBookmarkStatus === "loading") {
+  //   return <Loader />;
+  // }
+  if (isBookmark && bookmarkList.length ===0){
+      return(
+        <>
+          <h1 className="text-3xl font-bold  text-center">No Bookmark yet</h1>
+        </>
+      )
+     }
+  
 
   return (
     <>
@@ -177,6 +185,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
                 product={item}
                 isBookmark={isProductBookmarked(item, bookmarkList)}
                 bookmarkList={bookmarkList}
+                upVotedList={upVotedList}
               />
             );
           } else {
@@ -186,6 +195,8 @@ export default function ProductList({ currentCategory }: ProductListProps) {
                 product={item}
                 isBookmark={isProductBookmarked(item, bookmarkList)}
                 bookmarkList={bookmarkList}
+                upVotedList={upVotedList}
+
               />
             );
           }
@@ -203,13 +214,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           </h1>
         </>
       )}
-      {isBookmark &&
-        getListBookmarkStatus === "succeeded" &&
-        bookmarkList.length == 0 && (
-          <>
-            <h1 className="text-3xl font-bold  text-center">No Bookmark yet</h1>
-          </>
-        )}
+     
       <Pagination
         currentPage={currentPage}
         totalItems={filteredProductRecords!.length}
@@ -221,10 +226,10 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
 export function isProductBookmarked(
   product: AirtableModel,
-  bookmarkList: AirtableModel[]
+  bookmarkList: any
 ) {
-  if (bookmarkList) {
-    return bookmarkList?.some((bookmark) => bookmark?.id === product.id);
+  if (bookmarkList?.length >0) {
+    return bookmarkList?.some((bookmarkID: any) => bookmarkID === product?.id);
   }
   return false;
 }
