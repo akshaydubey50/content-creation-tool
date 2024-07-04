@@ -5,8 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 // Backend Data Import
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Session } from "@supabase/supabase-js";
 
 // Icon's Import
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
@@ -17,38 +15,33 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import LikedBookmarkModal from "../modal/LikedBookmarkModal";
 import VisitWebsite from "../visit-website/VisitWebsite";
 import AirtableModel from "@/models/airtable.model";
-import {
-  deleteBookmark,
-  addBookmark,
-} from "@/redux/slice/bookmark/bookmarkSlice";
+import {deleteBookmark,addBookmark} from "@/redux/slice/bookmark/bookmarkSlice";
+import { addUpvote,deleteUpvote } from "@/redux/slice/upvote/upvoteSlice";
+
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { isProductBookmarked, isProductLikedByUser } from "@/helper/helper";
-import useUpvoteCount from "@/hooks/useUpvoteCount";
+import { isProductBookmarked, isProductUpvoted } from "@/helper/helper";
+import { useSession } from "next-auth/react";
+import { P } from "@upstash/redis/zmscore-5d82e632";
 
 export function ProductCard(props: any) {
-  const supabaseClient = createClientComponentClient();
-  const { bookmarkList, product } = props;
+  const dispatch: AppDispatch = useDispatch();
+  const { upVotedList,bookmarkList, product } = props;
+
   const { id, fields } = product;
   const [isLiked, setIsLiked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [isBookMarked, setIsBookMarked] = useState(() =>
-    isProductBookmarked(id, bookmarkList)
-  );
-  const dispatch: AppDispatch = useDispatch();
-  const { totalCount, updateUpVoteCount, productUpVoteCount } =
-    useUpvoteCount(id);
-
-  const userAuthData = useSelector(
-    (store: RootState) => store.user.userSession
-  );
+  const [isBookMarked, setIsBookMarked] = useState(() =>isProductBookmarked(id, bookmarkList))
+  const [isUpvoted, setIsUpvoted] = useState(() => isProductUpvoted(id, upVotedList)  );
+  const [count,setCount]=useState(0)
+  const { data: session } = useSession();
 
   const { Tags, Name, WebsiteLink, Description, ToolImage, Verified } = fields!;
   const formattedTitle = Name?.toLowerCase().replace(/\s/g, "-");
   const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
 
   const handleBookmarkClick = () => {
-    if (!userAuthData) {
+    if (!session?.user) {
       setIsOpen(true);
     } else {
       if (isBookMarked && id) {
@@ -64,27 +57,43 @@ export function ProductCard(props: any) {
   };
 
   const handleLikes = async () => {
-    if (!userAuthData) {
+    if (!session?.user) {
       return setIsOpen(true);
     } else {
-      updateUpVoteCount(id);
-      setIsLiked(!isLiked);
+      if (isUpvoted && id) {
+        // @ts-ignore
+        dispatch(deleteUpvote(id));
+        setIsUpvoted(!isUpvoted);
+      } else {
+        // @ts-ignore
+        dispatch(addUpvote(id));
+        setIsUpvoted(!isUpvoted);
+      }
     }
   };
 
-  const likedByUser = async (id: number) => {
-    const booleanVal = await isProductLikedByUser(id);
-    setIsLiked(booleanVal);
-  };
+
 
   useEffect(() => {
     setIsBookMarked(isProductBookmarked(id, bookmarkList));
+    console.log("bookmarkList", bookmarkList)
   }, [setIsBookMarked, isBookMarked, id, bookmarkList]);
 
-  useEffect(() => {
-    likedByUser(id);
-  }, [id]);
 
+  useEffect(() => {
+    setIsLiked(isProductUpvoted(id, upVotedList));
+    console.log("upVotedList", upVotedList)
+  }, [setIsLiked, isUpvoted, id, upVotedList]);
+
+
+  useEffect(()=>{
+    if (upVotedList && id){
+
+      const getCurrentUpvote=  isProductUpvoted(id, upVotedList)
+      console.log('getCurrentUpvote', getCurrentUpvote)
+      setCount(getCurrentUpvote?.count||0)
+    }
+  }, [upVotedList,id])
   return (
     <>
       <div
@@ -138,9 +147,9 @@ export function ProductCard(props: any) {
                       <AiOutlineHeart className="text-3xl   text-black" />
                     )}
                   </p>
-                  <p className="">{totalCount}</p>
+                  <p className="">{count}</p>
                 </button>
-                {!userAuthData && isOpen && (
+                {!session?.user && isOpen && (
                   <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
                 )}
               </div>
@@ -177,9 +186,7 @@ export function ProductCard(props: any) {
                     <BsBookmark className="text-3xl   text-black" />
                   )}
                 </button>
-                {/* {!userAuthData && isOpen && (
-                  <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
-                )} */}
+            
               </div>
             </div>
           </div>

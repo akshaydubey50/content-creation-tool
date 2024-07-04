@@ -23,20 +23,14 @@ import {
   setSearchInputFocus,
   scrollPage,
 } from "@/redux/slice/search/searchSlice";
+import { useSession } from "next-auth/react";
 
 export default function HeroSection({ productList }: any) {
   const dispatch: AppDispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
 
-  const isUserLoggedIn = useSelector(
-    (store: RootState) => store.user.isUserAuthenticated
-  );
-  const userAuthData = useSelector(
-    (store: RootState) => store.user.userSession
-  );
-  const { isUserAuthenticated, error, userSession } = useSelector(
-    (store: RootState) => store.user
-  );
+  const { data: session } = useSession();
+
   const isBookmark = useSelector<any>(
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
@@ -64,10 +58,10 @@ export default function HeroSection({ productList }: any) {
   };
 
   const handleBookmark = async () => {
-    if (!userAuthData) {
+    if (!session) {
       return setIsOpen(true);
     } else {
-      if (!isBookmark && isUserAuthenticated) {
+      if (!isBookmark && session) {
         dispatch(setIsBookmarkCheck());
         dispatch(getBookmarkList());
       }
@@ -97,7 +91,7 @@ export default function HeroSection({ productList }: any) {
     }
   };
 
-  const searchIconHandler =()=>{
+  const searchIconHandler = () => {
     dispatch(setSearchInputFocus())
     dispatch(scrollPage(400))
   }
@@ -108,17 +102,16 @@ export default function HeroSection({ productList }: any) {
           <div className="flex-1">
             <div className="flex flex-col space-y-4 text-center">
               <h1 className="font-bold text-2xl leading-9 md:text-4xl md:leading-45 xl:text-6xl xl:leading-90 ">
-                Discover{" "}
+                Discover  {" "}
                 <span className="text-DarkOrange">
                   200+ Content Creation Tools
                 </span>
                 <br />
-                to Fuel Your Creativity.
+                for Content Creators.
               </h1>
-              <h5 className="text-base  xl:text-3xl xl:leading-45">
-                Search our massive database of the best and highest-
-                <br />
-                paying affiliate programs.
+              <h5 className="text-base mx-auto xl:text-3xl xl:leading-45 px-2 max-w-lg xl:max-w-4xl">
+                Directory of 200+ content creation tools designed to streamline
+                 your process and enhance productivity.
               </h5>
             </div>
           </div>
@@ -133,11 +126,7 @@ export default function HeroSection({ productList }: any) {
                       onClick={handleShowAllProduct}
                     >
                       <RiStackFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                      {/* {isAllFilled ? (
-                      <RiStackFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    ) : (
-                      <PiStack className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    )} */}
+
                     </button>
                     <p className="font-medium text-Title-Small xl:text-Title-Medium">
                       All
@@ -150,7 +139,6 @@ export default function HeroSection({ productList }: any) {
                     } hover:bg-opacity-75 focus:outline-none`}
                       onClick={handleBookmark}
                     >
-                      {/* <BsBookmarkFill className="text-2xl md:text-3xl lg:text-4xl text-black" /> */}
                       {isBookmark ? (
                         <BsBookmarkFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
                       ) : (
@@ -160,7 +148,7 @@ export default function HeroSection({ productList }: any) {
                     <p className="font-medium text-Title-Small xl:text-Title-Medium">
                       Bookmark
                     </p>
-                    {!userAuthData && isOpen && (
+                    {!session && isOpen && (
                       <LikedBookmarkModal
                         isOpen={isOpen}
                         setIsOpen={setIsOpen}
@@ -185,29 +173,6 @@ export default function HeroSection({ productList }: any) {
                     </p>
                   </div>
 
-                  {/*
-                <div className="flex flex-col place-items-center  space-y-4 cursor-pointer">
-                  <button
-                    className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6 
-                     "bg-gray-200" : "bg-gray-300"
-                     hover:bg-opacity-75 focus:outline-none`}
-                    onClick={() => {
-                      console.log("Liked btn clicked");
-                    }}
-                  >
-                    <GoHeartFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                      {islikeFilled ? (
-                      <GoHeartFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    ) : (
-                      <GoHeart className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    )} 
-                  </button>
-                  <p className="font-medium text-Title-Small xl:text-Title-Medium">
-                    Liked
-                  </p>
-                </div>
-                    */}
-
                   <div className="flex flex-col place-items-center  space-y-4 cursor-pointer">
                     <button
                       className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6  "bg-gray-200" : "bg-gray-300"
@@ -216,11 +181,6 @@ export default function HeroSection({ productList }: any) {
                     >
                       {" "}
                       <RiSearchLine className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                      {/*  {isSearchFilled ? (
-                      <RiSearchLine className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    ) : (
-                      <RiSearchLine className="text-2xl md:text-3xl lg:text-4xl text-black" />
-                    )} */}
                     </button>
                     <p className="font-medium text-Title-Small xl:text-Title-Medium">
                       Search

@@ -4,16 +4,16 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 export const getBookmarkList = createAsyncThunk(
   "bookmark/fetchBookmarkList",
   async () => {
-    const response = await fetch("/api/bookmarks");
+    const response = await fetch("/api/bookmark");
     const jsonData = await response.json();
-    return jsonData.data;
+    return jsonData?.bookmarks[0]?.productIds;
   }
 );
 
 export const addBookmark = createAsyncThunk(
   "bookmark/addBookmark",
   async (productId, { dispatch }) => {
-    const response = await fetch("/api/bookmarks/" + productId, {
+    const response = await fetch("/api/bookmark/" + productId, {
       method: "POST",
     });
     dispatch(getBookmarkList());
@@ -27,7 +27,7 @@ export const addBookmark = createAsyncThunk(
 export const deleteBookmark = createAsyncThunk(
   "bookmark/deleteBookmark",
   async (productId, { dispatch }) => {
-    const response = await fetch("/api/bookmarks/" + productId, {
+    const response = await fetch("/api/bookmark/" + productId, {
       method: "DELETE",
     });
 
@@ -69,6 +69,7 @@ const bookmarkSlice = createSlice({
       .addCase(getBookmarkList.fulfilled, (state, action) => {
         state.getListStatus = "succeeded";
         state.bookmarkList = action.payload;
+        console.log("bookmarkList", state.bookmarkList)
       })
       .addCase(getBookmarkList.rejected, (state, action) => {
         state.getListStatus = "failed";
@@ -80,7 +81,8 @@ const bookmarkSlice = createSlice({
       })
       .addCase(addBookmark.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.bookmarkList.push(action.payload);
+        state.bookmarkList = [...state.bookmarkList,action.payload];
+        console.log('bookmarkList add',state.bookmarkList)
       })
       .addCase(addBookmark.rejected, (state, action) => {
         state.status = "failed";
@@ -92,8 +94,8 @@ const bookmarkSlice = createSlice({
       })
       .addCase(deleteBookmark.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.bookmarkList = state.bookmarkList.filter(
-          (bookmark) => bookmark.id !== action.payload
+        state.bookmarkList = state.bookmarkList?.filter(
+          (bookmarkId) => bookmarkId !== action.payload
         );
       })
       .addCase(deleteBookmark.rejected, (state, action) => {
