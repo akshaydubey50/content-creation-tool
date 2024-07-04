@@ -18,28 +18,18 @@ import {
 } from "@/redux/slice/search/searchSlice";
 import { RootState, AppDispatch } from "@/redux/store";
 
-export default function FilterSection() {
+export default function FilterSection({productList}: any) {
   const [isMounted, SetIsMounted] = useState(false);
   const router = useRouter();
   const searchRef = useRef<HTMLInputElement>(null);
   /*Redux Dispatch & Selector*/
   const dispatch = useDispatch();
-  const categoryData = useSelector(
-    (store: RootState) => store.category.categoryData
-  );
-  const searchQuery = useSelector(
-    (store: RootState) => store.search.searchQuery
-  );
-  const filterData = useSelector(
-    (store: RootState) => store.search.searchFilterList
-  );
-  const { productList } = useSelector((state: RootState) => state.product);
-  const searchToFocusInput = useSelector(
-    (state: RootState) => state.search.searchToFocus
-  );
-  const scrollPosition = useSelector(
-    (state: RootState) => state.search.scrollPosition
-  );
+  const categoryData = useSelector((store: RootState) => store.category.categoryData);
+  const searchQuery = useSelector((store: RootState) => store.search.searchQuery);
+  const filterData = useSelector((store: RootState) => store.search.searchFilterList);
+  // const { productList } = useSelector((state: RootState) => state.product);
+  const searchToFocusInput = useSelector((state: RootState) => state.search.searchToFocus)
+  const scrollPosition = useSelector((state: RootState) => state.search.scrollPosition);
 
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();

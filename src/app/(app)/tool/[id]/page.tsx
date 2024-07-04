@@ -7,10 +7,12 @@ import { useSearchParams } from "next/navigation";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { useProductListContextData } from "@/lib/ProductListContext";
 
 export default function ProductDetail() {
   const id = useSearchParams().get("id");
-  const { productList } = useSelector((state: RootState) => state.product);
+  const { productList } = useProductListContextData()
+  // const { productList } = useSelector((state: RootState) => state.product);
   const [product, setProductData] = useState<AirtableModel>();
   const { setVisibleItem } = useVisibleItemContextData();
   const currentCategory = product && product!.fields.Tags[0];
@@ -51,7 +53,7 @@ export default function ProductDetail() {
           <span className="text-DarkOrange">{product!.fields.Tags}</span> Tools
         </h1>
       )}
-      <ProductList currentCategory={currentCategory} />
+      <ProductList currentCategory={currentCategory} productList={productList} />
     </>
   );
 }

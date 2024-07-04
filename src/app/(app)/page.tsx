@@ -4,12 +4,16 @@ import FilterSection from "@/components/filter/FilterSection";
 
 export const dynamic = 'force-dynamic'
 
-export default function Home() {
+export default async function Home() {
+
+  const response = await fetch("http://localhost:3000/api/tools")
+  const responseBody = await response.json();
+
   return (
     <div className="mb-8">
-      <HeroSection />
-      <FilterSection />
-      <ProductList />
+      <HeroSection productList={responseBody.data} />
+      <FilterSection productList={responseBody.data} />
+      <ProductList productList={responseBody.data} />
     </div>
   );
 }

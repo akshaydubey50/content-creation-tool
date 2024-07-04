@@ -24,7 +24,7 @@ import {
   scrollPage,
 } from "@/redux/slice/search/searchSlice";
 
-export default function HeroSection() {
+export default function HeroSection({ productList }: any) {
   const dispatch: AppDispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -47,7 +47,7 @@ export default function HeroSection() {
     (store: RootState) => store.verifiedProduct.verifiedProductList
   );
 
-  const { productList } = useSelector((state: RootState) => state.product);
+  // const { productList } = useSelector((state: RootState) => state.product);
 
   const handleShowAllProduct = () => {
     if (!productList) {

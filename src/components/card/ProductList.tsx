@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductList } from "@/redux/slice/product/productSlice";
+import { fetchProductList, productList } from "@/redux/slice/product/productSlice";
 import AirtableModel from "@/models/airtable.model";
 import { ProductCard } from "./ProductCard";
 import {
@@ -12,53 +12,39 @@ import {
 import Loader from "../common/Loader/Loader";
 import { RootState, AppDispatch } from "@/redux/store";
 import Pagination from "../pagination/Pagination";
+import { useProductListContextData } from "@/lib/ProductListContext";
 
 interface ProductListProps {
   currentCategory?: string;
+  productList?: any
 }
 
-export default function ProductList({ currentCategory }: ProductListProps) {
+export default function ProductList({ currentCategory, productList }: ProductListProps) {
   const id = useSearchParams().get("id");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);  
 
   const dispatch: AppDispatch = useDispatch();
   const { isUserAuthenticated, error, userSession } = useSelector(
     (store: RootState) => store.user
   );
+ 
+  const { setProductList } = useProductListContextData()
 
-  const productList = useSelector(
-    (state: RootState) => state.product.productList
-  );
-  const dropDownCategoryArr = useSelector(
-    (store: RootState) => store.category.matchedCategory
-  );
-  const inputSearchFilterArr = useSelector(
-    (store: RootState) => store.search.searchFilterList
-  );
-  const verifiedProductArr = useSelector(
-    (store: RootState) => store.verifiedProduct.verifiedProductList
-  );
-  const productSearchQuery = useSelector(
-    (store: RootState) => store.search.searchQuery
-  );
-  const isVerifiedCheck = useSelector(
-    (store: RootState) => store.verifiedProduct.isVerifiedChecked
-  );
-  const bookmarkList = useSelector(
-    (store: RootState) => store.bookmark.bookmarkList
-  );
-  const isBookmark = useSelector(
-    (store: RootState) => store.bookmark.isBookmarkChecked
-  );
-  const userAuthData = useSelector(
-    (store: RootState) => store.user.userSession
-  );
-  const bookmarkLoadingStatus = useSelector(
-    (store: RootState) => store.bookmark.status
-  );
-  const getListBookmarkStatus = useSelector(
-    (store: RootState) => store.bookmark.getListStatus
-  );
+  useEffect(() => {
+    setProductList(productList);
+  }, [productList])
+
+  // const productList = useSelector((state: RootState) => state.product.productList);
+  const dropDownCategoryArr = useSelector((store: RootState) => store.category.matchedCategory);
+  const inputSearchFilterArr = useSelector((store: RootState) => store.search.searchFilterList);
+  const verifiedProductArr = useSelector((store: RootState) => store.verifiedProduct.verifiedProductList);
+  const productSearchQuery = useSelector((store: RootState) => store.search.searchQuery);
+  const isVerifiedCheck = useSelector((store: RootState) => store.verifiedProduct.isVerifiedChecked);
+  const bookmarkList = useSelector((store: RootState) => store.bookmark.bookmarkList);
+  const isBookmark = useSelector((store: RootState) => store.bookmark.isBookmarkChecked);
+  const userAuthData = useSelector((store: RootState) => store.user.userSession);
+  const bookmarkLoadingStatus = useSelector((store: RootState) => store.bookmark.status);
+  const getListBookmarkStatus = useSelector((store: RootState) => store.bookmark.getListStatus);
 
   const itemsPerPage = 9;
   const handlePageChange = (page: number) => {
@@ -131,9 +117,9 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     updateCurrentProducts();
   }, [currentPage, filteredProductRecords]);
 
-  useEffect(() => {
-    dispatch(fetchProductList());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchProductList());
+  // }, [dispatch]);
 
   useEffect(() => {
     if (userAuthData) {
@@ -150,12 +136,12 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     return <Loader />;
   }
 
-  if (isBookmark && bookmarkLoadingStatus === "loading") {
-    return <Loader />;
-  }
-  if (getListBookmarkStatus === "loading") {
-    return <Loader />;
-  }
+  // if (isBookmark && bookmarkLoadingStatus === "loading") {
+  //   return <Loader />;
+  // }
+  // if (getListBookmarkStatus === "loading") {
+  //   return <Loader />;
+  // }
 
   return (
     <>
