@@ -6,7 +6,6 @@ import LikeModel from "@/models/likes/Like.model";
 
 export async function POST(req: NextRequest) {
   await connectDB();
-
   const token = await getToken({ req: req });
 
   if (!token) {
@@ -24,6 +23,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { success: false, msg: "User does not exist" },
         { status: 400 }
+      );
+    }
+
+    const likeExist = await LikeModel.findOne({
+      userId: user._id,
+      productId: productId,
+    });
+
+    //Same productId exist with user
+    if (likeExist) {
+      console.log("Existing Like product", likeExist);
+      return NextResponse.json(
+        { success: true, msg: "Already liked by" },
+        { status: 200 }
       );
     }
 

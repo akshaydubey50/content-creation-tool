@@ -28,6 +28,20 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const bookmarkExisting = await BookmarkModel.findOne({
+      userId: user._id,
+      productId: productId,
+    });
+
+    //Same productId exist with user
+    if (bookmarkExisting) {
+      console.log("Existing bookmark product", bookmarkExisting);
+      return NextResponse.json(
+        { success: true, msg: "Already bookmarked by user" },
+        { status: 200 }
+      );
+    }
+
     const bookmark = new BookmarkModel({
       productId,
       userId: new mongoose.Types.ObjectId(user._id),
