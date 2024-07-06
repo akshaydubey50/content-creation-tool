@@ -1,6 +1,7 @@
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+export { default } from "next-auth/middleware";
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
@@ -9,7 +10,7 @@ export async function middleware(request: NextRequest) {
   //if token&& url then redirect /
 
   const token = await getToken({ req: request });
-  console.log("token from middleware",token,)
+  console.log("token from middleware",token)
   console.log("request", request)
 
   const url = request.nextUrl;
