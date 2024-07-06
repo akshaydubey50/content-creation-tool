@@ -51,9 +51,9 @@ export default function FilterSection() {
 
     /* Filter data based on the updated search query */
     const filteredResults = productList && productList?.filter((searchData: AirtableModel) => {
-      const tooldatalist = searchData.fields.Name.toLowerCase();
+      const tooldatalist = searchData.fields.Name?.toLowerCase();
       if (newSearch) {
-        return tooldatalist.includes(newSearch);
+        return tooldatalist?.includes(newSearch);
       }
     });
 
