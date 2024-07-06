@@ -9,6 +9,9 @@ export async function middleware(request: NextRequest) {
   //if token&& url then redirect /
 
   const token = await getToken({ req: request });
+  console.log("token from middleware",token,)
+  console.log("request", request)
+
   const url = request.nextUrl;
 
   if (
