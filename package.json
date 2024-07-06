@@ -32,7 +32,7 @@
     "clsx": "^2.1.1",
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
-    "lucide-react": "^0.395.0",
+    "lucide-react": "^0.400.0",
     "mongoose": "^8.4.3",
     "next": "^14.2.3",
     "next-auth": "^4.24.7",
@@ -49,7 +49,7 @@
     "typescript": "5.1.6"
   },
   "devDependencies": {
-    "supabase": "^1.77.9",
-    "@million/lint": "^1.0.0-rc.26"
+    "@million/lint": "^1.0.0-rc.26",
+    "supabase": "^1.77.9"
   }
 }
