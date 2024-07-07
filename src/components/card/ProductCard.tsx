@@ -36,7 +36,7 @@ export function ProductCard(props: any) {
   const [count,setCount]=useState(0)
   const { data: session } = useSession();
 
-  const { Tags, Name, WebsiteLink, Description, ToolImage, Verified } = fields!;
+  const { Tags, Name, WebsiteLink, Description, ToolImage, Verified,Pricing } = fields!;
   const formattedTitle = Name?.toLowerCase().replace(/\s/g, "-");
   const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
 
@@ -155,20 +155,23 @@ export function ProductCard(props: any) {
               </div>
             </div>
             <div className="">
-              <div className="text-Description h-16 mt-6">
+              <div className="text-Description h-16 ">
                 <p className="line-clamp-3">{Description}</p>
               </div>
             </div>
             <div className="tool-btn-section pb-7">
-              <p className="my-6 ">
-                <Link
+              <p className="my-6  ">
+                <span className="bg-white rounded-full  text-tags font-medium border 
+                border-solid border-black px-5 py-1">
+                  {Pricing}
+                </span>
+                {/* <Link
                   className="bg-white rounded-full  text-tags font-medium border 
                 border-solid border-black px-5 py-1"
                   href={`/category/${formattedTag}`}
                   prefetch={true}
                 >
-                  {Tags}
-                </Link>
+                </Link> */}
               </p>
               <div
                 className="text-white text-Title-Medium  flex 

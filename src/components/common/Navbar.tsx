@@ -38,7 +38,7 @@ export default function Navbar() {
   const menuItem: MenuItem[] = [
     { id: 1, label: "All Program", href: RoutePath.HomePage },
     { id: 2, label: "Contact", href: RoutePath.Contact },
-    { id: 3, label: "Post a Program", href: RoutePath.PostProgram },
+    { id: 3, label: "Submit Tool", href: RoutePath.SubmitTool },
   ];
 
   const [isMenu, setIsMenu] = useState(false);
@@ -85,7 +85,8 @@ export default function Navbar() {
             <ul className="hidden text-Title-Medium lg:flex flex-1 flex-wrap justify-end font-medium gap-6  text-black items-baseline">
               {menuItem.map((menu, index) => (
                 <li key={menu.id}>
-                  <Link
+                  <Link 
+                    target={menu?.label=="Submit Tool"?"_blank":"_self"}
                     className={`  text-black    hover:border-b-4 hover:border-DarkOrange  cursor-pointer
                 ${
                   pathName === menu.href

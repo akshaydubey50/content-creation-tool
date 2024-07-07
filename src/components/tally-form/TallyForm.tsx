@@ -15,7 +15,7 @@ export default function TallyForm() {
   return (
     <div>
     <iframe
-      src="https://tally.so/r/meQjOe?transparentBackground=1"
+      src="https://airtable.com/appDlJsNfch4PdzhN/shrelxTmWBjfBe2WO"
       style={iframeStyle}
       scrolling="no"
       title="Content Tools"
