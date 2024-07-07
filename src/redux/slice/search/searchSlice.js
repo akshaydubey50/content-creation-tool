@@ -16,7 +16,9 @@ const searchSlice = createSlice({
             state.searchFilterList = action.payload;
         },
         clearSearchFilterList: (state) => {
-            state.searchFilterList = [];
+            state.searchFilterList.length = 0;
+            state.searchQuery = "";
+
         },
         setSearchInputFocus:(state)=>{
             state.searchToFocus = !state.searchToFocus

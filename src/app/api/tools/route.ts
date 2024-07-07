@@ -49,13 +49,12 @@ export async function GET() {
         offset = response.data.offset;
       }
     } while (offset);
-
-    // await setCache("airtableProductList", airtableProductList);
+    const statusRecord = airtableProductList?.filter((item: AirtableModel) => item.fields?.Stage?.toLowerCase() == "done")
 
     return NextResponse.json(
       {
         success: true,
-        data: airtableProductList,
+        data: statusRecord,
       },
       { status: 200 }
     );
