@@ -11,26 +11,41 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { redirect, useRouter } from "next/navigation";
 
 export default function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [error, setError] = useState<String | null>(null);
   const router = useRouter();
 
   const handleSignUp = async () => {
-    const response = await axios.post("/api/signup", { email, password });
-    const resjson = await response.data;
+    try {
+      setError(null);
+      const response = await axios.post("/api/signup", {
+        firstName: firstname,
+        lastName: lastname,
+        email,
+        password,
+      });
 
-    if (response.data.success) {
-      router.push("/signin");
+      if (response.data.success) {
+        router.push("/signin");
+      }
+      if (response.data.success === false) {
+        setError(response.data.message);
+      }
+    } catch (error: any) {
+      const errMsg = error as AxiosError<{ status: string; message: string }>;
+      setError(errMsg?.response?.data?.message || "Something went wrong");
     }
-    console.log("response", resjson);
   };
 
   return (
-   <section className="h-screen items-center flex ">
+    <section className="h-screen items-center flex ">
       <Card className="mx-auto max-w-sm  shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]">
         <CardHeader>
           <CardTitle className="text-xl">Sign Up</CardTitle>
@@ -43,11 +58,23 @@ export default function Page() {
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="first-name">First name</Label>
-                <Input id="first-name" placeholder="Max" required />
+                <Input
+                  id="first-name"
+                  placeholder="Max"
+                  value={firstname}
+                  onChange={(e) => setFirstname(e.target.value)}
+                  required
+                />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="last-name">Last name</Label>
-                <Input id="last-name" placeholder="Robinson" required />
+                <Input
+                  id="last-name"
+                  placeholder="Robinson"
+                  value={lastname}
+                  onChange={(e) => setLastname(e.target.value)}
+                  required
+                />
               </div>
             </div>
             <div className="grid gap-2">
@@ -72,12 +99,18 @@ export default function Page() {
                 required
               />
             </div>
-            <Button onClick={handleSignUp} variant="outline" type="submit" className="w-full">
+            {error && <div className="text-red-500">{error}</div>}
+            <Button
+              onClick={handleSignUp}
+              variant="outline"
+              type="submit"
+              className="w-full"
+            >
               Create an account
             </Button>
 
             <Button variant="outline" className="w-full">
-              Sign up with GitHub
+              Sign up with Google
             </Button>
           </div>
           <div className="mt-4 text-center text-sm">
@@ -88,6 +121,6 @@ export default function Page() {
           </div>
         </CardContent>
       </Card>
-   </section>
+    </section>
   );
 }

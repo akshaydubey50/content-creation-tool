@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { SignInResponse, signIn } from "next-auth/react";
 import { redirect, useRouter } from "next/navigation";
@@ -21,21 +21,29 @@ import { setUserAuth } from "@/redux/slice/user/userSlice";
 export default function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<String | null>(null);
   const route = useRouter();
   const dispatch = useDispatch();
 
-
   const handleSignIn = async () => {
-    const response = await signIn("credentials", {
-      redirect: false,
-      email: email,
-      password: password,
-    });
-    dispatch(setUserAuth(response))
-    console.log("reponse", response);
+    try {
+      setError(null);
+      const response = await signIn("credentials", {
+        redirect: false,
+        email: email,
+        password: password,
+      });
+      dispatch(setUserAuth(response));
 
-    if (response?.url) {
-      route.push("/");
+      if (response?.error) {
+        setError(response?.error);
+      }
+      if (response?.url) {
+        route.push("/");
+      }
+    } catch (error) {
+      const errorMsg = error as AxiosError<{ status: string; message: string }>;
+      setError(errorMsg?.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -64,7 +72,10 @@ export default function Page() {
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
-                <Link href="#" className="ml-auto inline-block text-sm underline">
+                <Link
+                  href="#"
+                  className="ml-auto inline-block text-sm underline"
+                >
                   Forgot your password?
                 </Link>
               </div>
@@ -76,8 +87,14 @@ export default function Page() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-            </div>
-            <Button variant="outline"  onClick={handleSignIn} type="submit" className="w-full">
+            </div>{" "}
+            {error && <div className="text-red-500">{error}</div>}
+            <Button
+              variant="outline"
+              onClick={handleSignIn}
+              type="submit"
+              className="w-full"
+            >
               Login
             </Button>
             <Button variant="outline" className="w-full">
