@@ -1,6 +1,6 @@
 "use client";
 import AirtableModel from "@/models/airtable.model";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import SelectDropdown from "./SelectDropdown";
@@ -16,6 +16,7 @@ import {
   clearSearchFilterList,
   scrollPage,
 } from "@/redux/slice/search/searchSlice";
+import { clearMatchedPrice,clearPriceData,setMatchedPrice,setPriceData} from "@/redux/slice/priceModel/priceModelSlice"
 import { RootState, AppDispatch } from "@/redux/store";
 
 export default function FilterSection() {
@@ -40,12 +41,18 @@ export default function FilterSection() {
   const scrollPosition = useSelector(
     (state: RootState) => state.search.scrollPosition
   );
+  const {priceData,matchedPrice}=useSelector((state:RootState)=>state.priceModel)
 
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
 
   /*Search Functionality*/
   const handleSearch = () => {
+    router.push("/")
+    dispatch(clearMatchedPrice())
+    dispatch(clearPriceData())
+    dispatch(clearCategoryData())
+    dispatch(clearMatchedCategory())
     const newSearch = searchRef.current!.value.toLowerCase();
     dispatch(setSearchQuery(newSearch));
 
@@ -76,31 +83,61 @@ export default function FilterSection() {
     if (selectedOption) {
       let categoryVal = selectedOption.value;
       let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
-      router.push(`/category/${formatedCategory}`);
       dispatch(clearSearchFilterList());
+      dispatch(clearMatchedPrice())
+      dispatch(clearPriceData())
+
       dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
       dispatch(scrollPage(600))
+      router.push(`/category/${formatedCategory}`);
+
+    }
+  };
+
+  /* Selected Category functionality */
+  const selectedPriceModel = (selectedOption: any) => {
+    if (selectedOption) {
+      let priceVal = selectedOption.value;
+      debugger  
+      const getPriceList = productList.filter((item: AirtableModel) => {
+        const pricingVal = item.fields?.Pricing
+        if (Array.isArray(pricingVal)){
+          return pricingVal[0]?.toLowerCase() === priceVal?.toLowerCase()
+        }
+        return false
+      })
+      dispatch(setMatchedPrice(getPriceList))
+      console.log("getPriceList", getPriceList)
+      setVisibleItem(9);
+      dispatch(scrollPage(600))
+      dispatch(clearSearchFilterList());
+      dispatch(setPriceData(priceVal));
+
+      dispatch(clearCategoryData())
+      dispatch(clearMatchedCategory())
 
     }
   };
 
   /*Clear Filter*/
   const clearFilter = () => {
-    router.push("/");
-    if (searchQuery.length > 0) {
-      dispatch(setSearchQuery(""));
-      dispatch(clearSearchFilterList());
-    } else if (categoryData.length > 0) {
-      dispatch(clearCategoryData());
-      dispatch(clearMatchedCategory([]));
-    }
+    dispatch(setSearchQuery(""));
+    dispatch(clearSearchFilterList());
+    dispatch(clearMatchedCategory());
+    dispatch(clearCategoryData());
+
+    dispatch(clearMatchedPrice());
+    dispatch(clearPriceData());
+
     if (searchRef.current!.value) {
       searchRef.current!.value = '';
       searchRef.current!.innerText = '';
     }
 
     setVisibleItem(9);
+    router.push("/");
+
   };
 
   /*Get a List for Category*/
@@ -125,6 +162,34 @@ export default function FilterSection() {
   );
 
 
+  const priceModelList = (): Set<string> => {
+    const priceItem = new Set<string>([]);
+    productList?.length > 0 &&
+      productList?.map((item: AirtableModel) => {
+        if (item?.fields?.Pricing !== undefined) {
+          priceItem.add(item?.fields?.Pricing[0]);
+        }
+      });
+    return priceItem;
+  };
+
+
+  const priceOptionList = Array.from(priceModelList()).map(
+    (item: string, index: number) => {
+      return {
+        value: item,
+        label: item,
+      };
+    }
+  );
+
+  const priceTypeHandler = useCallback(() => {
+
+    const getPriceList = productList.filter((item:AirtableModel) => item?.fields?.Pricing[0]?.toLowerCase() == priceData?.toLowerCase())
+    dispatch(setMatchedPrice(getPriceList))
+    console.log(getPriceList)
+  }, [])
+
   useEffect(() => {
     SetIsMounted(true);
   }, []);
@@ -138,6 +203,8 @@ export default function FilterSection() {
   useEffect(() => {
     window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
   }, [categoryData, scrollPosition])
+
+
 
 
   return (
@@ -170,6 +237,21 @@ export default function FilterSection() {
             )}
           </div>
         </div>
+        <div className="basis-32 z-0">
+          <div className=" bg-DarkOrange text-center  rounded-full    h-full">
+            {isMounted && (
+              <SelectDropdown
+                key={priceData}
+                placeholder="Pricing "
+                options={priceOptionList}
+                onChange={selectedPriceModel}
+                value={priceOptionList.find(
+                  (option) => option.value === priceData
+                ) || null}
+              />
+            )}
+          </div>
+        </div>
         <div className=" font-medium">
           <div className="">
             <button
@@ -180,7 +262,7 @@ export default function FilterSection() {
             </button>
           </div>
         </div>
-        <div className="basis-2/5 font-medium">
+        <div className="basis-1/4 font-medium">
           <div className=" text-black py-0.5 ">
             <input
               ref={searchRef}

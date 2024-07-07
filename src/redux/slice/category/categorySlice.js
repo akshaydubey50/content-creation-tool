@@ -19,12 +19,12 @@ const categorySlice = createSlice({
         },
         clearCategoryData: (state) => {
             // selected dropdown value
-            state.categoryData = "";
+            state.categoryData = null;
         },
 
-        clearMatchedCategory: (state, action) => {
+        clearMatchedCategory: (state) => {
             // tag base product data
-            state.matchedCategory = [];
+            state.matchedCategory.length = 0;
         },
 
     },

@@ -48,6 +48,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   );
   const bookmarkList:any = useSelector((store: RootState) => store.bookmark.bookmarkList);
   
+  const {matchedPrice}=useSelector((state:RootState)=>state.priceModel)
   const isBookmark = useSelector(
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
@@ -95,7 +96,11 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     } else if (productSearchQuery.length > 0 && inputSearchFilterArr) {
       // Search input filtered product productList
       return inputSearchFilterArr.length > 0 ? inputSearchFilterArr : [];
-    } else if (session && isBookmark && bookmarkList) {
+    } 
+    else if (matchedPrice.length>0 && !id){
+      return matchedPrice;
+    }
+    else if (session && isBookmark && bookmarkList) {
       const getBookmarkedList = productList.filter((item:AirtableModel)=>{
         if (bookmarkList?.includes(item?.id)){
           return item
@@ -124,6 +129,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     verifiedProductArr,
     productList,
     productSearchQuery.length,
+    matchedPrice
   ]);
 
   useEffect(() => {
