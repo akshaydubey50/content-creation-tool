@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   //return user response
 
   try {
-    const { email, password } = await request.json();
+    const { firstName, lastName, email, password } = await request.json();
     console.log({ email, password });
     if (!email || !password) {
       return NextResponse.json(
@@ -39,6 +39,8 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new UserModel({
+      firstName,
+      lastName,
       email,
       password: hashedPassword,
     });
