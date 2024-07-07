@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     if (bookmarkExisting) {
       console.log("Existing bookmark product", bookmarkExisting);
       return NextResponse.json(
-        { success: true, msg: "Already bookmarked by user" },
+        { success: true, msg: "Already bookmarked by user"},
         { status: 200 }
       );
     }
