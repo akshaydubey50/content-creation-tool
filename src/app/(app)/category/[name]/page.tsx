@@ -78,6 +78,8 @@ export default function ToolDetails() {
     }
   }, [pathName, productList, param.name, dispatch]);
 
+
+  
   useEffect(() => {
     setVisibleItem(9);
     categoryTypeHandler();
