@@ -48,6 +48,11 @@ export default function FilterSection() {
 
   /*Search Functionality*/
   const handleSearch = () => {
+    router.push("/")
+    dispatch(clearMatchedPrice())
+    dispatch(clearPriceData())
+    dispatch(clearCategoryData())
+    dispatch(clearMatchedCategory())
     const newSearch = searchRef.current!.value.toLowerCase();
     dispatch(setSearchQuery(newSearch));
 
@@ -79,6 +84,9 @@ export default function FilterSection() {
       let categoryVal = selectedOption.value;
       let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
       dispatch(clearSearchFilterList());
+      dispatch(clearMatchedPrice())
+      dispatch(clearPriceData())
+
       dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
       dispatch(scrollPage(600))
@@ -105,7 +113,9 @@ export default function FilterSection() {
       dispatch(scrollPage(600))
       dispatch(clearSearchFilterList());
       dispatch(setPriceData(priceVal));
-      // router.push(`/category/${formatedCategory}`);
+
+      dispatch(clearCategoryData())
+      dispatch(clearMatchedCategory())
 
     }
   };
