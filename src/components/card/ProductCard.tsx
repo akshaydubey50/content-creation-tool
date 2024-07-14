@@ -14,31 +14,38 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 // Project  Component Import
 import LikedBookmarkModal from "../modal/LikedBookmarkModal";
 import VisitWebsite from "../visit-website/VisitWebsite";
-import AirtableModel from "@/models/airtable.model";
-import {deleteBookmark,addBookmark} from "@/redux/slice/bookmark/bookmarkSlice";
-import { addUpvote,deleteUpvote } from "@/redux/slice/upvote/upvoteSlice";
+import { deleteBookmark, addBookmark } from "@/redux/slice/bookmark/bookmarkSlice";
+import { addUpvote, deleteUpvote } from "@/redux/slice/upvote/upvoteSlice";
 
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/redux/store";
-import { isProductBookmarked, isProductUpvoted } from "@/helper/helper";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { isProductBookmarked } from "@/helper/helper";
 import { useSession } from "next-auth/react";
-import { P } from "@upstash/redis/zmscore-5d82e632";
 
 export function ProductCard(props: any) {
   const dispatch: AppDispatch = useDispatch();
-  const { upVotedList,bookmarkList, product } = props;
+  const { upVotedList, bookmarkList, product } = props;
 
   const { id, fields } = product;
-  const [isLiked, setIsLiked] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isBookMarked, setIsBookMarked] = useState(() =>isProductBookmarked(id, bookmarkList))
-  const [isUpvoted, setIsUpvoted] = useState(() => isProductUpvoted(id, upVotedList)  );
-  const [count,setCount]=useState(0)
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isBookMarked, setIsBookMarked] = useState<any>(() => isProductBookmarked(id, bookmarkList))
+  const [count, setCount] = useState(0)
   const { data: session } = useSession();
 
-  const { Tags, Name, WebsiteLink, Description, ToolImage, Verified,Pricing } = fields!;
+  const {  Name, WebsiteLink, Description, ToolImage, Verified, Pricing } = fields!;
   const formattedTitle = Name?.toLowerCase().replace(/\s/g, "-");
-  const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
+  // const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
+
+  const getCurrentProductUpvotedObj = (toolId: any) => {
+    const getObj = upVotedList.find((item: any) => {
+      if (item?.productId === toolId) {
+        return true
+      }
+      else { return false }
+    })
+    return getObj
+  }
 
   const handleBookmarkClick = () => {
     if (!session?.user) {
@@ -60,15 +67,21 @@ export function ProductCard(props: any) {
     if (!session?.user) {
       return setIsOpen(true);
     } else {
-      if (isUpvoted && id) {
+      
+      if (isLiked == true) {
+        setIsLiked(false)
+        setCount(count - 1)
         // @ts-ignore
         dispatch(deleteUpvote(id));
-        setIsUpvoted(!isUpvoted);
-      } else {
+
+      }
+      else if (isLiked == false) {
+        setIsLiked(true)
+        setCount(count+1)
         // @ts-ignore
         dispatch(addUpvote(id));
-        setIsUpvoted(!isUpvoted);
       }
+
     }
   };
 
@@ -81,19 +94,14 @@ export function ProductCard(props: any) {
 
 
   useEffect(() => {
-    setIsLiked(isProductUpvoted(id, upVotedList));
-    console.log("upVotedList", upVotedList)
-  }, [setIsLiked, isUpvoted, id, upVotedList]);
+    const upvotedObj = getCurrentProductUpvotedObj(id)
+    setIsLiked(upvotedObj?.isProductLikedByUser)
+    setCount(upvotedObj?.totalLikes || 0)
+
+  }, [id])
 
 
-  useEffect(()=>{
-    if (upVotedList && id){
-
-      const getCurrentUpvote=  isProductUpvoted(id, upVotedList)
-      console.log('getCurrentUpvote', getCurrentUpvote)
-      setCount(getCurrentUpvote?.count||0)
-    }
-  }, [upVotedList,id])
+  
   return (
     <>
       <div
@@ -165,13 +173,7 @@ export function ProductCard(props: any) {
                 border-solid border-black px-5 py-1">
                   {Pricing}
                 </span>
-                {/* <Link
-                  className="bg-white rounded-full  text-tags font-medium border 
-                border-solid border-black px-5 py-1"
-                  href={`/category/${formattedTag}`}
-                  prefetch={true}
-                >
-                </Link> */}
+             
               </p>
               <div
                 className="text-white text-Title-Medium  flex 
@@ -189,7 +191,7 @@ export function ProductCard(props: any) {
                     <BsBookmark className="text-3xl   text-black" />
                   )}
                 </button>
-            
+
               </div>
             </div>
           </div>

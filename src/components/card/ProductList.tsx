@@ -28,9 +28,10 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const { isUserAuthenticated } = useSelector((store: RootState) => store.user);
   const {data:session} =useSession();
   // console.log('getAuthSession', getAuthSession)
-  const productList = useSelector(
-    (state: RootState) => state.product.productList
+  const {productList,isLoading} = useSelector(
+    (state: RootState) => state.product
   );
+  console.log('productList', productList, isLoading)
   const dropDownCategoryArr = useSelector(
     (store: RootState) => store.category.matchedCategory
   );
@@ -53,7 +54,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
  
-  const upVotedList:any=useSelector((store:RootState)=>store.upvote.upvoteList) 
+  const upVotedList:any=useSelector((store:RootState)=>store.upvote.upvoteList)
 
   const itemsPerPage = 9;
   const handlePageChange = (page: number) => {
@@ -150,16 +151,10 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   }, [dispatch, session ]);
 
 
-  if (!productList) {
+  if (isLoading) {
     return <Loader />;
   }
 
-  // if (isBookmark && bookmarkLoadingStatus === "loading") {
-  //   return <Loader />;
-  // }
-  // if (getListBookmarkStatus === "loading") {
-  //   return <Loader />;
-  // }
   if (isBookmark && bookmarkList.length ===0){
       return(
         <>

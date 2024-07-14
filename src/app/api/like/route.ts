@@ -10,45 +10,34 @@ export async function GET(req: NextRequest) {
 
   const token = await getToken({ req: req });
 
-  if (!token) {
-    return NextResponse.json(
-      { success: false, msg: "Unauthorized access" },
-      { status: 400 }
-    );
-  }
-  //   const id = "667ff969d27bcfc89d2a86ce";
   try {
-    const user = await UserModel.findById({
-      _id: token?._id,
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, msg: "User does not exist" },
-        { status: 404 }
-      );
-    }
+    const user = token?._id ? await UserModel.findById(token._id) : null;
 
     const likes = await LikeModel.aggregate([
-     
       {
         $group: {
           _id: "$productId",
-          count: { $sum: 1 }
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          products: { $push: { productId: "$_id", count: "$count" } },
-          totalLikes: { $sum: "$count" },
+          totalLikes: { $sum: 1 },
+          userIds: { $push: "$userId" },
         },
       },
       {
         $project: {
           _id: 0,
-          products: 1,
-          totalLikes: 1,
+          productId: "$_id",
+          totalLikes: "$totalLikes",
+          isProductLikedByUser: {
+            $cond: {
+              if: { $eq: [null, user?.id] },
+              then: null,
+              else: {
+                $in: [
+                  user?.id ? new mongoose.Types.ObjectId(user.id) : null,
+                  "$userIds",
+                ],
+              },
+            },
+          },
         },
       },
     ]);
