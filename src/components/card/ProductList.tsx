@@ -139,13 +139,13 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   useEffect(() => {
     dispatch(fetchProductList());
+    dispatch(getUpvoteList())
 
   }, [dispatch]);
 
   useEffect(() => {
     if (session?.user){
       dispatch(getBookmarkList());
-      dispatch(getUpvoteList())
     }
 
   }, [dispatch, session ]);
