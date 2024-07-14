@@ -48,7 +48,7 @@ export function ProductCard(props: any) {
   }
 
   const handleBookmarkClick = () => {
-    if (!session?.user) {
+    if (!session || !session?.user) {
       setIsOpen(true);
     } else {
       if (isBookMarked && id) {
@@ -64,7 +64,7 @@ export function ProductCard(props: any) {
   };
 
   const handleLikes = async () => {
-    if (!session?.user) {
+    if (!session || !session?.user) {
       return setIsOpen(true);
     } else {
       
@@ -157,7 +157,7 @@ export function ProductCard(props: any) {
                   </p>
                   <p className="">{count}</p>
                 </button>
-                {!session?.user && isOpen && (
+                {(!session || !session?.user) && isOpen && (
                   <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
                 )}
               </div>
