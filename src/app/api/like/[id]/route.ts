@@ -78,7 +78,6 @@ export async function DELETE(req: NextRequest) {
       { status: 400 }
     );
   }
-  // const id = "667ff969d27bcfc89d2a86ce";
   try {
     const productId = req.nextUrl.pathname.split("like/")[1];
     const user = await UserModel.findById({ _id: token._id });
