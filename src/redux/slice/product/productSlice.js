@@ -10,7 +10,7 @@ export const fetchProductList = createAsyncThunk("fetch/toolList", async () => {
 const productSlice = createSlice({
     name: "productSlice",
     initialState: {
-        isLoading: false,
+        isLoading: true,
         isError: false,
         productList: [],
     },
