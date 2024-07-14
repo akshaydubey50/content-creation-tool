@@ -1,6 +1,7 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useVisibleItemContextData } from '@/lib/visibleItemContext';
+import Link from 'next/link';
 // import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
 interface LikedBookmarkModalProps {
@@ -11,7 +12,7 @@ interface LikedBookmarkModalProps {
 export default function LikedBookmarkModal({isOpen, setIsOpen}:LikedBookmarkModalProps) {
 
   const cancelButtonRef = useRef(null);
-  const { showLoginForm, setShowLoginForm } = useVisibleItemContextData();
+  // const { showLoginForm, setShowLoginForm } = useVisibleItemContextData();
 
 
   return (
@@ -56,22 +57,22 @@ export default function LikedBookmarkModal({isOpen, setIsOpen}:LikedBookmarkModa
                   </div>
                 </div>
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                  <Link href="/signin">
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-DarkOrange px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-light-yellow sm:ml-3 sm:w-auto"
                     onClick={() => {
-                      setShowLoginForm(true)
                       setIsOpen(false);
                     }}
-                  >
+                    >
                     Login
                   </button>
+                    </Link>
                   <button
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                     onClick={() => setIsOpen(false)}
-                    ref={cancelButtonRef}
-                  >
+                    >
                     Cancel
                   </button>
                 </div>
