@@ -5,7 +5,7 @@ export const getUpvoteList = createAsyncThunk(
     async () => {
         const response = await fetch("/api/like");
         const jsonData = await response.json();
-        return jsonData?.likes[0]?.products
+        return jsonData
     }
 );
 
@@ -67,7 +67,7 @@ const bookmarkSlice = createSlice({
             })
             .addCase(getUpvoteList.fulfilled, (state, action) => {
                 state.getListStatus = "succeeded";
-                state.upvoteList = action.payload;
+                state.upvoteList = action.payload?.likes;
                 console.log('upvoteList ####',state.upvoteList)
             })
             .addCase(getUpvoteList.rejected, (state, action) => {
@@ -81,6 +81,7 @@ const bookmarkSlice = createSlice({
             .addCase(addUpvote.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.upvoteList = [...state.upvoteList,action.payload];
+
             })
             .addCase(addUpvote.rejected, (state, action) => {
                 state.status = "failed";

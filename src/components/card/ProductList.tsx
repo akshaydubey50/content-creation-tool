@@ -53,7 +53,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
  
-  const upVotedList:any=useSelector((store:RootState)=>store.upvote.upvoteList) 
+  const upVotedList:any=useSelector((store:RootState)=>store.upvote.upvoteList)
 
   const itemsPerPage = 9;
   const handlePageChange = (page: number) => {
