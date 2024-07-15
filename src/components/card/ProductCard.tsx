@@ -23,6 +23,9 @@ import { isProductBookmarked } from "@/helper/helper";
 import { useSession } from "next-auth/react";
 
 export function ProductCard(props: any) {
+  
+  const DEBOUNCE_DELAY = 400; // ms
+
   const dispatch: AppDispatch = useDispatch();
   const { upVotedList, bookmarkList, product } = props;
 
@@ -38,70 +41,74 @@ export function ProductCard(props: any) {
   // const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
 
   const getCurrentProductUpvotedObj = (toolId: any) => {
-    const getObj = upVotedList.find((item: any) => {
-      if (item?.productId === toolId) {
-        return true
-      }
-      else { return false }
-    })
-    return getObj
+    return upVotedList.find((item: any) => item?.productId === toolId) || null;
   }
 
-  const handleBookmarkClick = () => {
+
+  const handleBookmark = useCallback(() => {
     if (!session || !session?.user) {
       setIsOpen(true);
-    } else {
-      if (isBookMarked && id) {
-        // @ts-ignore
-        dispatch(deleteBookmark(id));
-        setIsBookMarked(!isBookMarked);
+      return;
+    }
+    setIsBookMarked(!isBookMarked);
+    const action = isBookMarked ? deleteBookmark : addBookmark;
+    // @ts-ignore
+    dispatch(action(id));
+
+  }, [session, isBookMarked, id, dispatch]);
+
+
+  const handleLikes = useCallback(()=>{
+      if (!session || !session?.user) {
+        return setIsOpen(true);
       } else {
-        // @ts-ignore
-        dispatch(addBookmark(id));
-        setIsBookMarked(!isBookMarked);
-      }
-    }
-  };
-
-  const handleLikes = async () => {
-    console.log("logger ##################")
-    if (!session || !session?.user) {
-      console.log("logger user not signed in ")
-
-      return setIsOpen(true);
-    } else {
-      console.log("logger user signed in ")
-      if (isLiked == true) {
-        setIsLiked(false)
-        setCount(count - 1)
-        // @ts-ignore
-        dispatch(deleteUpvote(id));
+        if (isLiked) {
+          setIsLiked(false)
+          setCount(count - 1)
+          // @ts-ignore
+          dispatch(deleteUpvote(id));
+        }
+        else if (!isLiked) {
+          setIsLiked(true)
+          setCount(count + 1)
+          // @ts-ignore
+          dispatch(addUpvote(id));
+        }
 
       }
-      else if (isLiked == false) {
-        setIsLiked(true)
-        setCount(count+1)
-        // @ts-ignore
-        dispatch(addUpvote(id));
-      }
+  }, [session, isLiked, id, dispatch]);
 
-    }
-  };
+  function debounce(func: Function, delay: number) {
+    let timeoutId: NodeJS.Timeout;
+    return (...args: any[]) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
+  }
+
+  const debouncedHandleLikes = useCallback(
+    debounce(handleLikes, DEBOUNCE_DELAY),
+    [handleLikes]
+  );
 
 
+  const debouncedHandleBookmark = useCallback(
+    debounce(handleBookmark, DEBOUNCE_DELAY),
+    [handleBookmark]
+  );
 
+  
   useEffect(() => {
     setIsBookMarked(isProductBookmarked(id, bookmarkList));
-    console.log("bookmarkList", bookmarkList)
-  }, [setIsBookMarked, isBookMarked, id, bookmarkList]);
+  }, [id, bookmarkList]);
+
 
 
   useEffect(() => {
-    const upvotedObj = getCurrentProductUpvotedObj(id)
-    setIsLiked(upvotedObj?.isProductLikedByUser)
-    setCount(upvotedObj?.totalLikes || 0)
-
-  }, [id])
+    const upvotedObj = getCurrentProductUpvotedObj(id);
+    setIsLiked(upvotedObj?.isProductLikedByUser || false);
+    setCount(upvotedObj?.totalLikes || 0);
+  }, [id]);  
 
 
   
@@ -148,7 +155,7 @@ export function ProductCard(props: any) {
                 <button
                   title="Likes"
                   type="button"
-                  onClick={handleLikes}
+                  onClick={debouncedHandleLikes}
                   className="flex items-center gap-x-1"
                 >
                   <p>
@@ -186,7 +193,7 @@ export function ProductCard(props: any) {
                 <button
                   title="Bookmark"
                   type="button"
-                  onClick={handleBookmarkClick}
+                  onClick={debouncedHandleBookmark  }
                 >
                   {isBookMarked ? (
                     <BsBookmarkFill className="text-3xl text-DarkOrange" />
