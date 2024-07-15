@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback,useEffect, useState } from "react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import Image from "next/image";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { isProductBookmarked } from "@/helper/helper";
 import { MdVerified } from "react-icons/md";
+import { useSession } from "next-auth/react";
 
 export default function ProductToolBanner({
   url,
@@ -37,37 +38,46 @@ export default function ProductToolBanner({
 
   const router = useRouter();
   const dispatch = useDispatch();
+  const { data: session } = useSession();
+  const DEBOUNCE_DELAY = 400; // ms
 
-  const { isUserAuthenticated } = useSelector(
-    (store: RootState) => store.user
+
+  const handleBookmark = useCallback(() => {
+    if (!session || !session?.user) {
+      setIsOpen(true);
+      return;
+    }
+    setIsBookMarked(!isBookMarked);
+    const action = isBookMarked ? deleteBookmark : addBookmark;
+    // @ts-ignore
+    dispatch(action(id));
+
+  }, [session, isBookMarked, id, dispatch]);
+  
+  function debounce(func: Function, delay: number) {
+    let timeoutId: NodeJS.Timeout;
+    return (...args: any[]) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
+  }
+
+  const debouncedHandleBookmark = useCallback(
+    debounce(handleBookmark, DEBOUNCE_DELAY),
+    [handleBookmark]
   );
 
-  const handleBookMark = () => {
-    if (!isUserAuthenticated) {
-      setIsOpen(true);
-    } else {
-      if (isBookMarked && id) {
-        // @ts-ignore
-        dispatch(deleteBookmark(id));
-        setIsBookMarked(!isBookMarked);
-      } else {
-        // @ts-ignore
-        dispatch(addBookmark(id));
-        setIsBookMarked(!isBookMarked);
-      }
-    }
-
-    setIsBookMarked(!isBookMarked);
-  };
   const formattedTag = tag[0].toLowerCase().replace(/\s/g, "-");
 
   const goToCategory = () => {
     router.push(`/category/${formattedTag}`);
   };
 
+
   useEffect(() => {
     setIsBookMarked(isProductBookmarked(id, bookmarkList));
-  }, [setIsBookMarked, isBookMarked, id, bookmarkList]);
+  }, [id, bookmarkList]);
+
   return (
     <>
       <main className="bg-light-gray   p-10 md:px-10 md:py-16 md:mb-12  ">
@@ -111,7 +121,7 @@ export default function ProductToolBanner({
                     <button
                       title="Bookmark"
                       type="button"
-                      onClick={handleBookMark}
+                      onClick={debouncedHandleBookmark}
                     >
                       {isBookMarked ? (
                         <BsBookmarkFill className="text-xl md:text-2xl xl:text-3xl text-DarkOrange"/>
