@@ -64,10 +64,13 @@ export function ProductCard(props: any) {
   };
 
   const handleLikes = async () => {
+    console.log("logger ##################")
     if (!session || !session?.user) {
+      console.log("logger user not signed in ")
+
       return setIsOpen(true);
     } else {
-      
+      console.log("logger user signed in ")
       if (isLiked == true) {
         setIsLiked(false)
         setCount(count - 1)
