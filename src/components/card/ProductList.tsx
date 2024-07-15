@@ -9,7 +9,7 @@ import {
   getBookmarkList,
   setBookmarkList,
 } from "@/redux/slice/bookmark/bookmarkSlice";
-import {getUpvoteList} from "@/redux/slice/upvote/upvoteSlice"
+import { getUpvoteList } from "@/redux/slice/upvote/upvoteSlice"
 import Loader from "../common/Loader/Loader";
 import { RootState, AppDispatch } from "@/redux/store";
 import Pagination from "../pagination/Pagination";
@@ -26,9 +26,9 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   const dispatch: AppDispatch = useDispatch();
   const { isUserAuthenticated } = useSelector((store: RootState) => store.user);
-  const {data:session} =useSession();
+  const { data: session } = useSession();
   // console.log('getAuthSession', getAuthSession)
-  const {productList,isLoading} = useSelector(
+  const { productList, isLoading } = useSelector(
     (state: RootState) => state.product
   );
   console.log('productList', productList, isLoading)
@@ -47,14 +47,14 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const isVerifiedCheck = useSelector(
     (store: RootState) => store.verifiedProduct.isVerifiedChecked
   );
-  const bookmarkList:any = useSelector((store: RootState) => store.bookmark.bookmarkList);
-  
-  const {matchedPrice}=useSelector((state:RootState)=>state.priceModel)
+  const bookmarkList: any = useSelector((store: RootState) => store.bookmark.bookmarkList);
+
+  const { matchedPrice } = useSelector((state: RootState) => state.priceModel)
   const isBookmark = useSelector(
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
- 
-  const upVotedList:any=useSelector((store:RootState)=>store.upvote.upvoteList)
+
+  const upVotedList: any = useSelector((store: RootState) => store.upvote.upvoteList)
 
   const itemsPerPage = 9;
   const handlePageChange = (page: number) => {
@@ -97,16 +97,16 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     } else if (productSearchQuery.length > 0 && inputSearchFilterArr) {
       // Search input filtered product productList
       return inputSearchFilterArr.length > 0 ? inputSearchFilterArr : [];
-    } 
-    else if (matchedPrice.length>0 && !id){
+    }
+    else if (matchedPrice.length > 0 && !id) {
       return matchedPrice;
     }
     else if (session && isBookmark && bookmarkList) {
-      const getBookmarkedList = productList.filter((item:AirtableModel)=>{
-        if (bookmarkList?.includes(item?.id)){
+      const getBookmarkedList = productList.filter((item: AirtableModel) => {
+        if (bookmarkList?.includes(item?.id)) {
           return item
         }
-      }) 
+      })
       return getBookmarkedList
     } else if (isVerifiedCheck && verifiedProductArr.length > 0) {
       // Verified Product
@@ -144,25 +144,25 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   }, [dispatch]);
 
   useEffect(() => {
-    if (session?.user){
+    if (session?.user) {
       dispatch(getBookmarkList());
     }
 
-  }, [dispatch, session ]);
+  }, [dispatch, session]);
 
 
   if (isLoading) {
     return <Loader />;
   }
 
-  if (isBookmark && bookmarkList.length ===0){
-      return(
-        <>
-          <h1 className="text-3xl font-bold  text-center">No Bookmark yet</h1>
-        </>
-      )
-     }
-  
+  if (isBookmark && bookmarkList.length === 0) {
+    return (
+      <>
+        <h1 className="text-3xl font-bold  text-center">No Bookmark yet</h1>
+      </>
+    )
+  }
+
 
   return (
     <>
@@ -215,7 +215,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           </h1>
         </>
       )}
-     
+
       <Pagination
         currentPage={currentPage}
         totalItems={filteredProductRecords!.length}
@@ -229,7 +229,7 @@ export function isProductBookmarked(
   product: AirtableModel,
   bookmarkList: any
 ) {
-  if (bookmarkList?.length >0) {
+  if (bookmarkList?.length > 0) {
     return bookmarkList?.some((bookmarkID: any) => bookmarkID === product?.id);
   }
   return false;
