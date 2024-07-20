@@ -77,7 +77,7 @@ export default function Navbar() {
         <div className="flex  max-w-7xl  mx-auto justify-between items-center  py-4 lg:px-2 lg:py-4">
           <div>
             <Link href="/">
-              <h2 className="text-Title-Large  font-bold">Content Tool</h2>
+              <h2 className="text-Title-Large  font-bold">Content Creation</h2>
             </Link>
           </div>
           {/* menubar in large screen */}

@@ -4,6 +4,7 @@ import { Poppins } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Providers from "@/providers/Providers";
+import { Toaster } from "@/components/ui/toaster";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,7 +26,10 @@ export default function RootLayout({
   return (
     <>
       <Navbar />
-      <main className="pt-[40px] lg:pt-[60px] flex-1">{children}</main>
+      <main className="pt-[40px] lg:pt-[60px] flex-1">{children}
+
+        <Toaster />
+      </main>
       <Footer />
     </>
   );

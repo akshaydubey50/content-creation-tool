@@ -93,7 +93,7 @@ export default function HeroSection() {
 
   const searchIconHandler = () => {
     dispatch(setSearchInputFocus())
-    dispatch(scrollPage(400))
+    dispatch(scrollPage(600))
   }
   return (
     <>
