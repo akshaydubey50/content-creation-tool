@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useState, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductList } from "@/redux/slice/product/productSlice";
 import AirtableModel from "@/models/airtable.model";
@@ -22,6 +22,10 @@ interface ProductListProps {
 
 export default function ProductList({ currentCategory }: ProductListProps) {
   const id = useSearchParams().get("id");
+
+  const params = useParams();
+  const slug = params;
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const dispatch: AppDispatch = useDispatch();
@@ -75,7 +79,9 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     (categoryType: string): AirtableModel[] | null => {
       if (categoryType !== "") {
         return productList?.filter((item: AirtableModel) => {
-          if (item?.fields?.Tags[0] === categoryType && item?.id !== id) {
+          const formattedTitle = item?.fields?.Name?.toLowerCase()?.trim()?.replace(/\s/g, "-");
+
+          if (item?.fields?.Tags[0] === categoryType && formattedTitle !== slug?.id) {
             return categoryType;
           }
         });
@@ -158,7 +164,11 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   if (isBookmark && bookmarkList.length === 0) {
     return (
       <>
-        <h1 className="text-3xl font-bold  text-center">No Bookmark yet</h1>
+        <div className="text-3xl font-bold  text-center h-80 flex items-center justify-center">
+          <h2>
+            No Bookmark yet
+          </h2>
+        </div>
       </>
     )
   }
