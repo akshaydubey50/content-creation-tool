@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import UserModel from "@/models/user/User.model";
 import mongoose from "mongoose";
-import connectDB from "@/lib/dbConnect";
+import connectDB from "@/db/dbConnect";
 import LikeModel from "@/models/likes/Like.model";
 
 export async function GET(req: NextRequest) {

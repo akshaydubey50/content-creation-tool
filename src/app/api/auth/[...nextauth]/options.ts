@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 // import connectToDB from "@/lib/dbConnect";
 // import UserModel from "@/model/User";
 import bcrypt from "bcryptjs";
-import connectDB from "@/lib/dbConnect";
+import connectDB from "@/db/dbConnect";
 import UserModel from "@/models/user/User.model";
 
 const authOptions: NextAuthOptions = {
@@ -55,7 +55,7 @@ const authOptions: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: "/signin",
+    signIn: "/signin", 
   },
   session: {
     strategy: "jwt",

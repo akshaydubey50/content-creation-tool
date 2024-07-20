@@ -28,6 +28,7 @@ export default function Page() {
   const handleSignIn = async () => {
     try {
       setError(null);
+  
       const response = await signIn("credentials", {
         redirect: false,
         email: email,

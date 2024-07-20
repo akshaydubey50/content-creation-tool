@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import { redirect, useRouter } from "next/navigation";
+import { encryptData } from "@/lib/crypto";
 
 export default function Page() {
   const [email, setEmail] = useState("");
@@ -26,14 +27,17 @@ export default function Page() {
     try {
       setError(null);
       const response = await axios.post("/api/signup", {
-        firstName: firstname,
-        lastName: lastname,
+        /* firstName: firstname,
+        lastName: lastname, */
         email,
         password,
       });
 
       if (response.data.success) {
-        router.push("/signin");
+        const encryptedEmail = encryptData(email);
+        sessionStorage.setItem("verificationEmail", encryptedEmail);
+        router.push("/verify");
+        // router.push("/signin");
       }
       if (response.data.success === false) {
         setError(response.data.message);

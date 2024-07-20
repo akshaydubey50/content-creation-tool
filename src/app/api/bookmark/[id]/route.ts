@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import UserModel from "@/models/user/User.model";
-import connectDB from "@/lib/dbConnect";
+import connectDB from "@/db/dbConnect";
 import BookmarkModel from "@/models/bookmark/Bookmark.model";
 import mongoose from "mongoose";
 
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     if (bookmarkExisting) {
       console.log("Existing bookmark product", bookmarkExisting);
       return NextResponse.json(
-        { success: true, msg: "Already bookmarked by user"},
+        { success: true, msg: "Already bookmarked by user" },
         { status: 200 }
       );
     }

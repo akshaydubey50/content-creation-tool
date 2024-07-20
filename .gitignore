@@ -40,3 +40,4 @@ next-env.d.ts
 .supabase
 # Million Lint
 .million
+.vscode

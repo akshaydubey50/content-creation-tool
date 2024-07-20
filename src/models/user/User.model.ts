@@ -3,9 +3,12 @@ import mongoose, { Schema } from "mongoose";
 export interface User extends Document {
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
+  /*  firstName: string;
+  lastName: string; */
   refreshToken: string;
+  isVerified: boolean;
+  verifyCode: string;
+  verifyCodeExpiry: Date;
 }
 
 const UserSchema: Schema<User> = new Schema({
@@ -13,14 +16,14 @@ const UserSchema: Schema<User> = new Schema({
     type: String,
     required: [true, "Email is required"],
   },
-  firstName: {
-    type: String,
-    required: [true, "First name is required"],
-  },
-  lastName: {
-    type: String,
-    required: [true, "Last name is required"],
-  },
+  // firstName: {
+  //   type: String,
+  //   // required: [true, "First name is required"],
+  // },
+  // lastName: {
+  //   type: String,
+  //   // required: [true, "Last name is required"],
+  // },
   password: {
     type: String,
     required: [true, "Password is required"],
@@ -28,6 +31,18 @@ const UserSchema: Schema<User> = new Schema({
   refreshToken: {
     type: String,
     default: "",
+  },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  verifyCode: {
+    type: String,
+    required: [true, "Verify code is required"],
+  },
+  verifyCodeExpiry: {
+    type: Date,
+    required: [true, "VerifyCodeExpiry is required"],
   },
 });
 
