@@ -36,7 +36,7 @@ export default function Navbar() {
   }, [isActiveMenu, dispatch]);
 
   const menuItem: MenuItem[] = [
-    { id: 1, label: "All Program", href: RoutePath.HomePage },
+    { id: 1, label: "All Tools", href: RoutePath.HomePage },
     { id: 2, label: "Contact", href: RoutePath.Contact },
     { id: 3, label: "Submit Tool", href: RoutePath.SubmitTool },
   ];

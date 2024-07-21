@@ -18,6 +18,7 @@ import { Eye, EyeOff, LogIn, Mail,Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 
 const signUpSchema = z.object({
@@ -124,6 +125,7 @@ shadow-[0_8px_30px_rgb(0,0,0,0.12)]
                       <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input
+                        autoComplete="off"
                           type="text"
                           placeholder="m@example.com"
                           {...field}
@@ -146,6 +148,8 @@ shadow-[0_8px_30px_rgb(0,0,0,0.12)]
                       <FormControl>
                         <div className="relative">
                           <Input
+                            autoComplete="off"
+
                             type={showPassword ? "text" : "password"}
                             placeholder="********"
                             {...field}
@@ -204,7 +208,9 @@ shadow-[0_8px_30px_rgb(0,0,0,0.12)]
                     </>
                   )}
                 </Button>
-                <Button variant="outline" className=" font-medium bg-slate-200 hover:bg-opacity-50 ">
+                <Button variant="outline" className=" font-medium bg-slate-200 hover:bg-opacity-50 "
+                  onClick={() => signIn("google")}
+                >
                   <Mail className="mr-2 h-4 w-4" /> Sign up with Google
                 </Button>
               </div>

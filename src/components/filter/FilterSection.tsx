@@ -209,8 +209,8 @@ export default function FilterSection() {
 
   return (
     <>
-      <section className="hidden md:flex flex-wrap justify-center px-10 py-5 md:gap-4  mx-auto text-white  lg:max-w-5xl xl:max-w-6xl   text-Title-Small lg:text-Title-Small">
-        <div className="">
+      <section className="hidden md:grid md:grid-cols-12 place-content-center px-10 py-5 md:gap-4  mx-auto text-white  lg:max-w-5xl xl:max-w-6xl   text-Title-Small lg:text-Title-Small">
+        <div className=" md:col-span-2 ">
           <div>
             <button
               className="bg-DarkOrange  px-5 lg:px-8 py-3 rounded-full   focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-semibold w-full text-center "
@@ -220,7 +220,7 @@ export default function FilterSection() {
             </button>
           </div>
         </div>
-        <div className="basis-1/5 z-0">
+        <div className="md:col-span-6 lg:col-span-3 z-0">
           <div className=" bg-DarkOrange  rounded-full    h-full">
             {isMounted && (
               <SelectDropdown
@@ -237,7 +237,7 @@ export default function FilterSection() {
             )}
           </div>
         </div>
-        <div className="basis-32 z-0">
+        <div className="md:col-span-4 lg:col-span-2 z-0">
           <div className=" bg-DarkOrange text-center  rounded-full    h-full">
             {isMounted && (
               <SelectDropdown
@@ -252,7 +252,7 @@ export default function FilterSection() {
             )}
           </div>
         </div>
-        <div className=" font-medium">
+        <div className=" md:col-span-4 lg:col-span-2 font-medium">
           <div className="">
             <button
               className="bg-DarkOrange whitespace-nowrap px-5  py-3 rounded-full   focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-semibold w-full text-center"
@@ -262,7 +262,7 @@ export default function FilterSection() {
             </button>
           </div>
         </div>
-        <div className="basis-1/4 font-medium">
+        <div className=" md:col-span-8 lg:col-span-3 font-medium">
           <div className=" text-black py-0.5 ">
             <input
               ref={searchRef}
