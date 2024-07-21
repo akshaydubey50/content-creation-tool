@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     );
   } catch (error: any) {
     console.log("Error while creating user", error);
-    return Response.json(
+    return NextResponse.json(
       {
         success: false,
         message: "Something went wrong",
