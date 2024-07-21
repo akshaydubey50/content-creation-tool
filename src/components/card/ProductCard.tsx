@@ -14,86 +14,139 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 // Project  Component Import
 import LikedBookmarkModal from "../modal/LikedBookmarkModal";
 import VisitWebsite from "../visit-website/VisitWebsite";
-import AirtableModel from "@/models/airtable.model";
-import {deleteBookmark,addBookmark} from "@/redux/slice/bookmark/bookmarkSlice";
-import { addUpvote,deleteUpvote } from "@/redux/slice/upvote/upvoteSlice";
+import { deleteBookmark, addBookmark } from "@/redux/slice/bookmark/bookmarkSlice";
+import { addUpvote, deleteUpvote } from "@/redux/slice/upvote/upvoteSlice";
 
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/redux/store";
-import { isProductBookmarked, isProductUpvoted } from "@/helper/helper";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { isProductBookmarked } from "@/helper/helper";
 import { useSession } from "next-auth/react";
-import { P } from "@upstash/redis/zmscore-5d82e632";
+import { useToast } from "../ui/use-toast";
+import { ToastAction } from "../ui/toast";
 
 export function ProductCard(props: any) {
+    const { toast } = useToast()
+
+  const DEBOUNCE_DELAY = 250; // ms
+
   const dispatch: AppDispatch = useDispatch();
-  const { upVotedList,bookmarkList, product } = props;
+  const { upVotedList, bookmarkList, product } = props;
 
   const { id, fields } = product;
-  const [isLiked, setIsLiked] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isBookMarked, setIsBookMarked] = useState(() =>isProductBookmarked(id, bookmarkList))
-  const [isUpvoted, setIsUpvoted] = useState(() => isProductUpvoted(id, upVotedList)  );
-  const [count,setCount]=useState(0)
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isBookMarked, setIsBookMarked] = useState<any>(() => isProductBookmarked(id, bookmarkList))
+  const [count, setCount] = useState(0)
   const { data: session } = useSession();
 
-  const { Tags, Name, WebsiteLink, Description, ToolImage, Verified,Pricing } = fields!;
-  const formattedTitle = Name?.toLowerCase().replace(/\s/g, "-");
-  const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
+  const {  Name, WebsiteLink, Description, ToolImage, Verified, Pricing } = fields!;
+  const formattedTitle = Name?.toLowerCase()?.trim()?.replace(/\s/g, "-");
+  // const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
 
-  const handleBookmarkClick = () => {
-    if (!session?.user) {
+  console.log("formattedTitle", formattedTitle)
+  const getCurrentProductUpvotedObj = (toolId: any) => {
+    return upVotedList?.find((item: any) => item?.productId === toolId) || null;
+  }
+
+
+  const handleBookmark = useCallback(() => {
+    if (!session || !session?.user) {
       setIsOpen(true);
-    } else {
-      if (isBookMarked && id) {
-        // @ts-ignore
-        dispatch(deleteBookmark(id));
-        setIsBookMarked(!isBookMarked);
-      } else {
-        // @ts-ignore
-        dispatch(addBookmark(id));
-        setIsBookMarked(!isBookMarked);
-      }
+      return;
     }
-  };
-
-  const handleLikes = async () => {
-    if (!session?.user) {
-      return setIsOpen(true);
-    } else {
-      if (isUpvoted && id) {
-        // @ts-ignore
-        dispatch(deleteUpvote(id));
-        setIsUpvoted(!isUpvoted);
-      } else {
-        // @ts-ignore
-        dispatch(addUpvote(id));
-        setIsUpvoted(!isUpvoted);
-      }
+    setIsBookMarked(!isBookMarked);
+    if (isBookMarked){
+      toast({
+        title: "You deleted the product",
+        duration: 2000,
+        action: <ToastAction altText="Undo">Undo</ToastAction>,
+        variant: "destructive"
+      })
+      // @ts-ignore
+      dispatch(deleteBookmark(id));
     }
-  };
+    else{
+      toast({
+        title: "You saved the product",
+        duration: 2000,
+        action: <ToastAction altText="Undo">Undo</ToastAction>,
+        variant: "success"
+      })
+      // @ts-ignore
+      dispatch(addBookmark(id));
+    }
+      
+
+    
+  }, [session, isBookMarked, id, dispatch]);
 
 
+  const handleLikes = useCallback(()=>{
+      if (!session || !session?.user) {
+        return setIsOpen(true);
+      } else {
+        if (isLiked) {
+          setIsLiked(false)
+          setCount(count - 1)
+          toast({
+            title: "You downvoted the product",
+            duration: 2000,
+            action: <ToastAction altText="Undo">Undo</ToastAction>,
+            variant: "destructive"
+          })
+          // @ts-ignore
+          dispatch(deleteUpvote(id));
+        }
+        else if (!isLiked) {
+          setIsLiked(true)
+          setCount(count + 1)
+          toast({
+            title: "You upvoted the product",
+            duration: 2000,
+            action: <ToastAction altText="Undo">Undo</ToastAction>,
+            variant: "success"
+          })
+          // @ts-ignore
+          dispatch(addUpvote(id));
+        }
 
+      }
+  }, [session, isLiked, id, dispatch]);
+
+  function debounce(func: Function, delay: number) {
+    let timeoutId: NodeJS.Timeout;
+    return (...args: any[]) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
+  }
+
+  const debouncedHandleLikes = useCallback(
+    debounce(handleLikes, DEBOUNCE_DELAY),
+    [handleLikes]
+  );
+
+
+  const debouncedHandleBookmark = useCallback(
+    debounce(handleBookmark, DEBOUNCE_DELAY),
+    [handleBookmark]
+  );
+
+  
   useEffect(() => {
     setIsBookMarked(isProductBookmarked(id, bookmarkList));
-    console.log("bookmarkList", bookmarkList)
-  }, [setIsBookMarked, isBookMarked, id, bookmarkList]);
+  }, [id, bookmarkList]);
+
 
 
   useEffect(() => {
-    setIsLiked(isProductUpvoted(id, upVotedList));
-    console.log("upVotedList", upVotedList)
-  }, [setIsLiked, isUpvoted, id, upVotedList]);
+    const upvotedObj = getCurrentProductUpvotedObj(id);
+    setIsLiked(upvotedObj?.isProductLikedByUser || false);
+    setCount(upvotedObj?.totalLikes || 0);
+  }, [id]);  
 
 
-  useEffect(()=>{
-    if (upVotedList && id){
-
-      const getCurrentUpvote=  isProductUpvoted(id, upVotedList)
-      console.log('getCurrentUpvote', getCurrentUpvote)
-      setCount(getCurrentUpvote?.count||0)
-    }
-  }, [upVotedList,id])
+  
   return (
     <>
       <div
@@ -102,10 +155,7 @@ export function ProductCard(props: any) {
       >
         <Link
           href={{
-            pathname: `/tool/${formattedTitle}`,
-            query: {
-              id: id,
-            },
+            pathname: `/tool/${formattedTitle}`
           }}
         >
           <section className="border-b border-black border-solid">
@@ -137,7 +187,7 @@ export function ProductCard(props: any) {
                 <button
                   title="Likes"
                   type="button"
-                  onClick={handleLikes}
+                  onClick={debouncedHandleLikes}
                   className="flex items-center gap-x-1"
                 >
                   <p>
@@ -149,7 +199,7 @@ export function ProductCard(props: any) {
                   </p>
                   <p className="">{count}</p>
                 </button>
-                {!session?.user && isOpen && (
+                {(!session || !session?.user) && isOpen && (
                   <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
                 )}
               </div>
@@ -165,13 +215,7 @@ export function ProductCard(props: any) {
                 border-solid border-black px-5 py-1">
                   {Pricing}
                 </span>
-                {/* <Link
-                  className="bg-white rounded-full  text-tags font-medium border 
-                border-solid border-black px-5 py-1"
-                  href={`/category/${formattedTag}`}
-                  prefetch={true}
-                >
-                </Link> */}
+             
               </p>
               <div
                 className="text-white text-Title-Medium  flex 
@@ -181,7 +225,7 @@ export function ProductCard(props: any) {
                 <button
                   title="Bookmark"
                   type="button"
-                  onClick={handleBookmarkClick}
+                  onClick={debouncedHandleBookmark  }
                 >
                   {isBookMarked ? (
                     <BsBookmarkFill className="text-3xl text-DarkOrange" />
@@ -189,7 +233,7 @@ export function ProductCard(props: any) {
                     <BsBookmark className="text-3xl   text-black" />
                   )}
                 </button>
-            
+
               </div>
             </div>
           </div>

@@ -1,4 +1,5 @@
 "use client";
+import React, { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,29 +10,66 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import * as z from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Eye, EyeOff, LogIn, Mail,Loader2 } from "lucide-react"
+import { cn } from "@/lib/utils"
 import axios, { AxiosError } from "axios";
+<<<<<<< HEAD
 import { redirect, useRouter } from "next/navigation";
 import { encryptData } from "@/lib/crypto";
+=======
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+
+
+const signUpSchema = z.object({
+  email: z.string().email("Please enter valid email address"),
+  password: z.string()
+    .regex(
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+={}[\]:";'<>?,./|`~])[A-Za-z\d!@#$%^&*()_\-+={}[\]:";'<>?,./|`~]{8,}$/,
+      "Please Enter Password  "
+    )
+})
+
+
+
+>>>>>>> 0a397dccb148c74d6dada44fc8d5c99766d181b3
 
 export default function Page() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
   const [error, setError] = useState<String | null>(null);
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordMessages, setPasswordMessages] = useState<string[]>([]);
+  const [passwordConditionsMet, setPasswordConditionsMet] = useState<boolean[]>([]);
+  const [isLoading, setIsLoading] = useState<any>(false);
+  const [isLoadingGoogle, setIsLoadingGoogle] = useState<any>(false)
 
-  const handleSignUp = async () => {
+
+  const form = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
+
+  const handleSignUp = async (values: z.infer<typeof signUpSchema>) => {
     try {
+      setIsLoading(true)
       setError(null);
+<<<<<<< HEAD
       const response = await axios.post("/api/signup", {
         /* firstName: firstname,
         lastName: lastname, */
         email,
         password,
       });
+=======
+      const response = await axios.post("/api/signup", values);
+>>>>>>> 0a397dccb148c74d6dada44fc8d5c99766d181b3
 
       if (response.data.success) {
         const encryptedEmail = encryptData(email);
@@ -45,12 +83,46 @@ export default function Page() {
     } catch (error: any) {
       const errMsg = error as AxiosError<{ status: string; message: string }>;
       setError(errMsg?.response?.data?.message || "Something went wrong");
+    }finally{
+      setIsLoading(false)
     }
   };
 
+ 
+  const validatePassword = (password: string) => {
+    const conditions = [
+      /[A-Z]/.test(password),
+      /[a-z]/.test(password),
+      /\d/.test(password),
+      /[@$!%*?&]/.test(password),
+      password.length >= 8,
+    ];
+
+    setPasswordConditionsMet(conditions);
+
+    const messages = [
+      "Password must include a capital letter",
+      "Password must include a lowercase letter",
+      "Password must include a number",
+      "Password must include a special character",
+      "Password must be at least 8 characters",
+    ];
+
+    if (conditions.every(condition => condition)) {
+      setPasswordMessages([]); // Clear messages if all conditions are met
+    } else {
+      setPasswordMessages(messages); // Set messages if conditions are not met
+    }
+  };
+
+
+
   return (
-    <section className="h-screen items-center flex ">
-      <Card className="mx-auto max-w-sm  shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]">
+    <section className="h-screen flex items-center bg-white">
+      <Card className="mx-auto max-w-sm 
+shadow-[0_8px_30px_rgb(0,0,0,0.12)]
+       text-black bg-[#fff]">
+
         <CardHeader>
           <CardTitle className="text-xl">Sign Up</CardTitle>
           <CardDescription>
@@ -58,65 +130,109 @@ export default function Page() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="first-name">First name</Label>
-                <Input
-                  id="first-name"
-                  placeholder="Max"
-                  value={firstname}
-                  onChange={(e) => setFirstname(e.target.value)}
-                  required
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleSignUp)} className="space-y-6">
+              
+              <div className="grid gap-4">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                        autoComplete="off"
+                          type="text"
+                          placeholder="m@example.com"
+                          {...field}
+                          className={cn(
+                            "transition-all duration-200 ease-in-out",
+                            form.formState.errors.email && "border-red-500 focus-visible:ring-red-500 input-error"
+                          )}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-red-500  font-medium text-sm transition-all duration-200 ease-in-out" />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="last-name">Last name</Label>
-                <Input
-                  id="last-name"
-                  placeholder="Robinson"
-                  value={lastname}
-                  onChange={(e) => setLastname(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            {error && <div className="text-red-500">{error}</div>}
-            <Button
-              onClick={handleSignUp}
-              variant="outline"
-              type="submit"
-              className="w-full"
-            >
-              Create an account
-            </Button>
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            autoComplete="off"
 
-            <Button variant="outline" className="w-full">
-              Sign up with Google
-            </Button>
-          </div>
+                            type={showPassword ? "text" : "password"}
+                            placeholder="********"
+                            {...field}
+                            className={cn(
+                              "transition-all duration-300 ease-in-out pr-10",
+                              form.formState.errors.password && "border-red-500 focus-visible:ring-red-500 input-error"
+                            )}
+                            onBlur={(e) => {
+                              validatePassword(e.target.value);
+                              field.onBlur();
+                            }}
+                            onChange={(e) => {
+                              validatePassword(e.target.value);
+                              field.onChange(e);
+                            }}
+
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent transition-opacity duration-300 ease-in-out"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? (
+                              <Eye className="h-4 w-4 icon-fade" />
+                            ) : (
+                              <EyeOff className="h-4 w-4 icon-fade" />
+                            )}
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <FormMessage className="text-red-500 font-medium text-sm transition-all duration-300 ease-in-out" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              {passwordMessages.length > 0 && (
+                <ul className="text-sm font-medium list-disc ml-5">
+                  {passwordMessages.map((msg, index) => (
+                    <li key={index} className={passwordConditionsMet[index] ? "text-green-500" : "text-red-500"}>
+                      {msg}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {error && <p className="text-red-500 font-medium">{error}</p>}
+              <div className="grid gap-2">
+                <Button type="submit" variant="outline" className="bg-[#1c1c1c] text-white font-medium hover:bg-opacity-80">
+             
+                  {isLoading ? (<>
+                    <Loader2 className="animate-spin mr-2" /> Loading
+                  </>) : (
+                    <>
+                        <LogIn className="mr-2 h-4 w-4" /> Sign Up
+                    </>
+                  )}
+                </Button>
+                <Button variant="outline" className=" font-medium bg-slate-200 hover:bg-opacity-50 "
+                  onClick={() => signIn("google")}
+                >
+                  <Mail className="mr-2 h-4 w-4" /> Sign up with Google
+                </Button>
+              </div>
+            </form>
+          </Form>
           <div className="mt-4 text-center text-sm">
             Already have an account?{" "}
             <Link href="/signin" className="underline">

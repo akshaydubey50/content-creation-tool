@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import ProductToolBanner from "@/components/product-tool/ProductToolBanner";
 import ProductList from "@/components/card/ProductList";
 import AirtableModel from "@/models/airtable.model";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useParams } from "next/navigation";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -14,15 +14,20 @@ export default function ProductDetail() {
   const [product, setProductData] = useState<AirtableModel>();
   const { setVisibleItem } = useVisibleItemContextData();
   const currentCategory = product && product!.fields.Tags[0];
-
+  const params = useParams();
+  const slug = params;
+  console.log("slug",slug)
   const getProductFromId = useCallback(() => {
-    const productMatched = productList!.find(
-      (product: AirtableModel) => product.id === id
-    );
+    const productMatched = productList!.find((product: AirtableModel) => {
+      const formattedTitle = product?.fields?.Name?.toLowerCase()?.trim()?.replace(/\s/g, "-");
+      return formattedTitle === slug?.id;
+    });
+
+    console.log("productMatched",productMatched)
     if (productMatched) {
       setProductData(productMatched);
     }
-  }, [id, productList]);
+  }, [slug?.id, productList]);
 
   useEffect(() => {
     setVisibleItem(9);

@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useState, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductList } from "@/redux/slice/product/productSlice";
 import AirtableModel from "@/models/airtable.model";
@@ -9,7 +9,7 @@ import {
   getBookmarkList,
   setBookmarkList,
 } from "@/redux/slice/bookmark/bookmarkSlice";
-import {getUpvoteList} from "@/redux/slice/upvote/upvoteSlice"
+import { getUpvoteList } from "@/redux/slice/upvote/upvoteSlice"
 import Loader from "../common/Loader/Loader";
 import { RootState, AppDispatch } from "@/redux/store";
 import Pagination from "../pagination/Pagination";
@@ -22,15 +22,20 @@ interface ProductListProps {
 
 export default function ProductList({ currentCategory }: ProductListProps) {
   const id = useSearchParams().get("id");
+
+  const params = useParams();
+  const slug = params;
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const dispatch: AppDispatch = useDispatch();
   const { isUserAuthenticated } = useSelector((store: RootState) => store.user);
-  const {data:session} =useSession();
+  const { data: session } = useSession();
   // console.log('getAuthSession', getAuthSession)
-  const productList = useSelector(
-    (state: RootState) => state.product.productList
+  const { productList, isLoading } = useSelector(
+    (state: RootState) => state.product
   );
+  console.log('productList', productList, isLoading)
   const dropDownCategoryArr = useSelector(
     (store: RootState) => store.category.matchedCategory
   );
@@ -46,14 +51,14 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const isVerifiedCheck = useSelector(
     (store: RootState) => store.verifiedProduct.isVerifiedChecked
   );
-  const bookmarkList:any = useSelector((store: RootState) => store.bookmark.bookmarkList);
-  
-  const {matchedPrice}=useSelector((state:RootState)=>state.priceModel)
+  const bookmarkList: any = useSelector((store: RootState) => store.bookmark.bookmarkList);
+
+  const { matchedPrice } = useSelector((state: RootState) => state.priceModel)
   const isBookmark = useSelector(
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
- 
-  const upVotedList:any=useSelector((store:RootState)=>store.upvote.upvoteList) 
+
+  const upVotedList: any = useSelector((store: RootState) => store.upvote.upvoteList)
 
   const itemsPerPage = 9;
   const handlePageChange = (page: number) => {
@@ -74,7 +79,9 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     (categoryType: string): AirtableModel[] | null => {
       if (categoryType !== "") {
         return productList?.filter((item: AirtableModel) => {
-          if (item?.fields?.Tags[0] === categoryType && item?.id !== id) {
+          const formattedTitle = item?.fields?.Name?.toLowerCase()?.trim()?.replace(/\s/g, "-");
+
+          if (item?.fields?.Tags[0] === categoryType && formattedTitle !== slug?.id) {
             return categoryType;
           }
         });
@@ -96,16 +103,16 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     } else if (productSearchQuery.length > 0 && inputSearchFilterArr) {
       // Search input filtered product productList
       return inputSearchFilterArr.length > 0 ? inputSearchFilterArr : [];
-    } 
-    else if (matchedPrice.length>0 && !id){
+    }
+    else if (matchedPrice.length > 0 && !id) {
       return matchedPrice;
     }
     else if (session && isBookmark && bookmarkList) {
-      const getBookmarkedList = productList.filter((item:AirtableModel)=>{
-        if (bookmarkList?.includes(item?.id)){
+      const getBookmarkedList = productList.filter((item: AirtableModel) => {
+        if (bookmarkList?.includes(item?.id)) {
           return item
         }
-      }) 
+      })
       return getBookmarkedList
     } else if (isVerifiedCheck && verifiedProductArr.length > 0) {
       // Verified Product
@@ -138,36 +145,34 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   useEffect(() => {
     dispatch(fetchProductList());
+    dispatch(getUpvoteList())
 
   }, [dispatch]);
 
   useEffect(() => {
-    if (session?.user){
+    if (session?.user) {
       dispatch(getBookmarkList());
-      dispatch(getUpvoteList())
     }
 
-  }, [dispatch, session ]);
+  }, [dispatch, session]);
 
 
-  if (!productList) {
+  if (isLoading) {
     return <Loader />;
   }
 
-  // if (isBookmark && bookmarkLoadingStatus === "loading") {
-  //   return <Loader />;
-  // }
-  // if (getListBookmarkStatus === "loading") {
-  //   return <Loader />;
-  // }
-  if (isBookmark && bookmarkList.length ===0){
-      return(
-        <>
-          <h1 className="text-3xl font-bold  text-center">No Bookmark yet</h1>
-        </>
-      )
-     }
-  
+  if (isBookmark && bookmarkList.length === 0) {
+    return (
+      <>
+        <div className="text-3xl font-bold  text-center h-80 flex items-center justify-center">
+          <h2>
+            No Bookmark yet
+          </h2>
+        </div>
+      </>
+    )
+  }
+
 
   return (
     <>
@@ -220,7 +225,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           </h1>
         </>
       )}
-     
+
       <Pagination
         currentPage={currentPage}
         totalItems={filteredProductRecords!.length}
@@ -234,7 +239,7 @@ export function isProductBookmarked(
   product: AirtableModel,
   bookmarkList: any
 ) {
-  if (bookmarkList?.length >0) {
+  if (bookmarkList?.length > 0) {
     return bookmarkList?.some((bookmarkID: any) => bookmarkID === product?.id);
   }
   return false;
