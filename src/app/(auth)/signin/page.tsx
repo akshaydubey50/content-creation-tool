@@ -144,7 +144,9 @@ shadow-[0_8px_30px_rgb(0,0,0,0.12)]
                     </>
                   )}
                 </Button>
-                <Button variant="outline" className= " font-medium bg-slate-200 hover:bg-opacity-50 ">
+                <Button variant="outline" className= " font-medium bg-slate-200 hover:bg-opacity-50 "
+                  onClick={() => signIn("google")}
+                >
                   {isLoadingGoogle ? (<>
                     <Loader2Icon className="animate-spin mr-2" /> Loading
                   </>) : (
