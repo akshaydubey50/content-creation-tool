@@ -19,6 +19,7 @@ export default function InputOTPControlled() {
   const verifyCode = async () => {
     setButtonDisabled(true);
     try {
+      //if params has token then call /api/verify-token
       const result = await axios.post("/api/verify", {
         code: value,
         email: email,
@@ -43,6 +44,7 @@ export default function InputOTPControlled() {
       setButtonDisabled(false);
     }
   };
+  
   useEffect(() => {
     // Retrieve and decrypt the email from sessionStorage
     const encryptedEmail = sessionStorage.getItem("verificationEmail");

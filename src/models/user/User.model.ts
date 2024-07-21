@@ -5,7 +5,8 @@ export interface User extends Document {
   password: string;
   /*  firstName: string;
   lastName: string; */
-  refreshToken: string;
+  forgetPasswordToken: string;
+  forgetPasswordTokenExpiry: Date;
   isVerified: boolean;
   verifyCode: string;
   verifyCodeExpiry: Date;
@@ -28,9 +29,12 @@ const UserSchema: Schema<User> = new Schema({
     type: String,
     required: [true, "Password is required"],
   },
-  refreshToken: {
+  forgetPasswordToken: {
     type: String,
     default: "",
+  },
+  forgetPasswordTokenExpiry: {
+    type: Date,
   },
   isVerified: {
     type: Boolean,

@@ -9,7 +9,6 @@ export async function GET(req: NextRequest) {
   await connectDB();
 
   const token = await getToken({ req: req });
-  console.log("token ####", token);
 
   if (!token) {
     console.log("token undefined", token);

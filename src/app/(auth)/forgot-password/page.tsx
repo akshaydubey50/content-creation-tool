@@ -20,28 +20,19 @@ import { setUserAuth } from "@/redux/slice/user/userSlice";
 
 export default function Page() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState<String | null>(null);
+  const [msg, setMessage] = useState<String | null>(null);
   const route = useRouter();
   const dispatch = useDispatch();
 
-  const handleSignIn = async () => {
+  const handleForgetPassword = async () => {
     try {
       setError(null);
 
-      const response = await signIn("credentials", {
-        redirect: false,
+      const response = await axios.post("/api/forgot-password", {
         email: email,
-        password: password,
       });
-      dispatch(setUserAuth(response));
-
-      if (response?.error) {
-        setError(response?.error);
-      }
-      if (response?.url) {
-        route.push("/");
-      }
+      console.log("forget password:", { response });
     } catch (error) {
       const errorMsg = error as AxiosError<{ status: string; message: string }>;
       setError(errorMsg?.response?.data?.message || "Something went wrong");
@@ -52,10 +43,8 @@ export default function Page() {
     <section className="h-screen flex items-center  ">
       <Card className="mx-auto max-w-sm shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]	">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account
-          </CardDescription>
+          <CardTitle className="text-2xl">Forget Password</CardTitle>
+          <CardDescription>Enter your email to reset password</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
@@ -70,43 +59,16 @@ export default function Page() {
                 required
               />
             </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <Link
-                  href="/forgot-password"
-                  className="ml-auto inline-block text-sm underline"
-                >
-                  Forgot your password?
-                </Link>
-              </div>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>{" "}
             {error && <div className="text-red-500">{error}</div>}
+            {msg && <div className="text-green-500">{error}</div>}
             <Button
               variant="outline"
-              onClick={handleSignIn}
+              onClick={handleForgetPassword}
               type="submit"
               className="w-full"
-            >
-              Login
+            >       
+              Submit
             </Button>
-            <Button variant="outline" className="w-full">
-              Login with Google
-            </Button>
-          </div>
-          <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <Link href={"/signup"} className="underline">
-              Sign up
-            </Link>
           </div>
         </CardContent>
       </Card>
