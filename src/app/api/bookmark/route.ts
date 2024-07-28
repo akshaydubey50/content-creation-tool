@@ -9,9 +9,8 @@ export async function GET(req: NextRequest) {
   await connectDB();
 
   const token = await getToken({ req: req });
-
-  if (!token) {
-    console.log("token undefined", token);
+  console.log("TOKEN", token);
+  if (!token || token?._id === undefined) {
     return NextResponse.json(
       { success: false, msg: "Unauthorized access" },
       { status: 400 }
@@ -19,8 +18,8 @@ export async function GET(req: NextRequest) {
   }
   //   const id = "667ff969d27bcfc89d2a86ce";
   try {
-    const user = await UserModel.findById({
-      _id: token?._id,
+    const user = await UserModel.findOne({
+      email: token?.email,
     });
 
     if (!user) {

@@ -9,7 +9,7 @@ import {
   getBookmarkList,
   setBookmarkList,
 } from "@/redux/slice/bookmark/bookmarkSlice";
-import { getUpvoteList } from "@/redux/slice/upvote/upvoteSlice"
+import { getUpvoteList } from "@/redux/slice/upvote/upvoteSlice";
 import Loader from "../common/Loader/Loader";
 import { RootState, AppDispatch } from "@/redux/store";
 import Pagination from "../pagination/Pagination";
@@ -35,7 +35,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const { productList, isLoading } = useSelector(
     (state: RootState) => state.product
   );
-  console.log('productList', productList, isLoading)
+  console.log("productList", productList, isLoading);
   const dropDownCategoryArr = useSelector(
     (store: RootState) => store.category.matchedCategory
   );
@@ -51,44 +51,43 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const isVerifiedCheck = useSelector(
     (store: RootState) => store.verifiedProduct.isVerifiedChecked
   );
-  const bookmarkList: any = useSelector((store: RootState) => store.bookmark.bookmarkList);
+  const bookmarkList: any = useSelector(
+    (store: RootState) => store.bookmark.bookmarkList
+  );
 
-  const { matchedPrice } = useSelector((state: RootState) => state.priceModel)
+  const { matchedPrice } = useSelector((state: RootState) => state.priceModel);
   const isBookmark = useSelector(
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
 
-  const upVotedList: any = useSelector((store: RootState) => store.upvote.upvoteList)
+  const upVotedList: any = useSelector(
+    (store: RootState) => store.upvote.upvoteList
+  );
 
   const itemsPerPage = 9;
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  const updateCurrentProducts = () => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const newCurrentProducts = filteredProductRecords!.slice(
-      startIndex,
-      endIndex
-    );
-    return newCurrentProducts;
-  };
-
   const getProductByCategory = useCallback(
     (categoryType: string): AirtableModel[] | null => {
       if (categoryType !== "") {
         return productList?.filter((item: AirtableModel) => {
-          const formattedTitle = item?.fields?.Name?.toLowerCase()?.trim()?.replace(/\s/g, "-");
+          const formattedTitle = item?.fields?.Name?.toLowerCase()
+            ?.trim()
+            ?.replace(/\s/g, "-");
 
-          if (item?.fields?.Tags[0] === categoryType && formattedTitle !== slug?.id) {
+          if (
+            item?.fields?.Tags[0] === categoryType &&
+            formattedTitle !== slug?.id
+          ) {
             return categoryType;
           }
         });
       }
       return null;
     },
-    [productList, id]
+    [productList, slug?.id]
   );
 
   const filteredProductRecords = useMemo(() => {
@@ -103,22 +102,20 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     } else if (productSearchQuery.length > 0 && inputSearchFilterArr) {
       // Search input filtered product productList
       return inputSearchFilterArr.length > 0 ? inputSearchFilterArr : [];
-    }
-    else if (matchedPrice.length > 0 && !id) {
+    } else if (matchedPrice.length > 0 && !id) {
       return matchedPrice;
-    }
-    else if (session && isBookmark && bookmarkList) {
+    } else if (session && isBookmark && bookmarkList) {
       const getBookmarkedList = productList.filter((item: AirtableModel) => {
         if (bookmarkList?.includes(item?.id)) {
-          return item
+          return item;
         }
-      })
-      return getBookmarkedList
+      });
+      return getBookmarkedList;
     } else if (isVerifiedCheck && verifiedProductArr.length > 0) {
       // Verified Product
       return verifiedProductArr;
     } else if (productList && !id) {
-      // All productList  
+      // All productList
       return productList;
     }
 
@@ -136,26 +133,32 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     verifiedProductArr,
     productList,
     productSearchQuery.length,
-    matchedPrice
+    matchedPrice,
   ]);
-
-  useEffect(() => {
-    updateCurrentProducts();
+  const updateCurrentProducts = useCallback(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const newCurrentProducts = filteredProductRecords!.slice(
+      startIndex,
+      endIndex
+    );
+    return newCurrentProducts;
   }, [currentPage, filteredProductRecords]);
 
   useEffect(() => {
-    dispatch(fetchProductList());
-    dispatch(getUpvoteList())
+    updateCurrentProducts();
+  }, [currentPage, filteredProductRecords, updateCurrentProducts]);
 
+  useEffect(() => {
+    dispatch(fetchProductList());
   }, [dispatch]);
 
   useEffect(() => {
     if (session?.user) {
+      dispatch(getUpvoteList());
       dispatch(getBookmarkList());
     }
-
   }, [dispatch, session]);
-
 
   if (isLoading) {
     return <Loader />;
@@ -165,14 +168,11 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     return (
       <>
         <div className="text-3xl font-bold  text-center h-80 flex items-center justify-center">
-          <h2>
-            No Bookmark yet
-          </h2>
+          <h2>No Bookmark yet</h2>
         </div>
       </>
-    )
+    );
   }
-
 
   return (
     <>
@@ -207,7 +207,6 @@ export default function ProductList({ currentCategory }: ProductListProps) {
                 isBookmark={isProductBookmarked(item, bookmarkList)}
                 bookmarkList={bookmarkList}
                 upVotedList={upVotedList}
-
               />
             );
           }
@@ -225,7 +224,6 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           </h1>
         </>
       )}
-
       <Pagination
         currentPage={currentPage}
         totalItems={filteredProductRecords!.length}
@@ -235,10 +233,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   );
 }
 
-export function isProductBookmarked(
-  product: AirtableModel,
-  bookmarkList: any
-) {
+export function isProductBookmarked(product: AirtableModel, bookmarkList: any) {
   if (bookmarkList?.length > 0) {
     return bookmarkList?.some((bookmarkID: any) => bookmarkID === product?.id);
   }

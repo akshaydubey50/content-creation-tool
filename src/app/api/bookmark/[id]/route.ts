@@ -10,16 +10,17 @@ export async function POST(req: NextRequest) {
 
   const token = await getToken({ req: req });
 
-  if (!token) {
+  if (!token || token?._id === undefined) {
     return NextResponse.json(
       { success: false, msg: "Unauthorized access" },
       { status: 400 }
     );
   }
-  // const id = "667ff969d27bcfc89d2a86ce";
   try {
     const productId = req.nextUrl.pathname.split("bookmark/")[1];
-    const user = await UserModel.findById({ _id: token._id });
+    const user = await UserModel.findOne({
+      email: token?.email,
+    });
 
     if (!user) {
       return NextResponse.json(

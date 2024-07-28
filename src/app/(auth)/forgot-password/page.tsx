@@ -66,7 +66,7 @@ export default function Page() {
               onClick={handleForgetPassword}
               type="submit"
               className="w-full"
-            >       
+            >
               Submit
             </Button>
           </div>

@@ -29,15 +29,6 @@ const toastVariants = cva(
   {
     variants: {
       variant: {
-<<<<<<< HEAD
-        default: "border bg-background text-foreground",
-        destructive:
-          "destructive group border-destructive bg-destructive text-destructive-foreground",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-=======
         default: "border-green bg-green-500 text-white",
         destructive:
           "border-DarkOrange bg-light-gray text-DarkOrange",
@@ -48,7 +39,6 @@ const toastVariants = cva(
     },
     defaultVariants: {
       variant: "destructive",
->>>>>>> 0a397dccb148c74d6dada44fc8d5c99766d181b3
     },
   }
 )
@@ -58,19 +48,12 @@ const Toast = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
     VariantProps<typeof toastVariants>
 >(({ className, variant, ...props }, ref) => {
-<<<<<<< HEAD
-  return (
-    <ToastPrimitives.Root
-      ref={ref}
-      className={cn(toastVariants({ variant }), className)}
-=======
   const variantToUse = variant || "default";
   console.log("variant ####", variant)
   return (
     <ToastPrimitives.Root
       ref={ref}
       className={cn(toastVariants({ variant: variantToUse }), className)}
->>>>>>> 0a397dccb148c74d6dada44fc8d5c99766d181b3
       {...props}
     />
   )
@@ -84,11 +67,7 @@ const ToastAction = React.forwardRef<
   <ToastPrimitives.Action
     ref={ref}
     className={cn(
-<<<<<<< HEAD
-      "inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-muted/40 group-[.destructive]:hover:border-destructive/30 group-[.destructive]:hover:bg-destructive group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive",
-=======
       "inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none  disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-muted/40 group-[.destructive]:hover:border-destructive/30 group-[.destructive]:hover:bg-destructive group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive ",
->>>>>>> 0a397dccb148c74d6dada44fc8d5c99766d181b3
       className
     )}
     {...props}
@@ -120,11 +99,7 @@ const ToastTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitives.Title
     ref={ref}
-<<<<<<< HEAD
-    className={cn("text-sm font-semibold", className)}
-=======
     className={cn("text-base font-semibold", className)}
->>>>>>> 0a397dccb148c74d6dada44fc8d5c99766d181b3
     {...props}
   />
 ))

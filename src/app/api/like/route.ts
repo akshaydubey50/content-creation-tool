@@ -9,10 +9,16 @@ export async function GET(req: NextRequest) {
   await connectDB();
 
   const token = await getToken({ req: req });
-
+  if (!token || token?._id === undefined) {
+    return NextResponse.json(
+      { success: false, msg: "Unauthorized access" },
+      { status: 400 }
+    );
+  }
   try {
-    const user = token?._id ? await UserModel.findById(token._id) : null;
-
+    const user = await UserModel.findOne({
+      email: token?.email,
+    });
     const likes = await LikeModel.aggregate([
       {
         $group: {
