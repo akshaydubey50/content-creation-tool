@@ -21,10 +21,13 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { isProductBookmarked } from "@/helper/helper";
 import { useSession } from "next-auth/react";
+import { useToast } from "../ui/use-toast";
+import { ToastAction } from "../ui/toast";
 
 export function ProductCard(props: any) {
-  
-  const DEBOUNCE_DELAY = 400; // ms
+    const { toast } = useToast()
+
+  const DEBOUNCE_DELAY = 250; // ms
 
   const dispatch: AppDispatch = useDispatch();
   const { upVotedList, bookmarkList, product } = props;
@@ -37,11 +40,12 @@ export function ProductCard(props: any) {
   const { data: session } = useSession();
 
   const {  Name, WebsiteLink, Description, ToolImage, Verified, Pricing } = fields!;
-  const formattedTitle = Name?.toLowerCase().replace(/\s/g, "-");
+  const formattedTitle = Name?.toLowerCase()?.trim()?.replace(/\s/g, "-");
   // const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
 
+  console.log("formattedTitle", formattedTitle)
   const getCurrentProductUpvotedObj = (toolId: any) => {
-    return upVotedList.find((item: any) => item?.productId === toolId) || null;
+    return upVotedList?.find((item: any) => item?.productId === toolId) || null;
   }
 
 
@@ -51,10 +55,29 @@ export function ProductCard(props: any) {
       return;
     }
     setIsBookMarked(!isBookMarked);
-    const action = isBookMarked ? deleteBookmark : addBookmark;
-    // @ts-ignore
-    dispatch(action(id));
+    if (isBookMarked){
+      toast({
+        title: "You deleted the product",
+        duration: 2000,
+        action: <ToastAction altText="Undo">Undo</ToastAction>,
+        variant: "destructive"
+      })
+      // @ts-ignore
+      dispatch(deleteBookmark(id));
+    }
+    else{
+      toast({
+        title: "You saved the product",
+        duration: 2000,
+        action: <ToastAction altText="Undo">Undo</ToastAction>,
+        variant: "success"
+      })
+      // @ts-ignore
+      dispatch(addBookmark(id));
+    }
+      
 
+    
   }, [session, isBookMarked, id, dispatch]);
 
 
@@ -65,12 +88,24 @@ export function ProductCard(props: any) {
         if (isLiked) {
           setIsLiked(false)
           setCount(count - 1)
+          toast({
+            title: "You downvoted the product",
+            duration: 2000,
+            action: <ToastAction altText="Undo">Undo</ToastAction>,
+            variant: "destructive"
+          })
           // @ts-ignore
           dispatch(deleteUpvote(id));
         }
         else if (!isLiked) {
           setIsLiked(true)
           setCount(count + 1)
+          toast({
+            title: "You upvoted the product",
+            duration: 2000,
+            action: <ToastAction altText="Undo">Undo</ToastAction>,
+            variant: "success"
+          })
           // @ts-ignore
           dispatch(addUpvote(id));
         }
@@ -120,10 +155,7 @@ export function ProductCard(props: any) {
       >
         <Link
           href={{
-            pathname: `/tool/${formattedTitle}`,
-            query: {
-              id: id,
-            },
+            pathname: `/tool/${formattedTitle}`
           }}
         >
           <section className="border-b border-black border-solid">

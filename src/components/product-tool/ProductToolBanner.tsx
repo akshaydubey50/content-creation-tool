@@ -39,7 +39,7 @@ export default function ProductToolBanner({
   const router = useRouter();
   const dispatch = useDispatch();
   const { data: session } = useSession();
-  const DEBOUNCE_DELAY = 400; // ms
+  const DEBOUNCE_DELAY = 250; // ms
 
 
   const handleBookmark = useCallback(() => {
@@ -107,7 +107,7 @@ export default function ProductToolBanner({
             </div>
 
             <div className="aftl-right-section  xl:w-30%">
-              <div className="flex flex-col flex-1 space-y-4  mb-6 ">
+              <div className="flex flex-col flex-1 space-y-4  mb-6 sm:mt-4 lg:mt-0 ">
                 <div className="flex items-center  justify-between">
                   <div className="flex gap-2 items-center">
                     <h1 className="text-Heading-Medium xl:text-Heading-Large font-bold">
@@ -134,7 +134,7 @@ export default function ProductToolBanner({
                     <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
                   )}
                 </div>
-                <p className="ml-0 text-Description lg:text-Description-Large">
+                <p className="ml-0 text-Description xl:text-Description-Large">
                   {description}
                 </p>
               </div>

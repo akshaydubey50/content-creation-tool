@@ -62,8 +62,11 @@ export default function Page() {
   };
 
   return (
-    <section className="h-screen flex items-center bg-[#363639] text-white">
-      <Card className="mx-auto max-w-sm shadow-[0px_12px_25px_rgba(128,128,128,0.4)] text-black bg-[#fff]">
+    <section className="h-screen flex items-center bg-white">
+      <Card className="mx-auto max-w-sm
+shadow-[0_8px_30px_rgb(0,0,0,0.12)]
+       
+       text-black bg-[#fff]">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
@@ -81,7 +84,7 @@ export default function Page() {
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
-                        type="textl"
+                        type="text"
                         placeholder="m@example.com"
                         {...field}
                         className={cn(
@@ -90,7 +93,7 @@ export default function Page() {
                         )}
                       />
                     </FormControl>
-                    <FormMessage className="text-red-500 font-semibold text-sm transition-all duration-200 ease-in-out" />
+                    <FormMessage className="text-red-500 font-medium text-sm transition-all duration-200 ease-in-out" />
                   </FormItem>
                 )}
               />
@@ -126,7 +129,7 @@ export default function Page() {
                         </Button>
                       </div>
                     </FormControl>
-                    <FormMessage className="text-red-500 font-semibold text-sm transition-all duration-300 ease-in-out" />
+                    <FormMessage className="text-red-500 font-medium text-sm transition-all duration-300 ease-in-out" />
                   </FormItem>
                 )}
               />
@@ -141,7 +144,9 @@ export default function Page() {
                     </>
                   )}
                 </Button>
-                <Button variant="outline" className= " font-medium bg-slate-200 hover:bg-opacity-50 ">
+                <Button variant="outline" className= " font-medium bg-slate-200 hover:bg-opacity-50 "
+                  onClick={() => signIn("google")}
+                >
                   {isLoadingGoogle ? (<>
                     <Loader2Icon className="animate-spin mr-2" /> Loading
                   </>) : (

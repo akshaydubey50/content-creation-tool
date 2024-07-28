@@ -14,16 +14,15 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import * as z from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Eye, EyeOff, LogIn, Mail,Loader2Icon,Loader2 } from "lucide-react"
+import { Eye, EyeOff, LogIn, Mail,Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 
 const signUpSchema = z.object({
-  firstName: z.string().min(2, "Name field must be at least 2 characters"),
-  lastName: z.string().min(2, "Name field must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
+  email: z.string().email("Please enter valid email address"),
   password: z.string()
     .regex(
       /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+={}[\]:";'<>?,./|`~])[A-Za-z\d!@#$%^&*()_\-+={}[\]:";'<>?,./|`~]{8,}$/,
@@ -47,8 +46,6 @@ export default function Page() {
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
       email: "",
       password: "",
     },
@@ -104,8 +101,10 @@ export default function Page() {
 
 
   return (
-    <section className="h-screen flex items-center bg-[#363639] text-white">
-      <Card className="mx-auto max-w-sm shadow-[0px_12px_25px_rgba(128,128,128,0.4)] text-black bg-[#fff]">
+    <section className="h-screen flex items-center bg-white">
+      <Card className="mx-auto max-w-sm 
+shadow-[0_8px_30px_rgb(0,0,0,0.12)]
+       text-black bg-[#fff]">
 
         <CardHeader>
           <CardTitle className="text-xl">Sign Up</CardTitle>
@@ -116,48 +115,7 @@ export default function Page() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSignUp)} className="space-y-6">
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="firstName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>First Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="John"
-                          {...field}
-                          className={cn(
-                            "transition-all duration-200 ease-in-out",
-                            form.formState.errors.firstName && "border-red-500 focus-visible:ring-red-500 input-error"
-                          )}
-                        />
-                      </FormControl>
-                      <FormMessage className="text-red-500 font-semibold  text-sm transition-all duration-200 ease-in-out" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="lastName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Last Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Doe"
-                          {...field}
-                          className={cn(
-                            "transition-all duration-200 ease-in-out",
-                            form.formState.errors.lastName && "border-red-500 focus-visible:ring-red-500 input-error"
-                          )}
-                        />
-                      </FormControl>
-                      <FormMessage className="text-red-500 font-semibold text-sm transition-all duration-200 ease-in-out" />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              
               <div className="grid gap-4">
                 <FormField
                   control={form.control}
@@ -167,8 +125,9 @@ export default function Page() {
                       <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input
-                          type="email"
-                          placeholder="john.doe@example.com"
+                        autoComplete="off"
+                          type="text"
+                          placeholder="m@example.com"
                           {...field}
                           className={cn(
                             "transition-all duration-200 ease-in-out",
@@ -176,7 +135,7 @@ export default function Page() {
                           )}
                         />
                       </FormControl>
-                      <FormMessage className="text-red-500  font-semibold text-sm transition-all duration-200 ease-in-out" />
+                      <FormMessage className="text-red-500  font-medium text-sm transition-all duration-200 ease-in-out" />
                     </FormItem>
                   )}
                 />
@@ -189,6 +148,8 @@ export default function Page() {
                       <FormControl>
                         <div className="relative">
                           <Input
+                            autoComplete="off"
+
                             type={showPassword ? "text" : "password"}
                             placeholder="********"
                             {...field}
@@ -221,13 +182,13 @@ export default function Page() {
                           </Button>
                         </div>
                       </FormControl>
-                      <FormMessage className="text-red-500 font-semibold text-sm transition-all duration-300 ease-in-out" />
+                      <FormMessage className="text-red-500 font-medium text-sm transition-all duration-300 ease-in-out" />
                     </FormItem>
                   )}
                 />
               </div>
               {passwordMessages.length > 0 && (
-                <ul className="text-sm font-semibold list-disc ml-5">
+                <ul className="text-sm font-medium list-disc ml-5">
                   {passwordMessages.map((msg, index) => (
                     <li key={index} className={passwordConditionsMet[index] ? "text-green-500" : "text-red-500"}>
                       {msg}
@@ -247,7 +208,9 @@ export default function Page() {
                     </>
                   )}
                 </Button>
-                <Button variant="outline" className=" font-medium bg-slate-200 hover:bg-opacity-50 ">
+                <Button variant="outline" className=" font-medium bg-slate-200 hover:bg-opacity-50 "
+                  onClick={() => signIn("google")}
+                >
                   <Mail className="mr-2 h-4 w-4" /> Sign up with Google
                 </Button>
               </div>
