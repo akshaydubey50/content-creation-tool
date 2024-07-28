@@ -115,7 +115,7 @@ shadow-[0_8px_30px_rgb(0,0,0,0.12)]
        text-black bg-[#fff]"
       >
         <CardHeader>
-          <CardTitle className="text-xl">Sign Up</CardTitle>
+          <CardTitle className="text-2xl">Sign Up</CardTitle>
           <CardDescription>
             Enter your information to create an account
           </CardDescription>
