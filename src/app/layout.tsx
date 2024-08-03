@@ -11,12 +11,12 @@ const poppins = Poppins({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-poppins",
-  weight: ["400", "700"],
+  weight: ["300","400","500","600", "700","800"],
 });
 
 export const metadata = {
-  title: "Content Creation Tool",
-  description: "Dummy description",
+  title: "Content Creation Fyi",
+  description: "Directory of 200+ content creation tools designed to streamline your process and enhance productivity.",
 };
 
 export default function RootLayout({
