@@ -26,6 +26,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${poppins.variable}`}>
+      <head>
+        <link
+          rel="preconnect"
+          href="https://embeds.beehiiv.com"
+        />
+        <link
+          rel="preload"
+          href="https://embeds.beehiiv.com/c8b47983-58f2-410d-9d69-f10d79908089?slim=true"
+          as="document"
+        />
+      </head>
       <body className="font-poppins">
         {" "}
         <Authprovider>
