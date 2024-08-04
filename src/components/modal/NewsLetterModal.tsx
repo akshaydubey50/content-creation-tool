@@ -15,7 +15,7 @@ export default function NewsLetterModal() {
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsOpen(true)
-        }, 2000)
+        }, 5000)
 
         return () => clearTimeout(timer)
     }, [])
@@ -37,11 +37,15 @@ export default function NewsLetterModal() {
                         </span>
                     </DialogDescription>
                 </DialogHeader>
-
                 <div className="w-full">
-                        <iframe src="https://embeds.beehiiv.com/c8b47983-58f2-410d-9d69-f10d79908089?slim=true" data-test-id="beehiiv-embed" height="52" frameBorder="0" scrolling="no"
-                            className='bg-transparent m-0 rounded-none w-full'
-                        ></iframe>
+                    <iframe
+                        src="https://embeds.beehiiv.com/c8b47983-58f2-410d-9d69-f10d79908089?slim=true"
+                        loading="lazy"
+                        data-test-id="beehiiv-embed"
+                        height="52"
+                        scrolling="no"
+                        className='bg-transparent m-0 rounded-none w-full border-0'
+                    ></iframe>
                 </div>
                
             </DialogContent>

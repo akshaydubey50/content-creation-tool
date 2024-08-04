@@ -16,8 +16,6 @@ export default function FAQ() {
         "name": "Content Creation Fyi",
         "description": "Directory of 200+ content creation tools designed to streamline your process and enhance productivity.",
         "url": "https://www.contentcreation.fyi/",
-        "mainEntity":{
-            "@type": "FAQSection",
         "mainEntity": FAQJSON.map(item => ({
             "@type": "Question",
             "name": item.title,
@@ -28,32 +26,32 @@ export default function FAQ() {
                     : item.content
             }
         }))
-        }
     });
     return (
       <>
+      
             <Script id="webpage-faq-schema" type="application/ld+json">
                 {schemaString}
             </Script>
             <section className="lg:mx-auto rounded-xl max-w-6xl py-5 mx-10 lg:px-16 bg-white-200 my-10">
                 <h2 className="text-center font-semibold text-4xl my-4">Frequently Ask Questions</h2>
-                <Accordion type="single" collapsible className="w-full text-start">
+                <Accordion type="single" collapsible className="w-full ">
                     {FAQJSON.map((item) => (
                         <AccordionItem key={item.value} value={item.value} className="py-2 cursor-pointer">
-                            <AccordionTrigger className="hover:no-underline text-lg font-semibold ">
+                            <AccordionTrigger className="hover:no-underline text-lg font-semibold text-left ">
                                 {item.title}
                             </AccordionTrigger>
                             {!item.categories && (
-                                <AccordionContent className="text-base font-normal">
+                                <AccordionContent className="text-base font-medium">
                                     {item.content}
                                 </AccordionContent>
                             )}
                             {item.categories && (
-                                <AccordionContent className="text-base font-normal">
+                                <AccordionContent className="text-base font-medium">
                                     {item.content}
                                     <ul className='list-disc pl-6'>
                                         {item.categories.map((list, index) => (
-                                            <li key={`${index}_${list}`} className=' '>{list}</li>
+                                            <li key={`${index}_${list}`}>{list}</li>
                                         ))}
                                     </ul>
                                 </AccordionContent>
