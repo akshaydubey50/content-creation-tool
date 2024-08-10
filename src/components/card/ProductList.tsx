@@ -75,6 +75,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     return newCurrentProducts;
   };
 
+
   const getProductByCategory = useCallback(
     (categoryType: string): AirtableModel[] | null => {
       if (categoryType !== "") {
@@ -93,36 +94,37 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   const filteredProductRecords = useMemo(() => {
     setCurrentPage(1);
+    let products: AirtableModel[] = [];
 
+    // Existing filtering logic
     if (currentCategory) {
       // Product detail page similar category product listed productList
-      return getProductByCategory(currentCategory);
+      products = getProductByCategory(currentCategory) || [];
     } else if (dropDownCategoryArr?.length > 0 && !id) {
       // Dropdown base filtered product productList
-      return dropDownCategoryArr;
+      products = dropDownCategoryArr;
     } else if (productSearchQuery.length > 0 && inputSearchFilterArr) {
       // Search input filtered product productList
-      return inputSearchFilterArr.length > 0 ? inputSearchFilterArr : [];
-    }
-    else if (matchedPrice.length > 0 && !id) {
-      return matchedPrice;
-    }
-    else if (session && isBookmark && bookmarkList) {
-      const getBookmarkedList = productList.filter((item: AirtableModel) => {
-        if (bookmarkList?.includes(item?.id)) {
-          return item
-        }
-      })
-      return getBookmarkedList
+      products = inputSearchFilterArr.length > 0 ? inputSearchFilterArr : [];
+    } else if (matchedPrice.length > 0 && !id) {
+      products = matchedPrice;
+    } else if (session && isBookmark && bookmarkList) {
+      products = productList.filter((item: AirtableModel) => bookmarkList?.includes(item?.id));
     } else if (isVerifiedCheck && verifiedProductArr.length > 0) {
       // Verified Product
-      return verifiedProductArr;
+      products = verifiedProductArr;
     } else if (productList && !id) {
       // All productList  
-      return productList;
+      products = productList;
     }
 
-    return [];
+    const productsWithUpvotes = products.map(product => ({
+      ...product,
+      totalLikes: upVotedList.find((item: any) => item.productId === product.id)?.totalLikes || 0
+    }));
+
+      return productsWithUpvotes.sort((a, b) => b.totalLikes - a.totalLikes);
+
   }, [
     currentCategory,
     getProductByCategory,
@@ -136,7 +138,8 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     verifiedProductArr,
     productList,
     productSearchQuery.length,
-    matchedPrice
+    matchedPrice,
+    upVotedList,   
   ]);
 
   useEffect(() => {
@@ -180,6 +183,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
       {/* {productSearchQuery.length > 0 && <p className="text-center text-2xl  ">Search Result
         <span className="font-semibold text-4xl">
            {productSearchQuery} </span></p>} */}
+     
       <main
         className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
                   lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0"
@@ -196,7 +200,9 @@ export default function ProductList({ currentCategory }: ProductListProps) {
                 product={item}
                 isBookmark={isProductBookmarked(item, bookmarkList)}
                 bookmarkList={bookmarkList}
+                totalLikes={item.totalLikes}
                 upVotedList={upVotedList}
+
               />
             );
           } else {
@@ -206,8 +212,8 @@ export default function ProductList({ currentCategory }: ProductListProps) {
                 product={item}
                 isBookmark={isProductBookmarked(item, bookmarkList)}
                 bookmarkList={bookmarkList}
+                totalLikes={item.totalLikes}
                 upVotedList={upVotedList}
-
               />
             );
           }
