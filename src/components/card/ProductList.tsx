@@ -93,7 +93,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   );
 
   const filteredProductRecords = useMemo(() => {
-    setCurrentPage(1);
+    setCurrentPage(currentPage);
     let products: AirtableModel[] = [];
 
     // Existing filtering logic
