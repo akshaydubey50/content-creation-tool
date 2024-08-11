@@ -61,7 +61,7 @@ export async function GET() {
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
+    console.log("tools api failure ::: ", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

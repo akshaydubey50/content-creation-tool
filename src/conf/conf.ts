@@ -15,3 +15,7 @@ export const MongodbConf = {
   MONGO_URI: String(process.env.MONGO_URI),
   DB_NAME: String(process.env.MONGODB_NAME),
 };
+
+export const APPConf = {
+  BASE_URL: String(process.env.NEXTAUTH_URL),
+};

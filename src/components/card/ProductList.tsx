@@ -121,7 +121,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     const productsWithUpvotes = products.map((product) => ({
       ...product,
       totalLikes:
-        upVotedList.find((item: any) => item.productId === product.id)
+        upVotedList?.find((item: any) => item.productId === product.id)
           ?.totalLikes || 0,
     }));
 
@@ -162,8 +162,8 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   }, [dispatch]);
 
   useEffect(() => {
+    dispatch(getUpvoteList());
     if (session?.user) {
-      dispatch(getUpvoteList());
       dispatch(getBookmarkList());
     }
   }, [dispatch, session]);
@@ -204,7 +204,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
                 product={item}
                 isBookmark={isProductBookmarked(item, bookmarkList)}
                 bookmarkList={bookmarkList}
-                totalLikes={item.totalLikes}
+                totalLikes={item?.totalLikes}
                 upVotedList={upVotedList}
               />
             );
@@ -215,7 +215,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
                 product={item}
                 isBookmark={isProductBookmarked(item, bookmarkList)}
                 bookmarkList={bookmarkList}
-                totalLikes={item.totalLikes}
+                totalLikes={item?.totalLikes}
                 upVotedList={upVotedList}
               />
             );

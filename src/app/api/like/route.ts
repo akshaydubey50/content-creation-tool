@@ -9,12 +9,7 @@ export async function GET(req: NextRequest) {
   await connectDB();
 
   const token = await getToken({ req: req });
-  if (!token || token?._id === undefined) {
-    return NextResponse.json(
-      { success: false, msg: "Unauthorized access" },
-      { status: 400 }
-    );
-  }
+
   try {
     const user = await UserModel.findOne({
       email: token?.email,
