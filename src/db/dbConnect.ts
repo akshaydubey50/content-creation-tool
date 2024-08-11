@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { DB_NAME } from "@/constants/dbconstants";
+import { MongodbConf } from "@/conf/conf";
 
 type ConnectionObject = {
   isConnected?: number;
@@ -15,11 +15,13 @@ export default async function connectDB(): Promise<void> {
   }
   try {
     //if DB is not connected then connect
-    if (!process.env.MONGO_URI) {
+    if (!MongodbConf.MONGO_URI) {
       throw new Error("Please define MONGO_URL env variable");
     }
 
-    const db = await mongoose.connect(process.env.MONGO_URI + "/" + DB_NAME);
+    const db = await mongoose.connect(
+      MongodbConf.MONGO_URI + "/" + MongodbConf.DB_NAME
+    );
     connection.isConnected = db.connections[0].readyState;
 
     console.log("Connected to MongoDB");

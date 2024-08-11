@@ -8,7 +8,7 @@
     "value": "item-2",
     "title": "How are the tools categorized?",
     "content": "Tools are categorized by their primary function, such as:",
-     "categories": [
+    "categories": [
       "SEO",
       "Drafting",
       "Webinar",
@@ -29,8 +29,12 @@
     "value": "item-3",
     "title": "Can I find the pricing model for each tool?",
     "content": "Yes, each tool listing includes pricing model tags to help you choose the best option. We have categorized tools with pricing tags such as:",
-    "categories":[
-        "Free", "Paid", "Free Trial", "Freemium", "Contact for Pricing"
+    "categories": [
+      "Free",
+      "Paid",
+      "Free Trial",
+      "Freemium",
+      "Contact for Pricing"
     ]
   },
   {

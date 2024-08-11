@@ -2,17 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import UserModel from "@/models/user/User.model";
 import mongoose from "mongoose";
-import connectDB from "@/lib/dbConnect";
+import connectDB from "@/db/dbConnect";
 import BookmarkModel from "@/models/bookmark/Bookmark.model";
 
 export async function GET(req: NextRequest) {
   await connectDB();
 
   const token = await getToken({ req: req });
-  console.log('token ####', token)
-
-  if (!token) {
-    console.log('token undefined',token)
+  console.log("TOKEN", token);
+  if (!token || token?._id === undefined) {
     return NextResponse.json(
       { success: false, msg: "Unauthorized access" },
       { status: 400 }
@@ -20,8 +18,8 @@ export async function GET(req: NextRequest) {
   }
   //   const id = "667ff969d27bcfc89d2a86ce";
   try {
-    const user = await UserModel.findById({
-      _id: token?._id,
+    const user = await UserModel.findOne({
+      email: token?.email,
     });
 
     if (!user) {
@@ -55,7 +53,7 @@ export async function GET(req: NextRequest) {
 
     if (bookmarks.length === 0) {
       return NextResponse.json(
-        { success: true, bookmarks:null, msg: "No product bookmarked" },
+        { success: true, bookmarks: null, msg: "No product bookmarked" },
         { status: 200 }
       );
     }
