@@ -162,8 +162,8 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   }, [dispatch]);
 
   useEffect(() => {
+    dispatch(getUpvoteList());
     if (session?.user) {
-      dispatch(getUpvoteList());
       dispatch(getBookmarkList());
     }
   }, [dispatch, session]);

@@ -13,15 +13,19 @@ import { Label } from "@/components/ui/label";
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { isLoading } from "@/redux/slice/product/productSlice";
+import { Loader2Icon } from "lucide-react";
 
 export default function Page() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState<String | null>(null);
   const [msg, setMessage] = useState<String | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const route = useRouter();
 
   const handleForgetPassword = async () => {
     try {
+      setIsLoading(true);
       setError(null);
       setMessage(null); // Clear previous messages
 
@@ -34,6 +38,8 @@ export default function Page() {
     } catch (error) {
       const errorMsg = error as AxiosError<{ status: string; message: string }>;
       setError(errorMsg?.response?.data?.message || "Something went wrong");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -68,6 +74,11 @@ export default function Page() {
               type="button" // Change type to "button" to prevent form submission
               className="w-full"
             >
+              {isLoading && (
+              <>
+                  <Loader2Icon className="animate-spin mr-2" />{" "}
+                </>
+              )}
               Submit
             </Button>
           </div>
