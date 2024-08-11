@@ -91,49 +91,57 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   );
 
   const filteredProductRecords = useMemo(() => {
-    setCurrentPage(1);
+    setCurrentPage(currentPage);
+    let products: AirtableModel[] = [];
 
+    // Existing filtering logic
     if (currentCategory) {
       // Product detail page similar category product listed productList
-      return getProductByCategory(currentCategory);
+      products = getProductByCategory(currentCategory) || [];
     } else if (dropDownCategoryArr?.length > 0 && !id) {
       // Dropdown base filtered product productList
-      return dropDownCategoryArr;
+      products = dropDownCategoryArr;
     } else if (productSearchQuery.length > 0 && inputSearchFilterArr) {
       // Search input filtered product productList
-      return inputSearchFilterArr.length > 0 ? inputSearchFilterArr : [];
+      products = inputSearchFilterArr.length > 0 ? inputSearchFilterArr : [];
     } else if (matchedPrice.length > 0 && !id) {
-      return matchedPrice;
+      products = matchedPrice;
     } else if (session && isBookmark && bookmarkList) {
-      const getBookmarkedList = productList.filter((item: AirtableModel) => {
-        if (bookmarkList?.includes(item?.id)) {
-          return item;
-        }
-      });
-      return getBookmarkedList;
+      products = productList.filter((item: AirtableModel) =>
+        bookmarkList?.includes(item?.id)
+      );
     } else if (isVerifiedCheck && verifiedProductArr.length > 0) {
       // Verified Product
-      return verifiedProductArr;
+      products = verifiedProductArr;
     } else if (productList && !id) {
       // All productList
-      return productList;
+      products = productList;
     }
 
-    return [];
+    const productsWithUpvotes = products.map((product) => ({
+      ...product,
+      totalLikes:
+        upVotedList.find((item: any) => item.productId === product.id)
+          ?.totalLikes || 0,
+    }));
+
+    return productsWithUpvotes.sort((a, b) => b.totalLikes - a.totalLikes);
   }, [
+    currentPage,
     currentCategory,
-    getProductByCategory,
     dropDownCategoryArr,
     id,
+    productSearchQuery.length,
     inputSearchFilterArr,
+    matchedPrice,
     session,
     isBookmark,
     bookmarkList,
     isVerifiedCheck,
     verifiedProductArr,
     productList,
-    productSearchQuery.length,
-    matchedPrice,
+    getProductByCategory,
+    upVotedList,
   ]);
   const updateCurrentProducts = useCallback(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -196,6 +204,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
                 product={item}
                 isBookmark={isProductBookmarked(item, bookmarkList)}
                 bookmarkList={bookmarkList}
+                totalLikes={item.totalLikes}
                 upVotedList={upVotedList}
               />
             );
@@ -206,6 +215,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
                 product={item}
                 isBookmark={isProductBookmarked(item, bookmarkList)}
                 bookmarkList={bookmarkList}
+                totalLikes={item.totalLikes}
                 upVotedList={upVotedList}
               />
             );

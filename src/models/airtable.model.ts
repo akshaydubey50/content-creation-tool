@@ -10,6 +10,7 @@ export default interface AirtableModel {
     Verified :boolean;
     Pricing:string[];
   };
+  totalLikes?:any
 }
 
 

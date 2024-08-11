@@ -30,13 +30,13 @@ export function ProductCard(props: any) {
   const DEBOUNCE_DELAY = 250; // ms
 
   const dispatch: AppDispatch = useDispatch();
-  const { upVotedList, bookmarkList, product } = props;
+  const { upVotedList, bookmarkList, product, totalLikes } = props;
 
   const { id, fields } = product;
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isBookMarked, setIsBookMarked] = useState<any>(() => isProductBookmarked(id, bookmarkList))
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(totalLikes)
   const { data: session } = useSession();
 
   const {  Name, WebsiteLink, Description, ToolImage, Verified, Pricing } = fields!;
@@ -89,7 +89,7 @@ export function ProductCard(props: any) {
 
     if (isLiked) {
       setIsLiked(false);
-      setCount((prevCount) => prevCount - 1);
+      setCount((prevCount:any) => prevCount - 1);
       toast({
         title: "You downvoted the product",
         duration: 2000,
@@ -100,7 +100,7 @@ export function ProductCard(props: any) {
       dispatch(deleteUpvote(id));
     } else {
       setIsLiked(true);
-      setCount((prevCount) => prevCount + 1);
+      setCount((prevCount:any) => prevCount + 1);
       toast({
         title: "You upvoted the product",
         duration: 2000,
@@ -141,7 +141,6 @@ export function ProductCard(props: any) {
   useEffect(() => {
     const upvotedObj = getCurrentProductUpvotedObj(id);
     setIsLiked(upvotedObj?.isProductLikedByUser || false);
-    setCount(upvotedObj?.totalLikes || 0);
   }, [id]);  
 
 
@@ -172,7 +171,7 @@ export function ProductCard(props: any) {
         </Link>
         <section className="bg-light-gray pt-7 px-5 rounded-b-2xl h-full">
           <div className="flex flex-col justify-between h-full">
-            <div className="">
+            <div>
               <div className="pb-4 flex flex-1 flex-row justify-between">
                 <div className="flex items-center gap-x-2">
                   <h1 className="font-bold text-Title-Medium md:text-Title-Large h-8">
