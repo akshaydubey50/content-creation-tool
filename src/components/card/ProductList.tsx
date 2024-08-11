@@ -121,7 +121,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     const productsWithUpvotes = products.map((product) => ({
       ...product,
       totalLikes:
-        upVotedList.find((item: any) => item.productId === product.id)
+        upVotedList?.find((item: any) => item.productId === product.id)
           ?.totalLikes || 0,
     }));
 
