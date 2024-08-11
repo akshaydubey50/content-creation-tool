@@ -9,11 +9,13 @@ export async function GET(req: NextRequest) {
   await connectDB();
 
   const token = await getToken({ req: req });
-
+  console.log("token for likes :::", token);
   try {
     const user = await UserModel.findOne({
       email: token?.email,
     });
+    console.log("user found for /like api ::: ", user);
+
     const likes = await LikeModel.aggregate([
       {
         $group: {
@@ -29,13 +31,23 @@ export async function GET(req: NextRequest) {
           totalLikes: "$totalLikes",
           isProductLikedByUser: {
             $cond: {
-              if: { $eq: [null, user?.id] },
+              /* if: { $eq: [null, user?.id] },
               then: null,
               else: {
                 $in: [
                   user?.id ? new mongoose.Types.ObjectId(user.id) : null,
                   "$userIds",
                 ],
+              }, */
+              if: {
+                $or: [
+                  { $eq: [user?.id, null] },
+                  { $eq: [user?.id, undefined] },
+                ],
+              },
+              then: false,
+              else: {
+                $in: [new mongoose.Types.ObjectId(user?.id), "$userIds"],
               },
             },
           },
