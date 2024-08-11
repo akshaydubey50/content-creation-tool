@@ -14,7 +14,10 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 // Project  Component Import
 import LikedBookmarkModal from "../modal/LikedBookmarkModal";
 import VisitWebsite from "../visit-website/VisitWebsite";
-import { deleteBookmark, addBookmark } from "@/redux/slice/bookmark/bookmarkSlice";
+import {
+  deleteBookmark,
+  addBookmark,
+} from "@/redux/slice/bookmark/bookmarkSlice";
 import { addUpvote, deleteUpvote } from "@/redux/slice/upvote/upvoteSlice";
 
 import { useDispatch } from "react-redux";
@@ -25,7 +28,7 @@ import { useToast } from "../ui/use-toast";
 import { ToastAction } from "../ui/toast";
 
 export function ProductCard(props: any) {
-    const { toast } = useToast()
+  const { toast } = useToast();
 
   const DEBOUNCE_DELAY = 250; // ms
 
@@ -35,19 +38,21 @@ export function ProductCard(props: any) {
   const { id, fields } = product;
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isBookMarked, setIsBookMarked] = useState<any>(() => isProductBookmarked(id, bookmarkList))
-  const [count, setCount] = useState(totalLikes)
+  const [isBookMarked, setIsBookMarked] = useState<any>(() =>
+    isProductBookmarked(id, bookmarkList)
+  );
+  const [count, setCount] = useState(totalLikes);
   const { data: session } = useSession();
 
-  const {  Name, WebsiteLink, Description, ToolImage, Verified, Pricing } = fields!;
+  const { Name, WebsiteLink, Description, ToolImage, Verified, Pricing } =
+    fields!;
   const formattedTitle = Name?.toLowerCase()?.trim()?.replace(/\s/g, "-");
   // const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
 
-  console.log("formattedTitle", formattedTitle)
+  console.log("formattedTitle", formattedTitle);
   const getCurrentProductUpvotedObj = (toolId: any) => {
     return upVotedList?.find((item: any) => item?.productId === toolId) || null;
-  }
-
+  };
 
   const handleBookmark = useCallback(() => {
     if (!session || !session?.user) {
@@ -55,31 +60,22 @@ export function ProductCard(props: any) {
       return;
     }
     setIsBookMarked(!isBookMarked);
-    if (isBookMarked){
+    if (isBookMarked) {
       toast({
-        title: "You deleted the product",
-        duration: 2000,
-        action: <ToastAction altText="Undo">Undo</ToastAction>,
-        variant: "destructive"
-      })
+        title: `You removed ${Name} from bookmarks`,
+        variant: "destructive",
+      });
       // @ts-ignore
       dispatch(deleteBookmark(id));
-    }
-    else{
+    } else {
       toast({
-        title: "You saved the product",
-        duration: 2000,
-        action: <ToastAction altText="Undo">Undo</ToastAction>,
-        variant: "success"
-      })
+        title: `You bookmarked ${Name}`,
+        variant: "success",
+      });
       // @ts-ignore
       dispatch(addBookmark(id));
     }
-      
-
-    
   }, [session, isBookMarked, id, dispatch]);
-
 
   const handleLikes = useCallback(() => {
     if (!session?.user) {
@@ -89,23 +85,19 @@ export function ProductCard(props: any) {
 
     if (isLiked) {
       setIsLiked(false);
-      setCount((prevCount:any) => prevCount - 1);
+      setCount((prevCount: any) => prevCount - 1);
       toast({
-        title: "You downvoted the product",
-        duration: 2000,
-        action: <ToastAction altText="Undo">Undo</ToastAction>,
-        variant: "destructive"
+        title: `You removed ${Name} from likes`,
+        variant: "destructive",
       });
       // @ts-ignore
       dispatch(deleteUpvote(id));
     } else {
       setIsLiked(true);
-      setCount((prevCount:any) => prevCount + 1);
+      setCount((prevCount: any) => prevCount + 1);
       toast({
-        title: "You upvoted the product",
-        duration: 2000,
-        action: <ToastAction altText="Undo">Undo</ToastAction>,
-        variant: "success"
+        title: `You liked ${Name}`,
+        variant: "success",
       });
       // @ts-ignore
       dispatch(addUpvote(id));
@@ -125,26 +117,20 @@ export function ProductCard(props: any) {
     [handleLikes]
   );
 
-
   const debouncedHandleBookmark = useCallback(
     debounce(handleBookmark, DEBOUNCE_DELAY),
     [handleBookmark]
   );
 
-  
   useEffect(() => {
     setIsBookMarked(isProductBookmarked(id, bookmarkList));
   }, [id, bookmarkList]);
 
-
-
   useEffect(() => {
     const upvotedObj = getCurrentProductUpvotedObj(id);
     setIsLiked(upvotedObj?.isProductLikedByUser || false);
-  }, [id]);  
+  }, [id]);
 
-
-  
   return (
     <>
       <div
@@ -153,7 +139,7 @@ export function ProductCard(props: any) {
       >
         <Link
           href={{
-            pathname: `/tool/${formattedTitle}`
+            pathname: `/tool/${formattedTitle}`,
           }}
         >
           <section className="border-b border-black border-solid">
@@ -209,11 +195,12 @@ export function ProductCard(props: any) {
             </div>
             <div className="tool-btn-section pb-7">
               <p className="my-6  ">
-                <span className="bg-white rounded-full  text-tags font-medium border 
-                border-solid border-black px-5 py-1">
+                <span
+                  className="bg-white rounded-full  text-tags font-medium border 
+                border-solid border-black px-5 py-1"
+                >
                   {Pricing}
                 </span>
-             
               </p>
               <div
                 className="text-white text-Title-Medium  flex 
@@ -223,7 +210,7 @@ export function ProductCard(props: any) {
                 <button
                   title="Bookmark"
                   type="button"
-                  onClick={debouncedHandleBookmark  }
+                  onClick={debouncedHandleBookmark}
                 >
                   {isBookMarked ? (
                     <BsBookmarkFill className="text-3xl text-DarkOrange" />
@@ -231,7 +218,6 @@ export function ProductCard(props: any) {
                     <BsBookmark className="text-3xl   text-black" />
                   )}
                 </button>
-
               </div>
             </div>
           </div>
