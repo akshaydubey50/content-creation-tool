@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import AirtableModel from "@/models/airtable.model";
 import axios from "axios";
 import { AirtableConf } from "@/conf/conf";
-import connectDB from "@/lib/dbConnect";
+import connectDB from "@/db/dbConnect";
 
 export async function GET() {
   await connectDB();
@@ -49,7 +49,9 @@ export async function GET() {
         offset = response.data.offset;
       }
     } while (offset);
-    const statusRecord = airtableProductList?.filter((item: AirtableModel) => item.fields?.Stage?.toLowerCase() == "done")
+    const statusRecord = airtableProductList?.filter(
+      (item: AirtableModel) => item.fields?.Stage?.toLowerCase() == "done"
+    );
 
     return NextResponse.json(
       {

@@ -16,7 +16,12 @@ import {
   clearSearchFilterList,
   scrollPage,
 } from "@/redux/slice/search/searchSlice";
-import { clearMatchedPrice,clearPriceData,setMatchedPrice,setPriceData} from "@/redux/slice/priceModel/priceModelSlice"
+import {
+  clearMatchedPrice,
+  clearPriceData,
+  setMatchedPrice,
+  setPriceData,
+} from "@/redux/slice/priceModel/priceModelSlice";
 import { RootState, AppDispatch } from "@/redux/store";
 
 export default function FilterSection() {
@@ -41,28 +46,32 @@ export default function FilterSection() {
   const scrollPosition = useSelector(
     (state: RootState) => state.search.scrollPosition
   );
-  const {priceData,matchedPrice}=useSelector((state:RootState)=>state.priceModel)
+  const { priceData, matchedPrice } = useSelector(
+    (state: RootState) => state.priceModel
+  );
 
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
 
   /*Search Functionality*/
   const handleSearch = () => {
-    router.push("/")
-    dispatch(clearMatchedPrice())
-    dispatch(clearPriceData())
-    dispatch(clearCategoryData())
-    dispatch(clearMatchedCategory())
+    router.push("/");
+    dispatch(clearMatchedPrice());
+    dispatch(clearPriceData());
+    dispatch(clearCategoryData());
+    dispatch(clearMatchedCategory());
     const newSearch = searchRef.current!.value.toLowerCase();
     dispatch(setSearchQuery(newSearch));
 
     /* Filter data based on the updated search query */
-    const filteredResults = productList && productList?.filter((searchData: AirtableModel) => {
-      const tooldatalist = searchData.fields.Name?.toLowerCase();
-      if (newSearch) {
-        return tooldatalist?.includes(newSearch);
-      }
-    });
+    const filteredResults =
+      productList &&
+      productList?.filter((searchData: AirtableModel) => {
+        const tooldatalist = searchData.fields.Name?.toLowerCase();
+        if (newSearch) {
+          return tooldatalist?.includes(newSearch);
+        }
+      });
 
     if (newSearch === "") {
       // If search is empty, show default data
@@ -84,14 +93,13 @@ export default function FilterSection() {
       let categoryVal = selectedOption.value;
       let formatedCategory = categoryVal.toLowerCase().replace(/\s/g, "-");
       dispatch(clearSearchFilterList());
-      dispatch(clearMatchedPrice())
-      dispatch(clearPriceData())
+      dispatch(clearMatchedPrice());
+      dispatch(clearPriceData());
 
       dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
-      dispatch(scrollPage(600))
+      dispatch(scrollPage(600));
       router.push(`/category/${formatedCategory}`);
-
     }
   };
 
@@ -100,22 +108,21 @@ export default function FilterSection() {
     if (selectedOption) {
       let priceVal = selectedOption.value;
       const getPriceList = productList.filter((item: AirtableModel) => {
-        const pricingVal = item.fields?.Pricing
-        if (Array.isArray(pricingVal)){
-          return pricingVal[0]?.toLowerCase() === priceVal?.toLowerCase()
+        const pricingVal = item.fields?.Pricing;
+        if (Array.isArray(pricingVal)) {
+          return pricingVal[0]?.toLowerCase() === priceVal?.toLowerCase();
         }
-        return false
-      })
-      dispatch(setMatchedPrice(getPriceList))
-      console.log("getPriceList", getPriceList)
+        return false;
+      });
+      dispatch(setMatchedPrice(getPriceList));
+      console.log("getPriceList", getPriceList);
       setVisibleItem(9);
-      dispatch(scrollPage(600))
+      dispatch(scrollPage(600));
       dispatch(clearSearchFilterList());
       dispatch(setPriceData(priceVal));
 
-      dispatch(clearCategoryData())
-      dispatch(clearMatchedCategory())
-
+      dispatch(clearCategoryData());
+      dispatch(clearMatchedCategory());
     }
   };
 
@@ -130,13 +137,12 @@ export default function FilterSection() {
     dispatch(clearPriceData());
 
     if (searchRef.current!.value) {
-      searchRef.current!.value = '';
-      searchRef.current!.innerText = '';
+      searchRef.current!.value = "";
+      searchRef.current!.innerText = "";
     }
 
     setVisibleItem(9);
     router.push("/");
-
   };
 
   /*Get a List for Category*/
@@ -160,7 +166,6 @@ export default function FilterSection() {
     }
   );
 
-
   const priceModelList = (): Set<string> => {
     const priceItem = new Set<string>([]);
     productList?.length > 0 &&
@@ -172,7 +177,6 @@ export default function FilterSection() {
     return priceItem;
   };
 
-
   const priceOptionList = Array.from(priceModelList()).map(
     (item: string, index: number) => {
       return {
@@ -183,11 +187,13 @@ export default function FilterSection() {
   );
 
   const priceTypeHandler = useCallback(() => {
-
-    const getPriceList = productList.filter((item:AirtableModel) => item?.fields?.Pricing[0]?.toLowerCase() == priceData?.toLowerCase())
-    dispatch(setMatchedPrice(getPriceList))
-    console.log(getPriceList)
-  }, [])
+    const getPriceList = productList.filter(
+      (item: AirtableModel) =>
+        item?.fields?.Pricing[0]?.toLowerCase() == priceData?.toLowerCase()
+    );
+    dispatch(setMatchedPrice(getPriceList));
+    console.log(getPriceList);
+  }, []);
 
   useEffect(() => {
     SetIsMounted(true);
@@ -195,16 +201,13 @@ export default function FilterSection() {
 
   useEffect(() => {
     if (searchToFocusInput) {
-      searchRef.current?.focus()
+      searchRef.current?.focus();
     }
-  }, [searchToFocusInput])
+  }, [searchToFocusInput]);
 
   useEffect(() => {
-    window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
-  }, [categoryData, scrollPosition])
-
-
-
+    window.scrollTo({ top: scrollPosition, behavior: "smooth" });
+  }, [categoryData, scrollPosition]);
 
   return (
     <>
@@ -244,9 +247,11 @@ export default function FilterSection() {
                 placeholder="Pricing "
                 options={priceOptionList}
                 onChange={selectedPriceModel}
-                value={priceOptionList.find(
-                  (option) => option.value === priceData
-                ) || null}
+                value={
+                  priceOptionList.find(
+                    (option) => option.value === priceData
+                  ) || null
+                }
               />
             )}
           </div>

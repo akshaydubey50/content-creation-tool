@@ -1,5 +1,4 @@
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export const getBookmarkList = createAsyncThunk(
   "bookmark/fetchBookmarkList",
@@ -69,7 +68,7 @@ const bookmarkSlice = createSlice({
       .addCase(getBookmarkList.fulfilled, (state, action) => {
         state.getListStatus = "succeeded";
         state.bookmarkList = action.payload;
-        console.log("bookmarkList", state.bookmarkList)
+        console.log("bookmarkList", state.bookmarkList);
       })
       .addCase(getBookmarkList.rejected, (state, action) => {
         state.getListStatus = "failed";
@@ -81,8 +80,8 @@ const bookmarkSlice = createSlice({
       })
       .addCase(addBookmark.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.bookmarkList = [...state.bookmarkList,action.payload];
-        console.log('bookmarkList add',state.bookmarkList)
+        state.bookmarkList = [...state.bookmarkList, action.payload];
+        console.log("bookmarkList add", state.bookmarkList);
       })
       .addCase(addBookmark.rejected, (state, action) => {
         state.status = "failed";
