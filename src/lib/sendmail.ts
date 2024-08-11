@@ -9,14 +9,15 @@ interface Response {
 
 export async function sendmail(
   email: string,
-  verifyCode: string
+  verifyCode: string,
+  isUrl: boolean
 ): Promise<Response> {
   try {
     const resendSentMailResponse = await resend().emails.send({
       from: ResendConf.FROM,
       to: email,
       subject: "Content Creation Tool | Verification Code",
-      react: VerificationEmail({ email, otp: verifyCode }),
+      react: VerificationEmail({ email, otp: verifyCode, isUrl }),
     });
     console.log({ resendSentMailResponse });
 

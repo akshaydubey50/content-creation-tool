@@ -3,8 +3,8 @@ import mongoose, { Schema } from "mongoose";
 export interface User extends Document {
   email: string;
   password: string;
-  forgetPasswordToken: string;
-  forgetPasswordTokenExpiry: Date;
+  forgetPasswordToken: string | undefined;
+  forgetPasswordTokenExpiry: Date | undefined;
   isVerified: boolean;
   verifyCode: string;
   verifyCodeExpiry: Date;

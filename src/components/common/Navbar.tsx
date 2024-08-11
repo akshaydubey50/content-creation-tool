@@ -121,7 +121,7 @@ export default function Navbar() {
                     className="text-white font-semibold bg-black  px-6 py-2  hover:bg-DarkOrange hover:text-white   rounded-lg"
                     onClick={handleSignup}
                   >
-                    Sign Up
+                    Sign Up for $0
                   </button>
                 </li>
               )}

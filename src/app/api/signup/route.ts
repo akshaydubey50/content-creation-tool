@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
 
     //send email verification code
 
-    const emailResponse = await sendmail(email, verifyCode);
+    const emailResponse = await sendmail(email, verifyCode, false);
     if (!emailResponse.success) {
       return NextResponse.json(
         {

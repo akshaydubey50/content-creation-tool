@@ -25,6 +25,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, LogIn, Loader2Icon, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter email address"),
@@ -116,33 +117,46 @@ shadow-[0_8px_30px_rgb(0,0,0,0.12)]
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Input
-                          type={showPassword ? "text" : "password"}
-                          placeholder="Enter Password"
-                          {...field}
-                          className={cn(
-                            "transition-all duration-300 ease-in-out pr-10",
-                            form.formState.errors.password &&
-                              "border-red-500 focus-visible:ring-red-500 input-error"
-                          )}
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent transition-opacity duration-300 ease-in-out"
-                          onClick={() => setShowPassword(!showPassword)}
+                    <div className="grid gap-2">
+                      <div className="flex items-center">
+                        <FormLabel>Password</FormLabel>{" "}
+                        <Link
+                          href="/forgot-password"
+                          className="ml-auto inline-block text-sm underline"
                         >
-                          {showPassword ? (
-                            <Eye className="h-4 w-4 icon-fade" />
-                          ) : (
-                            <EyeOff className="h-4 w-4 icon-fade" />
-                          )}
-                        </Button>
+                          Forgot your password?
+                        </Link>
                       </div>
+                    </div>
+
+                    <FormControl>
+                      <>
+                        <div className="relative">
+                          <Input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Enter Password"
+                            {...field}
+                            className={cn(
+                              "transition-all duration-300 ease-in-out pr-10",
+                              form.formState.errors.password &&
+                                "border-red-500 focus-visible:ring-red-500 input-error"
+                            )}
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent transition-opacity duration-300 ease-in-out"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? (
+                              <Eye className="h-4 w-4 icon-fade" />
+                            ) : (
+                              <EyeOff className="h-4 w-4 icon-fade" />
+                            )}
+                          </Button>{" "}
+                        </div>
+                      </>
                     </FormControl>
                     <FormMessage className="text-red-500 font-medium text-sm transition-all duration-300 ease-in-out" />
                   </FormItem>

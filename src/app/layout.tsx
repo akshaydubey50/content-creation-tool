@@ -11,12 +11,12 @@ const poppins = Poppins({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-poppins",
-  weight: ["400", "700"],
+  weight: ["300","400","500","600", "700","800"],
 });
 
 export const metadata = {
-  title: "Content Creation Tool",
-  description: "Dummy description",
+  title: "Content Creation Fyi",
+  description: "Directory of 200+ content creation tools designed to streamline your process and enhance productivity.",
 };
 
 export default function RootLayout({
@@ -26,6 +26,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${poppins.variable}`}>
+      <head>
+        <link
+          rel="preconnect"
+          href="https://embeds.beehiiv.com"
+        />
+        <link
+          rel="preload"
+          href="https://embeds.beehiiv.com/c8b47983-58f2-410d-9d69-f10d79908089?slim=true"
+          as="document"
+        />
+      </head>
       <body className="font-poppins">
         {" "}
         <Authprovider>

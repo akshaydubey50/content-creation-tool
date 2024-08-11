@@ -13,11 +13,13 @@ import {
 interface VerificationEmailProps {
   email: string;
   otp: string;
+  isUrl: boolean;
 }
 
 export default function VerificationEmail({
   email,
   otp,
+  isUrl = false,
 }: VerificationEmailProps) {
   return (
     <Html lang="en" dir="ltr">
@@ -48,22 +50,30 @@ export default function VerificationEmail({
             code to complete your registration:
           </Text>
         </Row>
-        <Row>
-          <Text>{otp}</Text>
-        </Row>
+
         <Row>
           <Text>
             If you did not request this code, please ignore this email.
           </Text>
         </Row>
-        {/* <Row>
-          <Button
-            href={`http://localhost:3000/verify/${username}`}
-            style={{ color: '#61dafb' }}
-          >
-            Verify here
-          </Button>
-        </Row> */}
+        {isUrl ? (
+          <Row>
+            <Button href={otp} style={{ color: "#61dafb" }}>
+              Verify here
+            </Button>
+          </Row>
+        ) : (
+          <Row>
+            <Text>{otp}</Text>
+          </Row>
+        )}
+        {isUrl && (
+          <Row>
+            <Text>Or you can copy paste this link in your browser</Text>
+            <br />
+            <Text>{otp}</Text>
+          </Row>
+        )}
       </Section>
     </Html>
   );

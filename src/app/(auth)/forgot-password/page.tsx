@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,26 +12,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
-import { SignInResponse, signIn } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { setUserAuth } from "@/redux/slice/user/userSlice";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState<String | null>(null);
   const [msg, setMessage] = useState<String | null>(null);
   const route = useRouter();
-  const dispatch = useDispatch();
 
   const handleForgetPassword = async () => {
     try {
       setError(null);
+      setMessage(null); // Clear previous messages
 
       const response = await axios.post("/api/forgot-password", {
         email: email,
       });
-      console.log("forget password:", { response });
+
+      // Set success message
+      setMessage("Reset Password link sent to your email!!");
     } catch (error) {
       const errorMsg = error as AxiosError<{ status: string; message: string }>;
       setError(errorMsg?.response?.data?.message || "Something went wrong");
@@ -40,11 +38,13 @@ export default function Page() {
   };
 
   return (
-    <section className="h-screen flex items-center  ">
-      <Card className="mx-auto max-w-sm shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]	">
+    <section className="h-screen flex items-center justify-center bg-gray-100">
+      <Card className="mx-auto max-w-sm shadow-lg bg-white rounded-lg p-6">
         <CardHeader>
-          <CardTitle className="text-2xl">Forget Password</CardTitle>
-          <CardDescription>Enter your email to reset password</CardDescription>
+          <CardTitle className="text-2xl font-bold">Forget Password</CardTitle>
+          <CardDescription className="text-sm text-gray-600">
+            Enter your email to reset your password
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
@@ -57,14 +57,15 @@ export default function Page() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={!!msg}
               />
             </div>
             {error && <div className="text-red-500">{error}</div>}
-            {msg && <div className="text-green-500">{error}</div>}
+            {msg && <div className="text-green-500">{msg}</div>}
             <Button
               variant="outline"
               onClick={handleForgetPassword}
-              type="submit"
+              type="button" // Change type to "button" to prevent form submission
               className="w-full"
             >
               Submit

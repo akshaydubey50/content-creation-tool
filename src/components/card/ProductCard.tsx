@@ -81,37 +81,36 @@ export function ProductCard(props: any) {
   }, [session, isBookMarked, id, dispatch]);
 
 
-  const handleLikes = useCallback(()=>{
-      if (!session || !session?.user) {
-        return setIsOpen(true);
-      } else {
-        if (isLiked) {
-          setIsLiked(false)
-          setCount(count - 1)
-          toast({
-            title: "You downvoted the product",
-            duration: 2000,
-            action: <ToastAction altText="Undo">Undo</ToastAction>,
-            variant: "destructive"
-          })
-          // @ts-ignore
-          dispatch(deleteUpvote(id));
-        }
-        else if (!isLiked) {
-          setIsLiked(true)
-          setCount(count + 1)
-          toast({
-            title: "You upvoted the product",
-            duration: 2000,
-            action: <ToastAction altText="Undo">Undo</ToastAction>,
-            variant: "success"
-          })
-          // @ts-ignore
-          dispatch(addUpvote(id));
-        }
+  const handleLikes = useCallback(() => {
+    if (!session?.user) {
+      setIsOpen(true);
+      return;
+    }
 
-      }
-  }, [session, isLiked, id, dispatch]);
+    if (isLiked) {
+      setIsLiked(false);
+      setCount((prevCount) => prevCount - 1);
+      toast({
+        title: "You downvoted the product",
+        duration: 2000,
+        action: <ToastAction altText="Undo">Undo</ToastAction>,
+        variant: "destructive"
+      });
+      // @ts-ignore
+      dispatch(deleteUpvote(id));
+    } else {
+      setIsLiked(true);
+      setCount((prevCount) => prevCount + 1);
+      toast({
+        title: "You upvoted the product",
+        duration: 2000,
+        action: <ToastAction altText="Undo">Undo</ToastAction>,
+        variant: "success"
+      });
+      // @ts-ignore
+      dispatch(addUpvote(id));
+    }
+  }, [session, isLiked, id, dispatch, setIsOpen]);
 
   function debounce(func: Function, delay: number) {
     let timeoutId: NodeJS.Timeout;

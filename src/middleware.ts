@@ -15,7 +15,9 @@ export async function middleware(request: NextRequest) {
 
   if (
     token &&
-    (url.pathname.startsWith("/signin") || url.pathname.startsWith("/signup"))
+    (url.pathname.startsWith("/signin") ||
+      url.pathname.startsWith("/signup") ||
+      url.pathname.startsWith("/verify"))
   ) {
     return NextResponse.redirect(new URL("/", request.url));
   }
