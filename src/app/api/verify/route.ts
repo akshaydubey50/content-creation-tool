@@ -1,14 +1,15 @@
 import connectDB from "@/db/dbConnect";
 import UserModel from "@/models/user/User.model";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: Request) {
+export async function POST(request: NextResponse) {
   await connectDB();
   try {
     const { email, code } = await request.json();
 
     const isExistingUser = await UserModel.findOne({ email });
     if (!isExistingUser) {
-      return Response.json({ success: false, message: "User not found" });
+      return NextResponse.json({ success: false, message: "User not found" });
     }
 
     const isValidCode = isExistingUser.verifyCode === code;
@@ -19,7 +20,7 @@ export async function POST(request: Request) {
       isExistingUser.isVerified = true;
       await isExistingUser.save();
 
-      return Response.json(
+      return NextResponse.json(
         {
           success: true,
           message: "Verified Code successfully",
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
         { status: 200 }
       );
     } else if (!isValidCode) {
-      return Response.json(
+      return NextResponse.json(
         {
           success: false,
           message: "Incorrect Verification Code",
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     } else if (isValidCode && isCodeNotExpiry && isExistingUser.isVerified) {
-      return Response.json(
+      return NextResponse.json(
         {
           success: false,
           message: "You are already verified.",
@@ -43,7 +44,7 @@ export async function POST(request: Request) {
         { status: 200 }
       );
     }
-    return Response.json(
+    return NextResponse.json(
       {
         success: false,
         message:
@@ -53,7 +54,7 @@ export async function POST(request: Request) {
     );
   } catch (error) {
     console.log("Error while verifing code", error);
-    return Response.json(
+    return NextResponse.json(
       { success: false, message: "Failed to verify code" },
       { status: 500 }
     );
