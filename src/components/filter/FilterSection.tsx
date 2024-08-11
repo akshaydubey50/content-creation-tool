@@ -107,7 +107,6 @@ export default function FilterSection() {
   const selectedPriceModel = (selectedOption: any) => {
     if (selectedOption) {
       let priceVal = selectedOption.value;
-      debugger;
       const getPriceList = productList.filter((item: AirtableModel) => {
         const pricingVal = item.fields?.Pricing;
         if (Array.isArray(pricingVal)) {
