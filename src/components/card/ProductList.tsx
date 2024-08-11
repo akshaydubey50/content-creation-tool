@@ -35,7 +35,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const { productList, isLoading } = useSelector(
     (state: RootState) => state.product
   );
-  console.log("productList", productList, isLoading);
+  // console.log("productList", productList, isLoading);
   const dropDownCategoryArr = useSelector(
     (store: RootState) => store.category.matchedCategory
   );
