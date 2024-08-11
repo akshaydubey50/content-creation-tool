@@ -2,7 +2,7 @@ import connectDB from "@/db/dbConnect";
 import UserModel from "@/models/user/User.model";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextResponse) {
+export async function POST(request: NextRequest) {
   await connectDB();
   try {
     const { email, code } = await request.json();
