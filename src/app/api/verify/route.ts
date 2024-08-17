@@ -9,7 +9,10 @@ export async function POST(request: NextRequest) {
 
     const isExistingUser = await UserModel.findOne({ email });
     if (!isExistingUser) {
-      return NextResponse.json({ success: false, message: "User not found" });
+      return NextResponse.json(
+        { success: false, message: "User not found" },
+        { status: 400 }
+      );
     }
 
     const isValidCode = isExistingUser.verifyCode === code;

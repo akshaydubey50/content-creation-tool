@@ -26,6 +26,7 @@ import { isProductBookmarked } from "@/helper/helper";
 import { useSession } from "next-auth/react";
 import { useToast } from "../ui/use-toast";
 import { ToastAction } from "../ui/toast";
+import { HomePage } from "@/constants/RoutePath";
 
 export function ProductCard(props: any) {
   const { toast } = useToast();
@@ -139,7 +140,7 @@ export function ProductCard(props: any) {
       >
         <Link
           href={{
-            pathname: `/tool/${formattedTitle}`,
+            pathname: `${HomePage}/${formattedTitle}`,
           }}
         >
           <section className="border-b border-black border-solid">

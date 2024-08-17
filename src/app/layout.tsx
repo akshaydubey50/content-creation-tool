@@ -6,17 +6,18 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Providers from "@/providers/Providers";
 import Authprovider from "./Authprovider";
-
+import { Toaster } from "@/components/ui/toaster";
 const poppins = Poppins({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-poppins",
-  weight: ["300","400","500","600", "700","800"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata = {
   title: "Content Creation Fyi",
-  description: "Directory of 200+ content creation tools designed to streamline your process and enhance productivity.",
+  description:
+    "Directory of 200+ content creation tools designed to streamline your process and enhance productivity.",
 };
 
 export default function RootLayout({
@@ -27,10 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable}`}>
       <head>
-        <link
-          rel="preconnect"
-          href="https://embeds.beehiiv.com"
-        />
+        <link rel="preconnect" href="https://embeds.beehiiv.com" />
         <link
           rel="preload"
           href="https://embeds.beehiiv.com/c8b47983-58f2-410d-9d69-f10d79908089?slim=true"
@@ -39,9 +37,12 @@ export default function RootLayout({
       </head>
       <body className="font-poppins">
         {" "}
+        <Toaster />
         <Authprovider>
           <Providers>
+            <Navbar />
             <main>{children}</main>
+            <Footer />
           </Providers>
         </Authprovider>
         <SpeedInsights />

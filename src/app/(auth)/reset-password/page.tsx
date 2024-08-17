@@ -99,9 +99,9 @@ export default function VerifyPassword() {
           {error && <div className="text-red-500">{error}</div>}
           <Button
             onClick={verifyCode}
-            className="mt-4 text-center font-semibold"
             type="button"
             variant="outline"
+            className="bg-[#1c1c1c] text-white font-medium hover:bg-opacity-80"
             disabled={
               buttonDisabled ||
               newPassword.length < 6 ||

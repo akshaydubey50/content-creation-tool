@@ -68,18 +68,20 @@ export default function Page() {
             </div>
             {error && <div className="text-red-500">{error}</div>}
             {msg && <div className="text-green-500">{msg}</div>}
+
             <Button
+              type="submit"
               variant="outline"
               onClick={handleForgetPassword}
-              type="button" // Change type to "button" to prevent form submission
-              className="w-full"
+              className="bg-[#1c1c1c] text-white font-medium hover:bg-opacity-80"
             >
-              {isLoading && (
-              <>
-                  <Loader2Icon className="animate-spin mr-2" />{" "}
+              {isLoading ? (
+                <>
+                  <Loader2Icon className="animate-spin mr-2" /> Submitting
                 </>
+              ) : (
+                <>Submit</>
               )}
-              Submit
             </Button>
           </div>
         </CardContent>

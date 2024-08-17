@@ -12,8 +12,10 @@ export async function middleware(request: NextRequest) {
   const token = await getToken({ req: request });
 
   const url = request.nextUrl;
-
-  if (
+  if (request.nextUrl.pathname === "/") {
+    // Redirect to /tools
+    return NextResponse.redirect(new URL("/tools", request.url));
+  } else if (
     token &&
     (url.pathname.startsWith("/signin") ||
       url.pathname.startsWith("/signup") ||
@@ -26,5 +28,5 @@ export async function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/signin", "/signup", "/verify"],
+  matcher: ["/", "/signin", "/signup", "/verify"],
 };

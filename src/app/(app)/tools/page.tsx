@@ -9,7 +9,6 @@ import NewsLetterModal from "@/components/modal/NewsLetterModal";
 export const dynamic = "force-dynamic";
 
 export default function Home() {
-  return null;
   return (
     <div className="mb-8">
       <HeroSection />
@@ -18,7 +17,7 @@ export default function Home() {
       <ProductList />
       <FAQ />
 
-      <NewsLetter />
+      <NewsLetter />  
       <div className="m-4">
         <NewsLetterModal />
       </div>
