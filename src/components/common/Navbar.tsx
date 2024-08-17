@@ -1,22 +1,13 @@
 "use client";
-import {
-  Session,
-  createClientComponentClient,
-  createRouteHandlerClient,
-} from "@supabase/auth-helpers-nextjs";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { ImCross } from "react-icons/im";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { Auth } from "@supabase/auth-ui-react";
-// import { isUserAuthenticated,} from "@/redux/slice/user/userSlice";
-import { AppDispatch, RootState } from "@/redux/store";
-import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { useDispatch } from "react-redux";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import { usePathname, useRouter } from "next/navigation";
 import * as RoutePath from "@/constants/RoutePath";
-import { Popover } from "@headlessui/react";
 import { signOut, useSession } from "next-auth/react";
 interface MenuItem {
   id: number;
@@ -28,10 +19,8 @@ export default function Navbar() {
   const dispatch: AppDispatch = useDispatch();
 
   const pathName = usePathname();
-  const { showLoginForm, setShowLoginForm } = useVisibleItemContextData();
 
   useEffect(() => {
-    // dispatch(isUserLoggedInSlice());
     localStorage.setItem("isActiveMenu", String(isActiveMenu));
   }, [isActiveMenu, dispatch]);
 
@@ -85,8 +74,8 @@ export default function Navbar() {
             <ul className="hidden text-Title-Medium lg:flex flex-1 flex-wrap justify-end font-medium gap-6  text-black items-baseline">
               {menuItem.map((menu, index) => (
                 <li key={menu.id}>
-                  <Link 
-                    target={menu?.label=="Submit Tool"?"_blank":"_self"}
+                  <Link
+                    target={menu?.label == "Submit Tool" ? "_blank" : "_self"}
                     className={`  text-black    hover:border-b-4 hover:border-DarkOrange  cursor-pointer
                 ${
                   pathName === menu.href

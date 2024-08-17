@@ -9,7 +9,7 @@ import {
   getBookmarkList,
   setBookmarkList,
 } from "@/redux/slice/bookmark/bookmarkSlice";
-import { getUpvoteList } from "@/redux/slice/upvote/upvoteSlice"
+import { getUpvoteList } from "@/redux/slice/upvote/upvoteSlice";
 import Loader from "../common/Loader/Loader";
 import { RootState, AppDispatch } from "@/redux/store";
 import Pagination from "../pagination/Pagination";
@@ -35,7 +35,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const { productList, isLoading } = useSelector(
     (state: RootState) => state.product
   );
-  console.log('productList', productList, isLoading)
+  // console.log("productList", productList, isLoading);
   const dropDownCategoryArr = useSelector(
     (store: RootState) => store.category.matchedCategory
   );
@@ -51,45 +51,43 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const isVerifiedCheck = useSelector(
     (store: RootState) => store.verifiedProduct.isVerifiedChecked
   );
-  const bookmarkList: any = useSelector((store: RootState) => store.bookmark.bookmarkList);
+  const bookmarkList: any = useSelector(
+    (store: RootState) => store.bookmark.bookmarkList
+  );
 
-  const { matchedPrice } = useSelector((state: RootState) => state.priceModel)
+  const { matchedPrice } = useSelector((state: RootState) => state.priceModel);
   const isBookmark = useSelector(
     (store: RootState) => store.bookmark.isBookmarkChecked
   );
 
-  const upVotedList: any = useSelector((store: RootState) => store.upvote.upvoteList)
+  const upVotedList: any = useSelector(
+    (store: RootState) => store.upvote.upvoteList
+  );
 
-  const itemsPerPage = 9;
+  const itemsPerPage = 12;
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-
-  const updateCurrentProducts = () => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const newCurrentProducts = filteredProductRecords!.slice(
-      startIndex,
-      endIndex
-    );
-    return newCurrentProducts;
-  };
-
 
   const getProductByCategory = useCallback(
     (categoryType: string): AirtableModel[] | null => {
       if (categoryType !== "") {
         return productList?.filter((item: AirtableModel) => {
-          const formattedTitle = item?.fields?.Name?.toLowerCase()?.trim()?.replace(/\s/g, "-");
+          const formattedTitle = item?.fields?.Name?.toLowerCase()
+            ?.trim()
+            ?.replace(/\s/g, "-");
 
-          if (item?.fields?.Tags[0] === categoryType && formattedTitle !== slug?.id) {
+          if (
+            item?.fields?.Tags[0] === categoryType &&
+            formattedTitle !== slug?.id
+          ) {
             return categoryType;
           }
         });
       }
       return null;
     },
-    [productList, id]
+    [productList, slug?.id]
   );
 
   const filteredProductRecords = useMemo(() => {
@@ -109,56 +107,66 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     } else if (matchedPrice.length > 0 && !id) {
       products = matchedPrice;
     } else if (session && isBookmark && bookmarkList) {
-      products = productList.filter((item: AirtableModel) => bookmarkList?.includes(item?.id));
+      products = productList.filter((item: AirtableModel) =>
+        bookmarkList?.includes(item?.id)
+      );
     } else if (isVerifiedCheck && verifiedProductArr.length > 0) {
       // Verified Product
       products = verifiedProductArr;
     } else if (productList && !id) {
-      // All productList  
+      // All productList
       products = productList;
     }
 
-    const productsWithUpvotes = products.map(product => ({
+    const productsWithUpvotes = products.map((product) => ({
       ...product,
-      totalLikes: upVotedList.find((item: any) => item.productId === product.id)?.totalLikes || 0
+      totalLikes:
+        upVotedList?.find((item: any) => item.productId === product.id)
+          ?.totalLikes || 0,
     }));
 
-      return productsWithUpvotes.sort((a, b) => b.totalLikes - a.totalLikes);
-
+    return productsWithUpvotes.sort((a, b) => b.totalLikes - a.totalLikes);
   }, [
+    currentPage,
     currentCategory,
-    getProductByCategory,
     dropDownCategoryArr,
     id,
+    productSearchQuery.length,
     inputSearchFilterArr,
+    matchedPrice,
     session,
     isBookmark,
     bookmarkList,
     isVerifiedCheck,
     verifiedProductArr,
     productList,
-    productSearchQuery.length,
-    matchedPrice,
-    upVotedList,   
+    getProductByCategory,
+    upVotedList,
   ]);
-
-  useEffect(() => {
-    updateCurrentProducts();
+  const updateCurrentProducts = useCallback(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const newCurrentProducts = filteredProductRecords!.slice(
+      startIndex,
+      endIndex
+    );
+    return newCurrentProducts;
   }, [currentPage, filteredProductRecords]);
 
   useEffect(() => {
-    dispatch(fetchProductList());
-    dispatch(getUpvoteList())
+    updateCurrentProducts();
+  }, [currentPage, filteredProductRecords, updateCurrentProducts]);
 
+  useEffect(() => {
+    dispatch(fetchProductList());
   }, [dispatch]);
 
   useEffect(() => {
+    dispatch(getUpvoteList());
     if (session?.user) {
       dispatch(getBookmarkList());
     }
-
   }, [dispatch, session]);
-
 
   if (isLoading) {
     return <Loader />;
@@ -168,14 +176,11 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     return (
       <>
         <div className="text-3xl font-bold  text-center h-80 flex items-center justify-center">
-          <h2>
-            No Bookmark yet
-          </h2>
+          <h2>No Bookmark yet</h2>
         </div>
       </>
-    )
+    );
   }
-
 
   return (
     <>
@@ -183,7 +188,6 @@ export default function ProductList({ currentCategory }: ProductListProps) {
       {/* {productSearchQuery.length > 0 && <p className="text-center text-2xl  ">Search Result
         <span className="font-semibold text-4xl">
            {productSearchQuery} </span></p>} */}
-     
       <main
         className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
                   lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0"
@@ -200,9 +204,8 @@ export default function ProductList({ currentCategory }: ProductListProps) {
                 product={item}
                 isBookmark={isProductBookmarked(item, bookmarkList)}
                 bookmarkList={bookmarkList}
-                totalLikes={item.totalLikes}
+                totalLikes={item?.totalLikes}
                 upVotedList={upVotedList}
-
               />
             );
           } else {
@@ -212,7 +215,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
                 product={item}
                 isBookmark={isProductBookmarked(item, bookmarkList)}
                 bookmarkList={bookmarkList}
-                totalLikes={item.totalLikes}
+                totalLikes={item?.totalLikes}
                 upVotedList={upVotedList}
               />
             );
@@ -231,7 +234,6 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           </h1>
         </>
       )}
-
       <Pagination
         currentPage={currentPage}
         totalItems={filteredProductRecords!.length}
@@ -241,10 +243,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   );
 }
 
-export function isProductBookmarked(
-  product: AirtableModel,
-  bookmarkList: any
-) {
+export function isProductBookmarked(product: AirtableModel, bookmarkList: any) {
   if (bookmarkList?.length > 0) {
     return bookmarkList?.some((bookmarkID: any) => bookmarkID === product?.id);
   }

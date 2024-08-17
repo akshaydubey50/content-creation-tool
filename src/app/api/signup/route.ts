@@ -1,19 +1,14 @@
-import connectDB from "@/lib/dbConnect";
+import connectDB from "@/db/dbConnect";
+import { sendmail } from "@/lib/sendmail";
 import UserModel from "@/models/user/User.model";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   await connectDB();
-  //get email and password
-  //check if email exist
-  //if exit throw error
-  //hashed password
-  //save user to db
-  //return user response
 
   try {
-    const { firstName, lastName, email, password } = await request.json();
+    const { email, password } = await request.json();
     console.log({ email, password });
     if (!email || !password) {
       return NextResponse.json(
@@ -30,47 +25,54 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          message: "email already exist",
+          message: "User already exist with this email.",
         },
         { status: 400 }
       );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiryDate = new Date();
+    expiryDate.setHours(expiryDate.getHours() + 1);
 
     const user = new UserModel({
-      firstName,
-      lastName,
       email,
       password: hashedPassword,
+      verifyCode: verifyCode,
+      verifyCodeExpiry: expiryDate,
     });
     await user.save();
 
-    const newUser = await UserModel.findOne({ email }).select("-password");
-    if (!user) {
-      return NextResponse.json({
-        status: false,
-        message: "Error while creating user",
-      });
+    //send email verification code
+
+    const emailResponse = await sendmail(email, verifyCode, false);
+    if (!emailResponse.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: emailResponse.message,
+        },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json(
       {
         success: true,
-        message: "user created successfully",
-        data: newUser,
+        message: "User registered successfully. Please verify your account.",
       },
       { status: 201 }
     );
   } catch (error: any) {
     console.log("Error while creating user", error);
-    throw Error(error.message);
-    /* return Response.json(
+    return NextResponse.json(
       {
         success: false,
-        message: "Internal server error",
+        message: "Something went wrong",
+        error: error,
       },
       { status: 500 }
-    ); */
+    );
   }
 }
