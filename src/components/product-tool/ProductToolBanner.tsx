@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback,useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import Image from "next/image";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
@@ -17,6 +17,7 @@ import { RootState } from "@/redux/store";
 import { isProductBookmarked } from "@/helper/helper";
 import { MdVerified } from "react-icons/md";
 import { useSession } from "next-auth/react";
+import { HomePage } from "@/constants/RoutePath";
 
 export default function ProductToolBanner({
   url,
@@ -41,7 +42,6 @@ export default function ProductToolBanner({
   const { data: session } = useSession();
   const DEBOUNCE_DELAY = 250; // ms
 
-
   const handleBookmark = useCallback(() => {
     if (!session || !session?.user) {
       setIsOpen(true);
@@ -51,9 +51,8 @@ export default function ProductToolBanner({
     const action = isBookMarked ? deleteBookmark : addBookmark;
     // @ts-ignore
     dispatch(action(id));
-
   }, [session, isBookMarked, id, dispatch]);
-  
+
   function debounce(func: Function, delay: number) {
     let timeoutId: NodeJS.Timeout;
     return (...args: any[]) => {
@@ -70,9 +69,8 @@ export default function ProductToolBanner({
   const formattedTag = tag[0].toLowerCase().replace(/\s/g, "-");
 
   const goToCategory = () => {
-    router.push(`/category/${formattedTag}`);
+    router.push(`${HomePage}/category/${formattedTag}`);
   };
-
 
   useEffect(() => {
     setIsBookMarked(isProductBookmarked(id, bookmarkList));
@@ -103,7 +101,7 @@ export default function ProductToolBanner({
                   data-nimg="1"
                   className="rounded-t-xl  h-full  object-cover"
                 />
-              </div>  
+              </div>
             </div>
 
             <div className="aftl-right-section  xl:w-30%">
@@ -116,7 +114,7 @@ export default function ProductToolBanner({
                     {verified && (
                       <MdVerified className="text-2xl text-DarkOrange" />
                     )}
-                 </div>
+                  </div>
                   <div className="mt-2">
                     <button
                       title="Bookmark"
@@ -124,9 +122,9 @@ export default function ProductToolBanner({
                       onClick={debouncedHandleBookmark}
                     >
                       {isBookMarked ? (
-                        <BsBookmarkFill className="text-xl md:text-2xl xl:text-3xl text-DarkOrange"/>
+                        <BsBookmarkFill className="text-xl md:text-2xl xl:text-3xl text-DarkOrange" />
                       ) : (
-                          <BsBookmark className="text-xl md:text-2xl xl:text-3xl   text-black" />
+                        <BsBookmark className="text-xl md:text-2xl xl:text-3xl   text-black" />
                       )}
                     </button>{" "}
                   </div>
@@ -172,7 +170,6 @@ export default function ProductToolBanner({
                     </div>
                   </Link>
                 </div>
-              
               </div>
             </div>
           </div>

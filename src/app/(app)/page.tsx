@@ -9,6 +9,7 @@ import NewsLetterModal from "@/components/modal/NewsLetterModal";
 export const dynamic = "force-dynamic";
 
 export default function Home() {
+  return null;
   return (
     <div className="mb-8">
       <HeroSection />

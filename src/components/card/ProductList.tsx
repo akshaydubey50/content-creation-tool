@@ -64,7 +64,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     (store: RootState) => store.upvote.upvoteList
   );
 
-  const itemsPerPage = 9;
+  const itemsPerPage = 12;
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
