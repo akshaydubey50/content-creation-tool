@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/db/dbConnect";
 import UserModel from "@/models/user/User.model";
 import crypto from "crypto";
-import { sendmail } from "@/lib/sendmail";
-import { APPConf } from "@/conf/conf";
+import { APPConf, ResendConf } from "@/conf/conf";
+import { EmailType, sendmail } from "@/lib/sendmail";
 
 function generateToken(): string {
   return crypto.randomBytes(32).toString("hex");
@@ -52,7 +52,12 @@ export async function POST(req: NextRequest) {
   const resetLink = `${APPConf.BASE_URL}/reset-password?token=${resetToken}`;
 
   //send link in email
-  await sendmail(user.email, resetLink, true);
+  await sendmail({
+    emailTo: user.email,
+    subject: ResendConf.FORGET_SUBJECT,
+    resetLink,
+    emailType: EmailType.ResetPassword,
+  });
   //return response
   return NextResponse.json(
     {
