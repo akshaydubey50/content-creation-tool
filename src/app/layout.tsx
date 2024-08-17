@@ -7,6 +7,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import Providers from "@/providers/Providers";
 import Authprovider from "./Authprovider";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { Toaster } from "@/components/ui/toaster";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -49,6 +50,7 @@ export default function RootLayout({
         /> */}
       </head>
       <body className="font-poppins">
+        <Toaster />
         <Authprovider>
           <Providers>
             <Navbar />

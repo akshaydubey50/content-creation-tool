@@ -13,7 +13,7 @@ function Pagination({
   totalItems,
   onPageChange,
 }: PaginationProps) {
-  const totalPages = Math.ceil(totalItems / 9);
+  const totalPages = Math.ceil(totalItems / 12);
   const isFirstPage = currentPage === 1;
   const isLastPage = currentPage === totalPages;
   const [inputValue, setInputValue] = useState(currentPage.toString());

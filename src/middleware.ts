@@ -8,14 +8,14 @@ export async function middleware(request: NextRequest) {
   //get token
   //get current url
   //if token&& url then redirect /
-
-  const token = await getToken({ req: request });
-
-  const url = request.nextUrl;
   if (request.nextUrl.pathname === "/") {
     // Redirect to /tools
     return NextResponse.redirect(new URL("/tools", request.url));
-  } else if (
+  }
+  const token = await getToken({ req: request });
+
+  const url = request.nextUrl;
+  if (
     token &&
     (url.pathname.startsWith("/signin") ||
       url.pathname.startsWith("/signup") ||
