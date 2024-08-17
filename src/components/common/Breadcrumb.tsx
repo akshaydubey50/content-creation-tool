@@ -3,6 +3,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setCategoryData } from "@/redux/slice/category/categorySlice";
+import { HomePage } from "@/constants/RoutePath";
 
 type HyperHead = { tag: string; title: string };
 
@@ -10,7 +11,7 @@ export default function Breadcrumb({ tag, title }: HyperHead) {
   const router = useRouter();
 
   const handleGoBack = () => {
-    router.push(`/`);
+    router.push(`${HomePage}`);
   };
 
   const dispatch = useDispatch();
@@ -18,8 +19,10 @@ export default function Breadcrumb({ tag, title }: HyperHead) {
   const selectedCategory = (selectedOption: any) => {
     if (selectedOption) {
       let formatedCategory = selectedOption[0]
-        ?.toLowerCase()?.trim()?.replace(/\s/g, "-");
-      router.push(`/category/${formatedCategory}`);
+        ?.toLowerCase()
+        ?.trim()
+        ?.replace(/\s/g, "-");
+      router.push(`${HomePage}/category/${formatedCategory}`);
       dispatch(setCategoryData(selectedOption));
     }
   };
@@ -27,22 +30,21 @@ export default function Breadcrumb({ tag, title }: HyperHead) {
     <>
       <p className="font-medium ">
         <span className="cursor-pointer">
-        <span
-          
-          onClick={handleGoBack}
-          className="hover:border-b-2 hover:border-DarkOrange"
+          <span
+            onClick={handleGoBack}
+            className="hover:border-b-2 hover:border-DarkOrange"
           >
-          Content Tools
-        </span>
-        {" > "}
-        <span
-          onClick={() => selectedCategory(tag)}
-          className="hover:border-b-2 hover:border-DarkOrange"
-          >
-          {tag}
-        </span>
-        {" > "} <span className="font-semibold">{title}</span>
+            Content Tools
           </span>
+          {" > "}
+          <span
+            onClick={() => selectedCategory(tag)}
+            className="hover:border-b-2 hover:border-DarkOrange"
+          >
+            {tag}
+          </span>
+          {" > "} <span className="font-semibold">{title}</span>
+        </span>
       </p>
     </>
   );

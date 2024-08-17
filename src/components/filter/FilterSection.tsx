@@ -23,6 +23,7 @@ import {
   setPriceData,
 } from "@/redux/slice/priceModel/priceModelSlice";
 import { RootState, AppDispatch } from "@/redux/store";
+import { HomePage } from "@/constants/RoutePath";
 
 export default function FilterSection() {
   const [isMounted, SetIsMounted] = useState(false);
@@ -99,7 +100,7 @@ export default function FilterSection() {
       dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
       dispatch(scrollPage(600));
-      router.push(`/category/${formatedCategory}`);
+      router.push(`${HomePage}/category/${formatedCategory}`);
     }
   };
 

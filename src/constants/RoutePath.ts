@@ -1,5 +1,5 @@
 import { AirtableConf } from "@/conf/conf";
 
-export const HomePage = "/";
+export const HomePage = "/tools";
 export const SubmitTool = AirtableConf.SUBMIT_TOOL_URI;
 export const Contact = "/contact";
