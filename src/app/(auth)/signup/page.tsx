@@ -108,12 +108,8 @@ export default function Page() {
   };
 
   return (
-    <section className="h-screen flex items-center bg-white">
-      <Card
-        className="mx-auto max-w-sm 
-shadow-[0_8px_30px_rgb(0,0,0,0.12)]
-       text-black bg-[#fff]"
-      >
+    <section className="w-full flex items-center justify-center min-h-[calc(100vh-4rem)] py-8">
+      <Card className="mx-auto max-w-sm shadow-[0_8px_30px_rgb(0,0,0,0.12)] text-black bg-white my-8">
         <CardHeader>
           <CardTitle className="text-2xl">Sign Up</CardTitle>
           <CardDescription>

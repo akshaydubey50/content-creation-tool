@@ -41,3 +41,4 @@ next-env.d.ts
 # Million Lint
 .million
 .vscode
+.yarn.lock
