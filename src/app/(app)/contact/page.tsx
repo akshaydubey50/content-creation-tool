@@ -34,7 +34,7 @@ const loginSchema = z.object({
     name: z.string().min(1, "First name is required"),
     email: z.string().email("Invalid email address"),
     description: z.string().min(5, "Describe your message"),
-    country:""
+    country: z.string().min(1, "Country selection is required"),
 });
 
 
@@ -53,12 +53,20 @@ export default function ContactUs() {
     const onSubmit = (values: any) => {
         console.log(values)
     }
+
+    const countries = [
+        { value: 'ca', label: 'Canada' },
+        { value: 'usa', label: 'USA' },
+        { value: 'uk', label: 'United Kingdom' },
+        { value: 'au', label: 'Australia' },
+        { value: 'in', label: 'India' },
+    ];
     return (
         <>
             <div className="flex flex-col items-center space-y-4  pt-10 pb:4  lg:pb-8">
                 <h1 className='font-semibold text-2xl  xl:text-4xl '>Contact </h1>
                 <p>
-                    We're here to help! 
+                    We`&apos;`re here to help! 
                 </p>
             </div>
             <div className="grid lg:grid-cols-2 gap-10 mx-auto max-w-7xl mt-6 lg:mt-10 lg:px-6 place-content-baseline">
@@ -67,14 +75,14 @@ export default function ContactUs() {
                         <p className="text-xl font-medium"> Contact Astroship</p>
                         
                         <p>
-                            Whether you have a question, feedback, or just want to say hello, we'd love to hear from you.
+                            Whether you have a question, feedback, or just want to say hello, we`&apos;`d love to hear from you.
                             </p>
                             <p>
-                            Reach out to us, and we'll get back to you as soon as possible.
+                            Reach out to us, and we`&apos;`ll get back to you as soon as possible.
                             </p>
                             <p>
                             Your input is valuable in helping us create the best experience for our community.
-                            Don't hesitate—get in touch!
+                            Don`&apos;`t hesitate—get in touch!
                             </p>
 
                         <p className="flex  items-center gap-2">
@@ -163,34 +171,33 @@ export default function ContactUs() {
                                 )}
                             />
 
-                                <FormField
-                                    control={form.control}
-                                    name="country"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                <Select
-                                                    onValueChange={(value) => field.onChange(value)}
-                                                    value={field.value}
-                                                >
-                                                    <SelectTrigger 
-                                                        className=" border-gray-500"
-                                                        >
-                                                        <SelectValue placeholder="Reason for contacting" />
-                                                    </SelectTrigger>
-                                                    <SelectContent className="bg-gray-100 cursor-pointer">
-                                                        <SelectItem value="ca">Canada</SelectItem>
-                                                        <SelectItem value="usa">USA</SelectItem>
-                                                        <SelectItem value="uk">United Kingdom</SelectItem>
-                                                        <SelectItem value="au">Australia</SelectItem>
-                                                        <SelectItem value="in">India</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                            </FormControl>
-                                            <FormMessage className="text-red-500 font-medium text-sm transition-all duration-200 ease-in-out" />
-                                        </FormItem>
-                                    )}
-                                />
+                                    <FormField
+                                        control={form.control}
+                                        name="country"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Select
+                                                        onValueChange={field.onChange}
+                                                        value={field.value}
+                                                    >
+                                                        <SelectTrigger className="border-gray-500">
+                                                            <SelectValue placeholder="Select your country" />
+                                                        </SelectTrigger>
+                                                        <SelectContent className="bg-gray-100 cursor-pointer">
+                                                            {countries.map((country) => (
+                                                                <SelectItem key={country.value} value={country.value} className="hover:bg-orange-200 cursor-pointer">
+                                                                    {country.label}
+                                                                </SelectItem>
+                                                            ))}
+                                                        </SelectContent>
+                                                    </Select>
+                                                </FormControl>
+                                                <FormMessage className="text-red-500 font-medium text-sm transition-all duration-200 ease-in-out" />
+                                            </FormItem>
+                                        )}
+                                    />
+
 
                             <FormField
                                 control={form.control}
