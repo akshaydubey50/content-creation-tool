@@ -44,10 +44,10 @@ export default function Page() {
   };
 
   return (
-    <section className="h-screen flex items-center justify-center bg-gray-100">
-      <Card className="mx-auto max-w-sm shadow-lg bg-white rounded-lg p-6">
+    <section className="w-full h-full flex items-center justify-center bg-white">
+      <Card className="mx-auto max-w-sm shadow-[0_8px_30px_rgb(0,0,0,0.12)] text-black bg-white">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Forget Password</CardTitle>
+          <CardTitle className="text-xl font-bold">Forget Password</CardTitle>
           <CardDescription className="text-sm text-gray-600">
             Enter your email to reset your password
           </CardDescription>
@@ -64,6 +64,7 @@ export default function Page() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={!!msg}
+                autoComplete="off"
               />
             </div>
             {error && <div className="text-red-500">{error}</div>}

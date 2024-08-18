@@ -71,13 +71,8 @@ export default function Page() {
   };
 
   return (
-    <section className="h-screen flex items-center bg-white">
-      <Card
-        className="mx-auto max-w-sm
-shadow-[0_8px_30px_rgb(0,0,0,0.12)]
-       
-       text-black bg-[#fff]"
-      >
+    <section className="w-full h-full flex items-center justify-center bg-white">
+      <Card className="mx-auto max-w-sm shadow-[0_8px_30px_rgb(0,0,0,0.12)] text-black bg-white">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
@@ -99,6 +94,7 @@ shadow-[0_8px_30px_rgb(0,0,0,0.12)]
                     <FormControl>
                       <Input
                         type="text"
+                        autoComplete="off"
                         placeholder="m@example.com"
                         {...field}
                         className={cn(

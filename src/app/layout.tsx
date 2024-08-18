@@ -45,7 +45,8 @@ export default function RootLayout({
           <Providers>
         <Toaster />
             <Navbar />
-            <main className="flex-grow">{children}</main>
+            <main className="flex-grow flex items-center justify-center">
+              {children}</main>
              <Footer />
           </Providers>
         </Authprovider>

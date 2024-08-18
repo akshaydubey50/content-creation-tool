@@ -1,6 +1,7 @@
 "use client";
 import * as RoutePath from "@/constants/RoutePath";
 import { useRouter } from "next/navigation";
+import InputOTPControlled from "./(auth)/verify/page";
 
 export default function NotFound() {
   const route = useRouter();
@@ -17,5 +18,6 @@ export default function NotFound() {
         Back to Home
       </button>
     </div>
+   
   );
 }
