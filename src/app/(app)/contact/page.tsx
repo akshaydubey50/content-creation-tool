@@ -1,166 +1,238 @@
-import React from 'react'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
+"use client";
+import React, { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/components/ui/form"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/form";
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import NewsLetter from "@/components/newsletter";
+import { Select,SelectItem,SelectTrigger,SelectValue,SelectContent } from "@/components/ui/select";
+import { MapPin,Mail,Phone } from 'lucide-react';
+
+const loginSchema = z.object({
+    name: z.string().min(1, "First name is required"),
+    email: z.string().email("Invalid email address"),
+    description: z.string().min(5, "Describe your message"),
+    country:""
+});
+
 
 export default function ContactUs() {
-    const FormSchema = z.object({
-        email: z
-            .string({
-                required_error: "Please select an email to display.",
-            })
-            .email(),
-    })
-    function onSubmit(values: z.infer<typeof FormSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
-    }
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
+    const form = useForm<z.infer<typeof loginSchema>>({
+        resolver: zodResolver(loginSchema),
         defaultValues: {
             email: "",
+            name: "",
+            description: "",
+            country:""
+
         },
-    })
+    });
+
+    const onSubmit = (values: any) => {
+        console.log(values)
+    }
     return (
         <>
-
-
-            <section className='max-w-7xl w-full mx-auto mt-10 px-8 '>
-                <h1 className='font-semibold text-2xl xl:text-3xl pt-2 pb-6 lg:pb-8 xl:pb-12'>Contact Us</h1>
+            <div className="flex flex-col items-center space-y-4  pt-10 pb:4  lg:pb-8">
+                <h1 className='font-semibold text-2xl  xl:text-4xl '>Contact </h1>
+                <p>
+                    We're here to help! 
+                </p>
+            </div>
+            <div className="grid lg:grid-cols-2 gap-10 mx-auto max-w-7xl mt-6 lg:mt-10 lg:px-6 place-content-baseline">
+            <section className=' px-8 '>
                 <div className="flex flex-col space-y-4 ">
+                        <p className="text-xl font-medium"> Contact Astroship</p>
+                        
+                        <p>
+                            Whether you have a question, feedback, or just want to say hello, we'd love to hear from you.
+                            </p>
+                            <p>
+                            Reach out to us, and we'll get back to you as soon as possible.
+                            </p>
+                            <p>
+                            Your input is valuable in helping us create the best experience for our community.
+                            Don't hesitate—get in touch!
+                            </p>
 
-                    <p>
-                        Were a collective of entrepreneurs and creators with global perspectives who believe in AI for good. We believe in a future where AI enhances every professionals toolkit.
+                        <p className="flex  items-center gap-2">
+                          <span >
+                                <MapPin className="w-4 h-4" /> 
+                          </span>
+                           <span>
+                            1734 Sanfransico, CA 93063
+                            </span> 
+                            </p>
+                        
+                        <p className="flex  items-center gap-2">
+                            <span>
+                                <Mail className="w-4 h-4" />
+                            </span>
+                            <span>
 
-                    </p>
-                    <p>
-                        Our team delves deep into AI tools and apps with transformative potential to then produce high quality editorial content for the world to absorb.
-
-                    </p>
-                    <p>
-                        Tailored for the proactive modern professional, we provide comprehensive resources that illuminate the path to AI integration in the workplace. Create a free account and elevate your professional journey with us today.
-                    </p>
-                    <p>
-                        Have questions or just want to chat with our team? Feel free to fill out the form below and someone will respond ASAP.
-                    </p>
+                            hello@astroshipstarter.com
+                            </span>
+                            </p>
+                       
+                        <p className="flex  items-center gap-2">
+                            <span>
+                                <Phone className="w-4 h-4" /> 
+                            </span>
+                            <span>
+                         +1 (987) 4587 899
+                            </span>
+                        </p>
+                    
                 </div>
             </section>
+                <section className=" px-4 lg:px-0 ">
 
-            <Card className="w-full max-w-7xl mx-auto mt-5 mb-10 px-4 border-0 ">
-                <CardHeader>
-                    <CardTitle className="text-2xl font-bold">We’d Love to Hear From You!</CardTitle>
-                    <CardDescription>Fill out the form below and well get back to you as soon as possible.</CardDescription>
-                </CardHeader>
+                    <Card className=" py-6 ">
                 <CardContent>
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                        <form
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            className="space-y-6"
+                        >
+                                <FormField
+                                    control={form.control}
+                                    name="name"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormControl>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Full Name"
+                                                    {...field}
+                                                    className={cn( 
+                                                        "border-gray-500",
+                                                        "transition-all duration-200 ease-in-out",
+                                                        form.formState.errors.name &&
+                                                        "border-red-500 focus-visible:ring-red-500 input-error"
+                                                    )}
+                                                />
+                                            </FormControl>
+                                            <FormMessage className="text-red-500 font-medium text-sm transition-all duration-200 ease-in-out" />
+                                        </FormItem>
+                                    )}
+                                />
+                               
+
                             <FormField
                                 control={form.control}
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>First Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="shadcn" {...field} />
+                                            <Input
+                                                type="email"
+                                                placeholder="Email"
+                                                {...field}
+                                                className={cn(
+                                                    "border-gray-500",
+                                                    "transition-all duration-200 ease-in-out",
+                                                    form.formState.errors.email &&
+                                                    "border-red-500 focus-visible:ring-red-500 input-error"
+                                                )}
+                                            />
                                         </FormControl>
-                                        <FormLabel>Last  Name</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="shadcn" {...field} />
-                                        </FormControl>
-                                        <FormLabel>Email</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="shadcn" type="email" {...field} />
-                                        </FormControl>
-                                        <FormLabel>Country</FormLabel>
-
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select a verified email to display" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                <SelectItem value="m@example.com">m@example.com</SelectItem>
-                                                <SelectItem value="m@google.com">m@google.com</SelectItem>
-                                                <SelectItem value="m@support.com">m@support.com</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <FormDescription>
-                                            You can manage email addresses in your{" "}
-                                        </FormDescription>
-                                        <FormMessage />
+                                        <FormMessage className="text-red-500 font-medium text-sm transition-all duration-200 ease-in-out" />
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit">Submit</Button>
+
+                                <FormField
+                                    control={form.control}
+                                    name="country"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormControl>
+                                                <Select
+                                                    onValueChange={(value) => field.onChange(value)}
+                                                    value={field.value}
+                                                >
+                                                    <SelectTrigger 
+                                                        className=" border-gray-500"
+                                                        >
+                                                        <SelectValue placeholder="Reason for contacting" />
+                                                    </SelectTrigger>
+                                                    <SelectContent className="bg-gray-100 cursor-pointer">
+                                                        <SelectItem value="ca">Canada</SelectItem>
+                                                        <SelectItem value="usa">USA</SelectItem>
+                                                        <SelectItem value="uk">United Kingdom</SelectItem>
+                                                        <SelectItem value="au">Australia</SelectItem>
+                                                        <SelectItem value="in">India</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage className="text-red-500 font-medium text-sm transition-all duration-200 ease-in-out" />
+                                        </FormItem>
+                                    )}
+                                />
+
+                            <FormField
+                                control={form.control}
+                                name="description"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <Textarea
+                                                placeholder="Message"
+                                                {...field}
+                                                className={cn(
+                                                    "border-gray-500",
+                                                    "transition-all duration-200 ease-in-out",
+                                                    form.formState.errors.description &&
+                                                    "border-red-500 focus-visible:ring-red-500 input-error"
+                                                )}
+                                            />
+                                        </FormControl>
+
+
+                                        <FormMessage className="text-red-500 font-medium text-sm transition-all duration-300 ease-in-out" />
+                                    </FormItem>
+                                )}
+                            />
+                            <div className="flex justify-start">
+                                <Button
+                                    type="submit"
+                                    variant="outline"
+                                    className=" text-white font-medium border w-full border-black bg-black hover:bg-white hover:text-black"
+                                >
+                                    Submit
+                                </Button>
+                            </div>
                         </form>
                     </Form>
-                    {/* <form className="grid gap-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="grid gap-2">
-                                <Label htmlFor="first-name">First Name</Label>
-                                <Input id="first-name" placeholder="Enter your first name" />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="last-name">Last Name</Label>
-                                <Input id="last-name" placeholder="Enter your last name" />
-                            </div>
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input id="email" type="email" placeholder="Enter your email" />
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="description">Description</Label>
-                            <Textarea id="description" placeholder="Tell us how we can help you" className="min-h-[100px]" />
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="country">Country</Label>
-                            <Select>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select your country" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                    <SelectItem value="us">United States</SelectItem>
-                                    <SelectItem value="ca">Canada</SelectItem>
-                                    <SelectItem value="uk">United Kingdom</SelectItem>
-                                    <SelectItem value="au">Australia</SelectItem>
-                                    <SelectItem value="de">Germany</SelectItem>
-                                    <SelectItem value="fr">France</SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </form> */}
                 </CardContent>
-                <CardFooter className="flex justify-start">
-                    <Button type="submit" variant={"default"} className='bg-black text-white  border border-black  hover:bg-gray-100 hover:text-black'>Submit</Button>
-                </CardFooter>
             </Card>
+                </section>
+
+            </div>
+            <NewsLetter />
+
         </>
     )
 }

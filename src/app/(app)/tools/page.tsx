@@ -12,19 +12,12 @@ export default function Home() {
   return (
     <div className="mb-8">
       <HeroSection />
-      {/* <div className="launchlist-widget" data-key-id="sFJR8e" data-height="180px"></div> */}
       <FilterSection />
       <ProductList />
       <FAQ />
-
       <NewsLetter />  
-      <div className="m-4">
         <NewsLetterModal />
-      </div>
-      {/* <Script
-        src="https://getlaunchlist.com/js/widget.js"
-        defer
-        /> */}
+     
     </div>
   );
 }

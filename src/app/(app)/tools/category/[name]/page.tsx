@@ -29,6 +29,7 @@ import {
 } from "@/redux/slice/category/categorySlice";
 import { clearSearchFilterList } from "@/redux/slice/search/searchSlice";
 import { RootState, AppDispatch } from "@/redux/store";
+import NewsLetter from "@/components/newsletter";
 
 export default function ToolDetails() {
   const dispatch: AppDispatch = useDispatch();
@@ -90,6 +91,7 @@ export default function ToolDetails() {
       <HeroSection />
       <FilterSection />
       <ProductList />
+      <NewsLetter />
     </>
   );
 }

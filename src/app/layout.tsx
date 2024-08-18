@@ -8,6 +8,7 @@ import Providers from "@/providers/Providers";
 import Authprovider from "./Authprovider";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Toaster } from "@/components/ui/toaster";
+import NewsLetter from "@/components/newsletter";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -36,33 +37,15 @@ export default function RootLayout({
           href="https://embeds.beehiiv.com/c8b47983-58f2-410d-9d69-f10d79908089?slim=true"
           as="document"
         />
-        <GoogleAnalytics gaId="GTM-P65VN64G" />
-        {/*  <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(w,d,s,l,i){w[l] = w[l] || [];w[l].push({'gtm.start':
-              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-              })(window,document,'script','dataLayer','GTM-P65VN64G');
-            `,
-          }}
-        /> */}
+          <GoogleAnalytics gaId="GTM-P65VN64G" />
+       
       </head>
-      <body className="font-poppins">
-        <Toaster />
+      <body className="font-poppins flex flex-col min-h-screen">
         <Authprovider>
           <Providers>
+        <Toaster />
             <Navbar />
-            <main>{children}</main>
-            <noscript>
-              <iframe
-                src="https://www.googletagmanager.com/ns.html?id=GTM-P65VN64G"
-                height="0"
-                width="0"
-                style={{ display: "none", visibility: "hidden" }}
-              ></iframe>
-            </noscript>
+            <main className="flex-grow">{children}</main>
              <Footer />
           </Providers>
         </Authprovider>
