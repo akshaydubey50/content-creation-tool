@@ -3,6 +3,8 @@ import connectDB from "@/db/dbConnect";
 import UserModel from "@/models/user/User.model";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
+import { ResendConf } from "@/conf/conf";
+import { sendmail, EmailType } from "@/lib/sendmail";
 
 export async function POST(req: NextRequest) {
   await connectDB();
@@ -42,7 +44,12 @@ export async function POST(req: NextRequest) {
   user.forgetPasswordToken = undefined; // Clear the token
   user.forgetPasswordTokenExpiry = undefined; // Clear the expiry date
   await user.save();
-
+  await sendmail({
+    emailTo: user.email,
+    subject: ResendConf.RESET_PASSWORD_SUBJECT,
+    emailType: EmailType.PasswordChangedSuccessfully,
+    username: "",
+  });
   return NextResponse.json(
     {
       success: true,
