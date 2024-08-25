@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { setCategoryData } from "@/redux/slice/category/categorySlice";
 import { HomePage } from "@/constants/RoutePath";
 
-type HyperHead = { tag: string; title: string };
+type HyperHead = { tag: string[]; title: string };
 
 export default function Breadcrumb({ tag, title }: HyperHead) {
   const router = useRouter();

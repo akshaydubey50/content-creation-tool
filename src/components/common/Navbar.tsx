@@ -10,7 +10,7 @@ import { usePathname, useRouter } from "next/navigation";
 import * as RoutePath from "@/constants/RoutePath";
 import { signOut, useSession } from "next-auth/react";
 interface MenuItem {
-  id: number;
+  id: number| string;
   label: string;
   href: string;
 }
@@ -25,9 +25,10 @@ export default function Navbar() {
   }, [isActiveMenu, dispatch]);
 
   const menuItem: MenuItem[] = [
-    { id: 1, label: "All Tools", href: RoutePath.HomePage },
-    { id: 2, label: "Contact", href: RoutePath.Contact },
-    { id: 3, label: "Submit Tool", href: RoutePath.SubmitTool },
+    { id: RoutePath.HomePage, label: "All Tools", href: RoutePath.HomePage },
+    { id: RoutePath.Contact, label: "Contact", href: RoutePath.Contact },
+    { id: RoutePath.About_US, label: "About Us", href: RoutePath.About_US },
+    { id: RoutePath.SubmitTool, label: "Submit Tool", href: RoutePath.SubmitTool },
   ];
 
   const [isMenu, setIsMenu] = useState(false);
@@ -62,7 +63,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="bg-white fixed z-10 shadow-md w-full px-5 xl:px-10 ">
+      <header className="bg-white fixed z-10 shadow-md w-full overflow-hidden px-5 xl:px-10  ">
         <div className="flex  max-w-7xl  mx-auto justify-between items-center  py-4 lg:px-2 lg:py-4">
           <div>
             <Link href="/">

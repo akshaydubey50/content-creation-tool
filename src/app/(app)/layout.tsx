@@ -25,9 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <>
-      {/* <Navbar /> */}
-      <main className="pt-[40px] lg:pt-[60px] flex-1">{children}</main>
-      {/* <Footer /> */}
+      <main className="flex-1">{children}</main>
     </>
   );
 }

@@ -28,36 +28,40 @@ export const ResetPasswordEmail = ({
   return (
     <Html>
       <Head />
-      <Preview>Dropbox reset your password</Preview>
+      {/* <Preview>Dropbox reset your password</Preview> */}
       <Body style={main}>
         <Container style={container}>
-          <Img
+          {/* <Img
             src={`${baseUrl}/static/dropbox-logo.png`}
             width="40"
             height="33"
             alt="Dropbox"
-          />
+          /> */}
           <Section>
-            <Text style={text}>Hi {userFirstname},</Text>
+            <Text style={text}>Hi {userFirstname} 👋,</Text>
             <Text style={text}>
-              Someone recently requested a password change for your Dropbox
-              account. If this was you, you can set a new password here:
+              No worries—we’ve all been there. Let’s get you back on track!
+
+            </Text>
+            <Text style={textBold}>
+              Click the button below to reset your password:
             </Text>
             <Button style={button} href={resetPasswordLink}>
-              Reset password
+              Reset My Password
             </Button>
             <Text style={text}>
-              If you don&apos;t want to change your password or didn&apos;t
-              request this, just ignore and delete this message.
+              For your security, this link will expire in 10 minutes. 
             </Text>
             <Text style={text}>
-              To keep your account secure, please don&apos;t forward this email
-              to anyone. See our Help Center for{" "}
-              <Link style={anchor} href="https://dropbox.com">
-                more security tips.
-              </Link>
+              Need help? Just reply to this email, and we’ll assist you right away.
             </Text>
-            <Text style={text}>Happy Dropboxing!</Text>
+            <Text style={footer}>
+              Stay creative!
+              <br />
+              Arpit Singh
+              <br />
+              CCF Team
+            </Text>
           </Section>
         </Container>
       </Body>
@@ -66,8 +70,8 @@ export const ResetPasswordEmail = ({
 };
 
 ResetPasswordEmail.PreviewProps = {
-  userFirstname: "Alan",
-  resetPasswordLink: "https://dropbox.com",
+  userFirstname: "",
+  resetPasswordLink: "",
 } as ResetPasswordEmailProps;
 
 export default ResetPasswordEmail;
@@ -87,13 +91,19 @@ const text = {
   fontSize: "16px",
   fontFamily:
     "'Open Sans', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
-  fontWeight: "300",
+  fontWeight: "500",
   color: "#404040",
   lineHeight: "26px",
 };
+const textBold={
+  ...text,
+  fontWeight:700
+}
+
 
 const button = {
-  backgroundColor: "#007ee6",
+  fontWeight: "700",
+  backgroundColor: "#FF8C00",
   borderRadius: "4px",
   color: "#fff",
   fontFamily: "'Open Sans', 'Helvetica Neue', Arial",
@@ -107,4 +117,9 @@ const button = {
 
 const anchor = {
   textDecoration: "underline",
+};
+
+const footer = {
+  color: "#8898aa",
+  fontSize: "16px",
 };

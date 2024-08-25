@@ -9,13 +9,13 @@ export const AirtableConf = {
 export const ResendConf = {
   API_KEY: String(process.env.RESEND_API_KEY),
   FROM: String(process.env.RESEND_FROM),
-  WELCOME_SUBJECT: String(process.env.WELCOME_SUBJECT || "Welcome - dev!"),
-  FORGET_SUBJECT: String(process.env.FORGET_SUBJECT || "Forgot Password - dev"),
+  WELCOME_SUBJECT: String(process.env.WELCOME_SUBJECT ),
+  FORGET_SUBJECT: String(process.env.FORGET_SUBJECT),
   RESET_PASSWORD_SUBJECT: String(
-    process.env.RESET_PASSWORD_SUBJECT || "Reset Your Password - dev"
+    process.env.RESET_PASSWORD_SUBJECT
   ),
   VERIFICATION_CODE_SUBJECT: String(
-    process.env.VERIFICATION_CODE_SUBJECT || "Verification Code - dev"
+    process.env.VERIFICATION_CODE_SUBJECT
   ),
 };
 
