@@ -23,28 +23,20 @@ const baseUrl = process.env.VERCEL_URL
 export const OnboardingEmail = ({ userFirstname }: OnboardingEmailProps) => (
   <Html>
     <Head />
-    {/* <Preview>
-      The sales intelligence platform that helps you uncover qualified leads.
-    </Preview> */}
+   
     <Body style={main}>
       <Container style={container}>
-        {/* <Img
-          src={`${baseUrl}/static/koala-logo.png`}
-          width="170"
-          height="50"
-          alt="Koala"
-          style={logo}
-        /> */}
+      
         <Text style={paragraph}>Hi {userFirstname} 👋,</Text>
         <Text style={paragraph}>
           Thanks for joining ContentCreation.fyi!
         </Text>
         <Section style={btnContainer}>
           <Text style={paragraph}>
-            You’ve just joined a community of creators, writers, marketers, and founders who are all about taking content creation to the next level.
+            You&apos;ve just joined a community of creators, writers, marketers, and founders who are all about taking content creation to the next level.
           </Text>
           <Text style={paragraph}>
-            Here’s what you can do now:
+            Here&apos;s what you can do now:
           </Text>
           <Text style={unOrderList}>
             <span style={spanText}>Explore</span>: Dive into our directory of 200+ content creation tools.
@@ -60,7 +52,7 @@ export const OnboardingEmail = ({ userFirstname }: OnboardingEmailProps) => (
         <Text style={paragraph}>
           Need help getting started?
           <br />
-          Just reply to this email—we’re here for you.
+          Just reply to this email—we&apos;re here for you.
         </Text>
         <Text style={footer}>
           Stay creative!
@@ -128,5 +120,5 @@ const spanText = {
   fontWeight: 700,
 }
 const unOrderList = {
-  "list-style-type": "disc"
+  listStyleType: "disc"
 }

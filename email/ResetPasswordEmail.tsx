@@ -28,15 +28,8 @@ export const ResetPasswordEmail = ({
   return (
     <Html>
       <Head />
-      {/* <Preview>Dropbox reset your password</Preview> */}
       <Body style={main}>
         <Container style={container}>
-          {/* <Img
-            src={`${baseUrl}/static/dropbox-logo.png`}
-            width="40"
-            height="33"
-            alt="Dropbox"
-          /> */}
           <Section>
             <Text style={text}>Hi {userFirstname} 👋,</Text>
             <Text style={text}>
@@ -46,9 +39,12 @@ export const ResetPasswordEmail = ({
             <Text style={textBold}>
               Click the button below to reset your password:
             </Text>
+            <Section style={buttonContainer}>
+
             <Button style={button} href={resetPasswordLink}>
               Reset My Password
             </Button>
+            </Section>
             <Text style={text}>
               For your security, this link will expire in 10 minutes. 
             </Text>
@@ -62,7 +58,11 @@ export const ResetPasswordEmail = ({
               <br />
               CCF Team
             </Text>
+          <Text style={footerCenter}>
+            © 2024 Content Creation FYI. All Rights Reserved.
+          </Text>
           </Section>
+
         </Container>
       </Body>
     </Html>
@@ -88,12 +88,15 @@ const container = {
 };
 
 const text = {
-  fontSize: "16px",
+  fontSize: "14px",
+  lineHeight: "24px",
+  margin:"16px 0px",
+  color: "#333",
   fontFamily:
-    "'Open Sans', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
-  fontWeight: "500",
-  color: "#404040",
-  lineHeight: "26px",
+    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+  fontWeight: "400",
+  // padding: "0px 35px"
+
 };
 const textBold={
   ...text,
@@ -105,12 +108,12 @@ const button = {
   fontWeight: "700",
   backgroundColor: "#FF8C00",
   borderRadius: "4px",
-  color: "#fff",
+  color: "#ffffff",
   fontFamily: "'Open Sans', 'Helvetica Neue', Arial",
   fontSize: "15px",
   textDecoration: "none",
   textAlign: "center" as const,
-  display: "block",
+  display: "inline-block",
   width: "210px",
   padding: "14px 7px",
 };
@@ -123,3 +126,14 @@ const footer = {
   color: "#8898aa",
   fontSize: "16px",
 };
+
+
+const upperSection={padding:"25px 35px"}
+const buttonContainer={
+  textAlign: "center" as const,
+  margin: "20px 0",
+}
+const footerCenter = {
+  ...footer,
+  textAlign: "center" as const,
+}

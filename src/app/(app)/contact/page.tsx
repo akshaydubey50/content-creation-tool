@@ -70,7 +70,7 @@ export default function ContactUs() {
             <div className="flex flex-col items-center space-y-4  pt-24 pb:4  lg:pb-8">
                 <h1 className='font-semibold text-2xl  xl:text-4xl '>Contact </h1>
                 <p>
-                    We're here to help!
+                    We&apos;re here to help!
                 </p>
             </div>
             <div className="grid lg:grid-cols-2 gap-10 mx-auto max-w-7xl mt-6 lg:mt-10 lg:px-6 place-content-baseline">
@@ -79,16 +79,16 @@ export default function ContactUs() {
                         <p className="text-xl font-semibold"> Get in Touch with the CCF Team</p>
                         
                         <p>
-                            Got a question, feedback, or just want to say hello? We’re all ears!
+                            Got a question, feedback, or just want to say hello? We&apos;re all ears!
 
                             </p>
                             <p>
-                            Drop us a message, and we’ll get back to you as quickly as possible.
+                            Drop us a message, and we&apos;ll get back to you as quickly as possible.
                             </p>
                             <p>
                             Your insights help us shape a better experience for the community..
                             </p>
-                        <p>Don't hesitate—get in touch!
+                        <p>Don&apos;t hesitate—get in touch!
                         </p>
                       
                         

@@ -25,61 +25,106 @@ export default function VerificationEmail({
   verificationCode,
 }: VerifyEmailProps) {
   return (
-    <Html>
+    // <Html>
+    //   <Head />
+    //   <Body style={main}>
+    //     <Container style={container}>
+    //       <Section style={coverSection}>
+    //         <Section style={upperSection}>
+    //           <Heading style={h1}>Verify your email address</Heading>
+    //           <Text style={mainText}>
+    //             Hi there 👋,
+    //             <br />
+    //             Thank you for choosing to sign up for Content Creation FYI!
+    //           </Text>
+    //           <Text style={textBold}>
+    //             To complete your account creation process, please enter the verification code when prompted.
+    //           </Text>
+    //           <Section style={verificationSection}>
+    //             <Text style={verifyText}>Verification code</Text>
+
+    //             <Text style={codeText}>{verificationCode}</Text>
+                
+    //             <Text style={validityText}>
+    //               (This code is valid for 10 minutes)
+    //             </Text>
+    //           </Section>
+    //         </Section>
+    //         <Hr />
+    //       </Section>
+    //       <Section>
+    //         <Text style={text}>
+    //           Need help? Just reply to this email, and we&apos;ll assist you right away.
+    //         </Text>
+    //         <Text style={text}>
+    //           Welcome to the ContentCreation.fyi community — we&apos;re excited to have you on board!
+    //         </Text>
+           
+    //       </Section>
+    //       <Text style={footer}>
+    //         Stay creative!
+    //         <br />
+    //         Arpit Singh
+    //         <br />
+    //         CCF Team
+    //       </Text>
+    //     </Container>
+      
+    //     <Text style={footerCenter}>
+    //       © 2024 Content Creation FYI. All Rights Reserved.
+
+    //     </Text>
+    //   </Body>
+    // </Html>
+
+      <Html>
       <Head />
+      {/* <Preview>Dropbox reset your password</Preview> */}
       <Body style={main}>
         <Container style={container}>
-          <Section style={coverSection}>
-            <Section style={upperSection}>
-              <Heading style={h1}>Verify your email address</Heading>
-              <Text style={mainText}>
-                Hi there 👋,
-                <br />
-                Thank you for choosing to sign up for Content Creation FYI!
-              </Text>
-              <Section style={verificationSection}>
-                <Text style={verifyText}>Verification code</Text>
-
-                <Text style={codeText}>{verificationCode}</Text>
-                <Text style={validityText}>
-                  (This code is valid for 10 minutes)
-                </Text>
-              </Section>
-            </Section>
-            <Hr />
-            {/* <Section style={lowerSection}>
-              <Text style={cautionText}>
-                We will never email you and ask you to disclose or verify your
-                password, credit card, or banking account number.
-              </Text>
-            </Section> */}
-          </Section>
+          {/* <Img
+            src={`${baseUrl}/static/dropbox-logo.png`}
+            width="40"
+            height="33"
+            alt="Dropbox"
+          /> */}
           <Section>
+            <Text style={text}>Hi there 👋,</Text>
+            <Text style={text}>
+              Thank you for choosing to sign up for Content Creation FYI!
+            </Text>
             <Text style={textBold}>
               To complete your account creation process, please enter the verification code when prompted.
             </Text>
             
+           <Section style={verificationSection}>
+                 <Text style={verifyText}>Verification code</Text>
+
+                 <Text style={codeText}>{verificationCode}</Text>
+                
+                 <Text style={validityText}>
+                   (This code is valid for 10 minutes)
+                 </Text>
+               </Section>
             <Text style={text}>
               Need help? Just reply to this email, and we&apos;ll assist you right away.
             </Text>
             <Text style={text}>
               Welcome to the ContentCreation.fyi community — we&apos;re excited to have you on board!
             </Text>
-           
-          </Section>
-          <Text style={footer}>
-            Stay creative!
-            <br />
-            Arpit Singh
-            <br />
-            CCF Team
-          </Text>
-        </Container>
-      
-        <Text style={footerCenter}>
-          © 2024 Content Creation FYI. All Rights Reserved.
+            <Text style={footer}>
+              Stay creative!
+              <br />
+              Arpit Singh
+              <br />
+              CCF Team
+            </Text>
+            <Text style={footerCenter}>
+              © 2024 Content Creation FYI. All Rights Reserved.
 
-        </Text>
+            </Text>
+          </Section>
+        </Container>
       </Body>
     </Html>
   );
@@ -108,8 +153,7 @@ const text = {
   fontFamily:
     "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
   fontSize: "14px",
-  padding: "0px 35px" ,
-   fontWeight:"500"
+   fontWeight:"400"
 };
 
 const imageSection = {

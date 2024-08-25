@@ -29,6 +29,9 @@ export default function Navbar() {
     { id: RoutePath.Contact, label: "Contact", href: RoutePath.Contact },
     { id: RoutePath.About_US, label: "About Us", href: RoutePath.About_US },
     { id: RoutePath.SubmitTool, label: "Submit Tool", href: RoutePath.SubmitTool },
+    { id: RoutePath.Prompt, label: "Prompt", href: RoutePath.Prompt },
+    { id: RoutePath.Resources, label: "Resources", href: RoutePath.Resources },
+
   ];
 
   const [isMenu, setIsMenu] = useState(false);
