@@ -40,7 +40,7 @@ export default function RootLayout({
           <GoogleAnalytics gaId="GTM-P65VN64G" />
        
       </head>
-      <body className="font-poppins flex flex-col min-h-screen">
+      <body className="font-poppins flex flex-col min-h-screen ">
         <Authprovider>
           <Providers>
         <Toaster />

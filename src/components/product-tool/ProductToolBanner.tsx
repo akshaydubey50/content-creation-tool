@@ -78,12 +78,12 @@ export default function ProductToolBanner({
 
   return (
     <>
-      <main className="bg-light-gray   p-10 md:px-10 md:py-16 md:mb-12  ">
-        <div className="max-w-7xl mx-auto">
+      <main className="bg-light-gray   p-10  md:py-16 md:mb-12  ">
+        <div className="max-w-7xl mx-auto pt-10">
           <Breadcrumb tag={tag} title={title} />
           <div
-            className="affiliate-tool-container lg:space-x-8  xl:space-y-0 flex flex-col 
-        lg:flex-row my-12"
+            className="affiliate-tool-container  space-y-4 lg:space-x-8  xl:space-y-0 flex flex-col 
+        lg:flex-row my-6 lg:my-10 xxl:my-12"
           >
             {/* Image Container */}
             <div className="aftl-left-section   xl:w-45%">
@@ -136,28 +136,10 @@ export default function ProductToolBanner({
                   {description}
                 </p>
               </div>
-              <div className="aftl-category   flex flex-1 text-xl space-x-4 ">
-                <div
-                  className=" rounded-lg bg-white border border-solid text-DarkOrange
-               border-DarkOrange text-center cursor-pointer hover:bg-DarkOrange hover:text-white hover:border-DarkOrange"
-                >
-                  <button
-                    className="text-sm px-6 py-2 md:px-10 md:py-2 font-bold w-fit"
-                    onClick={goToCategory}
-                  >
-                    {tag}
-                  </button>
-                </div>
-                <div
-                  className="rounded-lg  bg-white    text-DarkOrange border 
-               border-DarkOrange hover:bg-DarkOrange hover:text-white text-center"
-                >
-                  <button className="text-sm px-6 py-2 md:px-10 md:py-2 font-bold w-fit">
-                    Free
-                  </button>
-                </div>
-              </div>
-              <div className="flex justify-between pt-6 items-center text-white  max-w-lg">
+              <p className="text-lg mb-4">
+                <span className="font-semibold">Categories</span>: {tag.join(",")}
+              </p>
+              <div className="flex justify-start space-x-4 pt-6 items-center text-white  max-w-lg">
                 <div className="text-white text-2xl  hover:text-DarkOrange">
                   <Link
                     href={link}
@@ -169,6 +151,14 @@ export default function ProductToolBanner({
                       <FiArrowUpRight className="text-2xl hover:text-DarkOrange" />
                     </div>
                   </Link>
+                </div>
+                <div
+                  className="rounded-lg  bg-white    text-DarkOrange border 
+               border-DarkOrange hover:bg-DarkOrange hover:text-white text-center"
+                >
+                  <button className="text-sm px-6 py-2 md:px-10 md:py-2 font-bold w-fit">
+                    Free
+                  </button>
                 </div>
               </div>
             </div>

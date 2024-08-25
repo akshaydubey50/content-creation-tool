@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
   //send link in email
   await sendmail({
     emailTo: user.email,
-    subject: ResendConf.FORGET_SUBJECT,
+    subject: ResendConf.RESET_PASSWORD_SUBJECT,
     resetLink,
     emailType: EmailType.ResetPassword,
   });

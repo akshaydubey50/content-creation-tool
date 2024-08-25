@@ -23,36 +23,42 @@ const baseUrl = process.env.VERCEL_URL
 export const OnboardingEmail = ({ userFirstname }: OnboardingEmailProps) => (
   <Html>
     <Head />
-    <Preview>
-      The sales intelligence platform that helps you uncover qualified leads.
-    </Preview>
+   
     <Body style={main}>
       <Container style={container}>
-        <Img
-          src={`${baseUrl}/static/koala-logo.png`}
-          width="170"
-          height="50"
-          alt="Koala"
-          style={logo}
-        />
-        <Text style={paragraph}>Hi {userFirstname},</Text>
+      
+        <Text style={paragraph}>Hi {userFirstname} 👋,</Text>
         <Text style={paragraph}>
-          Onboarding to Koala, the sales intelligence platform that helps you
-          uncover qualified leads and close deals faster.
+          Thanks for joining ContentCreation.fyi!
         </Text>
         <Section style={btnContainer}>
-          <Button style={button} href="https://getkoala.com">
-            Get started
-          </Button>
+          <Text style={paragraph}>
+            You&apos;ve just joined a community of creators, writers, marketers, and founders who are all about taking content creation to the next level.
+          </Text>
+          <Text style={paragraph}>
+            Here&apos;s what you can do now:
+          </Text>
+          <Text style={unOrderList}>
+            <span style={spanText}>Explore</span>: Dive into our directory of 200+ content creation tools.
+            <span style={spanText}>Filter</span>: Easily find tools based on category & pricing model.
+            <span style={spanText}>Bookmark</span>: Keep track of your favourite tools.
+            <span style={spanText}>Like</span>: Give a thumbs up to tools you love.
+            Go to the directory(button)
+          </Text>
         </Section>
+        <Button style={button} href="https://getkoala.com">
+          Go to the directory
+        </Button>
         <Text style={paragraph}>
-          Best,
+          Need help getting started?
           <br />
-          The Koala team
+          Just reply to this email—we&apos;re here for you.
         </Text>
-        <Hr style={hr} />
         <Text style={footer}>
-          470 Noor Ave STE B #1148, South San Francisco, CA 94080
+          Stay creative!
+          <br />
+          Arpit Singh
+          <br />
         </Text>
       </Container>
     </Body>
@@ -60,7 +66,7 @@ export const OnboardingEmail = ({ userFirstname }: OnboardingEmailProps) => (
 );
 
 OnboardingEmail.PreviewProps = {
-  userFirstname: "Alan",
+  userFirstname: "",
 } as OnboardingEmailProps;
 
 export default OnboardingEmail;
@@ -109,3 +115,10 @@ const footer = {
   color: "#8898aa",
   fontSize: "12px",
 };
+
+const spanText = {
+  fontWeight: 700,
+}
+const unOrderList = {
+  listStyleType: "disc"
+}

@@ -24,7 +24,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Label } from "@/components/ui/label";
+import { FaLinkedin } from "react-icons/fa6";
+import { RiTwitterFill } from "react-icons/ri";
 import { Textarea } from "@/components/ui/textarea";
 import NewsLetter from "@/components/newsletter";
 import { Select,SelectItem,SelectTrigger,SelectValue,SelectContent } from "@/components/ui/select";
@@ -54,45 +55,42 @@ export default function ContactUs() {
         console.log(values)
     }
 
-    const countries = [
-        { value: 'ca', label: 'Canada' },
-        { value: 'usa', label: 'USA' },
-        { value: 'uk', label: 'United Kingdom' },
-        { value: 'au', label: 'Australia' },
-        { value: 'in', label: 'India' },
+    const messages = [
+        { value: 'advertising_sponsorship', label: 'Advertising / Sponsorship' },
+        { value: 'affiliate_patnership', label: 'Affiliate / Patnership' },
+        { value: 'bug_issue', label: 'Bug / Issue' },
+        { value: 'careers', label: 'Careers' },
+        { value: 'feedback', label: 'Feedback' },
+        { value: 'media_pr', label: 'Media / PR' },
+        { value: 'other', label: 'Other' },
+
     ];
     return (
         <>
-            <div className="flex flex-col items-center space-y-4  pt-10 pb:4  lg:pb-8">
+            <div className="flex flex-col items-center space-y-4  pt-24 pb:4  lg:pb-8">
                 <h1 className='font-semibold text-2xl  xl:text-4xl '>Contact </h1>
                 <p>
-                    We`&apos;`re here to help! 
+                    We&apos;re here to help!
                 </p>
             </div>
             <div className="grid lg:grid-cols-2 gap-10 mx-auto max-w-7xl mt-6 lg:mt-10 lg:px-6 place-content-baseline">
             <section className=' px-8 '>
                 <div className="flex flex-col space-y-4 ">
-                        <p className="text-xl font-medium"> Contact Astroship</p>
+                        <p className="text-xl font-semibold"> Get in Touch with the CCF Team</p>
                         
                         <p>
-                            Whether you have a question, feedback, or just want to say hello, we`&apos;`d love to hear from you.
-                            </p>
-                            <p>
-                            Reach out to us, and we`&apos;`ll get back to you as soon as possible.
-                            </p>
-                            <p>
-                            Your input is valuable in helping us create the best experience for our community.
-                            Don`&apos;`t hesitate—get in touch!
-                            </p>
+                            Got a question, feedback, or just want to say hello? We&apos;re all ears!
 
-                        <p className="flex  items-center gap-2">
-                          <span >
-                                <MapPin className="w-4 h-4" /> 
-                          </span>
-                           <span>
-                            1734 Sanfransico, CA 93063
-                            </span> 
                             </p>
+                            <p>
+                            Drop us a message, and we&apos;ll get back to you as quickly as possible.
+                            </p>
+                            <p>
+                            Your insights help us shape a better experience for the community..
+                            </p>
+                        <p>Don&apos;t hesitate—get in touch!
+                        </p>
+                      
                         
                         <p className="flex  items-center gap-2">
                             <span>
@@ -100,19 +98,29 @@ export default function ContactUs() {
                             </span>
                             <span>
 
-                            hello@astroshipstarter.com
+                            contentcreation.fyi@gmail.com
                             </span>
                             </p>
-                       
+
                         <p className="flex  items-center gap-2">
-                            <span>
-                                <Phone className="w-4 h-4" /> 
+                            <span >
+                                <MapPin className="w-4 h-4" />
                             </span>
                             <span>
-                         +1 (987) 4587 899
+                                Mumbai, India
                             </span>
                         </p>
-                    
+                        <p className="flex items-center gap-2">
+                            <span className="cursor-pointer">
+                                <FaLinkedin className="text-3xl" />
+
+                            </span>
+                            <span className="cursor-pointer">
+                                <RiTwitterFill className="text-3xl" />
+
+                            </span>
+                        </p>
+                       
                 </div>
             </section>
                 <section className=" px-4 lg:px-0 ">
@@ -182,10 +190,10 @@ export default function ContactUs() {
                                                         value={field.value}
                                                     >
                                                         <SelectTrigger className="border-gray-500">
-                                                            <SelectValue placeholder="Select your country" />
+                                                            <SelectValue placeholder="Reason for contacting" />
                                                         </SelectTrigger>
                                                         <SelectContent className="bg-gray-100 cursor-pointer">
-                                                            {countries.map((country) => (
+                                                            {messages.map((country) => (
                                                                 <SelectItem key={country.value} value={country.value} className="hover:bg-orange-200 cursor-pointer">
                                                                     {country.label}
                                                                 </SelectItem>

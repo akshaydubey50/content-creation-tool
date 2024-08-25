@@ -80,18 +80,18 @@ export default function ToolDetails() {
   }, [pathName, productList, param.name, dispatch]);
 
 
-  
+
   useEffect(() => {
     setVisibleItem(9);
     categoryTypeHandler();
   }, [setVisibleItem, categoryTypeHandler]);
 
   return (
-    <>
+    <div className="mt-[40px] lg:mt-[60px]">
       <HeroSection />
       <FilterSection />
       <ProductList />
       <NewsLetter />
-    </>
+    </div>
   );
 }

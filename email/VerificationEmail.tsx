@@ -25,83 +25,111 @@ export default function VerificationEmail({
   verificationCode,
 }: VerifyEmailProps) {
   return (
-    <Html>
+    // <Html>
+    //   <Head />
+    //   <Body style={main}>
+    //     <Container style={container}>
+    //       <Section style={coverSection}>
+    //         <Section style={upperSection}>
+    //           <Heading style={h1}>Verify your email address</Heading>
+    //           <Text style={mainText}>
+    //             Hi there 👋,
+    //             <br />
+    //             Thank you for choosing to sign up for Content Creation FYI!
+    //           </Text>
+    //           <Text style={textBold}>
+    //             To complete your account creation process, please enter the verification code when prompted.
+    //           </Text>
+    //           <Section style={verificationSection}>
+    //             <Text style={verifyText}>Verification code</Text>
+
+    //             <Text style={codeText}>{verificationCode}</Text>
+                
+    //             <Text style={validityText}>
+    //               (This code is valid for 10 minutes)
+    //             </Text>
+    //           </Section>
+    //         </Section>
+    //         <Hr />
+    //       </Section>
+    //       <Section>
+    //         <Text style={text}>
+    //           Need help? Just reply to this email, and we&apos;ll assist you right away.
+    //         </Text>
+    //         <Text style={text}>
+    //           Welcome to the ContentCreation.fyi community — we&apos;re excited to have you on board!
+    //         </Text>
+           
+    //       </Section>
+    //       <Text style={footer}>
+    //         Stay creative!
+    //         <br />
+    //         Arpit Singh
+    //         <br />
+    //         CCF Team
+    //       </Text>
+    //     </Container>
+      
+    //     <Text style={footerCenter}>
+    //       © 2024 Content Creation FYI. All Rights Reserved.
+
+    //     </Text>
+    //   </Body>
+    // </Html>
+
+      <Html>
       <Head />
-      <Preview>AWS Email Verification</Preview>
+      {/* <Preview>Dropbox reset your password</Preview> */}
       <Body style={main}>
         <Container style={container}>
-          <Section style={coverSection}>
-            <Section style={imageSection}>
-              {/*  <Img
-                src={`${baseUrl}/static/aws-logo.png`}
-                width="75"
-                height="45"
-                alt="AWS's Logo"
-              /> */}
-            </Section>
-            <Section style={upperSection}>
-              <Heading style={h1}>Verify your email address</Heading>
-              <Text style={mainText}>
-                Thanks for starting the new AWS account creation process. We
-                want to make sure it&apos;s really you. Please enter the
-                following verification code when prompted. If you don&apos;t
-                want to create an account, you can ignore this message.
-              </Text>
-              <Section style={verificationSection}>
-                <Text style={verifyText}>Verification code</Text>
+          {/* <Img
+            src={`${baseUrl}/static/dropbox-logo.png`}
+            width="40"
+            height="33"
+            alt="Dropbox"
+          /> */}
+          <Section>
+            <Text style={text}>Hi there 👋,</Text>
+            <Text style={text}>
+              Thank you for choosing to sign up for Content Creation FYI!
+            </Text>
+            <Text style={textBold}>
+              To complete your account creation process, please enter the verification code when prompted.
+            </Text>
+            
+           <Section style={verificationSection}>
+                 <Text style={verifyText}>Verification code</Text>
 
-                <Text style={codeText}>{verificationCode}</Text>
-                <Text style={validityText}>
-                  (This code is valid for 10 minutes)
-                </Text>
-              </Section>
-            </Section>
-            <Hr />
-            <Section style={lowerSection}>
-              <Text style={cautionText}>
-                We will never email you and ask you to disclose or verify your
-                password, credit card, or banking account number.
-              </Text>
-            </Section>
+                 <Text style={codeText}>{verificationCode}</Text>
+                
+                 <Text style={validityText}>
+                   (This code is valid for 10 minutes)
+                 </Text>
+               </Section>
+            <Text style={text}>
+              Need help? Just reply to this email, and we&apos;ll assist you right away.
+            </Text>
+            <Text style={text}>
+              Welcome to the ContentCreation.fyi community — we&apos;re excited to have you on board!
+            </Text>
+            <Text style={footer}>
+              Stay creative!
+              <br />
+              Arpit Singh
+              <br />
+              CCF Team
+            </Text>
+            <Text style={footerCenter}>
+              © 2024 Content Creation FYI. All Rights Reserved.
+
+            </Text>
           </Section>
-          <Text style={footerText}>
-            This message was produced and distributed by Amazon Web Services,
-            Inc., 410 Terry Ave. North, Seattle, WA 98109. © 2022, Amazon Web
-            Services, Inc.. All rights reserved. AWS is a registered trademark
-            of{" "}
-            <Link
-              href="https://https://www.contentcreation.fyi/tools"
-              target="_blank"
-              style={link}
-            >
-              Amazon.com
-            </Link>
-            , Inc. View our{" "}
-            <Link
-              href="https://https://www.contentcreation.fyi/tools"
-              target="_blank"
-              style={link}
-            >
-              privacy policy
-            </Link>
-            .
-          </Text>
         </Container>
       </Body>
     </Html>
   );
 }
 
-const main = {
-  backgroundColor: "#fff",
-  color: "#212121",
-};
-
-const container = {
-  padding: "20px",
-  margin: "0 auto",
-  backgroundColor: "#eee",
-};
 
 const h1 = {
   color: "#333",
@@ -125,7 +153,7 @@ const text = {
   fontFamily:
     "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
   fontSize: "14px",
-  margin: "24px 0",
+   fontWeight:"400"
 };
 
 const imageSection = {
@@ -138,7 +166,7 @@ const imageSection = {
 
 const coverSection = { backgroundColor: "#fff" };
 
-const upperSection = { padding: "25px 35px" };
+const upperSection = { padding: "25px 0px" };
 
 const lowerSection = { padding: "25px 35px" };
 
@@ -178,3 +206,50 @@ const verificationSection = {
 const mainText = { ...text, marginBottom: "14px" };
 
 const cautionText = { ...text, margin: "0px" };
+
+const footer = {
+  color: "#8898aa",
+  fontSize: "16px",
+};
+
+const footerCenter ={
+  ...footer,
+  textAlign: "center" as const,
+}
+
+const main = {
+  backgroundColor: "#f6f9fc",
+  padding: "10px 0",
+};
+
+const container = {
+  backgroundColor: "#ffffff",
+  border: "1px solid #f0f0f0",
+  padding: "45px",
+};
+
+
+const textBold = {
+  ...text,
+  fontWeight: 700
+}
+
+
+const button = {
+  fontWeight: "700",
+  backgroundColor: "#FF8C00",
+  borderRadius: "4px",
+  color: "#fff",
+  fontFamily: "'Open Sans', 'Helvetica Neue', Arial",
+  fontSize: "15px",
+  textDecoration: "none",
+  textAlign: "center" as const,
+  display: "block",
+  width: "210px",
+  padding: "14px 7px",
+};
+
+const anchor = {
+  textDecoration: "underline",
+};
+

@@ -29,7 +29,7 @@ export enum EmailType {
 export async function sendmail({
   emailTo,
   verifyCode,
-  username = "",
+  username = "there",
   subject,
   emailType,
   resetLink,

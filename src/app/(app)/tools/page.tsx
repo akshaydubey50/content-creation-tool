@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export default function Home() {
   return (
-    <div className="mb-8">
+    <div className="mb-8 pt-[40px] lg:pt-[60px] overflow-x-hidden">
       <HeroSection />
       <FilterSection />
       <ProductList />

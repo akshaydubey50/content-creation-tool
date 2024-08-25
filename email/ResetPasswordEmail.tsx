@@ -28,37 +28,41 @@ export const ResetPasswordEmail = ({
   return (
     <Html>
       <Head />
-      <Preview>Dropbox reset your password</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Img
-            src={`${baseUrl}/static/dropbox-logo.png`}
-            width="40"
-            height="33"
-            alt="Dropbox"
-          />
           <Section>
-            <Text style={text}>Hi {userFirstname},</Text>
+            <Text style={text}>Hi {userFirstname} 👋,</Text>
             <Text style={text}>
-              Someone recently requested a password change for your Dropbox
-              account. If this was you, you can set a new password here:
+              No worries—we’ve all been there. Let’s get you back on track!
+
             </Text>
+            <Text style={textBold}>
+              Click the button below to reset your password:
+            </Text>
+            <Section style={buttonContainer}>
+
             <Button style={button} href={resetPasswordLink}>
-              Reset password
+              Reset My Password
             </Button>
+            </Section>
             <Text style={text}>
-              If you don&apos;t want to change your password or didn&apos;t
-              request this, just ignore and delete this message.
+              For your security, this link will expire in 10 minutes. 
             </Text>
             <Text style={text}>
-              To keep your account secure, please don&apos;t forward this email
-              to anyone. See our Help Center for{" "}
-              <Link style={anchor} href="https://dropbox.com">
-                more security tips.
-              </Link>
+              Need help? Just reply to this email, and we’ll assist you right away.
             </Text>
-            <Text style={text}>Happy Dropboxing!</Text>
+            <Text style={footer}>
+              Stay creative!
+              <br />
+              Arpit Singh
+              <br />
+              CCF Team
+            </Text>
+          <Text style={footerCenter}>
+            © 2024 Content Creation FYI. All Rights Reserved.
+          </Text>
           </Section>
+
         </Container>
       </Body>
     </Html>
@@ -66,8 +70,8 @@ export const ResetPasswordEmail = ({
 };
 
 ResetPasswordEmail.PreviewProps = {
-  userFirstname: "Alan",
-  resetPasswordLink: "https://dropbox.com",
+  userFirstname: "",
+  resetPasswordLink: "",
 } as ResetPasswordEmailProps;
 
 export default ResetPasswordEmail;
@@ -84,23 +88,32 @@ const container = {
 };
 
 const text = {
-  fontSize: "16px",
+  fontSize: "14px",
+  lineHeight: "24px",
+  margin:"16px 0px",
+  color: "#333",
   fontFamily:
-    "'Open Sans', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
-  fontWeight: "300",
-  color: "#404040",
-  lineHeight: "26px",
+    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+  fontWeight: "400",
+  // padding: "0px 35px"
+
 };
+const textBold={
+  ...text,
+  fontWeight:700
+}
+
 
 const button = {
-  backgroundColor: "#007ee6",
+  fontWeight: "700",
+  backgroundColor: "#FF8C00",
   borderRadius: "4px",
-  color: "#fff",
+  color: "#ffffff",
   fontFamily: "'Open Sans', 'Helvetica Neue', Arial",
   fontSize: "15px",
   textDecoration: "none",
   textAlign: "center" as const,
-  display: "block",
+  display: "inline-block",
   width: "210px",
   padding: "14px 7px",
 };
@@ -108,3 +121,19 @@ const button = {
 const anchor = {
   textDecoration: "underline",
 };
+
+const footer = {
+  color: "#8898aa",
+  fontSize: "16px",
+};
+
+
+const upperSection={padding:"25px 35px"}
+const buttonContainer={
+  textAlign: "center" as const,
+  margin: "20px 0",
+}
+const footerCenter = {
+  ...footer,
+  textAlign: "center" as const,
+}
