@@ -1,6 +1,8 @@
+import NotFound from '@/app/not-found'
 import React from 'react'
 
 export default function AboutUs() {
+ return  <NotFound />
     return (
         <>
             <main className='max-w-7xl mx-auto'>

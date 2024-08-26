@@ -35,7 +35,7 @@ const loginSchema = z.object({
     name: z.string().min(1, "First name is required"),
     email: z.string().email("Invalid email address"),
     description: z.string().min(5, "Describe your message"),
-    country: z.string().min(1, "Country selection is required"),
+    message: z.string().min(1, "message selection is required"),
 });
 
 
@@ -46,7 +46,7 @@ export default function ContactUs() {
             email: "",
             name: "",
             description: "",
-            country:""
+            message:""
 
         },
     });
@@ -97,8 +97,9 @@ export default function ContactUs() {
                                 <Mail className="w-4 h-4" />
                             </span>
                             <span>
-
-                            contentcreation.fyi@gmail.com
+                                <Link href={"mailto:contentcreation.fyi@gmail.com"}>
+                                    contentcreation.fyi@gmail.com</Link>
+                            
                             </span>
                             </p>
 
@@ -112,11 +113,15 @@ export default function ContactUs() {
                         </p>
                         <p className="flex items-center gap-2">
                             <span className="cursor-pointer">
+                                <Link href="https://www.linkedin.com/in/digiarpit/" target="_blank">
                                 <FaLinkedin className="text-3xl" />
+                                </Link>
 
                             </span>
                             <span className="cursor-pointer">
+                                <Link href="https://x.com/digiarpit" target="_blank">
                                 <RiTwitterFill className="text-3xl" />
+                                </Link>
 
                             </span>
                         </p>
@@ -181,7 +186,7 @@ export default function ContactUs() {
 
                                     <FormField
                                         control={form.control}
-                                        name="country"
+                                        name="message"
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormControl>
@@ -193,9 +198,9 @@ export default function ContactUs() {
                                                             <SelectValue placeholder="Reason for contacting" />
                                                         </SelectTrigger>
                                                         <SelectContent className="bg-gray-100 cursor-pointer">
-                                                            {messages.map((country) => (
-                                                                <SelectItem key={country.value} value={country.value} className="hover:bg-orange-200 cursor-pointer">
-                                                                    {country.label}
+                                                            {messages.map((msg) => (
+                                                                <SelectItem key={msg.value} value={msg.value} className="hover:bg-orange-200 cursor-pointer">
+                                                                    {msg.label}
                                                                 </SelectItem>
                                                             ))}
                                                         </SelectContent>
