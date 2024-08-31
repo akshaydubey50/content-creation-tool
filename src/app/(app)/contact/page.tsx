@@ -103,11 +103,11 @@ export default function ContactUs() {
   return (
     <>
       <div className="max-w-7xl mx-auto px-6 md:px-8">
-        <div className="flex flex-col md:items-center space-y-4  pt-24 pb:4  lg:pb-8">
+        <div className="flex flex-col lg:items-center space-y-4  pt-24 pb:4  lg:pb-8">
           <h1 className="font-semibold text-2xl  xl:text-4xl  ">Contact </h1>
           <p>We&apos;re here to help!</p>
         </div>
-        <div className="flex flex-col md:flex-row  space-y-10 md:space-y-0 md:justify-center  md:items-center  md:space-x-18 lg:justify-between   mt-6 lg:mt-10 lg:px-6 ">
+        <div className="flex flex-col lg:flex-row  space-y-10 lg:space-y-0 lg:justify-center  lg:items-start  lg:space-x-20    mt-6 lg:mt-10 lg:px-6 ">
           <section >
             <div className="flex flex-col lg:items-start space-y-4 ">
               <p className="text-xl font-semibold">
@@ -163,7 +163,7 @@ export default function ContactUs() {
               </p>
             </div>
           </section>
-          <section>
+          <section className="flex-1">
             <Card className="py-6">
               <CardContent>
                 <Form {...form}>
