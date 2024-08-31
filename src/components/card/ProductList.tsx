@@ -14,7 +14,6 @@ import Loader from "../common/Loader/Loader";
 import { RootState, AppDispatch } from "@/redux/store";
 import Pagination from "../pagination/Pagination";
 import { useSession } from "next-auth/react";
-import { isProductUpvoted } from "@/helper/helper";
 
 interface ProductListProps {
   currentCategory?: string;
@@ -158,7 +157,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   useEffect(() => {
     if(productList?.length === 0){
-      dispatch(fetchProductList());
+    dispatch(fetchProductList());
     }
   }, [productList,dispatch]);
 
