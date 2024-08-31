@@ -15,10 +15,10 @@ export default function Home() {
       <FilterSection />
       <ProductList />
       <FAQ />
-      <div className="lg:px-8 xl:px-0">
+      <div className="px-8 xl:px-0">
       <NewsLetter />  
-        <NewsLetterModal />
       </div>
+        <NewsLetterModal />
      
     </div>
   );

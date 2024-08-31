@@ -184,6 +184,19 @@ export default function Navbar() {
               </span>
             </li>
           )}
+          {!session && (
+            <li className="py-3 px-3 font-medium">
+              <span className="px-4 border-l-4 border-DarkOrange border-solid">
+                <button
+                  onClick={() => {
+                    handleSignup();
+                  }}
+                >
+                  Sign Up for $0
+                </button>
+              </span>
+            </li>
+          )}
           {session && (
             <li className="py-3 px-3 font-medium">
               <span className="px-4 border-l-4 border-DarkOrange border-solid">
