@@ -8,12 +8,6 @@ import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
-export const metadata = {
-  title: "Content Creation Tools",
-  description:
-    "Directory of 200+ content creation tools designed to streamline your process and enhance productivity.",
-};
-
 export default function ProductDetail() {
   const id = useSearchParams().get("id");
   const { productList } = useSelector((state: RootState) => state.product);
@@ -30,7 +24,7 @@ export default function ProductDetail() {
       return formattedTitle === slug?.id;
     });
 
-    console.log("productMatched", productMatched)
+    console.log("productMatched", productMatched);
     if (productMatched) {
       setProductData(productMatched);
     }
@@ -48,22 +42,23 @@ export default function ProductDetail() {
     <>
       {product && (
         <>
-        <ProductToolBanner
-          url={product!.fields.ToolImage}
-          title={product!.fields.Name}
-          description={product!.fields.Description}
-          tag={product!.fields.Tags}
-          link={product!.fields.WebsiteLink}
-          id={product!.id}
-          verified={product!.fields.Verified}
-        />
-     
-        <div className="px-4">
-          <h1 className="text-xl md:text-3xl lg:text-4xl text-center  my-6 md:my-8 w-full font-bold">
-            Similar{" "}
-            <span className="text-DarkOrange">{product!.fields.Tags}</span> Tools
-          </h1>
-        </div>
+          <ProductToolBanner
+            url={product!.fields.ToolImage}
+            title={product!.fields.Name}
+            description={product!.fields.Description}
+            tag={product!.fields.Tags}
+            link={product!.fields.WebsiteLink}
+            id={product!.id}
+            verified={product!.fields.Verified}
+          />
+
+          <div className="px-4">
+            <h1 className="text-xl md:text-3xl lg:text-4xl text-center  my-6 md:my-8 w-full font-bold">
+              Similar{" "}
+              <span className="text-DarkOrange">{product!.fields.Tags}</span>{" "}
+              Tools
+            </h1>
+          </div>
         </>
       )}
       <ProductList currentCategory={currentCategory} />
