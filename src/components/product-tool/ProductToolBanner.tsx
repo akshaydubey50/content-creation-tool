@@ -78,89 +78,68 @@ export default function ProductToolBanner({
 
   return (
     <>
-      <main className="bg-light-gray   p-10  md:py-16 md:mb-12  overflow-x-hidden">
-        <div className="max-w-7xl mx-auto pt-10">
+      <main className="bg-light-gray py-6 px-8   md:p-10 md:py-16 md:mb-12 overflow-x-hidden">
+        <div className="max-w-7xl mx-auto pt-14">
           <Breadcrumb tag={tag} title={title} />
-          <div className="grid grid-cols-12 gap-8 my-4">
-          {/* image */}
-            <div className="col-span-12 lg:col-span-6 border border-black border-solid 
-          rounded-t-xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 my-4">
+            <div className="lg:col-span-6 border border-black border-solid rounded-t-xl">
               <Image
                 src={url}
-                alt="logo bannero"
+                alt="logo banner"
                 loading="lazy"
-                width="1280"
-                height="720"
-                decoding="async"
-                data-nimg="1"
-                className="rounded-t-xl  h-full  object-cover"
+                width={1280}
+                height={720}
+                className="rounded-t-xl w-full h-auto object-cover"
               />
-          </div>
-          {/* content */}
-            <div className="col-span-12  lg:col-span-6">
-              <div className="flex flex-col flex-1 space-y-4  mb-6 sm:mt-4 lg:mt-0 ">
-                <div className="flex items-center  justify-between">
+            </div>
+            <div className="lg:col-span-6">
+              <div className="flex flex-col space-y-4 mb-6">
+                <div className="flex items-center justify-between">
                   <div className="flex gap-2 items-center">
-                    <h1 className="text-Title-Large xl:text-Heading-Large font-bold">
+                    {/* Responsive text sizes for the title */}
+                    <h1 className="text-xl sm:text-2xl md:text-3xl xl:text-4xl font-bold break-words">
                       {title}
                     </h1>
-                    {verified && (
-                      <MdVerified className="text-2xl text-DarkOrange" />
+                    {verified && <MdVerified className="text-xl sm:text-2xl text-DarkOrange" />}
+                  </div>
+                  <button
+                    title="Bookmark"
+                    type="button"
+                    onClick={debouncedHandleBookmark}
+                    className="flex-shrink-0"
+                  >
+                    {isBookMarked ? (
+                      <BsBookmarkFill className="text-xl sm:text-2xl xl:text-3xl text-DarkOrange" />
+                    ) : (
+                      <BsBookmark className="text-xl sm:text-2xl xl:text-3xl text-black" />
                     )}
-                  </div>
-                  <div className="mt-2">
-                    <button
-                      title="Bookmark"
-                      type="button"
-                      onClick={debouncedHandleBookmark}
-                    >
-                      {isBookMarked ? (
-                        <BsBookmarkFill className="text-xl md:text-2xl xl:text-3xl text-DarkOrange" />
-                      ) : (
-                        <BsBookmark className="text-xl md:text-2xl xl:text-3xl   text-black" />
-                      )}
-                    </button>{" "}
-                  </div>
-                  {isOpen && (
-                    <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
-                  )}
+                  </button>
                 </div>
-                <p className="ml-0 text-Title-Large xl:text-Description-Large">
+                <p className="text-sm sm:text-base md:text-lg xl:text-xl break-words">
                   {description}
                 </p>
               </div>
-              <p className="mb-4 ">
-                <span className="text-Title-Large md:text-lg font-semibold">Categories</span> :  
-                <span className="">
-                  {` ${tag?.join(" , ")}`}
-                  </span>
+              <p className="mb-4 text-sm sm:text-base md:text-lg">
+                <span className="font-semibold">Categories</span>:
+                <span className="break-words">{` ${tag?.join(", ")}`}</span>
               </p>
-              <div className="flex justify-start space-x-4 pt-6 items-center text-white  max-w-lg">
-                <div className="text-white text-2xl  hover:text-DarkOrange">
-                  <Link
-                    href={link}
-                    target="_blank"
-                    className=" hover:bg-white  border border-DarkOrange flex rounded-md font-semibold bg-DarkOrange items-center justify-around  text-sm lg:text-lg px-4 space-x-2  py-2"
-                  >
-                    <p className="flex-1 text-center">Visit Website</p>
-                    <div>
-                      <FiArrowUpRight className="text-2xl hover:text-DarkOrange" />
-                    </div>
-                  </Link>
-                </div>
-                <div
-                  className="rounded-lg  bg-white    text-DarkOrange border 
-               border-DarkOrange hover:bg-DarkOrange hover:text-white text-center"
+              <div className="flex flex-col sm:flex-row justify-start space-y-2 sm:space-y-0 sm:space-x-4 pt-4 sm:pt-6 items-center text-white">
+                <Link
+                  href={link}
+                  target="_blank"
+                  className="w-full sm:w-auto hover:bg-white border border-DarkOrange flex rounded-md font-semibold bg-DarkOrange items-center justify-center text-sm lg:text-base px-4 py-2 space-x-2"
                 >
-                  <button className="text-sm px-6 py-2 md:px-10 md:py-2 font-bold w-fit">
-                    Free
-                  </button>
-                </div>
+                  <span>Visit Website</span>
+                  <FiArrowUpRight className="text-xl" />
+                </Link>
+                <button className="w-full sm:w-auto rounded-lg bg-white text-DarkOrange border border-DarkOrange hover:bg-DarkOrange hover:text-white text-center text-sm px-6 py-2 md:px-10 md:py-2 font-bold">
+                  Free
+                </button>
               </div>
             </div>
-
-         </div>
+          </div>
         </div>
+        {isOpen && <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />}
       </main>
     </>
   );
