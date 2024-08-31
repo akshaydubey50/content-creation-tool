@@ -291,7 +291,7 @@ export default function FilterSection() {
           />
         </div>
         <div className="col-span-1">
-          <div className="bg-DarkOrange  rounded-full  text-white  w-full ">
+          <div className="bg-DarkOrange  rounded-full   text-white  w-full ">
             {isMounted && (
               <SelectDropdown
                 key={categoryData}
@@ -301,6 +301,23 @@ export default function FilterSection() {
                 value={
                   categoryOptionsList.find(
                     (option) => option.value === categoryData
+                  ) || null
+                }
+              />
+            )}
+          </div>
+        </div>
+        <div className="col-span-1">
+          <div className=" bg-DarkOrange text-center   rounded-full    h-full">
+            {isMounted && (
+              <SelectDropdown
+                key={priceData}
+                placeholder="Pricing "
+                options={priceOptionList}
+                onChange={selectedPriceModel}
+                value={
+                  priceOptionList.find(
+                    (option) => option.value === priceData
                   ) || null
                 }
               />
