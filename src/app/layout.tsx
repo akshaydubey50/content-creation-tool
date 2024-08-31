@@ -18,7 +18,7 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: "Content Creation Fyi",
+  title: "Content Creation FYI",
   description:
     "Directory of 200+ content creation tools designed to streamline your process and enhance productivity.",
 };
