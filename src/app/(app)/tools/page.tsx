@@ -10,13 +10,15 @@ export const dynamic = "force-dynamic";
 
 export default function Home() {
   return (
-    <div className="mb-8 pt-[40px] lg:pt-[60px] overflow-x-hidden">
+    <div className="mb-8 pt-[40px] lg:pt-[60px]  overflow-x-hidden">
       <HeroSection />
       <FilterSection />
       <ProductList />
       <FAQ />
+      <div className="lg:px-8 xl:px-0">
       <NewsLetter />  
         <NewsLetterModal />
+      </div>
      
     </div>
   );
