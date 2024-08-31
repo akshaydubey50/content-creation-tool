@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
@@ -14,38 +14,64 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 
-export default function VerifyPassword() {
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+type PasswordCondition = {
+  test: (password: string) => boolean;
+  message: string;
+};
 
+const passwordConditions: PasswordCondition[] = [
+  { test: (pwd) => /[A-Z]/.test(pwd), message: "Include a capital letter" },
+  { test: (pwd) => /[a-z]/.test(pwd), message: "Include a lowercase letter" },
+  { test: (pwd) => /\d/.test(pwd), message: "Include a number" },
+  {
+    test: (pwd) => /[@$!%*?&]/.test(pwd),
+    message: "Include a special character",
+  },
+  { test: (pwd) => pwd.length >= 8, message: "Be at least 8 characters" },
+];
+
+export default function VerifyPassword() {
+  const [passwords, setPasswords] = useState({ new: "", confirm: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationResults, setValidationResults] = useState<boolean[]>(
+    passwordConditions.map(() => false)
+  );
   const router = useRouter();
   const { toast } = useToast();
 
-  const verifyCode = async () => {
-    setError(null);
-    setButtonDisabled(true);
-    try {
-      if (newPassword !== confirmPassword) {
-        toast({
-          title: "Passwords do not match",
-          description: "Please ensure both passwords are the same.",
-          variant: "destructive",
-        });
-        setError("Please ensure both passwords are the same.");
-        setButtonDisabled(false);
-        return;
-      }
+  const validatePassword = useCallback((password: string): boolean[] => {
+    return passwordConditions.map((condition) => condition.test(password));
+  }, []);
 
-      const token = new URLSearchParams(window.location.search).get("token");
-      const result = await axios.post("/api/reset-password", {
-        token: token,
-        newPassword: newPassword,
+  useEffect(() => {
+    const results = validatePassword(passwords.new);
+    setValidationResults(results);
+  }, [passwords.new, validatePassword]);
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setPasswords((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const resetPassword = async () => {
+    if (passwords.new !== passwords.confirm) {
+      toast({
+        title: "Passwords do not match",
+        description: "Please ensure both passwords are the same.",
+        variant: "destructive",
       });
-      console.log("result", result);
+      return;
+    }
 
-      if (result.data.success) {
+    setIsSubmitting(true);
+    try {
+      const token = new URLSearchParams(window.location.search).get("token");
+      const { data } = await axios.post("/api/reset-password", {
+        token,
+        newPassword: passwords.new,
+      });
+
+      if (data.success) {
         toast({
           title: "Success",
           description: "Password reset successfully",
@@ -53,21 +79,21 @@ export default function VerifyPassword() {
         router.push("/signin");
       }
     } catch (error) {
-      const axiosError = error as AxiosError<{
-        status: boolean;
-        message: string;
-      }>;
-      console.log("axiosError", axiosError.response?.data);
-      setError(axiosError.response?.data?.message || "Something went wrong");
+      console.error("Password reset error:", error);
       toast({
-        title: "Something went wrong. Try again!",
-        // description: "Error occurred.",
+        title: "Something went wrong",
+        description: "Please try again.",
         variant: "destructive",
       });
     } finally {
-      setButtonDisabled(false);
+      setIsSubmitting(false);
     }
   };
+
+  const isResetDisabled =
+    isSubmitting ||
+    !validationResults.every((result) => result) ||
+    passwords.new !== passwords.confirm;
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen space-y-4 w-fit mx-auto">
@@ -80,35 +106,29 @@ export default function VerifyPassword() {
             Enter your new password below.
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-2">
+        <CardContent className="flex flex-col gap-4">
           <Input
             type="password"
+            name="new"
             placeholder="New Password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
+            value={passwords.new}
+            onChange={handlePasswordChange}
             required
           />
-
           <Input
             type="password"
+            name="confirm"
             placeholder="Confirm New Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={passwords.confirm}
+            onChange={handlePasswordChange}
             required
           />
-          {error && <div className="text-red-500">{error}</div>}
           <Button
-            onClick={verifyCode}
-            type="button"
-            variant="outline"
+            onClick={resetPassword}
             className="bg-[#1c1c1c] text-white font-medium hover:bg-opacity-80"
-            disabled={
-              buttonDisabled ||
-              newPassword.length < 6 ||
-              confirmPassword.length < 6
-            }
+            disabled={isResetDisabled}
           >
-            {buttonDisabled ? (
+            {isSubmitting ? (
               <>
                 <Loader2 className="animate-spin mr-2" /> Resetting Password
               </>
@@ -116,6 +136,18 @@ export default function VerifyPassword() {
               "Reset Password"
             )}
           </Button>
+          <ul className="text-sm font-medium list-disc ml-5">
+            {passwordConditions.map(({ message }, index) => (
+              <li
+                key={index}
+                className={
+                  validationResults[index] ? "text-green-500" : "text-red-500"
+                }
+              >
+                {message}
+              </li>
+            ))}
+          </ul>
         </CardContent>
       </Card>
     </div>
