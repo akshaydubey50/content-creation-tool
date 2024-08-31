@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import connectDB from "@/db/dbConnect";
-import UserModel from "@/models/user/User.model";
-import crypto from "crypto";
-import bcrypt from "bcryptjs";
 import { ResendConf } from "@/conf/conf";
-import { sendmail, EmailType } from "@/lib/sendmail";
+import connectDB from "@/db/dbConnect";
+import { EmailType, sendmail } from "@/lib/sendmail";
+import UserModel from "@/models/user/User.model";
+import bcrypt from "bcryptjs";
+import crypto from "crypto";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   await connectDB();
@@ -50,8 +50,8 @@ export async function POST(req: NextRequest) {
     emailType: EmailType.PasswordChangedSuccessfully,
     username: "",
   });
-  
-  console.error(
+
+  console.log(
     "Password changed successfully email response ::: ",
     emailResponse
   );

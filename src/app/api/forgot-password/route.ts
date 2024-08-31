@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { APPConf, ResendConf } from "@/conf/conf";
 import connectDB from "@/db/dbConnect";
+import { EmailType, sendmail } from "@/lib/sendmail";
 import UserModel from "@/models/user/User.model";
 import crypto from "crypto";
-import { APPConf, ResendConf } from "@/conf/conf";
-import { EmailType, sendmail } from "@/lib/sendmail";
+import { NextRequest, NextResponse } from "next/server";
 
 function generateToken(): string {
   return crypto.randomBytes(32).toString("hex");
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
         status: false,
         message: "Email is required to reset password",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
         status: false,
         message: "user with email not found",
       },
-      { status: 404 }
+      { status: 404 },
     );
   }
 
@@ -58,13 +58,13 @@ export async function POST(req: NextRequest) {
     resetLink,
     emailType: EmailType.ResetPassword,
   });
-  console.error("Forget Password Email Response ::: ", emailResponse);
+  console.log("Forget Password Email Response ::: ", emailResponse);
   //return response
   return NextResponse.json(
     {
       success: true,
       message: "Password reset token generated successfully",
     },
-    { status: 200 }
+    { status: 200 },
   );
 }
