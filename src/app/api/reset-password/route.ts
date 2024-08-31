@@ -44,12 +44,17 @@ export async function POST(req: NextRequest) {
   user.forgetPasswordToken = undefined; // Clear the token
   user.forgetPasswordTokenExpiry = undefined; // Clear the expiry date
   await user.save();
-  await sendmail({
+  const emailResponse = await sendmail({
     emailTo: user.email,
     subject: ResendConf.RESET_PASSWORD_SUBJECT,
     emailType: EmailType.PasswordChangedSuccessfully,
     username: "",
   });
+  
+  console.error(
+    "Password changed successfully email response ::: ",
+    emailResponse
+  );
   return NextResponse.json(
     {
       success: true,

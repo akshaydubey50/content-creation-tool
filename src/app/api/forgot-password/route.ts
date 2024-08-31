@@ -52,12 +52,13 @@ export async function POST(req: NextRequest) {
   const resetLink = `${APPConf.BASE_URL}/reset-password?token=${resetToken}`;
 
   //send link in email
-  await sendmail({
+  const emailResponse = await sendmail({
     emailTo: user.email,
     subject: ResendConf.RESET_PASSWORD_SUBJECT,
     resetLink,
     emailType: EmailType.ResetPassword,
   });
+  console.error("Forget Password Email Response ::: ", emailResponse);
   //return response
   return NextResponse.json(
     {
