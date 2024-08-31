@@ -15,7 +15,7 @@ export default function Home() {
       <FilterSection />
       <ProductList />
       <FAQ />
-      <div className="px-8 xl:px-0">
+      <div className="px-6 xl:px-0">
       <NewsLetter />  
       </div>
         <NewsLetterModal />
