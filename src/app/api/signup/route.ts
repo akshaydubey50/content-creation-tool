@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
           success: false,
           message: "Email and Password are required",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
           success: false,
           message: "User already exist with this email.",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -54,15 +54,15 @@ export async function POST(request: NextRequest) {
       verifyCode: verifyCode,
       username: "",
     });
-    console.error("Verification code email response ::: ", emailResponse);
-   
+    console.log("Verification code email response ::: ", emailResponse);
+
     if (!emailResponse.success) {
       return NextResponse.json(
         {
           success: false,
           message: emailResponse.message,
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
     await sendmail({
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
         success: true,
         message: "User registered successfully. Please verify your account.",
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error: any) {
     console.log("Error while creating user", error);
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
         message: "Something went wrong",
         error: error,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

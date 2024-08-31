@@ -2,78 +2,58 @@ import {
   Body,
   Container,
   Head,
-  Heading,
-  Hr,
   Html,
-  Img,
-  Link,
-  Preview,
   Section,
   Text,
 } from "@react-email/components";
-import * as React from "react";
+import EmailFooter from "./EmailFooter";
 
 interface VerifyEmailProps {
   verificationCode: string;
 }
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
-
 export default function VerificationEmail({
   verificationCode,
 }: VerifyEmailProps) {
   return (
-
-
-      <Html>
+    <Html>
       <Head />
       <Body style={main}>
         <Container style={container}>
-      
           <Section>
             <Text style={text}>Hi there 👋,</Text>
             <Text style={text}>
               Thank you for choosing to sign up for Content Creation FYI!
             </Text>
             <Text style={textBold}>
-              To complete your account creation process, please enter the verification code when prompted.
+              To complete your account creation process, please enter the
+              verification code when prompted.
             </Text>
-            
-           <Section style={verificationSection}>
-                 <Text style={verifyText}>Verification code</Text>
 
-                 <Text style={codeText}>{verificationCode}</Text>
-                
-                 <Text style={validityText}>
-                   (This code is valid for 10 minutes)
-                 </Text>
-               </Section>
-            <Text style={text}>
-              Need help? Just reply to this email, and we&apos;ll assist you right away.
-            </Text>
-            <Text style={text}>
-              Welcome to the ContentCreation.fyi community — we&apos;re excited to have you on board!
-            </Text>
-            <Text style={footer}>
-              Stay creative!
-              <br />
-              Arpit Singh
-              <br />
-              CCF Team
-            </Text>
-            <Text style={footerCenter}>
-              © 2024 Content Creation FYI. All Rights Reserved.
+            <Section style={verificationSection}>
+              <Text style={verifyText}>Verification code</Text>
 
+              <Text style={codeText}>{verificationCode}</Text>
+
+              <Text style={validityText}>
+                (This code is valid for 10 minutes)
+              </Text>
+            </Section>
+            <Text style={text}>
+              Need help? Just reply to this email, and we&apos;ll assist you
+              right away.
             </Text>
+            <Text style={text}>
+              Welcome to the ContentCreation.fyi community — we&apos;re excited
+              to have you on board!
+            </Text>
+            <EmailFooter />
           </Section>
         </Container>
       </Body>
     </Html>
   );
 }
-
 
 const h1 = {
   color: "#333",
@@ -97,7 +77,7 @@ const text = {
   fontFamily:
     "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
   fontSize: "14px",
-   fontWeight:"400"
+  fontWeight: "400",
 };
 
 const imageSection = {
@@ -153,13 +133,13 @@ const cautionText = { ...text, margin: "0px" };
 
 const footer = {
   color: "#8898aa",
-  fontSize: "16px",
+  fontSize: "14px",
 };
 
-const footerCenter ={
+const footerCenter = {
   ...footer,
   textAlign: "center" as const,
-}
+};
 
 const main = {
   backgroundColor: "#f6f9fc",
@@ -172,12 +152,10 @@ const container = {
   padding: "45px",
 };
 
-
 const textBold = {
   ...text,
-  fontWeight: 700
-}
-
+  fontWeight: 700,
+};
 
 const button = {
   fontWeight: "700",
@@ -196,4 +174,3 @@ const button = {
 const anchor = {
   textDecoration: "underline",
 };
-

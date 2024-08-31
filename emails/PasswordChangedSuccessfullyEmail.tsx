@@ -11,15 +11,13 @@ import {
   Text,
 } from "@react-email/components";
 import * as React from "react";
+import EmailFooter from "./EmailFooter";
+import { APPConf } from "@/conf/conf";
 
 interface PasswordChangedSuccessfullyEmailProps {
   userFirstname?: string;
   resetPasswordLink?: string;
 }
-
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
 
 export const PasswordChangedSuccessfullyEmail = ({
   userFirstname,
@@ -30,23 +28,12 @@ export const PasswordChangedSuccessfullyEmail = ({
       <Preview>Dropbox reset your password</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Img
-            src={`${baseUrl}/static/dropbox-logo.png`}
-            width="40"
-            height="33"
-            alt="Dropbox"
-          />
           <Section>
             <Text style={text}>Hi {userFirstname},</Text>
             <Text style={text}>
               Someone recently requested a password change for your Dropbox
               account. If this was you, you can set a new password here:
             </Text>
-            {/*
-            if not reset by you 
-            <Button style={button} href={resetPasswordLink}>
-              Reset password
-            </Button> */}
             <Text style={text}>
               If you don&apos;t want to change your password or didn&apos;t
               request this, just ignore and delete this message.
@@ -54,11 +41,12 @@ export const PasswordChangedSuccessfullyEmail = ({
             <Text style={text}>
               To keep your account secure, please don&apos;t forward this email
               to anyone. See our Help Center for{" "}
-              <Link style={anchor} href="https://dropbox.com">
+              <Link style={anchor} href={APPConf.BASE_URL}>
                 more security tips.
               </Link>
             </Text>
-            <Text style={text}>Happy Dropboxing!</Text>
+
+            <EmailFooter />
           </Section>
         </Container>
       </Body>
@@ -68,7 +56,7 @@ export const PasswordChangedSuccessfullyEmail = ({
 
 PasswordChangedSuccessfullyEmail.PreviewProps = {
   userFirstname: "Alan",
-  resetPasswordLink: "https://dropbox.com",
+  resetPasswordLink: "",
 } as PasswordChangedSuccessfullyEmailProps;
 
 export default PasswordChangedSuccessfullyEmail;
