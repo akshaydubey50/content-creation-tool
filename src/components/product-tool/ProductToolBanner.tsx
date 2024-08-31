@@ -127,7 +127,7 @@ export default function ProductToolBanner({
                 <Link
                   href={link}
                   target="_blank"
-                  className="w-full sm:w-auto hover:bg-white border border-DarkOrange flex rounded-md font-semibold bg-DarkOrange items-center justify-center text-sm lg:text-base px-4 py-2 space-x-2"
+                  className="w-full sm:w-auto hover:bg-white hover:text-DarkOrange border border-DarkOrange flex rounded-md font-semibold bg-DarkOrange items-center justify-center text-sm lg:text-base px-4 py-2 space-x-2"
                 >
                   <span>Visit Website</span>
                   <FiArrowUpRight className="text-xl" />

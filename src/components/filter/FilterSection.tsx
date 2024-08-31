@@ -286,8 +286,10 @@ export default function FilterSection() {
           <input
             className="rounded-xl  w-full  border-2 outline-none p-3 font-medium border-black border-solid"
             type="text"
-            placeholder="Search"
+            placeholder="Search By Product Name"
             onChange={handleSearch}
+            ref={searchRef}
+
           />
         </div>
         <div className="col-span-1">

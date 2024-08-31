@@ -103,8 +103,8 @@ export default function ContactUs() {
   return (
     <>
       <div className="max-w-7xl mx-auto px-6 md:px-8">
-        <div className="flex flex-col items-center space-y-4  pt-24 pb:4  lg:pb-8">
-          <h1 className="font-semibold text-2xl  xl:text-4xl ">Contact </h1>
+        <div className="flex flex-col md:items-center space-y-4  pt-24 pb:4  lg:pb-8">
+          <h1 className="font-semibold text-2xl  xl:text-4xl  ">Contact </h1>
           <p>We&apos;re here to help!</p>
         </div>
         <div className="flex flex-col md:flex-row  space-y-10 md:space-y-0 md:justify-center  md:items-center  md:space-x-18 lg:space-x-36   mt-6 lg:mt-10 lg:px-6 ">
