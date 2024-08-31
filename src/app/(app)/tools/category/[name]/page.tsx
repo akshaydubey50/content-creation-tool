@@ -29,6 +29,7 @@ import {
 } from "@/redux/slice/category/categorySlice";
 import { clearSearchFilterList } from "@/redux/slice/search/searchSlice";
 import { RootState, AppDispatch } from "@/redux/store";
+import NewsLetter from "@/components/newsletter";
 
 export default function ToolDetails() {
   const dispatch: AppDispatch = useDispatch();
@@ -79,17 +80,18 @@ export default function ToolDetails() {
   }, [pathName, productList, param.name, dispatch]);
 
 
-  
+
   useEffect(() => {
     setVisibleItem(9);
     categoryTypeHandler();
   }, [setVisibleItem, categoryTypeHandler]);
 
   return (
-    <>
+    <div className="mt-[40px] lg:mt-[60px]">
       <HeroSection />
       <FilterSection />
       <ProductList />
-    </>
+      <NewsLetter />
+    </div>
   );
 }

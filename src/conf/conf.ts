@@ -9,6 +9,15 @@ export const AirtableConf = {
 export const ResendConf = {
   API_KEY: String(process.env.RESEND_API_KEY),
   FROM: String(process.env.RESEND_FROM),
+  WELCOME_SUBJECT:
+    String(process.env.WELCOME_SUBJECT) ?? "Welcome to Content Creation FYI!",
+  FORGET_SUBJECT:
+    String(process.env.FORGET_SUBJECT) ??
+    "Reset Your Password for ContentCreation.fyi",
+  RESET_PASSWORD_SUBJECT: String(process.env.RESET_PASSWORD_SUBJECT),
+  VERIFICATION_CODE_SUBJECT:
+    String(process.env.VERIFICATION_CODE_SUBJECT) ??
+    "Your Verification Code is Here!",
 };
 
 export const MongodbConf = {

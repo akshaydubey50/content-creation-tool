@@ -13,7 +13,7 @@ export default function FAQ() {
   const schemaString = JSON.stringify({
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "Content Creation Fyi",
+    name: "Content Creation FYI",
     description:
       "Directory of 200+ content creation tools designed to streamline your process and enhance productivity.",
     url: "https://www.contentcreation.fyi/",

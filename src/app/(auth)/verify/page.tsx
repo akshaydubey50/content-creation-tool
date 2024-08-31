@@ -71,8 +71,8 @@ export default function InputOTPControlled() {
   }, [router]);
 
   return (
-    <section className="h-screen flex items-center justify-center bg-gray-100">
-      <Card className="mx-auto max-w-sm shadow-lg bg-white rounded-lg p-6">
+    <section className="w-full h-full flex items-center justify-center bg-white">
+      <Card className="mx-auto max-w-sm shadow-[0_8px_30px_rgb(0,0,0,0.12)] text-black bg-white">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">
             Verify Your Account

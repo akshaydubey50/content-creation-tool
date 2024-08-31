@@ -1,80 +1,199 @@
 import {
-  Html,
+  Body,
+  Container,
   Head,
-  Font,
-  Preview,
   Heading,
-  Row,
+  Hr,
+  Html,
+  Img,
+  Link,
+  Preview,
   Section,
   Text,
-  Button,
 } from "@react-email/components";
+import * as React from "react";
 
-interface VerificationEmailProps {
-  email: string;
-  otp: string;
-  isUrl: boolean;
+interface VerifyEmailProps {
+  verificationCode: string;
 }
 
-export default function VerificationEmail({
-  email,
-  otp,
-  isUrl = false,
-}: VerificationEmailProps) {
-  return (
-    <Html lang="en" dir="ltr">
-      <Head>
-        <title>Verification Code</title>
-        <Font
-          fontFamily="Roboto"
-          fallbackFontFamily="Verdana"
-          webFont={{
-            url: "https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2",
-            format: "woff2",
-          }}
-          fontWeight={400}
-          fontStyle="normal"
-        />
-      </Head>
-      <Preview>Here&apos;s your verification code: {otp}</Preview>
-      <Section>
-        <Row>
-          <Heading as="h2">
-            Hello
-            {/* {email}, */}
-          </Heading>
-        </Row>
-        <Row>
-          <Text>
-            Thank you for registering. Please use the following verification
-            code to complete your registration:
-          </Text>
-        </Row>
+const baseUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "";
 
-        <Row>
-          <Text>
-            If you did not request this code, please ignore this email.
-          </Text>
-        </Row>
-        {isUrl ? (
-          <Row>
-            <Button href={otp} style={{ color: "#61dafb" }}>
-              Verify here
-            </Button>
-          </Row>
-        ) : (
-          <Row>
-            <Text>{otp}</Text>
-          </Row>
-        )}
-        {isUrl && (
-          <Row>
-            <Text>Or you can copy paste this link in your browser</Text>
-            <br />
-            <Text>{otp}</Text>
-          </Row>
-        )}
-      </Section>
+export default function VerificationEmail({
+  verificationCode,
+}: VerifyEmailProps) {
+  return (
+
+
+      <Html>
+      <Head />
+      <Body style={main}>
+        <Container style={container}>
+      
+          <Section>
+            <Text style={text}>Hi there 👋,</Text>
+            <Text style={text}>
+              Thank you for choosing to sign up for Content Creation FYI!
+            </Text>
+            <Text style={textBold}>
+              To complete your account creation process, please enter the verification code when prompted.
+            </Text>
+            
+           <Section style={verificationSection}>
+                 <Text style={verifyText}>Verification code</Text>
+
+                 <Text style={codeText}>{verificationCode}</Text>
+                
+                 <Text style={validityText}>
+                   (This code is valid for 10 minutes)
+                 </Text>
+               </Section>
+            <Text style={text}>
+              Need help? Just reply to this email, and we&apos;ll assist you right away.
+            </Text>
+            <Text style={text}>
+              Welcome to the ContentCreation.fyi community — we&apos;re excited to have you on board!
+            </Text>
+            <Text style={footer}>
+              Stay creative!
+              <br />
+              Arpit Singh
+              <br />
+              CCF Team
+            </Text>
+            <Text style={footerCenter}>
+              © 2024 Content Creation FYI. All Rights Reserved.
+
+            </Text>
+          </Section>
+        </Container>
+      </Body>
     </Html>
   );
 }
+
+
+const h1 = {
+  color: "#333",
+  fontFamily:
+    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+  fontSize: "20px",
+  fontWeight: "bold",
+  marginBottom: "15px",
+};
+
+const link = {
+  color: "#2754C5",
+  fontFamily:
+    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+  fontSize: "14px",
+  textDecoration: "underline",
+};
+
+const text = {
+  color: "#333",
+  fontFamily:
+    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+  fontSize: "14px",
+   fontWeight:"400"
+};
+
+const imageSection = {
+  backgroundColor: "#252f3d",
+  display: "flex",
+  padding: "20px 0",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+const coverSection = { backgroundColor: "#fff" };
+
+const upperSection = { padding: "25px 0px" };
+
+const lowerSection = { padding: "25px 35px" };
+
+const footerText = {
+  ...text,
+  fontSize: "12px",
+  padding: "0 20px",
+};
+
+const verifyText = {
+  ...text,
+  margin: 0,
+  fontWeight: "bold",
+  textAlign: "center" as const,
+};
+
+const codeText = {
+  ...text,
+  fontWeight: "bold",
+  fontSize: "36px",
+  margin: "10px 0",
+  textAlign: "center" as const,
+};
+
+const validityText = {
+  ...text,
+  margin: "0px",
+  textAlign: "center" as const,
+};
+
+const verificationSection = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+const mainText = { ...text, marginBottom: "14px" };
+
+const cautionText = { ...text, margin: "0px" };
+
+const footer = {
+  color: "#8898aa",
+  fontSize: "16px",
+};
+
+const footerCenter ={
+  ...footer,
+  textAlign: "center" as const,
+}
+
+const main = {
+  backgroundColor: "#f6f9fc",
+  padding: "10px 0",
+};
+
+const container = {
+  backgroundColor: "#ffffff",
+  border: "1px solid #f0f0f0",
+  padding: "45px",
+};
+
+
+const textBold = {
+  ...text,
+  fontWeight: 700
+}
+
+
+const button = {
+  fontWeight: "700",
+  backgroundColor: "#FF8C00",
+  borderRadius: "4px",
+  color: "#fff",
+  fontFamily: "'Open Sans', 'Helvetica Neue', Arial",
+  fontSize: "15px",
+  textDecoration: "none",
+  textAlign: "center" as const,
+  display: "block",
+  width: "210px",
+  padding: "14px 7px",
+};
+
+const anchor = {
+  textDecoration: "underline",
+};
+

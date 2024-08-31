@@ -1,7 +1,7 @@
 export default interface AirtableModel {
   id: string;
   fields: {
-    Tags: string;
+    Tags: string[];
     Stage: string;
     Name: string;
     WebsiteLink: string;

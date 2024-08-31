@@ -31,11 +31,9 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const dispatch: AppDispatch = useDispatch();
   const { isUserAuthenticated } = useSelector((store: RootState) => store.user);
   const { data: session } = useSession();
-  // console.log('getAuthSession', getAuthSession)
   const { productList, isLoading } = useSelector(
     (state: RootState) => state.product
   );
-  // console.log("productList", productList, isLoading);
   const dropDownCategoryArr = useSelector(
     (store: RootState) => store.category.matchedCategory
   );
@@ -91,7 +89,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   );
 
   const filteredProductRecords = useMemo(() => {
-    setCurrentPage(currentPage);
+    // setCurrentPage(currentPage);
     let products: AirtableModel[] = [];
 
     // Existing filtering logic
@@ -104,6 +102,8 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     } else if (productSearchQuery.length > 0 && inputSearchFilterArr) {
       // Search input filtered product productList
       products = inputSearchFilterArr.length > 0 ? inputSearchFilterArr : [];
+      // setCurrentPage(1);
+
     } else if (matchedPrice.length > 0 && !id) {
       products = matchedPrice;
     } else if (session && isBookmark && bookmarkList) {
@@ -127,7 +127,6 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
     return productsWithUpvotes.sort((a, b) => b.totalLikes - a.totalLikes);
   }, [
-    currentPage,
     currentCategory,
     dropDownCategoryArr,
     id,
@@ -158,8 +157,10 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   }, [currentPage, filteredProductRecords, updateCurrentProducts]);
 
   useEffect(() => {
-    dispatch(fetchProductList());
-  }, [dispatch]);
+    if(productList?.length === 0){
+      dispatch(fetchProductList());
+    }
+  }, [productList,dispatch]);
 
   useEffect(() => {
     dispatch(getUpvoteList());
@@ -168,8 +169,28 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     }
   }, [dispatch, session]);
 
+  // IMP for pagination reset while searching product tool
+  useEffect(()=>{
+    if (productSearchQuery.length > 0){
+      handlePageChange(1)
+    }
+  }, [productSearchQuery.length])
+
+  const loaderArray = Array.from({ length: 12 }, (_, index) => index);
+
   if (isLoading) {
-    return <Loader />;
+    return ( 
+      <>
+        <main
+          className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
+                  lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0 justify-items-center"
+        >
+          {loaderArray.map((index) => (
+            <Loader key={index} />
+          ))}
+            </main>
+      </>
+    );
   }
 
   if (isBookmark && bookmarkList.length === 0) {
@@ -190,7 +211,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
            {productSearchQuery} </span></p>} */}
       <main
         className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
-                  lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0"
+                  lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0 justify-items-center"
       >
         {updateCurrentProducts().map((item: AirtableModel) => {
           if (

@@ -2,7 +2,7 @@ export type Product = {
   url: string;
   title: string;
   description: string;
-  tag: string;
+  tag: string[];
   link: string;
   id:string;
   verified?:boolean

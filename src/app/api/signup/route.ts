@@ -1,5 +1,6 @@
+import { ResendConf } from "@/conf/conf";
 import connectDB from "@/db/dbConnect";
-import { sendmail } from "@/lib/sendmail";
+import { EmailType, sendmail } from "@/lib/sendmail";
 import UserModel from "@/models/user/User.model";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
@@ -46,7 +47,15 @@ export async function POST(request: NextRequest) {
 
     //send email verification code
 
-    const emailResponse = await sendmail(email, verifyCode, false);
+    const emailResponse = await sendmail({
+      emailTo: user.email,
+      subject: ResendConf.VERIFICATION_CODE_SUBJECT,
+      emailType: EmailType.Verification,
+      verifyCode: verifyCode,
+      username: "",
+    });
+    console.error("Verification code email response ::: ", emailResponse);
+   
     if (!emailResponse.success) {
       return NextResponse.json(
         {
@@ -56,6 +65,12 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+    await sendmail({
+      emailTo: user.email,
+      subject: ResendConf.WELCOME_SUBJECT,
+      emailType: EmailType.Welcome,
+      username: "",
+    });
 
     return NextResponse.json(
       {

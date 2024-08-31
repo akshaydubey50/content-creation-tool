@@ -78,33 +78,26 @@ export default function ProductToolBanner({
 
   return (
     <>
-      <main className="bg-light-gray   p-10 md:px-10 md:py-16 md:mb-12  ">
-        <div className="max-w-7xl mx-auto">
+      <main className="bg-light-gray   p-10  md:py-16 md:mb-12  ">
+        <div className="max-w-7xl mx-auto pt-10">
           <Breadcrumb tag={tag} title={title} />
-          <div
-            className="affiliate-tool-container lg:space-x-8  xl:space-y-0 flex flex-col 
-        lg:flex-row my-12"
-          >
-            {/* Image Container */}
-            <div className="aftl-left-section   xl:w-45%">
-              <div
-                className="border border-black border-solid 
-          rounded-t-xl"
-              >
-                <Image
-                  src={url}
-                  alt="logo bannero"
-                  loading="lazy"
-                  width="1280"
-                  height="720"
-                  decoding="async"
-                  data-nimg="1"
-                  className="rounded-t-xl  h-full  object-cover"
-                />
-              </div>
-            </div>
-
-            <div className="aftl-right-section  xl:w-30%">
+          <div className="grid grid-cols-12 gap-8 my-4">
+          {/* image */}
+            <div className="col-span-12 lg:col-span-6 border border-black border-solid 
+          rounded-t-xl">
+              <Image
+                src={url}
+                alt="logo bannero"
+                loading="lazy"
+                width="1280"
+                height="720"
+                decoding="async"
+                data-nimg="1"
+                className="rounded-t-xl  h-full  object-cover"
+              />
+          </div>
+          {/* content */}
+            <div className="col-span-12  lg:col-span-6">
               <div className="flex flex-col flex-1 space-y-4  mb-6 sm:mt-4 lg:mt-0 ">
                 <div className="flex items-center  justify-between">
                   <div className="flex gap-2 items-center">
@@ -136,28 +129,10 @@ export default function ProductToolBanner({
                   {description}
                 </p>
               </div>
-              <div className="aftl-category   flex flex-1 text-xl space-x-4 ">
-                <div
-                  className=" rounded-lg bg-white border border-solid text-DarkOrange
-               border-DarkOrange text-center cursor-pointer hover:bg-DarkOrange hover:text-white hover:border-DarkOrange"
-                >
-                  <button
-                    className="text-sm px-6 py-2 md:px-10 md:py-2 font-bold w-fit"
-                    onClick={goToCategory}
-                  >
-                    {tag}
-                  </button>
-                </div>
-                <div
-                  className="rounded-lg  bg-white    text-DarkOrange border 
-               border-DarkOrange hover:bg-DarkOrange hover:text-white text-center"
-                >
-                  <button className="text-sm px-6 py-2 md:px-10 md:py-2 font-bold w-fit">
-                    Free
-                  </button>
-                </div>
-              </div>
-              <div className="flex justify-between pt-6 items-center text-white  max-w-lg">
+              <p className="text-lg mb-4">
+                <span className="font-semibold">Categories</span>: {tag.join(",")}
+              </p>
+              <div className="flex justify-start space-x-4 pt-6 items-center text-white  max-w-lg">
                 <div className="text-white text-2xl  hover:text-DarkOrange">
                   <Link
                     href={link}
@@ -170,9 +145,18 @@ export default function ProductToolBanner({
                     </div>
                   </Link>
                 </div>
+                <div
+                  className="rounded-lg  bg-white    text-DarkOrange border 
+               border-DarkOrange hover:bg-DarkOrange hover:text-white text-center"
+                >
+                  <button className="text-sm px-6 py-2 md:px-10 md:py-2 font-bold w-fit">
+                    Free
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+
+         </div>
         </div>
       </main>
     </>
