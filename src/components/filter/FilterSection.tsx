@@ -286,12 +286,14 @@ export default function FilterSection() {
           <input
             className="rounded-xl  w-full  border-2 outline-none p-3 font-medium border-black border-solid"
             type="text"
-            placeholder="Search"
+            placeholder="Search By Product Name"
             onChange={handleSearch}
+            ref={searchRef}
+
           />
         </div>
         <div className="col-span-1">
-          <div className="bg-DarkOrange  rounded-full  text-white  w-full ">
+          <div className="bg-DarkOrange  rounded-full   text-white  w-full ">
             {isMounted && (
               <SelectDropdown
                 key={categoryData}
@@ -301,6 +303,23 @@ export default function FilterSection() {
                 value={
                   categoryOptionsList.find(
                     (option) => option.value === categoryData
+                  ) || null
+                }
+              />
+            )}
+          </div>
+        </div>
+        <div className="col-span-1">
+          <div className=" bg-DarkOrange text-center   rounded-full    h-full">
+            {isMounted && (
+              <SelectDropdown
+                key={priceData}
+                placeholder="Pricing "
+                options={priceOptionList}
+                onChange={selectedPriceModel}
+                value={
+                  priceOptionList.find(
+                    (option) => option.value === priceData
                   ) || null
                 }
               />

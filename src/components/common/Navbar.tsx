@@ -27,10 +27,8 @@ export default function Navbar() {
   const menuItem: MenuItem[] = [
     { id: RoutePath.HomePage, label: "All Tools", href: RoutePath.HomePage },
     { id: RoutePath.Contact, label: "Contact", href: RoutePath.Contact },
-    // { id: RoutePath.About_US, label: "About Us", href: RoutePath.About_US },
     { id: RoutePath.SubmitTool, label: "Submit Tool", href: RoutePath.SubmitTool },
-    { id: RoutePath.Prompt, label: "Prompt", href: RoutePath.Prompt },
-    { id: RoutePath.Resources, label: "Resources", href: RoutePath.Resources },
+    // { id: RoutePath.About_US, label: "About Us", href: RoutePath.About_US },
 
   ];
 
@@ -70,7 +68,7 @@ export default function Navbar() {
         <div className="flex  max-w-7xl  mx-auto justify-between items-center  py-4 lg:px-2 lg:py-4">
           <div>
             <Link href="/">
-              <h2 className="text-Title-Large  font-bold">Content Creation FYI</h2>
+              <h2 className="text-Heading-Small  font-bold">Content Creation FYI</h2>
             </Link>
           </div>
           {/* menubar in large screen */}
@@ -151,7 +149,7 @@ export default function Navbar() {
         }`}
       >
         <div className="p-3 flex my-2">
-          <h2 className="text-Title-Larger font-bold">Content Creation</h2>
+          <h2 className="text-Heading-Small font-bold">Content Creation FYI</h2>
           <button
             title="close"
             onClick={crossHandler}
@@ -186,10 +184,26 @@ export default function Navbar() {
               </span>
             </li>
           )}
+          {!session && (
+            <li className="py-3 px-3 font-medium">
+              <span className="px-4 border-l-4 border-DarkOrange border-solid">
+                <button
+                  onClick={() => {
+                    crossHandler();
+                    handleSignup();
+                  }}
+                >
+                  Sign Up for $0
+                </button>
+              </span>
+            </li>
+          )}
           {session && (
             <li className="py-3 px-3 font-medium">
               <span className="px-4 border-l-4 border-DarkOrange border-solid">
-                <button onClick={handleSignout}>Logout</button>
+                <button
+                 onClick={handleSignout}
+                 >Logout</button>
               </span>
             </li>
           )}

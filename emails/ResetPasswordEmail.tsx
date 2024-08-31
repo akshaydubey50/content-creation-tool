@@ -4,22 +4,15 @@ import {
   Container,
   Head,
   Html,
-  Img,
-  Link,
-  Preview,
   Section,
   Text,
 } from "@react-email/components";
-import * as React from "react";
+import EmailFooter from "./EmailFooter";
 
 interface ResetPasswordEmailProps {
   userFirstname: string;
   resetPasswordLink: string;
 }
-
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
 
 export const ResetPasswordEmail = ({
   userFirstname,
@@ -32,37 +25,24 @@ export const ResetPasswordEmail = ({
         <Container style={container}>
           <Section>
             <Text style={text}>Hi {userFirstname} 👋,</Text>
-            <Text style={text}>
-              No worries—we’ve all been there. Let’s get you back on track!
-
-            </Text>
+            <Text style={text}>No worries — let’s get you back on track!</Text>
             <Text style={textBold}>
               Click the button below to reset your password:
             </Text>
             <Section style={buttonContainer}>
-
-            <Button style={button} href={resetPasswordLink}>
-              Reset My Password
-            </Button>
+              <Button style={button} href={resetPasswordLink}>
+                Reset My Password
+              </Button>
             </Section>
             <Text style={text}>
-              For your security, this link will expire in 10 minutes. 
+              For your security, this link will expire in 10 minutes.
             </Text>
             <Text style={text}>
-              Need help? Just reply to this email, and we’ll assist you right away.
+              Need help? Just reply to this email, and we’ll assist you right
+              away.
             </Text>
-            <Text style={footer}>
-              Stay creative!
-              <br />
-              Arpit Singh
-              <br />
-              CCF Team
-            </Text>
-          <Text style={footerCenter}>
-            © 2024 Content Creation FYI. All Rights Reserved.
-          </Text>
+            <EmailFooter />
           </Section>
-
         </Container>
       </Body>
     </Html>
@@ -90,19 +70,17 @@ const container = {
 const text = {
   fontSize: "14px",
   lineHeight: "24px",
-  margin:"16px 0px",
+  margin: "16px 0px",
   color: "#333",
   fontFamily:
     "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
   fontWeight: "400",
   // padding: "0px 35px"
-
 };
-const textBold={
+const textBold = {
   ...text,
-  fontWeight:700
-}
-
+  fontWeight: 700,
+};
 
 const button = {
   fontWeight: "700",
@@ -124,16 +102,15 @@ const anchor = {
 
 const footer = {
   color: "#8898aa",
-  fontSize: "16px",
+  fontSize: "14px",
 };
 
-
-const upperSection={padding:"25px 35px"}
-const buttonContainer={
-  textAlign: "center" as const,
+const upperSection = { padding: "25px 35px" };
+const buttonContainer = {
+  textAlign: "start" as const,
   margin: "20px 0",
-}
+};
 const footerCenter = {
   ...footer,
   textAlign: "center" as const,
-}
+};

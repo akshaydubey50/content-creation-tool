@@ -68,7 +68,6 @@ export default function Page() {
         const encryptedEmail = encryptData(values.email);
         sessionStorage.setItem("verificationEmail", encryptedEmail);
         router.push("/verify");
-        // router.push("/signin");
       }
       if (response.data.success === false) {
         setError(response.data.message);
@@ -226,13 +225,6 @@ export default function Page() {
                     </>
                   )}
                 </Button>
-                {/*  <Button
-                  variant="outline"
-                  className=" font-medium bg-slate-200 hover:bg-opacity-50 "
-                  onClick={() => signIn("google")}
-                >
-                  <Mail className="mr-2 h-4 w-4" /> Sign up with Google
-                </Button> */}
               </div>
             </form>
           </Form>

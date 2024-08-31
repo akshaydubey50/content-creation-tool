@@ -15,7 +15,7 @@ export default function NewsLetterModal() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsOpen(true);
-    }, 10000);
+    }, 30000);
 
     return () => clearTimeout(timer);
   }, []);

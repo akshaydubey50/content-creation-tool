@@ -14,7 +14,6 @@ import Loader from "../common/Loader/Loader";
 import { RootState, AppDispatch } from "@/redux/store";
 import Pagination from "../pagination/Pagination";
 import { useSession } from "next-auth/react";
-import { isProductUpvoted } from "@/helper/helper";
 
 interface ProductListProps {
   currentCategory?: string;
@@ -158,7 +157,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   useEffect(() => {
     if(productList?.length === 0){
-      dispatch(fetchProductList());
+    dispatch(fetchProductList());
     }
   }, [productList,dispatch]);
 
@@ -176,19 +175,12 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     }
   }, [productSearchQuery.length])
 
-  const loaderArray = Array.from({ length: 12 }, (_, index) => index);
 
   if (isLoading) {
     return ( 
       <>
-        <main
-          className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
-                  lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0 justify-items-center"
-        >
-          {loaderArray.map((index) => (
-            <Loader key={index} />
-          ))}
-            </main>
+       
+       <Loader />
       </>
     );
   }

@@ -1,52 +1,50 @@
+import { APPConf } from "@/conf/conf";
 import {
   Body,
   Button,
   Container,
   Head,
-  Hr,
   Html,
-  Img,
-  Preview,
   Section,
   Text,
 } from "@react-email/components";
-import * as React from "react";
+import EmailFooter from "./EmailFooter";
 
 interface OnboardingEmailProps {
   userFirstname: string;
 }
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
-
 export const OnboardingEmail = ({ userFirstname }: OnboardingEmailProps) => (
   <Html>
     <Head />
-   
+
     <Body style={main}>
       <Container style={container}>
-      
         <Text style={paragraph}>Hi {userFirstname} 👋,</Text>
-        <Text style={paragraph}>
-          Thanks for joining ContentCreation.fyi!
-        </Text>
+        <Text style={paragraph}>Thanks for joining ContentCreation.fyi!</Text>
         <Section style={btnContainer}>
           <Text style={paragraph}>
-            You&apos;ve just joined a community of creators, writers, marketers, and founders who are all about taking content creation to the next level.
+            You&apos;ve just joined a community of creators, writers, marketers,
+            and founders who are all about taking content creation to the next
+            level.
           </Text>
-          <Text style={paragraph}>
-            Here&apos;s what you can do now:
-          </Text>
+          <Text style={paragraph}>Here&apos;s what you can do now:</Text>
           <Text style={unOrderList}>
-            <span style={spanText}>Explore</span>: Dive into our directory of 200+ content creation tools.
-            <span style={spanText}>Filter</span>: Easily find tools based on category & pricing model.
-            <span style={spanText}>Bookmark</span>: Keep track of your favourite tools.
-            <span style={spanText}>Like</span>: Give a thumbs up to tools you love.
-            Go to the directory(button)
+            <span style={spanText}>Explore</span>: Dive into our directory of
+            200+ content creation tools.
+            <br />
+            <span style={spanText}>Filter</span>: Easily find tools based on
+            category & pricing model.
+            <br />
+            <span style={spanText}>Bookmark</span>: Keep track of your favourite
+            tools.
+            <br />
+            <span style={spanText}>Like</span>: Give a thumbs up to tools you
+            love. Go to the directory(button)
+            <br />
           </Text>
         </Section>
-        <Button style={button} href="https://getkoala.com">
+        <Button style={button} href={APPConf.BASE_URL}>
           Go to the directory
         </Button>
         <Text style={paragraph}>
@@ -54,12 +52,7 @@ export const OnboardingEmail = ({ userFirstname }: OnboardingEmailProps) => (
           <br />
           Just reply to this email—we&apos;re here for you.
         </Text>
-        <Text style={footer}>
-          Stay creative!
-          <br />
-          Arpit Singh
-          <br />
-        </Text>
+        <EmailFooter />
       </Container>
     </Body>
   </Html>
@@ -87,6 +80,7 @@ const logo = {
 };
 
 const paragraph = {
+  textAlign: "start" as const,
   fontSize: "16px",
   lineHeight: "26px",
 };
@@ -113,12 +107,13 @@ const hr = {
 
 const footer = {
   color: "#8898aa",
-  fontSize: "12px",
+  fontSize: "14px",
 };
 
 const spanText = {
   fontWeight: 700,
-}
+};
 const unOrderList = {
-  listStyleType: "disc"
-}
+  textAlign: "start" as const,
+  listStyleType: "disc",
+};
