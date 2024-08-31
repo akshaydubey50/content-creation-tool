@@ -189,6 +189,7 @@ export default function Navbar() {
               <span className="px-4 border-l-4 border-DarkOrange border-solid">
                 <button
                   onClick={() => {
+                    crossHandler();
                     handleSignup();
                   }}
                 >
@@ -200,7 +201,9 @@ export default function Navbar() {
           {session && (
             <li className="py-3 px-3 font-medium">
               <span className="px-4 border-l-4 border-DarkOrange border-solid">
-                <button onClick={handleSignout}>Logout</button>
+                <button
+                 onClick={handleSignout}
+                 >Logout</button>
               </span>
             </li>
           )}

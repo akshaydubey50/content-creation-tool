@@ -19,7 +19,7 @@ export default function NewsLetter() {
                     <div className="md:col-span-8 col-span-12">
                         <div className="flex flex-col gap-6 items-center md:items-start ">
                             <h3 className='font-semibold text-3xl text-center lg:text-start lg:text-4xl  text-white'>Subscribe to our newsletter</h3>
-                            <p className='text-white text-center'>Discover the best content creation tools, news, resources, memes, and jobs — sent to your inbox every Tuesday.</p>
+                            <p className='text-white text-center md:text-left'>Discover the best content creation tools, news, resources, memes, and jobs — sent to your inbox every Tuesday.</p>
                             <div className="">
                                 <iframe src="https://embeds.beehiiv.com/c8b47983-58f2-410d-9d69-f10d79908089?slim=true" data-test-id="beehiiv-embed" height="52" frameBorder="0" scrolling="no"
                                     className='bg-transparent m-0 rounded-none'
