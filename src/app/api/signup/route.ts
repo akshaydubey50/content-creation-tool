@@ -54,6 +54,8 @@ export async function POST(request: NextRequest) {
       verifyCode: verifyCode,
       username: "",
     });
+    console.error("Verification code email response ::: ", emailResponse);
+   
     if (!emailResponse.success) {
       return NextResponse.json(
         {

@@ -89,7 +89,7 @@ export async function sendmail({
     const resendSentMailResponse = await resend().emails.send({
       from: ResendConf.FROM,
       to: emailTo,
-      subject,
+      subject: subject,
       react: emailComponent,
     });
     console.log({ resendSentMailResponse });
