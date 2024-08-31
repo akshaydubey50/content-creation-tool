@@ -107,7 +107,7 @@ export default function ContactUs() {
           <h1 className="font-semibold text-2xl  xl:text-4xl  ">Contact </h1>
           <p>We&apos;re here to help!</p>
         </div>
-        <div className="flex flex-col md:flex-row  space-y-10 md:space-y-0 md:justify-center  md:items-center  md:space-x-18 lg:space-x-36   mt-6 lg:mt-10 lg:px-6 ">
+        <div className="flex flex-col md:flex-row  space-y-10 md:space-y-0 md:justify-center  md:items-center  md:space-x-18 lg:justify-between   mt-6 lg:mt-10 lg:px-6 ">
           <section >
             <div className="flex flex-col lg:items-start space-y-4 ">
               <p className="text-xl font-semibold">
