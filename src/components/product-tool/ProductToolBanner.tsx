@@ -78,7 +78,7 @@ export default function ProductToolBanner({
 
   return (
     <>
-      <main className="bg-light-gray   p-10  md:py-16 md:mb-12  ">
+      <main className="bg-light-gray   p-10  md:py-16 md:mb-12  overflow-x-hidden">
         <div className="max-w-7xl mx-auto pt-10">
           <Breadcrumb tag={tag} title={title} />
           <div className="grid grid-cols-12 gap-8 my-4">
@@ -101,7 +101,7 @@ export default function ProductToolBanner({
               <div className="flex flex-col flex-1 space-y-4  mb-6 sm:mt-4 lg:mt-0 ">
                 <div className="flex items-center  justify-between">
                   <div className="flex gap-2 items-center">
-                    <h1 className="text-Heading-Medium xl:text-Heading-Large font-bold">
+                    <h1 className="text-Title-Large xl:text-Heading-Large font-bold">
                       {title}
                     </h1>
                     {verified && (
@@ -125,12 +125,15 @@ export default function ProductToolBanner({
                     <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
                   )}
                 </div>
-                <p className="ml-0 text-Description xl:text-Description-Large">
+                <p className="ml-0 text-Title-Large xl:text-Description-Large">
                   {description}
                 </p>
               </div>
-              <p className="text-lg mb-4">
-                <span className="font-semibold">Categories</span>: {tag.join(",")}
+              <p className="mb-4 ">
+                <span className="text-Title-Large md:text-lg font-semibold">Categories</span> :  
+                <span className="">
+                  {` ${tag?.join(" , ")}`}
+                  </span>
               </p>
               <div className="flex justify-start space-x-4 pt-6 items-center text-white  max-w-lg">
                 <div className="text-white text-2xl  hover:text-DarkOrange">

@@ -34,7 +34,7 @@ export default function FAQ() {
         {schemaString}
       </Script>
       <section className="lg:mx-auto rounded-xl max-w-6xl py-5 mx-10 lg:px-16 bg-white-200 my-10">
-        <h2 className="text-center font-semibold text-4xl my-4">
+        <h2 className="text-center font-semibold text-2xl lg:text-4xl my-4">
           Frequently Ask Questions
         </h2>
         <Accordion type="single" collapsible className="w-full ">
@@ -44,16 +44,16 @@ export default function FAQ() {
               value={item.value}
               className="py-2 cursor-pointer"
             >
-              <AccordionTrigger className="hover:no-underline text-lg font-semibold text-left ">
+              <AccordionTrigger className="hover:no-underline  text-base lg:text-lg font-semibold text-left ">
                 {item.title}
               </AccordionTrigger>
               {!item.categories && (
-                <AccordionContent className="text-base font-medium text-gray-600">
+                <AccordionContent className="text-sm lg:text-base font-medium text-gray-600">
                   {item.content}
                 </AccordionContent>
               )}
               {item.categories && (
-                <AccordionContent className="text-base font-medium text-gray-600">
+                <AccordionContent className="text-sm lg:text-base font-medium text-gray-600">
                   {item.content}
                   <ul className="list-disc pl-6">
                     {item.categories.map((list, index) => (

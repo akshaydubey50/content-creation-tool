@@ -5,6 +5,7 @@ interface PaginationProps {
   totalItems: number;
   onPageChange: (page: number) => void;
 }
+import { MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight, MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 import { SkipForward, ChevronRight, SkipBack, ChevronLeft } from "lucide-react";
 
@@ -49,39 +50,37 @@ function Pagination({
   }, [currentPage]);
 
   return (
-    <div className="flex flex-row justify-center items-center my-6 gap-6 py-5 px-10 lg:px-8 2xl:px-0">
+    <div className="flex flex-row justify-center items-center my-6 gap-6  px-10 lg:px-8 2xl:px-0 ">
       <button
-        className={`hidden md:block px-4 py-2   rounded-md shadow-lg ${
+        className={`hidden md:inline-block px-4 py-2   rounded-md shadow-lg border border-DarkOrange  ${
           isFirstPage ? "cursor-not-allowed" : "cursor-pointer font-semibold"
         }  ${
           isFirstPage
-            ? "bg-white text-DarkOrange border border-DarkOrange "
+            ? "bg-white text-DarkOrange "
             : "bg-DarkOrange text-white"
         }  `}
         disabled={isFirstPage}
         onClick={() => handlePageChange(1)}
       >
         <span className="text-xl">
-          <SkipBack />
+          <MdKeyboardDoubleArrowLeft />
         </span>
       </button>
 
       <button
-        className={`px-4 py-2  rounded-md  shadow-lg ${
-          isFirstPage ? "cursor-not-allowed" : "cursor-pointer font-semibold"
-        }  ${
-          isFirstPage
-            ? "bg-white text-DarkOrange border border-DarkOrange"
+        className={` px-4 py-2   rounded-md shadow-lg border border-DarkOrange ${isFirstPage ? "cursor-not-allowed" : "cursor-pointer font-semibold"
+          }  ${isFirstPage
+            ? "bg-white text-DarkOrange  "
             : "bg-DarkOrange text-white"
-        }  `}
+          }  `}
         disabled={isFirstPage}
         onClick={() => handlePageChange(currentPage - 1)}
       >
-        <span className="flex items-center space-x-1">
-          <ChevronLeft />
-          <span>Previous</span>
+        <span className="text-xl">
+          <MdKeyboardArrowLeft />
         </span>
       </button>
+
 
       <div className="">
         <div className="flex space-x-2 items-center text-slate-600">
@@ -96,34 +95,33 @@ function Pagination({
           <p className="text-slate-600">{totalPages}</p>
         </div>
       </div>
+      
       <button
-        className={`px-4 py-2  rounded-md  shadow-lg ${
-          isLastPage ? "cursor-not-allowed" : "cursor-pointer font-semibold"
-        }  ${
-          isLastPage
-            ? "bg-white text-DarkOrange border border-DarkOrange"
+        className={` px-4 py-2   rounded-md shadow-lg border border-DarkOrange ${isLastPage ? "cursor-not-allowed" : "cursor-pointer font-semibold"
+          }  ${isLastPage
+            ? "bg-white text-DarkOrange  "
             : "bg-DarkOrange text-white"
-        }  `}
+          }  `}
         disabled={isLastPage}
         onClick={() => handlePageChange(currentPage + 1)}
       >
-        <span className="flex items-center space-x-1">
-          <span>Next</span>
-          <ChevronRight />
+        <span className="text-xl">
+          <MdKeyboardArrowRight />
         </span>
       </button>
+
       <button
-        className={`hidden md:block rounded px-4 py-2  shadow-lg ${
-          isLastPage ? "cursor-not-allowed" : "cursor-pointer font-semibold"
-        }  ${
-          isLastPage
-            ? "bg-white text-DarkOrange border border-DarkOrange"
+        className={`hidden md:inline-block px-4 py-2   rounded-md shadow-lg border border-DarkOrange  ${isLastPage ? "cursor-not-allowed" : "cursor-pointer font-semibold"
+          }  ${isLastPage
+            ? "bg-white text-DarkOrange "
             : "bg-DarkOrange text-white"
-        } `}
+          }  `}
         disabled={isLastPage}
         onClick={() => handlePageChange(totalPages)}
       >
-        <SkipForward />
+        <span className="text-xl">
+          <MdKeyboardDoubleArrowRight />
+        </span>
       </button>
     </div>
   );
