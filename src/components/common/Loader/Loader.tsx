@@ -23,7 +23,7 @@ export default function Loader() {
 function ShimmerCard(){
   return (
     <>
-      <Card className="w-[350px] overflow-hidden">
+      <Card className="min-[370px]:w-[300px] w-[350px] overflow-hidden">
         <div className="relative">
           <Skeleton className="w-full h-[200px] rounded-t-lg animate-pulse bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-[length:400%_100%] animate-shimmer" />
         </div>

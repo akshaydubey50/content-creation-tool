@@ -16,21 +16,19 @@ export default function ProductDetail() {
   const currentCategory = product && product!.fields.Tags[0];
   const params = useParams();
   const slug = params;
-  console.log("slug", slug)
   const getProductFromId = useCallback(() => {
     const productMatched = productList!.find((product: AirtableModel) => {
       const formattedTitle = product?.fields?.Name?.toLowerCase()?.trim()?.replace(/\s/g, "-");
       return formattedTitle === slug?.id;
     });
 
-    console.log("productMatched", productMatched)
     if (productMatched) {
       setProductData(productMatched);
     }
   }, [slug?.id, productList]);
 
   useEffect(() => {
-    setVisibleItem(9);
+    setVisibleItem(12);
 
     if (!product) {
       getProductFromId();
@@ -40,6 +38,7 @@ export default function ProductDetail() {
   return (
     <>
       {product && (
+        <>
         <ProductToolBanner
           url={product!.fields.ToolImage}
           title={product!.fields.Name}
@@ -49,18 +48,16 @@ export default function ProductDetail() {
           id={product!.id}
           verified={product!.fields.Verified}
         />
-      )}
-      {product && (
-        <>
+     
         <div className="px-4">
           <h1 className="text-xl md:text-3xl lg:text-4xl text-center  my-6 md:my-8 w-full font-bold">
             Similar{" "}
             <span className="text-DarkOrange">{product!.fields.Tags}</span> Tools
           </h1>
         </div>
-          <ProductList currentCategory={currentCategory} />
         </>
       )}
+      <ProductList currentCategory={currentCategory} />
     </>
   );
 }
