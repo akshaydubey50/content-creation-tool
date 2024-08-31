@@ -71,7 +71,7 @@ export default function Page() {
   };
 
   return (
-    <section className="w-full h-full flex items-center justify-center bg-white">
+    <section className="w-full flex items-center justify-center min-h-[calc(100vh-4rem)] py-8">
       <Card className="mx-auto max-w-sm shadow-[0_8px_30px_rgb(0,0,0,0.12)] text-black bg-white">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
