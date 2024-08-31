@@ -105,9 +105,9 @@ export default function ContactUs() {
         <h1 className="font-semibold text-2xl  xl:text-4xl ">Contact </h1>
         <p>We&apos;re here to help!</p>
       </div>
-      <div className="grid lg:grid-cols-2 gap-10 mx-auto max-w-7xl mt-6 lg:mt-10 lg:px-6 place-content-baseline">
-        <section className=" px-8 ">
-          <div className="flex flex-col space-y-4 ">
+      <div className="grid md:grid-cols-2 gap-10 mx-auto max-w-7xl mt-6 lg:mt-10 lg:px-6 justify-items-center">
+        <section className="px-8">
+          <div className="flex flex-col lg:items-start space-y-4 ">
             <p className="text-xl font-semibold">
               {" "}
               Get in Touch with the CCF Team
@@ -161,8 +161,8 @@ export default function ContactUs() {
             </p>
           </div>
         </section>
-        <section className=" px-4 lg:px-0 ">
-          <Card className=" py-6 ">
+        <section className="px-4 lg:px-0">
+          <Card className="py-6">
             <CardContent>
               <Form {...form}>
                 <form
