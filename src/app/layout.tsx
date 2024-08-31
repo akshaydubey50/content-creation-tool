@@ -8,7 +8,6 @@ import Providers from "@/providers/Providers";
 import Authprovider from "./Authprovider";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Toaster } from "@/components/ui/toaster";
-import NewsLetter from "@/components/newsletter";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -37,17 +36,17 @@ export default function RootLayout({
           href="https://embeds.beehiiv.com/c8b47983-58f2-410d-9d69-f10d79908089?slim=true"
           as="document"
         />
-          <GoogleAnalytics gaId="GTM-P65VN64G" />
-       
+        <GoogleAnalytics gaId="GTM-P65VN64G" />
       </head>
       <body className="font-poppins flex flex-col min-h-screen ">
         <Authprovider>
           <Providers>
-        <Toaster />
+            <Toaster />
             <Navbar />
             <main className="flex-grow flex items-center justify-center">
-              {children}</main>
-             <Footer />
+              {children}
+            </main>
+            <Footer />
           </Providers>
         </Authprovider>
         <SpeedInsights />

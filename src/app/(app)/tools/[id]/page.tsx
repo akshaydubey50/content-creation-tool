@@ -8,6 +8,12 @@ import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
+export const metadata = {
+  title: "Content Creation Tools",
+  description:
+    "Directory of 200+ content creation tools designed to streamline your process and enhance productivity.",
+};
+
 export default function ProductDetail() {
   const id = useSearchParams().get("id");
   const { productList } = useSelector((state: RootState) => state.product);
@@ -16,14 +22,17 @@ export default function ProductDetail() {
   const currentCategory = product && product!.fields.Tags[0];
   const params = useParams();
   const slug = params;
-  console.log("slug", slug)
+  console.log("slug", slug);
+
   const getProductFromId = useCallback(() => {
     const productMatched = productList!.find((product: AirtableModel) => {
-      const formattedTitle = product?.fields?.Name?.toLowerCase()?.trim()?.replace(/\s/g, "-");
+      const formattedTitle = product?.fields?.Name?.toLowerCase()
+        ?.trim()
+        ?.replace(/\s/g, "-");
       return formattedTitle === slug?.id;
     });
 
-    console.log("productMatched", productMatched)
+    console.log("productMatched", productMatched);
     if (productMatched) {
       setProductData(productMatched);
     }
@@ -52,12 +61,13 @@ export default function ProductDetail() {
       )}
       {product && (
         <>
-        <div className="px-4">
-          <h1 className="text-xl md:text-3xl lg:text-4xl text-center  my-6 md:my-8 w-full font-bold">
-            Similar{" "}
-            <span className="text-DarkOrange">{product!.fields.Tags}</span> Tools
-          </h1>
-        </div>
+          <div className="px-4">
+            <h1 className="text-xl md:text-3xl lg:text-4xl text-center  my-6 md:my-8 w-full font-bold">
+              Similar{" "}
+              <span className="text-DarkOrange">{product!.fields.Tags}</span>{" "}
+              Tools
+            </h1>
+          </div>
           <ProductList currentCategory={currentCategory} />
         </>
       )}

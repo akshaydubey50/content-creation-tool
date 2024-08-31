@@ -4,6 +4,9 @@ export const AirtableConf = {
   TABLE_ID: String(process.env.TABLE_ID),
   BASE_URL: String(process.env.AIRTABLE_BASE_URI),
   SUBMIT_TOOL_URI: String(process.env.AIRTABLE_SUBMIT_TOOL_URI),
+  CONTACT_FORM_TABLE_ID: String(process.env.CONTACT_FORM_TABLE_ID),
+  CONTACT_FORM_BASE_ID: String(process.env.CONTACT_FORM_TABLE_BASE_ID),
+  CONTACT_FORM_BEARER_TOKEN: String(process.env.CONTACT_FORM_BEARER_TOKEN),
 };
 
 export const ResendConf = {

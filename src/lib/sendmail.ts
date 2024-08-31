@@ -1,9 +1,9 @@
 import { ResendConf } from "@/conf/conf";
 import { resend } from "@/helper/resend";
-import ResetPasswordEmail from "../../email/ResetPasswordEmail";
-import PasswordChangedSuccessfullyEmail from "../../email/PasswordChangedSuccessfullyEmail";
-import VerificationEmail from "../../email/VerificationEmail";
-import OnboardingEmail from "../../email/OnboardingEmail";
+import ResetPasswordEmail from "../../emails/ResetPasswordEmail";
+import PasswordChangedSuccessfullyEmail from "../../emails/PasswordChangedSuccessfullyEmail";
+import VerificationEmail from "../../emails/VerificationEmail";
+import OnboardingEmail from "../../emails/OnboardingEmail";
 
 interface Response {
   success: boolean;
