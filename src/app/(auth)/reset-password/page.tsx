@@ -71,7 +71,7 @@ export default function VerifyPassword() {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen space-y-4 w-fit mx-auto">
-      <Card className="w-full max-w-sm p-6 shadow-lg bg-white rounded-lg">
+      <Card className="w-full max-w-sm  shadow-lg bg-white rounded-lg">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">
             Reset Your Password
