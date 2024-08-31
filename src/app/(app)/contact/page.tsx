@@ -87,6 +87,7 @@ export default function ContactUs() {
       });
     } finally {
       setIsLoading(false);
+      form.reset();
     }
   };
 

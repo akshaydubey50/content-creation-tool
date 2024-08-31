@@ -146,7 +146,7 @@ export function ProductCard(props: any) {
           <section className="border-b border-black border-solid">
             <Image
               src={ToolImage}
-              alt="logo banner"
+              alt={formattedTitle}
               loading="lazy"
               width="1280"
               height="720"
