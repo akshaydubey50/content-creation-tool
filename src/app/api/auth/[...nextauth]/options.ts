@@ -2,9 +2,9 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 // import connectToDB from "@/lib/dbConnect";
 // import UserModel from "@/model/User";
-import bcrypt from "bcryptjs";
 import connectDB from "@/db/dbConnect";
 import UserModel from "@/models/user/User.model";
+import bcrypt from "bcryptjs";
 import GoogleProvider from "next-auth/providers/google";
 
 const authOptions: NextAuthOptions = {
@@ -45,7 +45,7 @@ const authOptions: NextAuthOptions = {
           } */
           const isPasswordCorrect = await bcrypt.compare(
             credentials.password,
-            user.password
+            user.password,
           );
           if (isPasswordCorrect) {
             return user;
@@ -67,12 +67,37 @@ const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET!,
   callbacks: {
+    async signIn({ user, account }) {
+      await connectDB();
+      try {
+        if (account?.provider === "google") {
+          const existingUser = await UserModel.findOne({ email: user.email });
+          if (!existingUser) {
+            const newUser = new UserModel({
+              email: user.email,
+              isVerified: true,
+              // name: user.name,
+              // Add any other fields you want to save for Google users
+            });
+            await newUser.save();
+            // user._id = newUser._id;
+            user._id = newUser._id.toString();
+          } else {
+            user._id = existingUser._id.toString();
+          }
+        }
+
+        return true;
+      } catch (error) {
+        console.error("Erorr while creating user signIn with google", error);
+        return false;
+      }
+    },
     async jwt({ token, user }) {
       if (user) {
-        token._id = user._id?.toString(); // Convert ObjectId to string
+        token._id = user._id?.toString();
         token.email = user.email;
-        /*    token.isAcceptingMessage = user.isAcceptingMessage;
-        token.username = user.username; */
+        // token.name = user.name;
       }
       return token;
     },
@@ -80,8 +105,7 @@ const authOptions: NextAuthOptions = {
       if (token) {
         session.user._id = token._id;
         session.user.email = token.email;
-        /* session.user.isAcceptingMessages = token.isAcceptingMessage;
-        session.user.username = token.username; */
+        // session.user.name = token.name;
       }
       return session;
     },

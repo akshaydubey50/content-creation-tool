@@ -12,7 +12,7 @@ import {
 export default function NewsLetter() {
   return (
     <>
-      <Card className="p-6 border-0">
+      <Card className="max-w-7xl  mx-auto   my-8 border-0 p-2">
         <CardContent
           className="bg-DarkOrange grid grid-cols-12 gap-y-6  
                   lg:gap-10  justify-items-center items-center rounded-xl shadow-2xl  py-10 md:px-8 max-w-6xl  mx-auto  lg:px-16"

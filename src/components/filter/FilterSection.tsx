@@ -55,13 +55,14 @@ export default function FilterSection() {
   const { setVisibleItem } = useVisibleItemContextData();
 
   /*Search Functionality*/
-  const handleSearch = () => {
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // console.log("searchRef", searchRef.current?.value);
     router.push("/");
     dispatch(clearMatchedPrice());
     dispatch(clearPriceData());
     dispatch(clearCategoryData());
     dispatch(clearMatchedCategory());
-    const newSearch = searchRef.current!.value.toLowerCase();
+    const newSearch = event.target.value.toLowerCase();
     dispatch(setSearchQuery(newSearch));
 
     /* Filter data based on the updated search query */
@@ -137,7 +138,7 @@ export default function FilterSection() {
     dispatch(clearMatchedPrice());
     dispatch(clearPriceData());
 
-    if (searchRef.current!.value) {
+    if (searchRef.current?.value) {
       searchRef.current!.value = "";
       searchRef.current!.innerText = "";
     }
@@ -274,7 +275,7 @@ export default function FilterSection() {
               onChange={handleSearch}
               className="rounded-xl  w-full  border-2 outline-none px-4 py-2 font-medium border-black border-solid"
               type="text"
-              placeholder="Search By Tool Name"
+              placeholder="Search By Product Name"
             />
           </div>
         </div>
@@ -286,8 +287,9 @@ export default function FilterSection() {
           <input
             className="rounded-xl  w-full  border-2 outline-none p-3 font-medium border-black border-solid"
             type="text"
-            placeholder="Search"
+            placeholder="Search By Product Name"
             onChange={handleSearch}
+            ref={searchRef}
           />
         </div>
         <div className="col-span-1">
