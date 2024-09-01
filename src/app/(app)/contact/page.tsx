@@ -86,6 +86,7 @@ export default function ContactUs() {
         description: error,
       });
     } finally {
+      form.reset();
       setIsLoading(false);
     }
   };
@@ -162,7 +163,7 @@ export default function ContactUs() {
               </p>
             </div>
           </section>
-          <section>
+          <section className="flex-1">
             <Card className="py-6">
               <CardContent>
                 <Form {...form}>
