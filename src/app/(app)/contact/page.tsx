@@ -86,7 +86,7 @@ export default function ContactUs() {
         description: error,
       });
     } finally {
-      form.reset()
+      form.reset();
       setIsLoading(false);
     }
   };
@@ -108,7 +108,7 @@ export default function ContactUs() {
           <p>We&apos;re here to help!</p>
         </div>
         <div className="flex flex-col lg:flex-row  space-y-10 lg:space-y-0 lg:justify-center  lg:items-start  lg:space-x-20    mt-6 lg:mt-10 lg:px-6 ">
-          <section >
+          <section>
             <div className="flex flex-col lg:items-start space-y-4 ">
               <p className="text-xl font-semibold">
                 {" "}
@@ -185,7 +185,7 @@ export default function ContactUs() {
                                 "border-gray-500",
                                 "transition-all duration-200 ease-in-out",
                                 form.formState.errors.name &&
-                                "border-red-500 focus-visible:ring-red-500 input-error"
+                                  "border-red-500 focus-visible:ring-red-500 input-error"
                               )}
                             />
                           </FormControl>
@@ -208,7 +208,7 @@ export default function ContactUs() {
                                 "border-gray-500",
                                 "transition-all duration-200 ease-in-out",
                                 form.formState.errors.email &&
-                                "border-red-500 focus-visible:ring-red-500 input-error"
+                                  "border-red-500 focus-visible:ring-red-500 input-error"
                               )}
                             />
                           </FormControl>
@@ -261,7 +261,7 @@ export default function ContactUs() {
                                 "border-gray-500",
                                 "transition-all duration-200 ease-in-out",
                                 form.formState.errors.description &&
-                                "border-red-500 focus-visible:ring-red-500 input-error"
+                                  "border-red-500 focus-visible:ring-red-500 input-error"
                               )}
                             />
                           </FormControl>
