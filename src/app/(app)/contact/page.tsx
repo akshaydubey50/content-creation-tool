@@ -101,195 +101,197 @@ export default function ContactUs() {
   ];
   return (
     <>
-      <div className="flex flex-col items-center space-y-4  pt-24 pb:4  lg:pb-8">
-        <h1 className="font-semibold text-2xl  xl:text-4xl ">Contact </h1>
-        <p>We&apos;re here to help!</p>
-      </div>
-      <div className="grid lg:grid-cols-2 gap-10 mx-auto max-w-7xl mt-6 lg:mt-10 lg:px-6 place-content-baseline">
-        <section className=" px-8 ">
-          <div className="flex flex-col space-y-4 ">
-            <p className="text-xl font-semibold">
-              {" "}
-              Get in Touch with the CCF Team
-            </p>
+      <div className="max-w-7xl mx-auto px-6 md:px-8">
+        <div className="flex flex-col lg:items-center space-y-4  pt-24 pb:4  lg:pb-8">
+          <h1 className="font-semibold text-2xl  xl:text-4xl  ">Contact </h1>
+          <p>We&apos;re here to help!</p>
+        </div>
+        <div className="flex flex-col lg:flex-row  space-y-10 lg:space-y-0 lg:justify-center  lg:items-start  lg:space-x-20    mt-6 lg:mt-10 lg:px-6 ">
+          <section>
+            <div className="flex flex-col lg:items-start space-y-4 ">
+              <p className="text-xl font-semibold">
+                {" "}
+                Get in Touch with the CCF Team
+              </p>
 
-            <p>
-              Got a question, feedback, or just want to say hello? We&apos;re
-              all ears!
-            </p>
-            <p>
-              Drop us a message, and we&apos;ll get back to you as quickly as
-              possible.
-            </p>
-            <p>
-              Your insights help us shape a better experience for the
-              community..
-            </p>
-            <p>Don&apos;t hesitate—get in touch!</p>
+              <p>
+                Got a question, feedback, or just want to say hello? We&apos;re
+                all ears!
+              </p>
+              <p>
+                Drop us a message, and we&apos;ll get back to you as quickly as
+                possible.
+              </p>
+              <p>
+                Your insights help us shape a better experience for the
+                community..
+              </p>
+              <p>Don&apos;t hesitate—get in touch!</p>
 
-            <p className="flex  items-center gap-2">
-              <span>
-                <Mail className="w-4 h-4" />
-              </span>
-              <span>
-                <Link href={"mailto:contentcreation.fyi@gmail.com"}>
-                  contentcreation.fyi@gmail.com
-                </Link>
-              </span>
-            </p>
+              <p className="flex  items-center gap-2">
+                <span>
+                  <Mail className="w-4 h-4" />
+                </span>
+                <span>
+                  <Link href={"mailto:contentcreation.fyi@gmail.com"}>
+                    contentcreation.fyi@gmail.com
+                  </Link>
+                </span>
+              </p>
 
-            <p className="flex  items-center gap-2">
-              <span>
-                <MapPin className="w-4 h-4" />
-              </span>
-              <span>Mumbai, India</span>
-            </p>
-            <p className="flex items-center gap-2">
-              <span className="cursor-pointer">
-                <Link
-                  href="https://www.linkedin.com/in/digiarpit/"
-                  target="_blank"
-                >
-                  <FaLinkedin className="text-3xl" />
-                </Link>
-              </span>
-              <span className="cursor-pointer">
-                <Link href="https://x.com/digiarpit" target="_blank">
-                  <RiTwitterFill className="text-3xl" />
-                </Link>
-              </span>
-            </p>
-          </div>
-        </section>
-        <section className=" px-4 lg:px-0 ">
-          <Card className=" py-6 ">
-            <CardContent>
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-6"
-                >
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input
-                            type="text"
-                            placeholder="Full Name"
-                            {...field}
-                            className={cn(
-                              "border-gray-500",
-                              "transition-all duration-200 ease-in-out",
-                              form.formState.errors.name &&
-                                "border-red-500 focus-visible:ring-red-500 input-error"
-                            )}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-500 font-medium text-sm transition-all duration-200 ease-in-out" />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input
-                            type="email"
-                            placeholder="Email"
-                            {...field}
-                            className={cn(
-                              "border-gray-500",
-                              "transition-all duration-200 ease-in-out",
-                              form.formState.errors.email &&
-                                "border-red-500 focus-visible:ring-red-500 input-error"
-                            )}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-500 font-medium text-sm transition-all duration-200 ease-in-out" />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="message"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            value={field.value}
-                          >
-                            <SelectTrigger className="border-gray-500">
-                              <SelectValue placeholder="Reason for contacting" />
-                            </SelectTrigger>
-                            <SelectContent className="bg-gray-100 cursor-pointer">
-                              {messages.map((msg) => (
-                                <SelectItem
-                                  key={msg.value}
-                                  value={msg.value}
-                                  className="hover:bg-orange-200 cursor-pointer"
-                                >
-                                  {msg.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage className="text-red-500 font-medium text-sm transition-all duration-200 ease-in-out" />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Message"
-                            {...field}
-                            className={cn(
-                              "border-gray-500",
-                              "transition-all duration-200 ease-in-out",
-                              form.formState.errors.description &&
-                                "border-red-500 focus-visible:ring-red-500 input-error"
-                            )}
-                          />
-                        </FormControl>
-
-                        <FormMessage className="text-red-500 font-medium text-sm transition-all duration-300 ease-in-out" />
-                      </FormItem>
-                    )}
-                  />
-                  <div className="flex justify-start">
-                    <Button
-                      type="submit"
-                      variant="outline"
-                      className=" text-white font-medium border w-full border-black bg-black hover:bg-white hover:text-black"
-                    >
-                      {isLoading ? (
-                        <>
-                          <Loader2 className="animate-spin mr-2" /> Submitting
-                        </>
-                      ) : (
-                        <>Submit</>
+              <p className="flex  items-center gap-2">
+                <span>
+                  <MapPin className="w-4 h-4" />
+                </span>
+                <span>Mumbai, India</span>
+              </p>
+              <p className="flex items-center gap-2">
+                <span className="cursor-pointer">
+                  <Link
+                    href="https://www.linkedin.com/in/digiarpit/"
+                    target="_blank"
+                  >
+                    <FaLinkedin className="text-3xl" />
+                  </Link>
+                </span>
+                <span className="cursor-pointer">
+                  <Link href="https://x.com/digiarpit" target="_blank">
+                    <RiTwitterFill className="text-3xl" />
+                  </Link>
+                </span>
+              </p>
+            </div>
+          </section>
+          <section>
+            <Card className="py-6">
+              <CardContent>
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-6"
+                  >
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              type="text"
+                              placeholder="Full Name"
+                              {...field}
+                              className={cn(
+                                "border-gray-500",
+                                "transition-all duration-200 ease-in-out",
+                                form.formState.errors.name &&
+                                  "border-red-500 focus-visible:ring-red-500 input-error"
+                              )}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-red-500 font-medium text-sm transition-all duration-200 ease-in-out" />
+                        </FormItem>
                       )}
-                    </Button>
-                  </div>
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
-        </section>
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              type="email"
+                              placeholder="Email"
+                              {...field}
+                              className={cn(
+                                "border-gray-500",
+                                "transition-all duration-200 ease-in-out",
+                                form.formState.errors.email &&
+                                  "border-red-500 focus-visible:ring-red-500 input-error"
+                              )}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-red-500 font-medium text-sm transition-all duration-200 ease-in-out" />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="message"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value}
+                            >
+                              <SelectTrigger className="border-gray-500">
+                                <SelectValue placeholder="Reason for contacting" />
+                              </SelectTrigger>
+                              <SelectContent className="bg-gray-100 cursor-pointer">
+                                {messages.map((msg) => (
+                                  <SelectItem
+                                    key={msg.value}
+                                    value={msg.value}
+                                    className="hover:bg-orange-200 cursor-pointer"
+                                  >
+                                    {msg.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage className="text-red-500 font-medium text-sm transition-all duration-200 ease-in-out" />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="description"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Message"
+                              {...field}
+                              className={cn(
+                                "border-gray-500",
+                                "transition-all duration-200 ease-in-out",
+                                form.formState.errors.description &&
+                                  "border-red-500 focus-visible:ring-red-500 input-error"
+                              )}
+                            />
+                          </FormControl>
+
+                          <FormMessage className="text-red-500 font-medium text-sm transition-all duration-300 ease-in-out" />
+                        </FormItem>
+                      )}
+                    />
+                    <div className="flex justify-start">
+                      <Button
+                        type="submit"
+                        variant="outline"
+                        className=" text-white font-medium border w-full border-black bg-black hover:bg-white hover:text-black"
+                      >
+                        {isLoading ? (
+                          <>
+                            <Loader2 className="animate-spin mr-2" /> Submitting
+                          </>
+                        ) : (
+                          <>Submit</>
+                        )}
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
+              </CardContent>
+            </Card>
+          </section>
+        </div>
+        <NewsLetter />
       </div>
-      <NewsLetter />
     </>
   );
 }
