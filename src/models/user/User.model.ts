@@ -17,14 +17,15 @@ const UserSchema: Schema<User> = new Schema({
   },
   password: {
     type: String,
-    required: [true, "Password is required"],
+    // required: [true, "Password is required"],
   },
   forgetPasswordToken: {
     type: String,
-    default: "",
+    default: undefined,
   },
   forgetPasswordTokenExpiry: {
     type: Date,
+    default: undefined,
   },
   isVerified: {
     type: Boolean,
@@ -32,11 +33,13 @@ const UserSchema: Schema<User> = new Schema({
   },
   verifyCode: {
     type: String,
-    required: [true, "Verify code is required"],
+    default: undefined,
+    // required: [true, "Verify code is required"],
   },
   verifyCodeExpiry: {
     type: Date,
-    required: [true, "VerifyCodeExpiry is required"],
+    default: undefined,
+    // required: [true, "VerifyCodeExpiry is required"],
   },
 });
 

@@ -1,13 +1,13 @@
-import Image from 'next/image'
-import React from 'react';
+import Image from "next/image";
+import React from "react";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function NewsLetter() {
     return (

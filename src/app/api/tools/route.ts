@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import AirtableModel from "@/models/airtable.model";
 import axios from "axios";
@@ -13,7 +13,6 @@ export async function GET() {
 
   try {
     let airtableProductList: AirtableModel[] = [];
-    // let cacheData = await getCache("airtableProductList");
 
     let cacheData = null;
     if (cacheData !== null) {
@@ -26,8 +25,6 @@ export async function GET() {
       );
     }
 
-    const maxConcurrentRequests = 2; // Adjust concurrency as needed
-
     let offset = null;
     do {
       const response: any = await axios.get(
@@ -35,7 +32,6 @@ export async function GET() {
         {
           headers,
           params: {
-            // maxRecords: 30, // Adjust maxRecords as needed
             offset,
           },
         }
