@@ -27,6 +27,7 @@ export default function ProductToolBanner({
   link,
   id,
   verified,
+  pricing
 }: Product) {
   const [isOpen, setIsOpen] = useState(false);
   const bookmarkList = useSelector(
@@ -81,7 +82,55 @@ export default function ProductToolBanner({
       <main className="bg-light-gray py-6 px-8   md:p-10 md:py-16 md:mb-12 overflow-x-hidden">
         <div className="max-w-7xl mx-auto pt-14">
           <Breadcrumb tag={tag} title={title} />
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 my-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 lg:gap-16 my-4">
+            <div className="lg:col-span-6">
+              <div className="flex flex-col space-y-4 mb-6">
+                  <div className="flex gap-2 items-center">
+                    {/* Responsive text sizes for the title */}
+                    <h1 className="text-xl sm:text-2xl md:text-3xl xl:text-4xl font-bold break-words">
+                      {title}
+                    </h1>
+                    {verified && <MdVerified className="text-xl sm:text-2xl text-DarkOrange" />}
+                  </div>
+                 
+              
+                <p className="sm:text-base text-lg break-words">
+                  {description}
+                </p>
+              </div>
+              <p className=" text-sm sm:text-base ">
+                <span className="font-semibold">Categories : </span> 
+                <span className="break-words">{`${tag?.join(", ")}`}</span>
+              </p>
+              <p className=" text-sm sm:text-base  text-black">
+                <span className="font-semibold">Pricing Model : </span> 
+                <span className="break-words">{`${pricing} `}</span>
+              </p>
+              <div className="flex flex-col sm:flex-row justify-start space-y-2 sm:space-y-0 sm:space-x-4 pt-4 sm:pt-6 items-center text-white">
+                <div className="border border-DarkOrange rounded-lg py-2 px-10 flex items-center text-DarkOrange hover:bg-DarkOrange hover:text-white hover:cursor-pointer">
+                  <button
+                    title="Bookmark"
+                    type="button"
+                    className=""
+                    onClick={debouncedHandleBookmark}
+                  >
+                    {isBookMarked ? (
+                      <BsBookmarkFill className="  sm:text-2xl md:text-lg font-semibold  " />
+                    ) : (
+                        <BsBookmark className="  sm:text-2xl md:text-lg font-semibold " />
+                    )}
+                  </button>
+                </div>
+                <Link
+                  href={link}
+                  target="_blank"
+                  className="w-full sm:w-auto hover:bg-white hover:text-DarkOrange border border-DarkOrange flex rounded-md font-semibold bg-DarkOrange items-center justify-center text-sm lg:text-base px-4 py-2 space-x-2"
+                >
+                  <span>Visit Website</span>
+                  <FiArrowUpRight className="text-xl" />
+                </Link>               
+              </div>
+            </div>
             <div className="lg:col-span-6 border border-black border-solid rounded-t-xl">
               <Image
                 src={url}
@@ -92,51 +141,7 @@ export default function ProductToolBanner({
                 className="rounded-t-xl w-full h-auto object-cover"
               />
             </div>
-            <div className="lg:col-span-6">
-              <div className="flex flex-col space-y-4 mb-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex gap-2 items-center">
-                    {/* Responsive text sizes for the title */}
-                    <h1 className="text-xl sm:text-2xl md:text-3xl xl:text-4xl font-bold break-words">
-                      {title}
-                    </h1>
-                    {verified && <MdVerified className="text-xl sm:text-2xl text-DarkOrange" />}
-                  </div>
-                  <button
-                    title="Bookmark"
-                    type="button"
-                    onClick={debouncedHandleBookmark}
-                    className="flex-shrink-0"
-                  >
-                    {isBookMarked ? (
-                      <BsBookmarkFill className="text-xl sm:text-2xl xl:text-3xl text-DarkOrange" />
-                    ) : (
-                      <BsBookmark className="text-xl sm:text-2xl xl:text-3xl text-black" />
-                    )}
-                  </button>
-                </div>
-                <p className="text-sm sm:text-base md:text-lg xl:text-xl break-words">
-                  {description}
-                </p>
-              </div>
-              <p className="mb-4 text-sm sm:text-base md:text-lg">
-                <span className="font-semibold">Categories</span>:
-                <span className="break-words">{` ${tag?.join(", ")}`}</span>
-              </p>
-              <div className="flex flex-col sm:flex-row justify-start space-y-2 sm:space-y-0 sm:space-x-4 pt-4 sm:pt-6 items-center text-white">
-                <Link
-                  href={link}
-                  target="_blank"
-                  className="w-full sm:w-auto hover:bg-white hover:text-DarkOrange border border-DarkOrange flex rounded-md font-semibold bg-DarkOrange items-center justify-center text-sm lg:text-base px-4 py-2 space-x-2"
-                >
-                  <span>Visit Website</span>
-                  <FiArrowUpRight className="text-xl" />
-                </Link>
-                <button className="w-full sm:w-auto rounded-lg bg-white text-DarkOrange border border-DarkOrange hover:bg-DarkOrange hover:text-white text-center text-sm px-6 py-2 md:px-10 md:py-2 font-bold">
-                  Free
-                </button>
-              </div>
-            </div>
+            
           </div>
         </div>
         {isOpen && <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />}
