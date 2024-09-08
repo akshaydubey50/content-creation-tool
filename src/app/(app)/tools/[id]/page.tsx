@@ -50,6 +50,7 @@ export default function ProductDetail() {
             link={product!.fields.WebsiteLink}
             id={product!.id}
             verified={product!.fields.Verified}
+            Pricing={product!.fields.Pricing}
           />
 
           <div className="px-4">

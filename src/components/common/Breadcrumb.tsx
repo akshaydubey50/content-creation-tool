@@ -34,7 +34,7 @@ export default function Breadcrumb({ tag, title }: HyperHead) {
             onClick={handleGoBack}
             className="hover:border-b-2 hover:border-DarkOrange"
           >
-            Content Tools
+             Tools
           </span>
           {" > "}
           <span
