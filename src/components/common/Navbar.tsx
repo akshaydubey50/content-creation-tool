@@ -26,7 +26,7 @@ export default function Navbar() {
   }, [isActiveMenu, dispatch]);
 
   const menuItem: MenuItem[] = [
-    { id: RoutePath.HomePage, label: "All Tools", href: RoutePath.HomePage },
+    { id: RoutePath.HomePage, label: "Tools", href: RoutePath.HomePage },
     { id: RoutePath.Contact, label: "Contact", href: RoutePath.Contact },
     { id: RoutePath.SubmitTool, label: "Submit Tool", href: RoutePath.SubmitTool },
     // { id: RoutePath.About_US, label: "About Us", href: RoutePath.About_US },
@@ -69,7 +69,7 @@ export default function Navbar() {
         <div className="flex  max-w-7xl  mx-auto justify-between items-center  py-4 lg:px-2 lg:py-4">
           <div>
             <Link href="/">
-              <h2 className="text-Heading-Medium  font-bold">Content Creation FYI</h2>
+              <h2 className="text-Heading-Medium lg:text-Heading-Small  font-bold">Content Creation FYI</h2>
             </Link>
           </div>
           {/* menubar in large screen */}
@@ -162,10 +162,11 @@ export default function Navbar() {
         <div>
           {menuItem.map((menu) => (
             <>
-              <div className="flex items-center py-4 px-2  border-b border-gray-200 font-semibold text-xl"
+              <div key={menu?.id} className="flex items-center py-4 px-2  border-b border-gray-200 font-semibold text-xl"
                 onClick={() => {
+                  console.log("menu", menu)
                   crossHandler();
-                  handleSignIn();
+                  router.push(menu?.href)
                 }}
               >
                 {menu.label}

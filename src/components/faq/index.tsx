@@ -34,7 +34,7 @@ export default function FAQ() {
       <Script id="webpage-faq-schema" type="application/ld+json">
         {schemaString}
       </Script>
-      <section className=" max-w-7xl rounded-xl  py-5 mx-auto  bg-white-200 my-10">
+      <section className=" max-w-7xl rounded-xl  py-5 mx-auto  bg-white-200 my-10 ">
         <h2 className="text-center font-semibold text-2xl lg:text-4xl my-4">
           Frequently Ask Questions
         </h2>
@@ -55,9 +55,9 @@ const renderAccordion=(items:any)=>(
       <AccordionItem
         key={item.value}
         value={item.value}
-        className="py-2 cursor-pointer bg-light-gray border-slate-100 px-4 rounded-md my-4"
+        className="py-2 cursor-pointer  px-4 "
       >
-        <AccordionTrigger className="hover:no-underline  text-base lg:text-lg font-semibold text-left ">
+        <AccordionTrigger className="hover:no-underline  text-base lg:text-lg font-medium text-left ">
           {item.title}
         </AccordionTrigger>
         {!item.categories && (
@@ -80,7 +80,7 @@ const renderAccordion=(items:any)=>(
   </Accordion>
 );
 return (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-20">
+  <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-16  px-6 lg:px-0  ">
     <div>{renderAccordion(leftColumn)}</div>
     <div>{renderAccordion(rightColumn)}</div>
   </div>
