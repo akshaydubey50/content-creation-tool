@@ -15,7 +15,7 @@ export default function NewsLetter() {
 
             <Card className='max-w-7xl  mx-auto   my-8 border-0'>
                 <CardContent className='bg-DarkOrange grid grid-cols-12 gap-y-6  px-4 
-                  lg:gap-10  justify-items-center items-center rounded-xl shadow-2xl  py-10 md:px-8 max-w-6xl  mx-auto  lg:px-16'>
+                  lg:gap-10  justify-items-center items-center rounded-xl shadow-2xl  py-10 md:px-8 max-w-7xl  mx-auto  lg:px-16'>
                     <div className="md:col-span-8 col-span-12">
                         <div className="flex flex-col gap-6 items-center md:items-start ">
                             <h3 className='font-semibold text-3xl text-center lg:text-start lg:text-4xl  text-white'>Subscribe to our newsletter</h3>

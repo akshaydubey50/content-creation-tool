@@ -1,10 +1,8 @@
 import ProductList from "@/components/card/ProductList";
 import HeroSection from "@/components/herosection/HeroSection";
 import FilterSection from "@/components/filter/FilterSection";
-import Script from "next/script";
 import NewsLetter from "@/components/newsletter";
 import FAQ from "@/components/faq";
-import NewsLetterModal from "@/components/modal/NewsLetterModal";
 
 export const dynamic = "force-dynamic";
 
@@ -18,8 +16,6 @@ export default function Home() {
       <div className="px-6 xl:px-0">
       <NewsLetter />  
       </div>
-        <NewsLetterModal />
-     
     </div>
   );
 }
