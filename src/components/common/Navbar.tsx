@@ -200,14 +200,17 @@ export default function Navbar() {
 
           )}
           {session && (
-            <div className="flex items-center py-4 px-2  border-b border-gray-200"
+            <div className="mt-6 font-semibold flex justify-center">
+            <button className="rounded-full py-4 px-20  bg-DarkOrange text-white"
               onClick={() => {
                 crossHandler();
                 handleSignout();
               }}
             >
               Logout
+            </button>
             </div>
+
           )}
         </div>
           
