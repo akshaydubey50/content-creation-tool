@@ -18,6 +18,7 @@ import { isProductBookmarked } from "@/helper/helper";
 import { MdVerified } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import { HomePage } from "@/constants/RoutePath";
+import Details from "../details";
 
 export default function ProductToolBanner({
   url,
@@ -27,8 +28,9 @@ export default function ProductToolBanner({
   link,
   id,
   verified,
-  Pricing
-}: Product) {
+  Pricing,
+  detailedMsg
+}: Product,) {
   const [isOpen, setIsOpen] = useState(false);
   const bookmarkList = useSelector(
     (state: RootState) => state.bookmark.bookmarkList
@@ -79,7 +81,7 @@ export default function ProductToolBanner({
 
   return (
     <>
-      <main className="bg-light-gray py-6 px-8   md:p-10 md:py-16 md:mb-12 overflow-x-hidden">
+      <main className="bg-light-gray py-6 px-8   md:px-10 lg:pt-16  overflow-x-hidden">
         <div className="max-w-7xl mx-auto pt-14">
           <Breadcrumb tag={tag} title={title} />
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 lg:gap-16 my-4">
@@ -154,11 +156,16 @@ export default function ProductToolBanner({
                 className="rounded-t-xl w-full h-auto object-cover"
               />
             </div>
-            
           </div>
+
         </div>
+
         {isOpen && <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />}
       </main>
+      <div className="max-w-7xl mx-auto overflow-x-hidden px-8 ">
+        {detailedMsg && <Details content={detailedMsg} />}
+      </div>
+
     </>
   );
 }

@@ -9,6 +9,7 @@ export default interface AirtableModel {
     ToolImage: string;
     Verified :boolean;
     Pricing:string[];
+    "Detailed Description"?: string; 
   };
   totalLikes?:any
 }

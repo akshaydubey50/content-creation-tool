@@ -104,3 +104,48 @@ body, html {
 .icon-fade {
   animation: fadeIn 0.3s ease-in-out;
 }
+
+/* .markdown-content blockquote, dl, dd, h1, h2, h3, h4, h5, h6, hr, figure, p, pre {
+    margin: revert !important;
+}
+
+.markdown-content h1, h2, h3, h4, h5, h6 {
+    font-size: revert !important;
+    font-weight: revert !important;
+} */
+
+.markdown-content {
+  /* Reset margins for block elements */
+  & > blockquote,
+  & > dl,
+  & > dd,
+  & > h1,
+  & > h2,
+  & > h3,
+  & > h4,
+  & > h5,
+  & > h6,
+  & > hr,
+  & > figure,
+  & > p,
+  & > pre {
+    margin: revert;
+  }
+
+  & > ul {
+    list-style: revert;
+  }
+  & > ul > li > a{
+    color: revert ;
+    text-decoration: revert ;
+  }
+  & > h1,
+  & > h2,
+  & > h3,
+  & > h4,
+  & > h5,
+  & > h6 {
+    font-size: revert;
+    font-weight: revert;
+  }
+}
