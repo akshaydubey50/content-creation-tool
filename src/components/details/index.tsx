@@ -55,7 +55,7 @@ const Details =({content}:any)=>{
                              Discover the best content creation tools, news, resources, memes, and jobs — sent to your inbox every Tuesday.
                             </CardDescription>
                         </CardHeader>
-                        <CardContent className='xs:px-0 xs:w-[90%]  pb-6 sm:px-6 sm:w-full'>
+                        <CardContent className='xs:px-0 xs:w-[90%]  pb-6 sm:px-6 sm:w-full mx-auto'>
                                 <iframe src="https://embeds.beehiiv.com/c8b47983-58f2-410d-9d69-f10d79908089?slim=true" data-test-id="beehiiv-embed" height="52" frameBorder="0" scrolling="no"
                                     className='bg-transparent m-0 rounded-none'
                                 ></iframe>
