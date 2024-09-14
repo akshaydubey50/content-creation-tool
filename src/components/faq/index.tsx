@@ -80,7 +80,7 @@ const renderAccordion=(items:any)=>(
   </Accordion>
 );
 return (
-  <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-16  px-6 lg:px-0  ">
+  <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-16  px-6 lg:px-8 2xl:px-0  ">
     <div>{renderAccordion(leftColumn)}</div>
     <div>{renderAccordion(rightColumn)}</div>
   </div>

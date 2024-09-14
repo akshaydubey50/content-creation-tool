@@ -7,4 +7,7 @@ export type Product = {
   id:string;
   verified?:boolean;
   Pricing: string[];
+  "Detailed Description"?: string; 
+  detailedMsg?:any
 };
+

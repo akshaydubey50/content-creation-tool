@@ -51,6 +51,7 @@ export default function ProductDetail() {
             id={product!.id}
             verified={product!.fields.Verified}
             Pricing={product!.fields.Pricing}
+            detailedMsg={product!.fields['Detailed Description']}
           />
 
           <div className="px-4">
