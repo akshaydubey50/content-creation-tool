@@ -15,6 +15,8 @@ export default function Footer() {
     { id: RoutePath.Contact, label: "Contact", href: RoutePath.Contact },
     { id: RoutePath.Prompt, label: "Prompt", href: RoutePath.Prompt },
     { id: RoutePath.Resources, label: "Resources", href: RoutePath.Resources },
+    { id: RoutePath.Experts, label: "Experts", href: RoutePath.Experts },
+
   ];
   return (
     <footer className="bg-light-gray rounded-lg shadow dark:text-white text-black  ">

@@ -6,5 +6,6 @@ export const Contact = "/contact";
 export const About_US = "/about-us";
 export const Prompt = "/prompt";
 export const Resources = "/resources";
+export const Experts = "/experts";
 
 

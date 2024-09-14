@@ -41,16 +41,19 @@ const Details =({content}:any)=>{
     }
     return(
         <>
-            <div className=" grid grid-cols-1 lg:grid-cols-12  gap-8 lg:gap-20  my-2 lg:my-8">
+            <div className=" grid grid-cols-1 lg:grid-cols-12  gap-8 lg:gap-16  my-2 lg:my-8">
                 <div className="col-span-1 lg:col-span-8 rounded-lg markdown-content">
                <ReactMarkdown>{content}</ReactMarkdown>
             </div>
 
                 <div className="col-span-1 lg:col-span-4 rounded-lg ">
                 {/* subscribe newsletter  */}
-                    <Card className='bg-gray-100'>
+                    <Card className='bg-gray-100 '>
                         <CardHeader>
-                            <CardTitle>Subscribe to Newsletter</CardTitle>
+                            <CardTitle className='text-xl'>Content Creation FYI Newsletter</CardTitle>
+                            <CardDescription>
+                             Discover the best content creation tools, news, resources, memes, and jobs — sent to your inbox every Tuesday.
+                            </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <Form {...form}>
@@ -64,7 +67,7 @@ const Details =({content}:any)=>{
                                                     <Input
                                                         type="text"
                                                         autoComplete="off"
-                                                        placeholder="m@example.com"
+                                                        placeholder="Enter your email"
                                                         {...field}
                                                         className={cn(
                                                             "transition-all duration-200 ease-in-out",
