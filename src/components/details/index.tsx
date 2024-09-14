@@ -55,35 +55,10 @@ const Details =({content}:any)=>{
                              Discover the best content creation tools, news, resources, memes, and jobs — sent to your inbox every Tuesday.
                             </CardDescription>
                         </CardHeader>
-                        <CardContent>
-                            <Form {...form}>
-                                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                                    <FormField
-                                        control={form.control}
-                                        name="email"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormControl>
-                                                    <Input
-                                                        type="text"
-                                                        autoComplete="off"
-                                                        placeholder="Enter your email"
-                                                        {...field}
-                                                        className={cn(
-                                                            "transition-all duration-200 ease-in-out",
-                                                            form.formState.errors.email &&
-                                                            "border-red-500 focus-visible:ring-red-500 input-error"
-                                                        )}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <Button type="submit" className="w-full border text-black border-black hover:border-white hover:text-white hover:bg-black" variant="outline">Submit</Button>
-                                </form>
-                            </Form>
-
+                        <CardContent className='xs:px-0 xs:w-[90%]  pb-6 sm:px-6 sm:w-full'>
+                                <iframe src="https://embeds.beehiiv.com/c8b47983-58f2-410d-9d69-f10d79908089?slim=true" data-test-id="beehiiv-embed" height="52" frameBorder="0" scrolling="no"
+                                    className='bg-transparent m-0 rounded-none'
+                                ></iframe>
                         </CardContent>
                        
                     </Card>
