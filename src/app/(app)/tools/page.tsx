@@ -3,6 +3,7 @@ import HeroSection from "@/components/herosection/HeroSection";
 import FilterSection from "@/components/filter/FilterSection";
 import NewsLetter from "@/components/newsletter";
 import FAQ from "@/components/faq";
+import NewsLetterModal from "@/components/modal/NewsLetterModal";
 
 export const dynamic = "force-dynamic";
 
