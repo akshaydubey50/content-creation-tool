@@ -1,51 +1,71 @@
-"use cilent";
+"use client";
 import React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setCategoryData } from "@/redux/slice/category/categorySlice";
 import { HomePage } from "@/constants/RoutePath";
+import { ChevronRight } from "lucide-react";
 
-type HyperHead = { tag: string[]; title: string };
+type BreadcrumbProps = {
+  categories: string;
+  currentPageTitle: string;
+};
 
-export default function Breadcrumb({ tag, title }: HyperHead) {
+export default function Breadcrumb({
+  categories,
+  currentPageTitle,
+}: BreadcrumbProps) {
   const router = useRouter();
-
-  const handleGoBack = () => {
-    router.push(`${HomePage}`);
-  };
-
+  const pathname = usePathname();
   const dispatch = useDispatch();
 
-  const selectedCategory = (selectedOption: any) => {
-    if (selectedOption) {
-      let formatedCategory = selectedOption[0]
-        ?.toLowerCase()
-        ?.trim()
-        ?.replace(/\s/g, "-");
-      router.push(`${HomePage}/category/${formatedCategory}`);
-      dispatch(setCategoryData(selectedOption));
+  const handleNavigateToHome = () => {
+    router.push(HomePage);
+  };
+
+  const handleCategorySelection = (selectedCategory: string) => {
+    if (selectedCategory) {
+      const formattedCategory = selectedCategory
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-");
+
+      router.push(`${HomePage}/category/${formattedCategory}`);
+      dispatch(setCategoryData([selectedCategory]));
     }
   };
+
+  const handlePageNavigation = (pageTitle: string) => {
+    const formattedPage = pageTitle.toLowerCase().trim().replace(/\s+/g, "-");
+    const newPath = pathname.includes("/category")
+      ? `${pathname}/category/${formattedPage}`
+      : pathname.includes("/category")
+      ? `${pathname}/tools/${formattedPage}`
+      : `${pathname}/${formattedPage}`;
+    console.log("newPath", newPath);
+    console.log("pathname", pathname);
+    router.replace(newPath);
+  };
+
   return (
-    <>
-      <p className="font-medium ">
-        <span className="cursor-pointer">
-          <span
-            onClick={handleGoBack}
-            className="hover:border-b-2 hover:border-DarkOrange"
-          >
-            Content Tools
-          </span>
-          {" > "}
-          <span
-            onClick={() => selectedCategory(tag)}
-            className="hover:border-b-2 hover:border-DarkOrange"
-          >
-            {tag}
-          </span>
-          {" > "} <span className="font-semibold">{title}</span>
-        </span>
-      </p>
-    </>
+    <nav className="font-medium flex flex-row items-center h-4">
+      <span
+        onClick={handleNavigateToHome}
+        className="hover:text-DarkOrange hover:border-b-2 hover:border-DarkOrange cursor-pointer"
+      >
+        Content Creation
+      </span>
+      <ChevronRight className="h-4 w-4 text-gray-400" />
+
+      <span
+        onClick={() => handlePageNavigation(categories)}
+        className="hover:text-DarkOrange hover:border-b-2 hover:border-DarkOrange cursor-pointer"
+      >
+        {categories}
+      </span>
+      <ChevronRight className="h-4 w-4 text-gray-400" />
+
+      <span className="font-semibold">{currentPageTitle}</span>
+    </nav>
   );
 }

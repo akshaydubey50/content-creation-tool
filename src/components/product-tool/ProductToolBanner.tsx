@@ -80,7 +80,13 @@ export default function ProductToolBanner({
     <>
       <main className="bg-light-gray py-6 px-8   md:p-10 md:py-16 md:mb-12 overflow-x-hidden">
         <div className="max-w-7xl mx-auto pt-14">
-          <Breadcrumb tag={tag} title={title} />
+          {/* <Breadcrumb tag={tag} title={title} /> */}
+          <Breadcrumb
+            categories={tag?.[0]}
+            currentPageTitle={title}
+            key={title}
+          />
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 my-4">
             <div className="lg:col-span-6 border border-black border-solid rounded-t-xl">
               <Image
@@ -100,7 +106,9 @@ export default function ProductToolBanner({
                     <h1 className="text-xl sm:text-2xl md:text-3xl xl:text-4xl font-bold break-words">
                       {title}
                     </h1>
-                    {verified && <MdVerified className="text-xl sm:text-2xl text-DarkOrange" />}
+                    {verified && (
+                      <MdVerified className="text-xl sm:text-2xl text-DarkOrange" />
+                    )}
                   </div>
                   <button
                     title="Bookmark"

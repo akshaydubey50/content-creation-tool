@@ -1,5 +1,5 @@
 "use client";
-import AirtableModel from "@/models/airtable.model";
+import { AirtableModel } from "@/models/airtable.model";
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -78,8 +78,6 @@ export default function ToolDetails() {
       dispatch(setCategoryData(getParamBaseCategory));
     }
   }, [pathName, productList, param.name, dispatch]);
-
-
 
   useEffect(() => {
     setVisibleItem(9);

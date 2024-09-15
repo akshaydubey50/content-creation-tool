@@ -1,5 +1,5 @@
 "use client";
-import AirtableModel from "@/models/airtable.model";
+import { AirtableModel } from "@/models/airtable.model";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";

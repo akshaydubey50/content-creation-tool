@@ -1,6 +1,6 @@
-"use client"
-import React from 'react'
-import { Card, CardContent } from "@/components/ui/card"
+"use client";
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Loader() {
@@ -9,7 +9,9 @@ export default function Loader() {
   return (
     <>
       <section
-        className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
+        className="
+        mt-10
+        grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
                   lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0 justify-items-center"
       >
         {loaderArray.map((index) => (
@@ -17,10 +19,10 @@ export default function Loader() {
         ))}
       </section>
     </>
-  )
+  );
 }
 
-function ShimmerCard(){
+function ShimmerCard() {
   return (
     <>
       <Card className="min-[430px]:w-[300px] w-[350px] overflow-hidden rounded-xl">
@@ -45,5 +47,5 @@ function ShimmerCard(){
         </CardContent>
       </Card>
     </>
-  )
+  );
 }

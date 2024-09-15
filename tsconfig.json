@@ -34,6 +34,6 @@
     "src/lib/verifiedToolContext.js",
     "src/lib/slice/categorySlice.js",
     "src/lib/slice/bookmarkSlice.js"
-,   "src/app/not-found.tsx"  ],
+,   "src/app/not-found.tsx", "src/app/sitemap.ts"  ],
   "exclude": ["node_modules"]
 }

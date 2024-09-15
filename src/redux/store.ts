@@ -6,7 +6,8 @@ import categorySlice from "@/redux/slice/category/categorySlice";
 import searchSlice from "@/redux/slice/search/searchSlice";
 import verifiedProductSlice from "@/redux/slice/verified/verifiedSlice";
 import upvoteSlice from "./slice/upvote/upvoteSlice";
-import priceModelSlice from "./slice/priceModel/priceModelSlice"
+import priceModelSlice from "./slice/priceModel/priceModelSlice";
+import promptResourceSlice from "./slice/prompt-resource/promptResourceSlice";
 
 const appStore = configureStore({
   reducer: {
@@ -16,8 +17,9 @@ const appStore = configureStore({
     category: categorySlice,
     search: searchSlice,
     verifiedProduct: verifiedProductSlice,
-    upvote:upvoteSlice,
-    priceModel:priceModelSlice
+    upvote: upvoteSlice,
+    priceModel: priceModelSlice,
+    promptResource: promptResourceSlice,
   },
 });
 

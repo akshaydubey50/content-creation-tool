@@ -16,10 +16,9 @@ export default function Home() {
       <ProductList />
       <FAQ />
       <div className="px-6 xl:px-0">
-      <NewsLetter />  
+        <NewsLetter />
       </div>
-        <NewsLetterModal />
-     
+      <NewsLetterModal />
     </div>
   );
 }
