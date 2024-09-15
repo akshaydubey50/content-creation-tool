@@ -5,10 +5,11 @@ import { ImCross } from "react-icons/im";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AppDispatch } from "@/redux/store";
 import { useDispatch } from "react-redux";
-import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import { usePathname, useRouter } from "next/navigation";
 import * as RoutePath from "@/constants/RoutePath";
 import { signOut, useSession } from "next-auth/react";
+
+
 interface MenuItem {
   id: number| string;
   label: string;
@@ -25,7 +26,7 @@ export default function Navbar() {
   }, [isActiveMenu, dispatch]);
 
   const menuItem: MenuItem[] = [
-    { id: RoutePath.HomePage, label: "All Tools", href: RoutePath.HomePage },
+    { id: RoutePath.HomePage, label: "Tools", href: RoutePath.HomePage },
     { id: RoutePath.Contact, label: "Contact", href: RoutePath.Contact },
     { id: RoutePath.SubmitTool, label: "Submit Tool", href: RoutePath.SubmitTool },
     // { id: RoutePath.About_US, label: "About Us", href: RoutePath.About_US },
@@ -123,7 +124,7 @@ export default function Navbar() {
                     className="text-white font-semibold bg-black  px-6 py-2  hover:bg-DarkOrange hover:text-white   rounded-lg"
                     onClick={handleSignup}
                   >
-                    Sign Up for $0
+                    Sign Up 
                   </button>
                 </li>
               )}
@@ -144,12 +145,12 @@ export default function Navbar() {
 
       {/* Mobile View Sidebar */}
       <aside
-        className={`fixed top-0 z-40 h-full w-screen bg-white text-black text-Title-Large transform transition-transform duration-500 overscroll-none ${
+        className={`fixed top-0 z-40 h-full w-screen px-3 bg-white text-black text-Title-Large transform transition-transform duration-500 overscroll-none ${
           isMenu ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="p-3 flex my-2">
-          <h2 className="text-Heading-Small font-bold">Content Creation FYI</h2>
+        <div className="p-3 flex my-2 ">
+          <h2 className="text-Heading-Medium font-bold">Content Creation FYI</h2>
           <button
             title="close"
             onClick={crossHandler}
@@ -158,56 +159,61 @@ export default function Navbar() {
             <ImCross size={20} color="red" />
           </button>
         </div>
-        <ul>
+        <div>
           {menuItem.map((menu) => (
-            <li key={menu.id} className="py-3 px-3 font-medium">
-              <Link
-                href={menu.href}
-                className="px-4 border-l-4 border-DarkOrange border-solid"
+            <>
+              <div key={menu?.id} className="flex items-center py-4 px-2  border-b border-gray-200 font-semibold text-xl"
+                onClick={() => {
+                  console.log("menu", menu)
+                  crossHandler();
+                  router.push(menu?.href)
+                }}
               >
                 {menu.label}
-              </Link>
-            </li>
+              </div>
+            </>
           ))}
 
+         
           {!session && (
-            <li className="py-3 px-3 font-medium">
-              <span className="px-4 border-l-4 border-DarkOrange border-solid">
-                <button
-                  onClick={() => {
-                    crossHandler();
-                    handleSignIn();
-                  }}
-                >
-                  Login
-                </button>
-              </span>
-            </li>
-          )}
-          {!session && (
-            <li className="py-3 px-3 font-medium">
-              <span className="px-4 border-l-4 border-DarkOrange border-solid">
-                <button
-                  onClick={() => {
-                    crossHandler();
-                    handleSignup();
-                  }}
-                >
-                  Sign Up for $0
-                </button>
-              </span>
-            </li>
+            <div className="grid grid-cols-2 mt-6 justify-items-center items-center font-semibold" >
+              <div className="col-span-1 rounded-full py-4 px-12  border-DarkOrange border text-DarkOrange">
+              <div className="flex items-center justify-end"
+                onClick={() => {
+                  crossHandler();
+                  handleSignIn();
+                }}
+              >
+                Login
+              </div>
+              </div>
+              <div className="col-span-1 rounded-full py-4 px-12  bg-DarkOrange text-white ">
+              <div className="  flex items-center  justify-center  "
+                onClick={() => {
+                  crossHandler();
+                  handleSignup();
+                }}>
+                Sign Up
+              </div>
+            </div>
+            </div>
+
           )}
           {session && (
-            <li className="py-3 px-3 font-medium">
-              <span className="px-4 border-l-4 border-DarkOrange border-solid">
-                <button
-                 onClick={handleSignout}
-                 >Logout</button>
-              </span>
-            </li>
+            <div className="mt-6 font-semibold flex justify-center">
+            <button className="rounded-full py-4 px-20  bg-DarkOrange text-white"
+              onClick={() => {
+                crossHandler();
+                handleSignout();
+              }}
+            >
+              Logout
+            </button>
+            </div>
+
           )}
-        </ul>
+        </div>
+          
       </aside>
     </>
   );

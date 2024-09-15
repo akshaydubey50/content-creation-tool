@@ -7,8 +7,9 @@ export interface AirtableModel {
     WebsiteLink: string;
     Description: string;
     ToolImage: string;
-    Verified: boolean;
-    Pricing: string[];
+    Verified :boolean;
+    Pricing:string[];
+    "Detailed Description"?: string; 
   };
   totalLikes?: any;
 }
