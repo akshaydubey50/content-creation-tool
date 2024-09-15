@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { useSearchParams, useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductList } from "@/redux/slice/product/productSlice";
-import AirtableModel from "@/models/airtable.model";
+import { AirtableModel } from "@/models/airtable.model";
 import { ProductCard } from "./ProductCard";
 import {
   getBookmarkList,
@@ -31,7 +31,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const { isUserAuthenticated } = useSelector((store: RootState) => store.user);
   const { data: session } = useSession();
   const { productList, isLoading } = useSelector(
-    (state: RootState) => state.product
+    (store: RootState) => store.product
   );
   const dropDownCategoryArr = useSelector(
     (store: RootState) => store.category.matchedCategory
@@ -102,7 +102,6 @@ export default function ProductList({ currentCategory }: ProductListProps) {
       // Search input filtered product productList
       products = inputSearchFilterArr.length > 0 ? inputSearchFilterArr : [];
       // setCurrentPage(1);
-
     } else if (matchedPrice.length > 0 && !id) {
       products = matchedPrice;
     } else if (session && isBookmark && bookmarkList) {
@@ -156,10 +155,10 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   }, [currentPage, filteredProductRecords, updateCurrentProducts]);
 
   useEffect(() => {
-    if(productList?.length === 0){
-    dispatch(fetchProductList());
+    if (productList?.length === 0) {
+      dispatch(fetchProductList());
     }
-  }, [productList,dispatch]);
+  }, [productList, dispatch]);
 
   useEffect(() => {
     dispatch(getUpvoteList());
@@ -169,18 +168,16 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   }, [dispatch, session]);
 
   // IMP for pagination reset while searching product tool
-  useEffect(()=>{
-    if (productSearchQuery.length > 0){
-      handlePageChange(1)
+  useEffect(() => {
+    if (productSearchQuery.length > 0) {
+      handlePageChange(1);
     }
-  }, [productSearchQuery.length])
-
+  }, [productSearchQuery.length]);
 
   if (isLoading) {
-    return ( 
+    return (
       <>
-       
-       <Loader />
+        <Loader />
       </>
     );
   }

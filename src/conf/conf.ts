@@ -7,6 +7,8 @@ export const AirtableConf = {
   CONTACT_FORM_TABLE_ID: String(process.env.CONTACT_FORM_TABLE_ID),
   CONTACT_FORM_BASE_ID: String(process.env.CONTACT_FORM_TABLE_BASE_ID),
   CONTACT_FORM_BEARER_TOKEN: String(process.env.CONTACT_FORM_BEARER_TOKEN),
+  PROMPT_BASE_ID: String(process.env.PROMPT_BASE_ID),
+  PROMPT_TABLE_ID: String(process.env.PROMPT_TABLE_ID),
 };
 
 export const ResendConf = {
