@@ -8,6 +8,7 @@ import verifiedProductSlice from "@/redux/slice/verified/verifiedSlice";
 import upvoteSlice from "./slice/upvote/upvoteSlice";
 import priceModelSlice from "./slice/priceModel/priceModelSlice";
 import promptResourceSlice from "./slice/prompt-resource/promptResourceSlice";
+import resourceSlice from "./slice/resources/ResourcesSlice";
 
 const appStore = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const appStore = configureStore({
     upvote: upvoteSlice,
     priceModel: priceModelSlice,
     promptResource: promptResourceSlice,
+    resources: resourceSlice,
   },
 });
 

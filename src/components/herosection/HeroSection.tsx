@@ -92,8 +92,8 @@ export default function HeroSection() {
   };
 
   const searchIconHandler = () => {
-    dispatch(setSearchInputFocus());
     dispatch(scrollPage(600));
+    dispatch(setSearchInputFocus());
   };
   return (
     <main className="py-12 xl:py-20 bg-light-gray  ">
