@@ -27,9 +27,10 @@ export default function Navbar() {
 
   const menuItem: MenuItem[] = [
     { id: RoutePath.HomePage, label: "Tools", href: RoutePath.HomePage },
+    { id: RoutePath.Prompt, label: "Prompt", href: RoutePath.Prompt },
+    { id: RoutePath.Resources, label: "Resources", href: RoutePath.Resources },
     { id: RoutePath.Contact, label: "Contact", href: RoutePath.Contact },
     { id: RoutePath.SubmitTool, label: "Submit Tool", href: RoutePath.SubmitTool },
-    // { id: RoutePath.About_US, label: "About Us", href: RoutePath.About_US },
 
   ];
 
@@ -76,7 +77,7 @@ export default function Navbar() {
           <nav>
             <ul className="hidden text-Title-Medium lg:flex flex-1 flex-wrap justify-end font-medium gap-6  text-black items-baseline">
               {menuItem.map((menu, index) => (
-                <li key={menu.id}>
+                <li key={menu?.id}>
                   <Link
                     target={menu?.label == "Submit Tool" ? "_blank" : "_self"}
                     className={`  text-black    hover:border-b-4 hover:border-DarkOrange  cursor-pointer

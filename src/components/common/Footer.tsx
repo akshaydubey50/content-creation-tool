@@ -26,7 +26,7 @@ export default function Footer() {
               Content Creation FYI
             </h2>
           </Link>
-          <ul className="flex space-x-4  items-center  text-sm font-medium  sm:mb-0 text-black">
+          <ul className="flex space-x-4 justify-center items-center flex-wrap  text-sm font-medium  sm:mb-0 text-black">
             {footerItem.map((menu, index) => (
               <li key={menu.id}>
                 <Link href={menu.href}>{menu.label}</Link>

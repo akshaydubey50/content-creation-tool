@@ -17,7 +17,7 @@ export default function Home() {
       <div className="px-6 xl:px-0">
         <NewsLetter />
       </div>
-      <NewsLetterModal />
+      {/* <NewsLetterModal /> */}
     </div>
   );
 }

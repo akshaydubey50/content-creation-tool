@@ -8,7 +8,7 @@ export interface AirtableModel {
     Description: string;
     ToolImage: string;
     Verified :boolean;
-    Pricing:string[];
+    Pricing:string;
     "Detailed Description"?: string; 
   };
   totalLikes?: any;
@@ -26,3 +26,16 @@ export interface PropmtResourceModel {
     SourceLink: string;
   };
 }
+
+export interface ResourceModel {
+  id: string;
+  fields: {
+    Name?: string;
+    Description?: string;
+    Topics?: string[];
+    Tags?: string;
+    URL?: string;
+    "Author/Publisher/Admin/Creator"?: string;
+  };
+}
+
