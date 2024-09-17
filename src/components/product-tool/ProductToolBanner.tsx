@@ -83,8 +83,24 @@ export default function ProductToolBanner({
     <>
       <main className="bg-light-gray py-6 px-8   md:px-10 lg:pt-16  overflow-x-hidden">
         <div className="max-w-7xl mx-auto pt-14">
-          <Breadcrumb tag={tag} title={title} />
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 lg:gap-16 my-4">
+          {/* <Breadcrumb tag={tag} title={title} /> */}
+          <Breadcrumb
+            categories={tag?.[0]}
+            currentPageTitle={title}
+            key={title}
+          />
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 my-4">
+            <div className="lg:col-span-6 border border-black border-solid rounded-t-xl">
+              <Image
+                src={url}
+                alt="logo banner"
+                loading="lazy"
+                width={1280}
+                height={720}
+                className="rounded-t-xl w-full h-auto object-cover"
+              />
+            </div>
             <div className="lg:col-span-6">
               <div className="flex flex-col space-y-4 mb-6">
                   <div className="flex gap-2 items-center">
@@ -92,7 +108,9 @@ export default function ProductToolBanner({
                     <h1 className="text-xl sm:text-2xl md:text-3xl xl:text-4xl font-bold break-words">
                       {title}
                     </h1>
-                    {verified && <MdVerified className="text-xl sm:text-2xl text-DarkOrange" />}
+                    {verified && (
+                      <MdVerified className="text-xl sm:text-2xl text-DarkOrange" />
+                    )}
                   </div>
                 <div className="border border-black border-solid rounded-t-xl lg:hidden">
                   <Image

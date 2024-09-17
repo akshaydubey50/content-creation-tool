@@ -4,7 +4,7 @@ const nextConfig = {
   swcMinify: true,
   /*  experimental: {
     serverActions: true,
-  }, */
+  }, */ output: "standalone",
   images: {
     domains: [
       "getlasso.co",

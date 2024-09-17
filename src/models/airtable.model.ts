@@ -1,4 +1,4 @@
-export default interface AirtableModel {
+export interface AirtableModel {
   id: string;
   fields: {
     Tags: string[];
@@ -11,8 +11,18 @@ export default interface AirtableModel {
     Pricing:string[];
     "Detailed Description"?: string; 
   };
-  totalLikes?:any
+  totalLikes?: any;
 }
 
-
-
+export interface PropmtResourceModel {
+  id: string;
+  fields: {
+    Name: string;
+    Description: string;
+    Category: string[];
+    Tags: string[];
+    Status: string;
+    Source: string;
+    SourceLink: string;
+  };
+}
