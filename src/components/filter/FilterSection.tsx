@@ -1,5 +1,5 @@
 "use client";
-import AirtableModel from "@/models/airtable.model";
+import { AirtableModel } from "@/models/airtable.model";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
@@ -58,6 +58,7 @@ export default function FilterSection() {
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     // console.log("searchRef", searchRef.current?.value);
     router.push("/");
+    dispatch(scrollPage(600))
     dispatch(clearMatchedPrice());
     dispatch(clearPriceData());
     dispatch(clearCategoryData());
@@ -209,7 +210,7 @@ export default function FilterSection() {
 
   useEffect(() => {
     window.scrollTo({ top: scrollPosition, behavior: "smooth" });
-  }, [categoryData, scrollPosition]);
+  }, [categoryData, scrollPosition, searchQuery]);
 
   return (
     <>

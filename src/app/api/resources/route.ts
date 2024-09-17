@@ -1,9 +1,9 @@
 // export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
-import { AirtableModel } from "@/models/airtable.model";
 import axios from "axios";
 import { AirtableConf } from "@/conf/conf";
 import connectDB from "@/db/dbConnect";
+import { ResourceModel } from "@/models/airtable.model";
 
 export async function GET() {
   await connectDB();
@@ -12,23 +12,12 @@ export async function GET() {
   };
 
   try {
-    let airtableProductList: AirtableModel[] = [];
-
-    let cacheData = null;
-    if (cacheData !== null) {
-      return NextResponse.json(
-        {
-          success: true,
-          data: cacheData,
-        },
-        { status: 200 }
-      );
-    }
+    let airtableProductList: ResourceModel[] = [];
 
     let offset = null;
     do {
       const response: any = await axios.get(
-        `${AirtableConf.BASE_URL}/${AirtableConf.BASE_ID}/${AirtableConf.TABLE_ID}`,
+        `${AirtableConf.BASE_URL}/${AirtableConf.RESOURCE_BASE_ID}/${AirtableConf.RESOURCE_TABLE_ID}`,
         {
           headers,
           params: {
@@ -38,15 +27,15 @@ export async function GET() {
       );
 
       if (response.status === 200) {
-        const records: AirtableModel[] = (await response.data[
+        const records: ResourceModel[] = (await response.data[
           "records"
-        ]) as AirtableModel[];
+        ]) as ResourceModel[];
         airtableProductList.push(...records);
         offset = response.data.offset;
       }
     } while (offset);
     const statusRecord = airtableProductList?.filter(
-      (item: AirtableModel) => item.fields?.Stage?.toLowerCase() == "done"
+      (item: ResourceModel) => item.fields?.Description
     );
 
     return NextResponse.json(
@@ -57,7 +46,7 @@ export async function GET() {
       { status: 200 }
     );
   } catch (error) {
-    console.log("tools api failure ::: ", error);
+    console.log("ResourceModel api failure ::: ", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

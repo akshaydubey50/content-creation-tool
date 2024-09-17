@@ -4,7 +4,7 @@ const nextConfig = {
   swcMinify: true,
   /*  experimental: {
     serverActions: true,
-  }, */
+  }, */ output: "standalone",
   images: {
     domains: [
       "getlasso.co",
@@ -13,6 +13,7 @@ const nextConfig = {
       "d1muf25xaso8hp.cloudfront.net",
       // Add the domain here
       "ik.imagekit.io",
+      "placehold.co"
     ],
   },
 };

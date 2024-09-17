@@ -27,9 +27,10 @@ export default function Navbar() {
 
   const menuItem: MenuItem[] = [
     { id: RoutePath.HomePage, label: "Tools", href: RoutePath.HomePage },
+    { id: RoutePath.Prompt, label: "Prompt", href: RoutePath.Prompt },
+    { id: RoutePath.Resources, label: "Resources", href: RoutePath.Resources },
     { id: RoutePath.Contact, label: "Contact", href: RoutePath.Contact },
     { id: RoutePath.SubmitTool, label: "Submit Tool", href: RoutePath.SubmitTool },
-    // { id: RoutePath.About_US, label: "About Us", href: RoutePath.About_US },
 
   ];
 
@@ -69,14 +70,14 @@ export default function Navbar() {
         <div className="flex  max-w-7xl  mx-auto justify-between items-center  py-4 lg:px-2 lg:py-4">
           <div>
             <Link href="/">
-              <h2 className="text-Heading-Medium lg:text-Heading-Small  font-bold">Content Creation FYI</h2>
+              <h2 className="text-Heading-Small  font-bold">Content Creation FYI</h2>
             </Link>
           </div>
           {/* menubar in large screen */}
           <nav>
             <ul className="hidden text-Title-Medium lg:flex flex-1 flex-wrap justify-end font-medium gap-6  text-black items-baseline">
               {menuItem.map((menu, index) => (
-                <li key={menu.id}>
+                <li key={menu?.id}>
                   <Link
                     target={menu?.label == "Submit Tool" ? "_blank" : "_self"}
                     className={`  text-black    hover:border-b-4 hover:border-DarkOrange  cursor-pointer

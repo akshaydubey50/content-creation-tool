@@ -98,11 +98,6 @@
     "content": "Subscribe to our newsletter for the latest updates on new tools, features, and exclusive offers."
   },
   {
-    "value": "item-16",
-    "title": "What types of content creators benefit from this directory?",
-    "content": "The directory is designed for those who create all types of content. They can be Content Writers, Content Editors, Content Marketers, Founders, Solopreneurs, Graphic Designers, Video Editors."
-  },
-  {
     "value": "item-17",
     "title": "Can I get personalized recommendations?",
     "content": "Currently, we have only added a like feature that keeps the popular tools/most-liked tools on the top. We have the option to bookmark tools under your account."
@@ -126,5 +121,10 @@
     "value": "item-21",
     "title": "Do you provide tutorials or guides for using these tools?",
     "content": "While we don't provide tutorials directly, we will soon start including links to tutorials and guides offered by the tool providers."
+  },
+  {
+    "value": "item-16",
+    "title": "What types of content creators benefit from this directory?",
+    "content": "The directory is designed for those who create all types of content. They can be Content Writers, Content Editors, Content Marketers, Founders, Solopreneurs, Graphic Designers, Video Editors."
   }
 ]

@@ -6,5 +6,8 @@ export type Product = {
   link: string;
   id:string;
   verified?:boolean;
-  Pricing: string[];
+  Pricing: string;
+  "Detailed Description"?: string; 
+  detailedMsg?:any
 };
+
