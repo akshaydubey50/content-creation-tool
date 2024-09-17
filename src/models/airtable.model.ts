@@ -8,7 +8,7 @@ export interface AirtableModel {
     Description: string;
     ToolImage: string;
     Verified :boolean;
-    Pricing:string[];
+    Pricing:string;
     "Detailed Description"?: string; 
   };
   totalLikes?: any;
