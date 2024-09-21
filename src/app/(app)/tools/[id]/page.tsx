@@ -1,6 +1,7 @@
 import { Metadata, ResolvingMetadata } from "next";
 import ProductDetail from "./product-detail"; // Import client-side component
 import { AirtableModel } from "@/models/airtable.model";
+import { APPConf } from "@/conf/conf";
 
 // Props for generateMetadata
 type Props = {
@@ -17,9 +18,10 @@ export async function generateMetadata(
   const id = params.id;
 
   // Fetch data from API (replace with your actual API)
-  const product = await fetch(`https://contentcreation.fyi/api/tools`).then(
-    (res) => res.json()
-  );
+  const product = await fetch(`${APPConf.BASE_URL}/api/tools`).then((res) => {
+    console.log("res", res);
+    return res.json();
+  });
   const productMatched = product?.data?.filter((product: AirtableModel) => {
     const formattedTitle = product?.fields?.Name?.toLowerCase()
       ?.trim()
