@@ -58,7 +58,7 @@ export default function PromptLibrary() {
   }, [currentPage, promptList, updateCurrentProducts]);
 
   useEffect(() => {
-    if (promptResourceList.length === 0) {
+    if (promptResourceList?.length === 0) {
       dispatch(fetchPromptResourceList());
     }
   }, [dispatch, promptResourceList]);
