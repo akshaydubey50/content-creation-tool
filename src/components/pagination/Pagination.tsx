@@ -1,13 +1,15 @@
-// Pagination.js
 import React, { useState, useEffect } from "react";
 interface PaginationProps {
   currentPage: number;
   totalItems: number;
   onPageChange: (page: number) => void;
 }
-import { MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight, MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-
-import { SkipForward, ChevronRight, SkipBack, ChevronLeft } from "lucide-react";
+import {
+  MdKeyboardDoubleArrowLeft,
+  MdKeyboardDoubleArrowRight,
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowRight,
+} from "react-icons/md";
 
 function Pagination({
   currentPage,
@@ -45,6 +47,7 @@ function Pagination({
       }
     }
   };
+
   useEffect(() => {
     setInputValue(currentPage.toString());
   }, [currentPage]);
@@ -55,9 +58,7 @@ function Pagination({
         className={`hidden md:inline-block px-4 py-2   rounded-md shadow-lg border border-DarkOrange  ${
           isFirstPage ? "cursor-not-allowed" : "cursor-pointer font-semibold"
         }  ${
-          isFirstPage
-            ? "bg-white text-DarkOrange "
-            : "bg-DarkOrange text-white"
+          isFirstPage ? "bg-white text-DarkOrange " : "bg-DarkOrange text-white"
         }  `}
         disabled={isFirstPage}
         onClick={() => handlePageChange(1)}
@@ -68,11 +69,13 @@ function Pagination({
       </button>
 
       <button
-        className={` px-4 py-2   rounded-md shadow-lg border border-DarkOrange ${isFirstPage ? "cursor-not-allowed" : "cursor-pointer font-semibold"
-          }  ${isFirstPage
+        className={` px-4 py-2   rounded-md shadow-lg border border-DarkOrange ${
+          isFirstPage ? "cursor-not-allowed" : "cursor-pointer font-semibold"
+        }  ${
+          isFirstPage
             ? "bg-white text-DarkOrange  "
             : "bg-DarkOrange text-white"
-          }  `}
+        }  `}
         disabled={isFirstPage}
         onClick={() => handlePageChange(currentPage - 1)}
       >
@@ -81,7 +84,6 @@ function Pagination({
         </span>
       </button>
 
-
       <div className="">
         <div className="flex space-x-2 items-center text-slate-600">
           {/* Page: {currentPage} of {totalPages} */}
@@ -89,19 +91,19 @@ function Pagination({
             type="text"
             value={inputValue}
             onChange={currentPageHandler}
-            className="w-10 text-center border-2 border-slate-400 rounded p-1 outline-2"
+            className="w-10 text-center border-2  rounded p-1 outline-2"
           />
           <p className="text-slate-600">of</p>
           <p className="text-slate-600">{totalPages}</p>
         </div>
       </div>
-      
+
       <button
-        className={` px-4 py-2   rounded-md shadow-lg border border-DarkOrange ${isLastPage ? "cursor-not-allowed" : "cursor-pointer font-semibold"
-          }  ${isLastPage
-            ? "bg-white text-DarkOrange  "
-            : "bg-DarkOrange text-white"
-          }  `}
+        className={` px-4 py-2   rounded-md shadow-lg border border-DarkOrange ${
+          isLastPage ? "cursor-not-allowed" : "cursor-pointer font-semibold"
+        }  ${
+          isLastPage ? "bg-white text-DarkOrange  " : "bg-DarkOrange text-white"
+        }  `}
         disabled={isLastPage}
         onClick={() => handlePageChange(currentPage + 1)}
       >
@@ -111,11 +113,11 @@ function Pagination({
       </button>
 
       <button
-        className={`hidden md:inline-block px-4 py-2   rounded-md shadow-lg border border-DarkOrange  ${isLastPage ? "cursor-not-allowed" : "cursor-pointer font-semibold"
-          }  ${isLastPage
-            ? "bg-white text-DarkOrange "
-            : "bg-DarkOrange text-white"
-          }  `}
+        className={`hidden md:inline-block px-4 py-2   rounded-md shadow-lg border border-DarkOrange  ${
+          isLastPage ? "cursor-not-allowed" : "cursor-pointer font-semibold"
+        }  ${
+          isLastPage ? "bg-white text-DarkOrange " : "bg-DarkOrange text-white"
+        }  `}
         disabled={isLastPage}
         onClick={() => handlePageChange(totalPages)}
       >

@@ -23,7 +23,7 @@ export default function PromptLibrary() {
     (state: RootState) => state.promptResource
   );
 
-  const itemsPerPage = 6;
+  const itemsPerPage = 10;
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
