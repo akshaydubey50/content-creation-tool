@@ -1,9 +1,10 @@
+
 import { Metadata, ResolvingMetadata } from "next";
 import ProductDetail from "./product-detail"; // Import client-side component
 import { AirtableModel } from "@/models/airtable.model";
 import { APPConf } from "@/conf/conf";
 
-export const dynamic = "force-dynamic";
+export const fetchCache = 'force-no-store';
 
 // Props for generateMetadata
 type Props = {
@@ -20,7 +21,9 @@ export async function generateMetadata(
   const id = params.id;
 
   // Fetch data from API (replace with your actual API)
-  const product = await fetch(`${APPConf.BASE_URL}/api/tools`).then((res) => {
+  const product = await fetch(`${APPConf.BASE_URL}/api/tools`,{
+    cache: 'no-store'
+  }).then((res) => {
     console.log("res", res);
     return res.json();
   });
