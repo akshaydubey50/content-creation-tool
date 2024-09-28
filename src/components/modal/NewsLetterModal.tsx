@@ -43,7 +43,7 @@ export default function NewsLetterModal() {
             height="52"
             scrolling="no"
             className="bg-transparent m-0 rounded-none w-full border-0"
-          ></iframe>
+          />
         </div>
       </DialogContent>
     </Dialog>
