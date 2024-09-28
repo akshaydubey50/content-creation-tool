@@ -55,7 +55,7 @@ export default function ProductDetail({ params }: Props) {
             id={product!.id}
             verified={product!.fields.Verified}
             Pricing={product!.fields.Pricing} 
-
+            detailedMsg={product!.fields["Detailed Description"]}
           />
 
           <div className="px-4">
