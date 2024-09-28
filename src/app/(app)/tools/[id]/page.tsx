@@ -3,6 +3,8 @@ import ProductDetail from "./product-detail"; // Import client-side component
 import { AirtableModel } from "@/models/airtable.model";
 import { APPConf } from "@/conf/conf";
 
+export const dynamic = "force-dynamic";
+
 // Props for generateMetadata
 type Props = {
   params: { id: string };
