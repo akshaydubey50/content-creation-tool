@@ -16,7 +16,7 @@ const searchSlice = createSlice({
             state.searchFilterList = action.payload;
         },
         clearSearchFilterList: (state) => {
-            state.searchFilterList.length = 0;
+            state.searchFilterList= [];
             state.searchQuery = "";
 
         },

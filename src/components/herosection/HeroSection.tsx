@@ -96,25 +96,27 @@ export default function HeroSection() {
     dispatch(setSearchInputFocus());
   };
   return (
-    <main className="py-12 xl:py-20 bg-light-gray  ">
-      <section className="flex  flex-col place-items-center space-y-10 xl:space-y-14  px-4 md:px-8 xl:px-10">
-        <div className="flex-1">
+    <main className="py-12 xl:py-20 bg-light-gray h-2/4  xl:h-5/6  flex items-center justify-center"> 
+      <section className="flex  flex-col place-items-center space-y-10  px-4 md:px-8 xl:px-10">
+        <div className="">
           <div className="flex flex-col space-y-4 text-center">
-            <h1 className="font-bold text-2xl leading-9 md:text-4xl md:leading-45 xl:text-6xl xl:leading-90 ">
-              Discover{" "}
-              <span className="text-DarkOrange">
-                200+ Content Creation Tools
+            <p>
+              <span className="rounded-full text-DarkOrange bg-white border-orange-500 font-semibold   border-solid border px-4 py-1">200+ Content Creation Tools</span>
+            </p>
+            <h1 className="font-semibold text-3xl leading-9 md:text-4xl mx-auto md:leading-45 md:max-w-2xl xl:text-8xl  xl:max-w-7xl xl:leading-tight">
+              <span> Every tool you need to </span>
+              <span>
+            ace  at content creation.
               </span>
-              <br />
-              for Content Creators.
             </h1>
-            <h5 className="text-base mx-auto xl:text-3xl xl:leading-45 px-2 max-w-lg xl:max-w-4xl">
-              Directory of 200+ content creation tools designed to streamline
-              your process and enhance productivity.
+            <h5 className="text-base text-center  mx-auto xl:text-3xl  px-2 max-w-lg xl:max-w-6xl xl:leading-normal">
+              {/* Directory of 200+ content creation tools designed to streamline
+              your process and enhance productivity. */}
+              Search, like, bookmark, and use the best content creation tools to streamline your workflow and create better content.
             </h5>
           </div>
         </div>
-        <div className="flex-1">
+        <div>
           <div className="flex space-x-8 ">
             <div className="flex-1">
               <div className="flex space-x-2  md:space-x-4 lg:space-x-8 xl:space-x-12 ">

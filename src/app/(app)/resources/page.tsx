@@ -1,4 +1,3 @@
-"use client";
 import Resource from "@/components/resources";
 
 export const dynamic = "force-dynamic";

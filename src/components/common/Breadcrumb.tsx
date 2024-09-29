@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { setCategoryData } from "@/redux/slice/category/categorySlice";
 import { HomePage } from "@/constants/RoutePath";
 import { ChevronRight, LucideHome } from "lucide-react";
+import { clearSearchFilterList, setSearchQuery } from "@/redux/slice/search/searchSlice";
 
 type BreadcrumbProps = {
   categories: string;
@@ -20,20 +21,22 @@ export default function Breadcrumb({
   const dispatch = useDispatch();
 
   const handleNavigateToHome = () => {
-    router.push(HomePage);
+    dispatch(setSearchQuery(""))
+    dispatch(clearSearchFilterList());
+    router.replace(HomePage);
   };
 
-  const handleCategorySelection = (selectedCategory: string) => {
-    if (selectedCategory) {
-      const formattedCategory = selectedCategory
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, "-");
+  // const handleCategorySelection = (selectedCategory: string) => {
+  //   if (selectedCategory) {
+  //     const formattedCategory = selectedCategory
+  //       .toLowerCase()
+  //       .trim()
+  //       .replace(/\s+/g, "-");
 
-      router.push(`${HomePage}/category/${formattedCategory}`);
-      dispatch(setCategoryData([selectedCategory]));
-    }
-  };
+  //     router.push(`${HomePage}/category/${formattedCategory}`);
+  //     dispatch(setCategoryData([selectedCategory]));
+  //   }
+  // };
 
   const handlePageNavigation = (pageTitle: string) => {
     const formattedPage = pageTitle.toLowerCase().trim().replace(/\s+/g, "-");
@@ -42,8 +45,6 @@ export default function Breadcrumb({
       : pathname.includes("/category")
         ? `${pathname}/tools/${formattedPage}`
         : `${pathname}/${formattedPage}`;
-    console.log("newPath", newPath);
-    console.log("pathname", pathname);
     router.replace("/");
   };
 
