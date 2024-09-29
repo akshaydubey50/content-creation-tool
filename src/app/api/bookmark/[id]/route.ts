@@ -16,11 +16,11 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
-
   try {
-    const { itemId, itemType } = await req.json(); // Extracting itemId and itemType from the request body
-    console.log("itemId seerveer ==> ", itemId, itemType);
-    const user = await UserModel.findOne({ email: token?.email });
+    const productId = req.nextUrl.pathname.split("bookmark/")[1];
+    const user = await UserModel.findOne({
+      email: token?.email,
+    });
 
     if (!user) {
       return NextResponse.json(
@@ -29,24 +29,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Check if bookmark for this itemId and itemType already exists
     const bookmarkExisting = await BookmarkModel.findOne({
       userId: user._id,
-      itemId,
-      itemType,
+      productId: productId,
     });
 
+    //Same productId exist with user
     if (bookmarkExisting) {
+      console.log("Existing bookmark product", bookmarkExisting);
       return NextResponse.json(
-        { success: true, msg: `Already bookmarked this ${itemType}` },
+        { success: true, msg: "Already bookmarked by user" },
         { status: 200 }
       );
     }
 
-    // Create a new bookmark
     const bookmark = new BookmarkModel({
-      itemId,
-      itemType,
+      productId,
       userId: new mongoose.Types.ObjectId(user._id),
     });
 
@@ -54,15 +52,12 @@ export async function POST(req: NextRequest) {
 
     if (!savedBookmarked) {
       return NextResponse.json(
-        { success: false, msg: `Failed to bookmark ${itemType}` },
+        { success: false, msg: "Failed to bookmark" },
         { status: 400 }
       );
     }
 
-    return NextResponse.json(
-      { success: true, msg: `${itemType} bookmarked successfully`, bookmark },
-      { status: 200 }
-    );
+    return NextResponse.json({ msg: "success", bookmark }, { status: 200 });
   } catch (error: any) {
     console.log("Error while bookmarking ==> ", error);
 
@@ -72,6 +67,7 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
 export async function DELETE(req: NextRequest) {
   await connectDB();
 
@@ -83,38 +79,38 @@ export async function DELETE(req: NextRequest) {
       { status: 400 }
     );
   }
-
+  // const id = "667ff969d27bcfc89d2a86ce";
   try {
-    const { itemId, itemType } = await req.json(); // Extracting itemId and itemType from the request body
-    const user = await UserModel.findOne({ email: token?.email });
+    const productId = req.nextUrl.pathname.split("bookmark/")[1];
+    const user = await UserModel.findById({ _id: token._id });
 
     if (!user) {
       return NextResponse.json(
         { success: false, msg: "User does not exist" },
-        { status: 404 }
+        { status: 200 }
       );
     }
 
-    // Attempt to delete the bookmark
     const deleteBookmark = await BookmarkModel.deleteOne({
       userId: user._id,
-      itemId,
-      itemType,
+      productId: productId,
     });
+
+    console.log("existingBookmark ==> ", deleteBookmark);
 
     if (deleteBookmark.deletedCount === 0) {
       return NextResponse.json({
         success: true,
-        msg: `${itemType} already deleted or does not exist in bookmarks`,
+        msg: "Bookmark product already delete or does not exist",
       });
     }
 
     return NextResponse.json(
-      { success: true, msg: `${itemType} deleted from bookmarks successfully` },
+      { success: true, msg: "product deleted from bookmark successfully" },
       { status: 200 }
     );
   } catch (error: any) {
-    console.log("Error while deleting bookmark ==> ", error);
+    console.log("Error while bookmarking ==> ", error);
     return NextResponse.json(
       { success: false, msg: "Internal Server Error" },
       { status: 500 }

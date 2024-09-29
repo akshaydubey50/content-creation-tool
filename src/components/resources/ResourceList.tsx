@@ -19,7 +19,7 @@ export default function ResourceList() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const dispatch: AppDispatch = useDispatch();
-  const { isUserAuthenticated } = useSelector((store: RootState) => store.auth);
+  const { isUserAuthenticated } = useSelector((store: RootState) => store.user);
   const { data: session } = useSession();
   const { resourceList, isLoading } = useSelector(
     (state: RootState) => state.resources
