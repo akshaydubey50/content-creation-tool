@@ -1,4 +1,3 @@
-import HeroSection from "@/components/herosection/HeroSection";
 import PromptLibrary from "@/components/prompt/prompt-library";
 
 export default function Prompt() {

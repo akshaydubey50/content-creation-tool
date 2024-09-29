@@ -4,20 +4,19 @@ import { AirtableModel } from "@/models/airtable.model";
 import { RiStackFill, RiSearchLine } from "react-icons/ri";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { VscVerifiedFilled, VscVerified } from "react-icons/vsc";
-import { GoHeartFill } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearBookmarkList,
   getBookmarkList,
-} from "@/redux/slice/bookmark/bookmarkSlice";
+} from "@/redux/slice/bookmark/bookmark.slice";
 import { fetchProductList } from "@/redux/slice/product/productSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import {
   clearProductVerifiedList,
   setIsVerifiedChecked,
   setProductVerifiedList,
-} from "@/redux/slice/verified/verifiedSlice";
-import { setIsBookmarkCheck } from "@/redux/slice/bookmark/bookmarkSlice";
+} from "@/redux/slice/verified/verified.slice";
+import { setIsBookmarkCheck } from "@/redux/slice/bookmark/bookmark.slice";
 import LikedBookmarkModal from "../modal/LikedBookmarkModal";
 import {
   setSearchInputFocus,
@@ -32,16 +31,16 @@ export default function HeroSection() {
   const { data: session } = useSession();
 
   const isBookmark = useSelector<any>(
-    (store: RootState) => store.bookmark.isBookmarkChecked
+    (store: RootState) => store.bookmarks.isBookmarkChecked
   );
   const isVerifiedCheck = useSelector(
-    (store: RootState) => store.verifiedProduct.isVerifiedChecked
+    (store: RootState) => store.verifiedProducts.isVerifiedChecked
   );
   const verifiedProductData = useSelector(
-    (store: RootState) => store.verifiedProduct.verifiedProductList
+    (store: RootState) => store.verifiedProducts.verifiedProductList
   );
 
-  const { productList } = useSelector((state: RootState) => state.product);
+  const { productList } = useSelector((state: RootState) => state.products);
 
   const handleShowAllProduct = () => {
     if (!productList) {
@@ -96,27 +95,25 @@ export default function HeroSection() {
     dispatch(setSearchInputFocus());
   };
   return (
-    <main className="py-12 xl:py-20 bg-light-gray h-2/4  xl:h-5/6  flex items-center justify-center"> 
-      <section className="flex  flex-col place-items-center space-y-10  px-4 md:px-8 xl:px-10">
-        <div className="">
+    <main className="py-12 xl:py-20 bg-light-gray  ">
+      <section className="flex  flex-col place-items-center space-y-10 xl:space-y-14  px-4 md:px-8 xl:px-10">
+        <div className="flex-1">
           <div className="flex flex-col space-y-4 text-center">
-            <p>
-              <span className="rounded-full text-DarkOrange bg-white border-orange-500 font-semibold   border-solid border px-4 py-1">200+ Content Creation Tools</span>
-            </p>
-            <h1 className="font-semibold text-3xl leading-9 md:text-4xl mx-auto md:leading-45 md:max-w-2xl xl:text-8xl  xl:max-w-7xl xl:leading-tight">
-              <span> Every tool you need to </span>
-              <span>
-            ace  at content creation.
+            <h1 className="font-bold text-2xl leading-9 md:text-4xl md:leading-45 xl:text-6xl xl:leading-90 ">
+              Discover{" "}
+              <span className="text-DarkOrange">
+                200+ Content Creation Tools
               </span>
+              <br />
+              for Content Creators.
             </h1>
-            <h5 className="text-base text-center  mx-auto xl:text-3xl  px-2 max-w-lg xl:max-w-6xl xl:leading-normal">
-              {/* Directory of 200+ content creation tools designed to streamline
-              your process and enhance productivity. */}
-              Search, like, bookmark, and use the best content creation tools to streamline your workflow and create better content.
+            <h5 className="text-base mx-auto xl:text-3xl xl:leading-45 px-2 max-w-lg xl:max-w-4xl">
+              Directory of 200+ content creation tools designed to streamline
+              your process and enhance productivity.
             </h5>
           </div>
         </div>
-        <div>
+        <div className="flex-1">
           <div className="flex space-x-8 ">
             <div className="flex-1">
               <div className="flex space-x-2  md:space-x-4 lg:space-x-8 xl:space-x-12 ">

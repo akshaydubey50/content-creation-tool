@@ -1,9 +1,6 @@
 import HeroSection from "@/components/herosection/HeroSection";
 import Resource from "@/components/resources";
 
-export const dynamic = "force-dynamic";
-
-
 export default function Resources() {
   return (
     <>

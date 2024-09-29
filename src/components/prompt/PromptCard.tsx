@@ -17,21 +17,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 
 const PromptCard = ({
-  promptResource = {
-    id: "recEyJBryU2v9u5KM",
-    fields: {
-      Source: "GPTBot",
-      Name: "Create a social media schedule",
-      Category: ["Content Creation"],
-      Description:
-        "As a skilled social media manager, your task is to formulate a one-month social media posting calendar beginning from [insert date that schedule will start]. The frequency of posts should align with your preference, either [daily/every two days/every weekday/weekly]. Your business, known as [insert name], is engaged in selling [insert products or services]. Each post should detail the publish date, an engaging heading, captivating body text, and relevant hashtags. Ensure that the tone is [professional/casual/funny/friendly] as per our brand’s voice. Additionally, each post should include a suggestion for a suitable image, which could be sourced from a stock image service.",
-      Tags: ["LinkedIn", "Instagram", "Twitter"],
-      Status: "",
-      SourceLink: "",
-    },
-  },
+  promptResource,
 }: {
-  promptResource?: PropmtResourceModel;
+  promptResource: PropmtResourceModel;
 }) => {
   const router = useRouter();
   const likedPromptList = useSelector(
@@ -84,17 +72,12 @@ const PromptCard = ({
     const title = promptResource?.fields?.Name?.toLowerCase()
       .trim()
       .replace(/\s/g, "-");
-
     router.push(`/prompt/${title}`);
+  };
 
-    console.log("PromptCard handlePromptClick", title);
-  };
-  const handleLike = async () => {
-    setIsLiked(!isLiked);
-  };
-  const handleBoomark = async () => {
-    setIsBookMarked(!isBookMarked);
-  };
+  if (!promptResource) {
+    return null;
+  }
   return (
     <Card className="flex flex-col border-black hover:border-DarkOrange bg-light-gray ">
       <CardHeader>
@@ -106,7 +89,7 @@ const PromptCard = ({
               </Badge>
             ))}
           </div>
-          <button
+          {/* <button
             title="Bookmark"
             type="button"
             className="flex items-center gap-x-2"
@@ -143,7 +126,7 @@ const PromptCard = ({
             View Prompt
             <FiArrowUpRight className="text-2xl " />
           </Button>
-          <button title="Bookmark" onClick={handleBoomark}>
+          {/* <button title="Bookmark" onClick={handleBoomark}>
             {isBookMarked ? (
               <BsBookmarkFill className="text-2xl text-DarkOrange" />
             ) : (

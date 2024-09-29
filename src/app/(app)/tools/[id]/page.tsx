@@ -1,4 +1,3 @@
-
 import { Metadata, ResolvingMetadata } from "next";
 import ProductDetail from "./product-detail"; // Import client-side component
 import { AirtableModel } from "@/models/airtable.model";

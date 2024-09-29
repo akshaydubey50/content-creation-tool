@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import { setCategoryData } from "@/redux/slice/category/categorySlice";
 import { HomePage } from "@/constants/RoutePath";
 import { ChevronRight, LucideHome } from "lucide-react";
-import { clearSearchFilterList, setSearchQuery } from "@/redux/slice/search/searchSlice";
 
 type BreadcrumbProps = {
   categories: string;
@@ -21,22 +20,20 @@ export default function Breadcrumb({
   const dispatch = useDispatch();
 
   const handleNavigateToHome = () => {
-    dispatch(setSearchQuery(""))
-    dispatch(clearSearchFilterList());
-    router.replace(HomePage);
+    router.push(HomePage);
   };
 
-  // const handleCategorySelection = (selectedCategory: string) => {
-  //   if (selectedCategory) {
-  //     const formattedCategory = selectedCategory
-  //       .toLowerCase()
-  //       .trim()
-  //       .replace(/\s+/g, "-");
+  const handleCategorySelection = (selectedCategory: string) => {
+    if (selectedCategory) {
+      const formattedCategory = selectedCategory
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-");
 
-  //     router.push(`${HomePage}/category/${formattedCategory}`);
-  //     dispatch(setCategoryData([selectedCategory]));
-  //   }
-  // };
+      router.push(`${HomePage}/category/${formattedCategory}`);
+      dispatch(setCategoryData([selectedCategory]));
+    }
+  };
 
   const handlePageNavigation = (pageTitle: string) => {
     const formattedPage = pageTitle.toLowerCase().trim().replace(/\s+/g, "-");
@@ -45,6 +42,8 @@ export default function Breadcrumb({
       : pathname.includes("/category")
         ? `${pathname}/tools/${formattedPage}`
         : `${pathname}/${formattedPage}`;
+    console.log("newPath", newPath);
+    console.log("pathname", pathname);
     router.replace("/");
   };
 
@@ -63,8 +62,7 @@ export default function Breadcrumb({
         onClick={() => handlePageNavigation(categories)}
         className="hover:text-DarkOrange hover:border-b-2 hover:border-DarkOrange cursor-pointer"
       >
-        {/* {categories} */}
-        Tools
+        {categories}
       </span>
       <ChevronRight className="h-4 w-4 text-gray-400" />
 
