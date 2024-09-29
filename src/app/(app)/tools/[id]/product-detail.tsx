@@ -14,7 +14,7 @@ type Props = {
 
 export default function ProductDetail({ params }: Props) {
   const id = useSearchParams().get("id");
-  const { productList } = useSelector((state: RootState) => state.products);
+  const { productList } = useSelector((state: RootState) => state.product);
   const [product, setProductData] = useState<AirtableModel>();
   const { setVisibleItem } = useVisibleItemContextData();
   const currentCategory = product && product!.fields.Tags[0];
@@ -28,6 +28,7 @@ export default function ProductDetail({ params }: Props) {
       return formattedTitle === slug;
     });
 
+    console.log("productMatched", productMatched);
     if (productMatched) {
       setProductData(productMatched);
     }
@@ -43,7 +44,6 @@ export default function ProductDetail({ params }: Props) {
 
   return (
     <>
-      {" "}
       {product && (
         <>
           <ProductToolBanner
@@ -55,7 +55,7 @@ export default function ProductDetail({ params }: Props) {
             id={product!.id}
             verified={product!.fields.Verified}
             Pricing={product!.fields.Pricing} 
-            detailedMsg={product!.fields["Detailed Description"]}
+
           />
 
           <div className="px-4">
