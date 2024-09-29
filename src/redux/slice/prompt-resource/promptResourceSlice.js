@@ -6,6 +6,7 @@ export const fetchPromptResourceList = createAsyncThunk(
   async () => {
     const response = await fetch("/api/prompts");
     const responseBody = await response.json();
+    console.log("responseBody", responseBody);
     return responseBody.data;
   }
 );

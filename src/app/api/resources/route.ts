@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import axios from "axios";
 import { AirtableConf } from "@/conf/conf";
