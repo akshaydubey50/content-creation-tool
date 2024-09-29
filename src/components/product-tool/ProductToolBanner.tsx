@@ -10,7 +10,7 @@ import LikedBookmarkModal from "@/components/modal/LikedBookmarkModal";
 import {
   deleteBookmark,
   addBookmark,
-} from "@/redux/slice/bookmark/bookmarkSlice";
+} from "@/redux/slice/bookmark/bookmark.slice";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -33,7 +33,7 @@ export default function ProductToolBanner({
 }: Product) {
   const [isOpen, setIsOpen] = useState(false);
   const bookmarkList = useSelector(
-    (state: RootState) => state.bookmark.bookmarkList
+    (state: RootState) => state.bookmarks.bookmarkList
   );
   // const [isBookMarked, setIsBookMarked] = useState(false);
   const [isBookMarked, setIsBookMarked] = useState(() =>

@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://content-creation-tool.vercel.app/sitemap.xml

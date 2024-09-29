@@ -1,5 +1,13 @@
-import HeroSection from "@/components/herosection/HeroSection";
 import PromptLibrary from "@/components/prompt/prompt-library";
+import { Metadata } from "next/types";
+
+export const metadata: Metadata = {
+  title: "Content Creation FYI Prompt Library",
+  description:
+    "Explore our curated library of prompts to enhance your content creation process. Find inspiration and boost your productivity with our diverse collection of writing prompts.",
+  keywords:
+    "content creation, prompts, writing prompts, creative writing, productivity",
+};
 
 export default function Prompt() {
   return (

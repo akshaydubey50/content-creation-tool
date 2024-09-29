@@ -1,229 +1,146 @@
 "use client";
 // React Component Import
-import React, { useCallback, useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-// Backend Data Import
-
 // Icon's Import
-import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { MdVerified } from "react-icons/md";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
-// Project  Component Import
-import LikedBookmarkModal from "../modal/LikedBookmarkModal";
+// Project Component Import
 import VisitWebsite from "../visit-website/VisitWebsite";
-import {
-  deleteBookmark,
-  addBookmark,
-} from "@/redux/slice/bookmark/bookmarkSlice";
-import { addUpvote, deleteUpvote } from "@/redux/slice/upvote/upvoteSlice";
-
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
-import { isProductBookmarked } from "@/helper/helper";
-import { useSession } from "next-auth/react";
-import { useToast } from "../ui/use-toast";
-import { ToastAction } from "../ui/toast";
 import { HomePage } from "@/constants/RoutePath";
+import { useBookmarkHandler } from "@/hooks/useBookmarkHandler";
+import { useLikeHandler } from "@/hooks/useLikeHandler";
+import { useDebounce } from "@/hooks/useDebounce";
+import LikeButton from "../ui/likebutton";
+import BookmarkButton from "../ui/bookmarkbutton";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { getLikeList } from "@/redux/slice/like/like.slice";
 
 export function ProductCard(props: any) {
-  const { toast } = useToast();
-
-  const DEBOUNCE_DELAY = 250; // ms
-
-  const dispatch: AppDispatch = useDispatch();
   const { upVotedList, bookmarkList, product, totalLikes } = props;
-
   const { id, fields } = product;
-  const [isLiked, setIsLiked] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isBookMarked, setIsBookMarked] = useState<any>(() =>
-    isProductBookmarked(id, bookmarkList)
-  );
-  const [count, setCount] = useState(totalLikes);
-  const { data: session } = useSession();
 
   const { Name, WebsiteLink, Description, ToolImage, Verified, Pricing } =
     fields!;
   const formattedTitle = Name?.toLowerCase()?.trim()?.replace(/\s/g, "-");
-  // const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
 
-  console.log("formattedTitle", formattedTitle);
-  const getCurrentProductUpvotedObj = (toolId: any) => {
-    return upVotedList?.find((item: any) => item?.productId === toolId) || null;
-  };
-
-  const handleBookmark = useCallback(() => {
-    if (!session || !session?.user) {
-      setIsOpen(true);
-      return;
-    }
-    setIsBookMarked(!isBookMarked);
-    if (isBookMarked) {
-      toast({
-        title: `You removed ${Name} from bookmarks`,
-        variant: "destructive",
-      });
-      // @ts-ignore
-      dispatch(deleteBookmark(id));
-    } else {
-      toast({
-        title: `You bookmarked ${Name}`,
-        variant: "success",
-      });
-      // @ts-ignore
-      dispatch(addBookmark(id));
-    }
-  }, [session, isBookMarked, id, dispatch]);
-
-  const handleLikes = useCallback(() => {
-    if (!session?.user) {
-      setIsOpen(true);
-      return;
-    }
-
-    if (isLiked) {
-      setIsLiked(false);
-      setCount((prevCount: any) => prevCount - 1);
-      toast({
-        title: `You removed ${Name} from likes`,
-        variant: "destructive",
-      });
-      // @ts-ignore
-      dispatch(deleteUpvote(id));
-    } else {
-      setIsLiked(true);
-      setCount((prevCount: any) => prevCount + 1);
-      toast({
-        title: `You liked ${Name}`,
-        variant: "success",
-      });
-      // @ts-ignore
-      dispatch(addUpvote(id));
-    }
-  }, [session, isLiked, id, dispatch, setIsOpen]);
-
-  function debounce(func: Function, delay: number) {
-    let timeoutId: NodeJS.Timeout;
-    return (...args: any[]) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func(...args), delay);
-    };
-  }
-
-  const debouncedHandleLikes = useCallback(
-    debounce(handleLikes, DEBOUNCE_DELAY),
-    [handleLikes]
-  );
-
-  const debouncedHandleBookmark = useCallback(
-    debounce(handleBookmark, DEBOUNCE_DELAY),
-    [handleBookmark]
-  );
+  const likedList = useSelector((state: RootState) => state.likes.likedList);
+  console.log("likedList ==> ", likedList);
+  const dispatch = useDispatch<AppDispatch>();
+  const [isAlreadyLiked, setIsAlreadyLiked] = useState(false);
 
   useEffect(() => {
-    setIsBookMarked(isProductBookmarked(id, bookmarkList));
-  }, [id, bookmarkList]);
+    dispatch(getLikeList());
+  }, [dispatch]);
 
   useEffect(() => {
-    const upvotedObj = getCurrentProductUpvotedObj(id);
-    setIsLiked(upvotedObj?.isProductLikedByUser || false);
-  }, [id]);
+    if (likedList.length > 0) {
+      const toolLikedItem = likedList.find((item) => item.itemType === "tool");
+      if (toolLikedItem?.itemIds != null) {
+        // Check if the current id is in the itemIds array
+        setIsAlreadyLiked(toolLikedItem.itemIds.includes(id));
+        console.log("inside if isAlreadyLiked ==> ", isAlreadyLiked);
+      } else {
+        setIsAlreadyLiked(false);
+      }
+    } else {
+      setIsAlreadyLiked(false);
+      console.log("isAlreadyLiked ==> ", isAlreadyLiked);
+    }
+  }, [id, likedList, isAlreadyLiked]);
+
+  // const debouncedHandleLikes = useDebounce(handleLike, 250);
+  // const debouncedHandleBookmark = useDebounce(handleBookmark, 250);
 
   return (
-    <>
-      <div
-        className="rounded-2xl max-w-sm  flex flex-col  border border-black 
-          border-solid  shadow-lg"
-      >
-        <Link
-          href={{
-            pathname: `${HomePage}/${formattedTitle}`,
-          }}
-        >
-          <section className="border-b border-black border-solid">
-            <Image
-              src={ToolImage}
-              alt={formattedTitle}
-              loading="lazy"
-              width="1280"
-              height="720"
-              decoding="async"
-              data-nimg="1"
-              className="rounded-t-2xl w-full object-cover"
-            />
-          </section>
-        </Link>
-        <section className="bg-light-gray pt-7 px-5 rounded-b-2xl h-full">
-          <div className="flex flex-col justify-between h-full">
-            <div>
-              <div className="pb-4 flex flex-1 flex-row justify-between">
-                <div className="flex items-center gap-x-2">
-                  <h1 className="font-bold text-Title-Medium md:text-Title-Large h-8">
-                    {Name}
-                  </h1>
-
-                  {Verified && (
-                    <MdVerified className="text-2xl text-DarkOrange" />
-                  )}
-                </div>
-                <button
-                  title="Likes"
-                  type="button"
-                  onClick={debouncedHandleLikes}
-                  className="flex items-center gap-x-1"
-                >
-                  <p>
-                    {isLiked ? (
-                      <AiFillHeart className="text-3xl text-DarkOrange" />
-                    ) : (
-                      <AiOutlineHeart className="text-3xl   text-black" />
-                    )}
-                  </p>
-                  <p className="">{count}</p>
-                </button>
-                {(!session || !session?.user) && isOpen && (
-                  <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
+    <div className="rounded-2xl max-w-sm flex flex-col border border-black border-solid shadow-lg">
+      <Link href={{ pathname: `${HomePage}/${formattedTitle}` }}>
+        <section className="border-b border-black border-solid">
+          <Image
+            src={ToolImage}
+            alt={formattedTitle}
+            loading="lazy"
+            width="1280"
+            height="720"
+            decoding="async"
+            data-nimg="1"
+            className="rounded-t-2xl w-full object-cover"
+          />
+        </section>
+      </Link>
+      <section className="bg-light-gray pt-7 px-5 rounded-b-2xl h-full">
+        <div className="flex flex-col justify-between h-full">
+          <div>
+            <div className="pb-4 flex flex-1 flex-row justify-between">
+              <div className="flex items-center gap-x-2">
+                <h1 className="font-bold text-Title-Medium md:text-Title-Large h-8">
+                  {Name}
+                </h1>
+                {Verified && (
+                  <MdVerified className="text-2xl text-DarkOrange" />
                 )}
               </div>
-            </div>
-            <div className="">
-              <div className="text-Description h-16 ">
-                <p className="line-clamp-3">{Description}</p>
-              </div>
-            </div>
-            <div className="tool-btn-section pb-7">
-              <p className="my-6  ">
-                <span
-                  className="bg-white rounded-full  text-tags font-medium border 
-                border-solid border-black px-5 py-1"
-                >
-                  {Pricing}
-                </span>
-              </p>
-              <div
-                className="text-white text-Title-Medium  flex 
-          justify-between items-center"
+              {/*  <button
+                title="Likes"
+                type="button"
+                onClick={handleLike}
+                className="flex items-center gap-x-1"
               >
-                <VisitWebsite url={WebsiteLink} />
-                <button
-                  title="Bookmark"
-                  type="button"
-                  onClick={debouncedHandleBookmark}
-                >
-                  {isBookMarked ? (
-                    <BsBookmarkFill className="text-3xl text-DarkOrange" />
+                <p>
+                  {isLiked ? (
+                    <AiFillHeart className="text-3xl text-DarkOrange" />
                   ) : (
-                    <BsBookmark className="text-3xl   text-black" />
+                    <AiOutlineHeart className="text-3xl text-black" />
                   )}
-                </button>
-              </div>
+                </p>
+                <p>{isLiked ? totalLikes + 1 : totalLikes}</p>
+              </button> */}
+              <LikeButton
+                key={`${{ id }}+${{ Name }}`}
+                itemId={id}
+                itemName={Name}
+                initialLikedState={isAlreadyLiked}
+                itemType="tool"
+              />
+              {/* Modal for unregistered users */}
+              {/* {!session?.user && (
+                <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
+              )} */}
             </div>
           </div>
-        </section>
-      </div>
-    </>
+          <div>
+            <div className="text-Description h-16">
+              <p className="line-clamp-3">{Description}</p>
+            </div>
+          </div>
+          <div className="tool-btn-section pb-7">
+            <p className="my-6">
+              <span className="bg-white rounded-full text-tags font-medium border border-solid border-black px-5 py-1">
+                {Pricing}
+              </span>
+            </p>
+            <div className="text-white text-Title-Medium flex justify-between items-center">
+              <VisitWebsite url={WebsiteLink} />
+              {/* <button title="Bookmark" type="button" onClick={handleBookmark}>
+                {isBookMarked ? (
+                  <BsBookmarkFill className="text-3xl text-DarkOrange" />
+                ) : (
+                  <BsBookmark className="text-3xl text-black" />
+                )}
+              </button> */}
+              <BookmarkButton
+                id={id}
+                Name={Name}
+                isInitialBookmarked={false}
+                itemType="tool"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
