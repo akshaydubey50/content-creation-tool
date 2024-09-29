@@ -33,7 +33,7 @@ export default function ProductToolBanner({
 }: Product) {
   const [isOpen, setIsOpen] = useState(false);
   const bookmarkList = useSelector(
-    (state: RootState) => state.bookmark.bookmarkList
+    (state: RootState) => state.bookmarks.bookmarkList || []
   );
   // const [isBookMarked, setIsBookMarked] = useState(false);
   const [isBookMarked, setIsBookMarked] = useState(() =>

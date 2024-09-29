@@ -1,6 +1,6 @@
 "use client";
 // React Component Import
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -27,6 +27,10 @@ import { useSession } from "next-auth/react";
 import { useToast } from "../ui/use-toast";
 import { ToastAction } from "../ui/toast";
 import { HomePage } from "@/constants/RoutePath";
+import LikeButton from "../ui/likebutton";
+import BookmarkButton from "../ui/bookmarkbutton";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 
 export function ProductCard(props: any) {
   const { toast } = useToast();
@@ -48,89 +52,49 @@ export function ProductCard(props: any) {
   const { Name, WebsiteLink, Description, ToolImage, Verified, Pricing } =
     fields!;
   const formattedTitle = Name?.toLowerCase()?.trim()?.replace(/\s/g, "-");
-  // const formattedTag = Tags[0].toLowerCase().replace(/\s/g, "-");
 
-  console.log("formattedTitle", formattedTitle);
-  const getCurrentProductUpvotedObj = (toolId: any) => {
-    return upVotedList?.find((item: any) => item?.productId === toolId) || null;
-  };
-
-  const handleBookmark = useCallback(() => {
-    if (!session || !session?.user) {
-      setIsOpen(true);
-      return;
-    }
-    setIsBookMarked(!isBookMarked);
-    if (isBookMarked) {
-      toast({
-        title: `You removed ${Name} from bookmarks`,
-        variant: "destructive",
-      });
-      // @ts-ignore
-      dispatch(deleteBookmark(id));
-    } else {
-      toast({
-        title: `You bookmarked ${Name}`,
-        variant: "success",
-      });
-      // @ts-ignore
-      dispatch(addBookmark(id));
-    }
-  }, [session, isBookMarked, id, dispatch]);
-
-  const handleLikes = useCallback(() => {
-    if (!session?.user) {
-      setIsOpen(true);
-      return;
-    }
-
-    if (isLiked) {
-      setIsLiked(false);
-      setCount((prevCount: any) => prevCount - 1);
-      toast({
-        title: `You removed ${Name} from likes`,
-        variant: "destructive",
-      });
-      // @ts-ignore
-      dispatch(deleteUpvote(id));
-    } else {
-      setIsLiked(true);
-      setCount((prevCount: any) => prevCount + 1);
-      toast({
-        title: `You liked ${Name}`,
-        variant: "success",
-      });
-      // @ts-ignore
-      dispatch(addUpvote(id));
-    }
-  }, [session, isLiked, id, dispatch, setIsOpen]);
-
-  function debounce(func: Function, delay: number) {
-    let timeoutId: NodeJS.Timeout;
-    return (...args: any[]) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func(...args), delay);
-    };
-  }
-
-  const debouncedHandleLikes = useCallback(
-    debounce(handleLikes, DEBOUNCE_DELAY),
-    [handleLikes]
+  const dispatch = useDispatch<AppDispatch>();
+  const likedList = useSelector((state: RootState) => state.likes.likedList);
+  const bookmarkedList = useSelector(
+    (state: RootState) => state.bookmarks.bookmarkList
   );
 
-  const debouncedHandleBookmark = useCallback(
-    debounce(handleBookmark, DEBOUNCE_DELAY),
-    [handleBookmark]
-  );
+  const [isAlreadyLiked, setIsAlreadyLiked] = useState(false);
+  const [isAlreadyBookmarked, setIsAlreadyBookmarked] = useState(false);
 
   useEffect(() => {
-    setIsBookMarked(isProductBookmarked(id, bookmarkList));
-  }, [id, bookmarkList]);
+    if (likedList.length > 0) {
+      const toolLikedItem = likedList.find((item) => item.itemType === "tool");
+      if (toolLikedItem?.itemIds != null) {
+        // Check if the current id is in the itemIds array
+        setIsAlreadyLiked(toolLikedItem.itemIds.includes(id));
+      } else {
+        setIsAlreadyLiked(false);
+      }
+    } else {
+      setIsAlreadyLiked(false);
+    }
+  }, [id, likedList]);
 
+  // New effect for bookmarks
   useEffect(() => {
-    const upvotedObj = getCurrentProductUpvotedObj(id);
-    setIsLiked(upvotedObj?.isProductLikedByUser || false);
-  }, [id]);
+    if (bookmarkedList.length > 0) {
+      const toolBookmarkedItem = bookmarkedList.find(
+        (item) => item.itemType === "tool"
+      );
+      if (toolBookmarkedItem?.itemIds != null) {
+        // Check if the current id is in the itemIds array
+        setIsAlreadyBookmarked(toolBookmarkedItem.itemIds.includes(id));
+      } else {
+        setIsAlreadyBookmarked(false);
+      }
+    } else {
+      setIsAlreadyBookmarked(false);
+    }
+  }, [id, bookmarkedList]);
+
+  // const debouncedHandleLikes = useDebounce(handleLike, 250);
+  // const debouncedHandleBookmark = useDebounce(handleBookmark, 250);
 
   return (
     <>
@@ -189,41 +153,37 @@ export function ProductCard(props: any) {
                 )}
               </div>
             </div>
-            <div className="">
-              <div className="text-Description h-16 ">
-                <p className="line-clamp-3">{Description}</p>
-              </div>
-            </div>
-            <div className="tool-btn-section pb-7">
-              <p className="my-6  ">
-                <span
-                  className="bg-white rounded-full  text-tags font-medium border 
-                border-solid border-black px-5 py-1"
-                >
-                  {Pricing}
-                </span>
-              </p>
-              <div
-                className="text-white text-Title-Medium  flex 
-          justify-between items-center"
-              >
-                <VisitWebsite url={WebsiteLink} />
-                <button
-                  title="Bookmark"
-                  type="button"
-                  onClick={debouncedHandleBookmark}
-                >
-                  {isBookMarked ? (
-                    <BsBookmarkFill className="text-3xl text-DarkOrange" />
-                  ) : (
-                    <BsBookmark className="text-3xl   text-black" />
-                  )}
-                </button>
-              </div>
+          </div>
+          <div>
+            <div className="text-Description h-16">
+              <p className="line-clamp-3">{Description}</p>
             </div>
           </div>
-        </section>
-      </div>
-    </>
+          <div className="tool-btn-section pb-7">
+            <p className="my-6">
+              <span className="bg-white rounded-full text-tags font-medium border border-solid border-black px-5 py-1">
+                {Pricing}
+              </span>
+            </p>
+            <div className="text-white text-Title-Medium flex justify-between items-center">
+              <VisitWebsite url={WebsiteLink} />
+              {/* <button title="Bookmark" type="button" onClick={handleBookmark}>
+                {isBookMarked ? (
+                  <BsBookmarkFill className="text-3xl text-DarkOrange" />
+                ) : (
+                  <BsBookmark className="text-3xl text-black" />
+                )}
+              </button> */}
+              <BookmarkButton
+                id={id}
+                Name={Name}
+                isInitialBookmarked={isAlreadyBookmarked}
+                itemType="tool"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
