@@ -4,20 +4,19 @@ import { AirtableModel } from "@/models/airtable.model";
 import { RiStackFill, RiSearchLine } from "react-icons/ri";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { VscVerifiedFilled, VscVerified } from "react-icons/vsc";
-import { GoHeartFill } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearBookmarkList,
   getBookmarkList,
-} from "@/redux/slice/bookmark/bookmarkSlice";
+} from "@/redux/slice/bookmark/bookmark.slice";
 import { fetchProductList } from "@/redux/slice/product/productSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import {
   clearProductVerifiedList,
   setIsVerifiedChecked,
   setProductVerifiedList,
-} from "@/redux/slice/verified/verifiedSlice";
-import { setIsBookmarkCheck } from "@/redux/slice/bookmark/bookmarkSlice";
+} from "@/redux/slice/verified/verified.slice";
+import { setIsBookmarkCheck } from "@/redux/slice/bookmark/bookmark.slice";
 import LikedBookmarkModal from "../modal/LikedBookmarkModal";
 import {
   setSearchInputFocus,
@@ -32,16 +31,16 @@ export default function HeroSection() {
   const { data: session } = useSession();
 
   const isBookmark = useSelector<any>(
-    (store: RootState) => store.bookmark.isBookmarkChecked
+    (store: RootState) => store.bookmarks.isBookmarkChecked
   );
   const isVerifiedCheck = useSelector(
-    (store: RootState) => store.verifiedProduct.isVerifiedChecked
+    (store: RootState) => store.verifiedProducts.isVerifiedChecked
   );
   const verifiedProductData = useSelector(
-    (store: RootState) => store.verifiedProduct.verifiedProductList
+    (store: RootState) => store.verifiedProducts.verifiedProductList
   );
 
-  const { productList } = useSelector((state: RootState) => state.product);
+  const { productList } = useSelector((state: RootState) => state.products);
 
   const handleShowAllProduct = () => {
     if (!productList) {
