@@ -1,4 +1,3 @@
-"use client";
 import HeroSection from "@/components/herosection/HeroSection";
 import Resource from "@/components/resources";
 import { Metadata } from "next/types";
