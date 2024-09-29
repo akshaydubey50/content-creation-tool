@@ -3,18 +3,24 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 export { default } from "next-auth/middleware";
 
-// This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
-  //get token
-  //get current url
-  //if token&& url then redirect /
+  // Create a response object that we'll modify and return
+  let response = NextResponse.next();
+
+  // Add cache control headers to prevent caching
+  response.headers.set('Cache-Control', 'no-store, max-age=0');
+  response.headers.set('Pragma', 'no-cache');
+  response.headers.set('Expires', '0');
+
+  // Existing redirect for root path
   if (request.nextUrl.pathname === "/") {
-    // Redirect to /tools
     return NextResponse.redirect(new URL("/tools", request.url));
   }
-  const token = await getToken({ req: request });
 
+  const token = await getToken({ req: request });
   const url = request.nextUrl;
+
+  // Existing redirect for authenticated users
   if (
     token &&
     (url.pathname.startsWith("/signin") ||
@@ -23,10 +29,20 @@ export async function middleware(request: NextRequest) {
   ) {
     return NextResponse.redirect(new URL("/", request.url));
   }
-  return NextResponse.next();
+
+  // Return the response with the added headers
+  return response;
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/", "/signin", "/signup", "/verify"],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
 };

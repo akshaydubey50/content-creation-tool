@@ -34,10 +34,10 @@ import NewsLetter from "@/components/newsletter";
 export default function ToolDetails() {
   const dispatch: AppDispatch = useDispatch();
   const categoryData = useSelector(
-    (store: RootState) => store.category.categoryData
+    (store: RootState) => store.categories.categoryData
   );
   const productList: AirtableModel[] | null = useSelector(
-    (store: RootState) => store.product.productList
+    (store: RootState) => store.products.productList
   );
 
   const { setVisibleItem } = useVisibleItemContextData();
