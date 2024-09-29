@@ -4,7 +4,6 @@ import { useSearchParams, useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductList } from "@/redux/slice/product/productSlice";
 import { getBookmarkList } from "@/redux/slice/bookmark/bookmark.slice";
-import { getUpvoteList } from "@/redux/slice/upvote/upvoteSlice";
 import { RootState, AppDispatch } from "@/redux/store";
 import { useSession } from "next-auth/react";
 import { ProductCard } from "./ProductCard";
@@ -21,8 +20,6 @@ interface ProductListProps {
 
 export default function ProductList({ currentCategory }: ProductListProps) {
   const id = useSearchParams().get("id");
-  const params = useParams();
-  const slug = params;
 
   const dispatch: AppDispatch = useDispatch();
   const { data: session } = useSession();
