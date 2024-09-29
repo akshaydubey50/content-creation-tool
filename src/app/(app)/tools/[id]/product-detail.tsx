@@ -59,11 +59,11 @@ export default function ProductDetail({ params }: Props) {
           />
 
           <div className="px-4">
-            <h1 className="text-xl md:text-3xl lg:text-4xl text-center  my-6 md:my-8 w-full font-bold">
+            <h2 className="text-xl md:text-3xl lg:text-4xl text-center  my-6 md:my-8 w-full font-bold">
               Similar{" "}
               <span className="text-DarkOrange">{product!.fields.Tags}</span>{" "}
               Tools
-            </h1>
+            </h2>
           </div>
         </>
       )}
