@@ -32,7 +32,7 @@ export default function FilterSection() {
   /*Redux Dispatch & Selector*/
   const dispatch = useDispatch();
   const categoryData = useSelector(
-    (store: RootState) => store.category.categoryData
+    (store: RootState) => store.categories.categoryData
   );
   const searchQuery = useSelector(
     (store: RootState) => store.search.searchQuery
@@ -40,7 +40,7 @@ export default function FilterSection() {
   const filterData = useSelector(
     (store: RootState) => store.search.searchFilterList
   );
-  const { productList } = useSelector((state: RootState) => state.product);
+  const { productList } = useSelector((state: RootState) => state.products);
   const searchToFocusInput = useSelector(
     (state: RootState) => state.search.searchToFocus
   );
@@ -48,7 +48,7 @@ export default function FilterSection() {
     (state: RootState) => state.search.scrollPosition
   );
   const { priceData, matchedPrice } = useSelector(
-    (state: RootState) => state.priceModel
+    (state: RootState) => state.pricingModel
   );
 
   /*Context Data*/
@@ -58,7 +58,7 @@ export default function FilterSection() {
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     // console.log("searchRef", searchRef.current?.value);
     router.push("/");
-    dispatch(scrollPage(600))
+    dispatch(scrollPage(600));
     dispatch(clearMatchedPrice());
     dispatch(clearPriceData());
     dispatch(clearCategoryData());

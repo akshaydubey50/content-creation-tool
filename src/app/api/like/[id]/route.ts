@@ -13,10 +13,11 @@ export async function POST(req: NextRequest) {
       { success: false, msg: "Unauthorized access" },
       { status: 400 }
     );
-  }
-  // const id = "667ff969d27bcfc89d2a86ce";
+  } 
   try {
     const productId = req.nextUrl.pathname.split("like/")[1];
+    
+    console.log("productId ==> ", productId);
     const user = await UserModel.findById({ _id: token._id });
 
     if (!user) {

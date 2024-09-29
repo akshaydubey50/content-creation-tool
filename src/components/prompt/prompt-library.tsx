@@ -14,13 +14,16 @@ import Pagination from "../pagination/Pagination";
 
 export default function PromptLibrary() {
   const [currentPage, setCurrentPage] = useState(1);
-
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [promptList, setPromptList] = useState<PropmtResourceModel[]>([]);
+  const [filteredPrompts, setFilteredPrompts] = useState<PropmtResourceModel[]>(
+    []
+  );
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const dispatch: AppDispatch = useDispatch();
   const { isLoading, isError, promptResourceList } = useSelector(
-    (state: RootState) => state.promptResource
+    (state: RootState) => state.promptResources
   );
 
   const itemsPerPage = 10;
@@ -29,29 +32,36 @@ export default function PromptLibrary() {
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const getPromptCategory = () => {
+  const getPromptCategory = useCallback(() => {
     const categoryList = new Set();
     if (promptList.length > 0) {
-      promptList.map((prompt) => {
-        if (!categoryList?.has(prompt.fields?.Category?.[0])) {
-          categoryList.add(prompt.fields?.Category?.[0]);
+      promptList.forEach((prompt) => {
+        if (prompt.fields?.Category?.[0]) {
+          categoryList.add(prompt.fields.Category[0]);
         }
       });
     }
+    return Array.from(categoryList) as string[];
+  }, [promptList]);
 
-    return Array.from(categoryList);
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    filterPrompts(category);
+    setCurrentPage(1);
+  };
+  const filterPrompts = (category: string) => {
+    const filtered = promptList.filter(
+      (prompt) => prompt.fields?.Category?.[0] === category
+    );
+    setFilteredPrompts(filtered);
   };
 
   const updateCurrentProducts = useCallback(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const newCurrentProducts = promptList!.slice(startIndex, endIndex);
-    return newCurrentProducts;
-  }, [currentPage, promptList]);
-
-  useEffect(() => {
-    updateCurrentProducts();
-  }, [currentPage, promptList, updateCurrentProducts]);
+    const currentList = selectedCategory ? filteredPrompts : promptList;
+    return currentList.slice(startIndex, endIndex);
+  }, [currentPage, promptList, filteredPrompts, selectedCategory]);
 
   useEffect(() => {
     if (promptResourceList?.length === 0) {
@@ -60,11 +70,11 @@ export default function PromptLibrary() {
   }, [dispatch, promptResourceList]);
 
   useEffect(() => {
-    console.log("useEffect Triggered!!!");
     if (!isLoading && promptResourceList?.length > 0) {
       setPromptList(promptResourceList);
+      setFilteredPrompts(promptResourceList);
     }
-  }, [isLoading, promptResourceList, isError, getPromptCategory]);
+  }, [isLoading, promptResourceList, isError]);
 
   if (isLoading) {
     return <Loader />;
@@ -95,7 +105,11 @@ export default function PromptLibrary() {
               isCategoryOpen ? "block" : "hidden"
             } lg:block`}
           >
-            <PromptCategory categoryList={getPromptCategory()} />
+            <PromptCategory
+              categoryList={getPromptCategory()}
+              onSelectCategory={handleCategorySelect}
+              selectedCategory={selectedCategory}
+            />
           </aside>
 
           {/* Main Content */}
@@ -113,7 +127,9 @@ export default function PromptLibrary() {
               </div>
               <Pagination
                 currentPage={currentPage}
-                totalItems={promptList!.length}
+                totalItems={
+                  selectedCategory ? filteredPrompts.length : promptList.length
+                }
                 onPageChange={handlePageChange}
               />
             </main>

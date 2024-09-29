@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import {
   Dialog,
@@ -37,6 +36,7 @@ export default function NewsLetterModal() {
         </DialogHeader>
         <div className="w-full">
           <iframe
+            title="Subscribe to our newsletter"
             src="https://embeds.beehiiv.com/c8b47983-58f2-410d-9d69-f10d79908089?slim=true"
             loading="lazy"
             data-test-id="beehiiv-embed"

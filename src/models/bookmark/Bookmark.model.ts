@@ -2,17 +2,24 @@ import mongoose, { Schema } from "mongoose";
 
 export interface Bookmark extends Document {
   userId: Schema.Types.ObjectId;
-  productId: string;
+  itemId: string;
+  itemType: "tool" | "prompt";
 }
 
 const bookmarkSchema: Schema<Bookmark> = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     ref: "User",
+    required: [true, "UserId is required"],
   },
-  productId: {
+  itemId: {
     type: String,
-    required: [true, "Product id is required"],
+    required: [true, "ItemId is required"],
+  },
+  itemType: {
+    type: String,
+    enum: ["tool", "prompt"],
+    required: [true, "Item type is required"],
   },
 });
 
