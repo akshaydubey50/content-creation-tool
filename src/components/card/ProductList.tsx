@@ -13,7 +13,10 @@ import { getUpvoteList } from "@/redux/slice/upvote/upvoteSlice";
 import Loader from "../common/Loader/Loader";
 import { RootState, AppDispatch } from "@/redux/store";
 import Pagination from "../pagination/Pagination";
-import { useSession } from "next-auth/react";
+import { usePagination } from "@/hooks/usePagination";
+import { useFilteredProducts } from "@/hooks/useFilteredProduct";
+import { isProductBookmarked } from "@/helper/helper";
+import { getLikeList } from "@/redux/slice/like/like.slice";
 
 interface ProductListProps {
   currentCategory?: string;
@@ -39,8 +42,11 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const inputSearchFilterArr = useSelector(
     (store: RootState) => store.search.searchFilterList
   );
-  const verifiedProductArr = useSelector(
-    (store: RootState) => store.verifiedProduct.verifiedProductList
+  const { currentPage, updateCurrentProducts, handlePageChange } =
+    usePagination(12);
+
+  const isBookmark = useSelector(
+    (state: RootState) => state.bookmarks.isBookmarkChecked || false
   );
   const productSearchQuery = useSelector(
     (store: RootState) => store.search.searchQuery
@@ -161,7 +167,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   }, [productList, dispatch]);
 
   useEffect(() => {
-    dispatch(getUpvoteList());
+    dispatch(getLikeList());
     if (session?.user) {
       dispatch(getBookmarkList());
     }
@@ -182,7 +188,12 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     );
   }
 
-  if (isBookmark && bookmarkList.length === 0) {
+  if (
+    isBookmark &&
+    (bookmarkList.filter((item: any) => item.itemType == "tool")?.length ===
+      0 ||
+      bookmarkList?.length === 0)
+  ) {
     return (
       <>
         <div className="text-3xl font-bold  text-center h-80 flex items-center justify-center">
