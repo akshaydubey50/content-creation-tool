@@ -37,9 +37,6 @@ export default function FilterSection() {
   const searchQuery = useSelector(
     (store: RootState) => store.search.searchQuery
   );
-  const filterData = useSelector(
-    (store: RootState) => store.search.searchFilterList
-  );
   const { productList } = useSelector((state: RootState) => state.products);
   const searchToFocusInput = useSelector(
     (state: RootState) => state.search.searchToFocus
@@ -47,9 +44,7 @@ export default function FilterSection() {
   const scrollPosition = useSelector(
     (state: RootState) => state.search.scrollPosition
   );
-  const { priceData, matchedPrice } = useSelector(
-    (state: RootState) => state.pricingModel
-  );
+  const { priceData } = useSelector((state: RootState) => state.pricingModel);
 
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
@@ -161,7 +156,7 @@ export default function FilterSection() {
   };
 
   const categoryOptionsList = Array.from(getListOfCategory()).map(
-    (item: string, index: number) => {
+    (item: string) => {
       return {
         value: item,
         label: item,
@@ -180,23 +175,12 @@ export default function FilterSection() {
     return priceItem;
   };
 
-  const priceOptionList = Array.from(priceModelList()).map(
-    (item: string, index: number) => {
-      return {
-        value: item,
-        label: item,
-      };
-    }
-  );
-
-  const priceTypeHandler = useCallback(() => {
-    const getPriceList = productList.filter(
-      (item: AirtableModel) =>
-        item?.fields?.Pricing[0]?.toLowerCase() == priceData?.toLowerCase()
-    );
-    dispatch(setMatchedPrice(getPriceList));
-    console.log(getPriceList);
-  }, []);
+  const priceOptionList = Array.from(priceModelList()).map((item: string) => {
+    return {
+      value: item,
+      label: item,
+    };
+  });
 
   useEffect(() => {
     SetIsMounted(true);

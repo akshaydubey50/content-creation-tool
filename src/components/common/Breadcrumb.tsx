@@ -44,7 +44,7 @@ export default function Breadcrumb({
         : `${pathname}/${formattedPage}`;
     console.log("newPath", newPath);
     console.log("pathname", pathname);
-    router.replace(newPath);
+    router.replace("/");
   };
 
   return (
@@ -62,7 +62,8 @@ export default function Breadcrumb({
         onClick={() => handlePageNavigation(categories)}
         className="hover:text-DarkOrange hover:border-b-2 hover:border-DarkOrange cursor-pointer"
       >
-        {categories}
+        {/* {categories} */}
+        Tools
       </span>
       <ChevronRight className="h-4 w-4 text-gray-400" />
 
