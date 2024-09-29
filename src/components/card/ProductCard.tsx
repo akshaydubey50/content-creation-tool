@@ -1,6 +1,6 @@
 "use client";
 // React Component Import
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -10,14 +10,10 @@ import { MdVerified } from "react-icons/md";
 // Project Component Import
 import VisitWebsite from "../visit-website/VisitWebsite";
 import { HomePage } from "@/constants/RoutePath";
-import { useBookmarkHandler } from "@/hooks/useBookmarkHandler";
-import { useLikeHandler } from "@/hooks/useLikeHandler";
-import { useDebounce } from "@/hooks/useDebounce";
 import LikeButton from "../ui/likebutton";
 import BookmarkButton from "../ui/bookmarkbutton";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { getLikeList } from "@/redux/slice/like/like.slice";
 
 export function ProductCard(props: any) {
   const { upVotedList, bookmarkList, product, totalLikes } = props;
@@ -27,14 +23,14 @@ export function ProductCard(props: any) {
     fields!;
   const formattedTitle = Name?.toLowerCase()?.trim()?.replace(/\s/g, "-");
 
-  const likedList = useSelector((state: RootState) => state.likes.likedList);
-  console.log("likedList ==> ", likedList);
   const dispatch = useDispatch<AppDispatch>();
-  const [isAlreadyLiked, setIsAlreadyLiked] = useState(false);
+  const likedList = useSelector((state: RootState) => state.likes.likedList);
+  const bookmarkedList = useSelector(
+    (state: RootState) => state.bookmarks.bookmarkList
+  );
 
-  useEffect(() => {
-    dispatch(getLikeList());
-  }, [dispatch]);
+  const [isAlreadyLiked, setIsAlreadyLiked] = useState(false);
+  const [isAlreadyBookmarked, setIsAlreadyBookmarked] = useState(false);
 
   useEffect(() => {
     if (likedList.length > 0) {
@@ -42,15 +38,30 @@ export function ProductCard(props: any) {
       if (toolLikedItem?.itemIds != null) {
         // Check if the current id is in the itemIds array
         setIsAlreadyLiked(toolLikedItem.itemIds.includes(id));
-        console.log("inside if isAlreadyLiked ==> ", isAlreadyLiked);
       } else {
         setIsAlreadyLiked(false);
       }
     } else {
       setIsAlreadyLiked(false);
-      console.log("isAlreadyLiked ==> ", isAlreadyLiked);
     }
-  }, [id, likedList, isAlreadyLiked]);
+  }, [id, likedList]);
+
+  // New effect for bookmarks
+  useEffect(() => {
+    if (bookmarkedList.length > 0) {
+      const toolBookmarkedItem = bookmarkedList.find(
+        (item) => item.itemType === "tool"
+      );
+      if (toolBookmarkedItem?.itemIds != null) {
+        // Check if the current id is in the itemIds array
+        setIsAlreadyBookmarked(toolBookmarkedItem.itemIds.includes(id));
+      } else {
+        setIsAlreadyBookmarked(false);
+      }
+    } else {
+      setIsAlreadyBookmarked(false);
+    }
+  }, [id, bookmarkedList]);
 
   // const debouncedHandleLikes = useDebounce(handleLike, 250);
   // const debouncedHandleBookmark = useDebounce(handleBookmark, 250);
@@ -134,7 +145,7 @@ export function ProductCard(props: any) {
               <BookmarkButton
                 id={id}
                 Name={Name}
-                isInitialBookmarked={false}
+                isInitialBookmarked={isAlreadyBookmarked}
                 itemType="tool"
               />
             </div>

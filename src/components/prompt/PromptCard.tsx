@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -13,6 +13,8 @@ import { FiArrowUpRight } from "react-icons/fi";
 import { Badge } from "../ui/badge";
 import LikeButton from "../ui/likebutton";
 import BookmarkButton from "../ui/bookmarkbutton";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 
 const PromptCard = ({
   promptResource,
@@ -20,8 +22,51 @@ const PromptCard = ({
   promptResource: PropmtResourceModel;
 }) => {
   const router = useRouter();
-  const [isBookMarked, setIsBookMarked] = useState<boolean>(false);
-  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const likedPromptList = useSelector(
+    (state: RootState) => state.likes.likedList
+  );
+  const bookmarkedPromptList = useSelector(
+    (state: RootState) => state.bookmarks.bookmarkList
+  );
+
+  const [isAlreadyLiked, setIsAlreadyLiked] = useState(false);
+  const [isAlreadyBookmarked, setIsAlreadyBookmarked] = useState(false);
+
+  useEffect(() => {
+    if (likedPromptList.length > 0) {
+      const toolLikedItem = likedPromptList.find(
+        (item) => item.itemType === "prompt"
+      );
+      if (toolLikedItem?.itemIds != null) {
+        // Check if the current id is in the itemIds array
+        setIsAlreadyLiked(toolLikedItem.itemIds.includes(promptResource?.id));
+      } else {
+        setIsAlreadyLiked(false);
+      }
+    } else {
+      setIsAlreadyLiked(false);
+    }
+  }, [likedPromptList, promptResource?.id]);
+
+  // New effect for bookmarks
+  useEffect(() => {
+    if (bookmarkedPromptList.length > 0) {
+      const toolBookmarkedItem = bookmarkedPromptList.find(
+        (item) => item.itemType === "prompt"
+      );
+      if (toolBookmarkedItem?.itemIds != null) {
+        // Check if the current id is in the itemIds array
+        setIsAlreadyBookmarked(
+          toolBookmarkedItem.itemIds.includes(promptResource?.id)
+        );
+      } else {
+        setIsAlreadyBookmarked(false);
+      }
+    } else {
+      setIsAlreadyBookmarked(false);
+    }
+  }, [bookmarkedPromptList, promptResource?.id]);
+
   const handlePromptClick = (promptResource: PropmtResourceModel) => {
     // navigate to prompt detail page
     const title = promptResource?.fields?.Name?.toLowerCase()
@@ -59,7 +104,7 @@ const PromptCard = ({
           </button> */}
           <LikeButton
             key={promptResource.id}
-            initialLikedState={isLiked}
+            initialLikedState={isAlreadyLiked}
             itemId={promptResource.id}
             itemName={promptResource.fields?.Name}
             itemType="prompt"
@@ -90,7 +135,7 @@ const PromptCard = ({
           </button> */}
           <BookmarkButton
             key={promptResource.id}
-            isInitialBookmarked={isBookMarked}
+            isInitialBookmarked={isAlreadyBookmarked}
             Name={promptResource.fields?.Name}
             id={promptResource.id}
             itemType="prompt"

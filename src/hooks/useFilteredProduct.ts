@@ -29,15 +29,20 @@ export function useFilteredProducts({
     } else if (matchedPrice.length > 0 && !id) {
       products = matchedPrice;
     } else if (session && isBookmark && bookmarkList) {
-      if (
-        !Array.isArray(bookmarkList[0].itemIds) ||
+      /*  if (
+        !Array.isArray(bookmarkList[0]?.itemIds) ||
         !Array.isArray(productList)
       ) {
         console.error("Either bookmarkList or productList is not an array");
         return [];
-      }
+      } */
 
-      products = productList.filter((item: AirtableModel) =>
+      /*   if (bookmarkList[0]?.itemIds?.length == 0) {
+        console.log("bookmarkList[0]?.itemIds?.length", bookmarkList?.length);
+        return [];
+      } */
+
+      products = productList?.filter((item: AirtableModel) =>
         bookmarkList[0]?.itemIds?.includes(item?.id)
       );
     } else if (isVerifiedCheck && verifiedProductArr.length > 0) {

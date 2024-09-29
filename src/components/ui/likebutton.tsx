@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLikeHandler } from "@/hooks/useLikeHandler";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
@@ -20,7 +20,7 @@ const LikeButton = ({
     itemName,
     initialLikedState,
     itemType
-  );
+  ); 
 
   return (
     <button

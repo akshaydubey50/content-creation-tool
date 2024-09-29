@@ -6,7 +6,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../common/Loader/Loader";
-import { fetchPromptResourceList } from "@/redux/slice/prompt-resource/promptResourceSlice";
+import { fetchPromptResourceList } from "@/redux/slice/prompt-resource/promptResource.slice";
 import { PropmtResourceModel } from "@/models/airtable.model";
 import PromptCategory from "./PromptCategory";
 import PromptCard from "./PromptCard";
