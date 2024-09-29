@@ -62,8 +62,7 @@ export default function Breadcrumb({
         onClick={() => handlePageNavigation(categories)}
         className="hover:text-DarkOrange hover:border-b-2 hover:border-DarkOrange cursor-pointer"
       >
-        {/* {categories} */}
-        Tools
+        {categories}
       </span>
       <ChevronRight className="h-4 w-4 text-gray-400" />
 

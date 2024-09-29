@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { AppDispatch } from "@/redux/store";
 import { useToast } from "@/components/ui/use-toast";
-import { addLike, deleteLike } from  "@/redux/slice/like/like.slice";
+import { addLike, deleteLike } from "@/redux/slice/like/like.slice";
 import { useDispatch } from "react-redux";
 
 export function useLikeHandler(
@@ -42,7 +42,7 @@ export function useLikeHandler(
       } else {
         await dispatch(deleteLike({ itemId: id, itemType }));
         toast({
-          title: `You unliked ${Name}`,
+          title: `You removed ${Name} from likes`,
           variant: "destructive",
         });
       }

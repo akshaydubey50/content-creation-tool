@@ -20,7 +20,7 @@ const LikeButton = ({
     itemName,
     initialLikedState,
     itemType
-  ); 
+  );
 
   return (
     <button

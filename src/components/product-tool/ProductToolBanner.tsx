@@ -10,7 +10,7 @@ import LikedBookmarkModal from "@/components/modal/LikedBookmarkModal";
 import {
   deleteBookmark,
   addBookmark,
-} from "@/redux/slice/bookmark/bookmark.slice";
+} from "@/redux/slice/bookmark/bookmarkSlice";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
