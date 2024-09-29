@@ -3,14 +3,7 @@ import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { useSearchParams, useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductList } from "@/redux/slice/product/productSlice";
-import { AirtableModel } from "@/models/airtable.model";
-import { ProductCard } from "./ProductCard";
-import {
-  getBookmarkList,
-  setBookmarkList,
-} from "@/redux/slice/bookmark/bookmarkSlice";
-import { getUpvoteList } from "@/redux/slice/upvote/upvoteSlice";
-import Loader from "../common/Loader/Loader";
+import { getBookmarkList } from "@/redux/slice/bookmark/bookmark.slice";
 import { RootState, AppDispatch } from "@/redux/store";
 import Pagination from "../pagination/Pagination";
 import { usePagination } from "@/hooks/usePagination";
@@ -24,11 +17,6 @@ interface ProductListProps {
 
 export default function ProductList({ currentCategory }: ProductListProps) {
   const id = useSearchParams().get("id");
-
-  const params = useParams();
-  const slug = params;
-
-  const [currentPage, setCurrentPage] = useState(1);
 
   const dispatch: AppDispatch = useDispatch();
   const { isUserAuthenticated } = useSelector((store: RootState) => store.user);
