@@ -1,13 +1,8 @@
+"use client";
 import Resource from "@/components/resources";
-import { Metadata } from "next/types";
 
-export const metadata: Metadata = {
-  title: "Content Creation FYI Resource Library",
-  description:
-    "Explore our curated library of resources to enhance your content creation process. Find inspiration and boost your productivity with our diverse collection of writing prompts.",
-  keywords:
-    "content creation, prompts, writing prompts, creative writing, productivity",
-};
+export const dynamic = "force-dynamic";
+
 
 export default function Resources() {
   return (
