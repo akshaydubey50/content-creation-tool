@@ -30,14 +30,14 @@ export default function HeroSection() {
 
   const { data: session } = useSession();
 
-  const isBookmark = useSelector<any>(
-    (store: RootState) => store.bookmarks.isBookmarkChecked
+  const isBookmark = useSelector(
+    (state: RootState) => state.bookmarks?.isBookmarkChecked || false
   );
   const isVerifiedCheck = useSelector(
-    (store: RootState) => store.verifiedProducts.isVerifiedChecked
+    (store: RootState) => store.verifiedProducts?.isVerifiedChecked||false
   );
   const verifiedProductData = useSelector(
-    (store: RootState) => store.verifiedProducts.verifiedProductList
+    (store: RootState) => store.verifiedProducts?.verifiedProductList||false
   );
 
   const { productList } = useSelector((state: RootState) => state.products);
@@ -95,11 +95,11 @@ export default function HeroSection() {
     dispatch(setSearchInputFocus());
   };
   return (
-    <main className="py-12 xl:py-20 bg-light-gray  ">
-      <section className="flex  flex-col place-items-center space-y-10 xl:space-y-14  px-4 md:px-8 xl:px-10">
+    <main className="py-12 xl:py-20 bg-light-gray ">
+      <section className="flex flex-col px-4 space-y-10 place-items-center xl:space-y-14 md:px-8 xl:px-10">
         <div className="flex-1">
           <div className="flex flex-col space-y-4 text-center">
-            <h1 className="font-bold text-2xl leading-9 md:text-4xl md:leading-45 xl:text-6xl xl:leading-90 ">
+            <h1 className="text-2xl font-bold leading-9 md:text-4xl md:leading-45 xl:text-6xl xl:leading-90 ">
               Discover{" "}
               <span className="text-DarkOrange">
                 200+ Content Creation Tools
@@ -107,7 +107,7 @@ export default function HeroSection() {
               <br />
               for Content Creators.
             </h1>
-            <h5 className="text-base mx-auto xl:text-3xl xl:leading-45 px-2 max-w-lg xl:max-w-4xl">
+            <h5 className="max-w-lg px-2 mx-auto text-base xl:text-3xl xl:leading-45 xl:max-w-4xl">
               Directory of 200+ content creation tools designed to streamline
               your process and enhance productivity.
             </h5>
@@ -116,20 +116,20 @@ export default function HeroSection() {
         <div className="flex-1">
           <div className="flex space-x-8 ">
             <div className="flex-1">
-              <div className="flex space-x-2  md:space-x-4 lg:space-x-8 xl:space-x-12 ">
-                <div className="flex flex-col place-items-center  space-y-4 cursor-pointer">
+              <div className="flex space-x-2 md:space-x-4 lg:space-x-8 xl:space-x-12 ">
+                <div className="flex flex-col space-y-4 cursor-pointer place-items-center">
                   <button
                     className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6  "bg-gray-200" : "bg-gray-300"
                      hover:bg-opacity-75 focus:outline-none`}
                     onClick={handleShowAllProduct}
                   >
-                    <RiStackFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
+                    <RiStackFill className="text-2xl text-black md:text-3xl lg:text-4xl" />
                   </button>
                   <p className="font-medium text-Title-Small xl:text-Title-Medium">
                     All
                   </p>
                 </div>
-                <div className="flex flex-col place-items-center  space-y-4 cursor-pointer">
+                <div className="flex flex-col space-y-4 cursor-pointer place-items-center">
                   <button
                     className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6 
                         "bg-gray-200"  "bg-gray-300"
@@ -137,9 +137,9 @@ export default function HeroSection() {
                     onClick={handleBookmark}
                   >
                     {isBookmark ? (
-                      <BsBookmarkFill className="text-2xl md:text-3xl lg:text-4xl text-black" />
+                      <BsBookmarkFill className="text-2xl text-black md:text-3xl lg:text-4xl" />
                     ) : (
-                      <BsBookmark className="text-2xl md:text-3xl lg:text-4xl text-black" />
+                      <BsBookmark className="text-2xl text-black md:text-3xl lg:text-4xl" />
                     )}
                   </button>
                   <p className="font-medium text-Title-Small xl:text-Title-Medium">
@@ -149,7 +149,7 @@ export default function HeroSection() {
                     <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
                   )}
                 </div>
-                <div className="flex flex-col place-items-center  space-y-4 cursor-pointer">
+                <div className="flex flex-col space-y-4 cursor-pointer place-items-center">
                   <button
                     className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6 
                     "bg-gray-200" : "bg-gray-300"
@@ -157,9 +157,9 @@ export default function HeroSection() {
                     onClick={verifiedIconHandler}
                   >
                     {isVerifiedCheck ? (
-                      <VscVerifiedFilled className="text-2xl md:text-3xl lg:text-4xl text-black" />
+                      <VscVerifiedFilled className="text-2xl text-black md:text-3xl lg:text-4xl" />
                     ) : (
-                      <VscVerified className="text-2xl md:text-3xl lg:text-4xl text-black" />
+                      <VscVerified className="text-2xl text-black md:text-3xl lg:text-4xl" />
                     )}
                   </button>
                   <p className="font-medium text-Title-Small xl:text-Title-Medium">
@@ -167,14 +167,14 @@ export default function HeroSection() {
                   </p>
                 </div>
 
-                <div className="flex flex-col place-items-center  space-y-4 cursor-pointer">
+                <div className="flex flex-col space-y-4 cursor-pointer place-items-center">
                   <button
                     className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6  "bg-gray-200" : "bg-gray-300"
                     hover:bg-opacity-75 focus:outline-none`}
                     onClick={searchIconHandler}
                   >
                     {" "}
-                    <RiSearchLine className="text-2xl md:text-3xl lg:text-4xl text-black" />
+                    <RiSearchLine className="text-2xl text-black md:text-3xl lg:text-4xl" />
                   </button>
                   <p className="font-medium text-Title-Small xl:text-Title-Medium">
                     Search

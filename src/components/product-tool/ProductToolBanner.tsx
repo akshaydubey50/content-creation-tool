@@ -81,8 +81,8 @@ export default function ProductToolBanner({
 
   return (
     <>
-      <main className="bg-light-gray py-6 px-8   md:px-10 lg:pt-16  overflow-x-hidden">
-        <div className="max-w-7xl mx-auto pt-14">
+      <main className="px-8 py-6 overflow-x-hidden bg-light-gray md:px-10 lg:pt-16">
+        <div className="mx-auto max-w-7xl pt-14">
           {/* <Breadcrumb tag={tag} title={title} /> */}
           <Breadcrumb
             categories={tag?.[0]}
@@ -90,24 +90,24 @@ export default function ProductToolBanner({
             key={title}
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 my-4">
-            {/*   <div className="lg:col-span-6 border border-black border-solid rounded-t-xl">
+          <div className="grid grid-cols-1 gap-4 my-4 lg:grid-cols-12 sm:gap-6 md:gap-8">
+            {/*   <div className="border border-black border-solid lg:col-span-6 rounded-t-xl">
               <Image
                 src={url}
                 alt="logo banner"
                 loading="lazy"
                 width={1280}
                 height={720}
-                className="rounded-t-xl w-full h-auto object-cover"
+                className="object-cover w-full h-auto rounded-t-xl"
               />
             </div> */}
             <div className="lg:col-span-6">
-              <div className="flex flex-col space-y-4 mb-6">
-                <div className="flex gap-2 items-center">
+              <div className="flex flex-col mb-6 space-y-4">
+                <div className="flex items-center gap-2">
                   {/* Responsive text sizes for the title */}
-                  <h1 className="text-xl sm:text-2xl md:text-3xl xl:text-4xl font-bold break-words">
+                  <h2 className="text-xl font-bold break-words sm:text-2xl md:text-3xl xl:text-4xl">
                     {title}
-                  </h1>
+                  </h2>
                   {verified && (
                     <MdVerified className="text-xl sm:text-2xl text-DarkOrange" />
                   )}
@@ -119,16 +119,16 @@ export default function ProductToolBanner({
                     loading="lazy"
                     width={1280}
                     height={720}
-                    className="rounded-t-xl w-full h-auto object-cover"
+                    className="object-cover w-full h-auto rounded-t-xl"
                   />
                 </div>
 
-                <p className="sm:text-base text-lg break-words">
+                <p className="text-lg break-words sm:text-base">
                   {description}
                 </p>
               </div>
               <div className="flex flex-col space-y-2">
-                <p className=" text-lg md:text-base ">
+                <p className="text-lg  md:text-base">
                   <span className="font-semibold">Categories : </span>
                   <span className="break-words">{`${tag?.join(", ")}`}</span>
                 </p>
@@ -137,8 +137,8 @@ export default function ProductToolBanner({
                   <span className="break-words">{`${Pricing} `}</span>
                 </p>
               </div>
-              <div className="flex  justify-between md:justify-start md:space-x-10  pt-4 items-stretch text-white">
-                <div className="border border-DarkOrange rounded-lg py-2 px-10 flex items-center text-DarkOrange hover:bg-DarkOrange hover:text-white hover:cursor-pointer ">
+              <div className="flex items-stretch justify-between pt-4 text-white md:justify-start md:space-x-10">
+                <div className="flex items-center px-10 py-2 border rounded-lg border-DarkOrange text-DarkOrange hover:bg-DarkOrange hover:text-white hover:cursor-pointer ">
                   <button
                     title="Bookmark"
                     type="button"
@@ -146,9 +146,9 @@ export default function ProductToolBanner({
                     onClick={debouncedHandleBookmark}
                   >
                     {isBookMarked ? (
-                      <BsBookmarkFill className="  sm:text-2xl md:text-lg font-bold  " />
+                      <BsBookmarkFill className="font-bold  sm:text-2xl md:text-lg" />
                     ) : (
-                      <BsBookmark className="  sm:text-2xl md:text-lg font-bold " />
+                      <BsBookmark className="font-bold  sm:text-2xl md:text-lg" />
                     )}
                   </button>
                 </div>
@@ -156,7 +156,7 @@ export default function ProductToolBanner({
                   <Link
                     href={link}
                     target="_blank"
-                    className="w-full sm:w-auto hover:bg-white hover:text-DarkOrange border border-DarkOrange flex rounded-md font-semibold bg-DarkOrange items-center justify-center text-sm lg:text-base px-4 py-2 space-x-2"
+                    className="flex items-center justify-center w-full px-4 py-2 space-x-2 text-sm font-semibold border rounded-md sm:w-auto hover:bg-white hover:text-DarkOrange border-DarkOrange bg-DarkOrange lg:text-base"
                   >
                     <span>Visit Website</span>
                     <FiArrowUpRight className="text-xl" />
@@ -164,14 +164,14 @@ export default function ProductToolBanner({
                 </div>
               </div>
             </div>
-            <div className="hidden lg:block lg:col-span-6 border border-black border-solid rounded-t-xl">
+            <div className="hidden border border-black border-solid lg:block lg:col-span-6 rounded-t-xl">
               <Image
                 src={url}
                 alt="logo banner"
                 loading="lazy"
                 width={1280}
                 height={720}
-                className="rounded-t-xl w-full h-auto object-cover"
+                className="object-cover w-full h-auto rounded-t-xl"
               />
             </div>
           </div>
@@ -179,7 +179,7 @@ export default function ProductToolBanner({
 
         {isOpen && <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />}
       </main>
-      <div className="max-w-7xl mx-auto overflow-x-hidden px-8 ">
+      <div className="px-8 mx-auto overflow-x-hidden max-w-7xl ">
         {detailedMsg && <Details content={detailedMsg} />}
       </div>
     </>
