@@ -97,23 +97,25 @@ export default function HeroSection() {
   return (
     <main className="py-12 xl:py-20 bg-light-gray ">
       <section className="flex flex-col px-4 space-y-10 place-items-center xl:space-y-14 md:px-8 xl:px-10">
-        <div className="flex-1">
+        <div>
           <div className="flex flex-col space-y-4 text-center">
-            <h1 className="text-2xl font-bold leading-9 md:text-4xl md:leading-45 xl:text-6xl xl:leading-90 ">
-              Discover{" "}
-              <span className="text-DarkOrange">
-                200+ Content Creation Tools
+            <p>
+              <span className="px-4 py-1 font-semibold bg-white border border-orange-500 border-solid rounded-full text-DarkOrange">200+ Content Creation Tools</span>
+            </p>
+            <h1 className="mx-auto text-3xl font-semibold leading-9 md:text-4xl md:leading-45 md:max-w-2xl xl:text-8xl xl:max-w-7xl xl:leading-tight">
+              <span> Every tool you need to </span>
+              <span>
+                ace  at content creation.
               </span>
-              <br />
-              for Content Creators.
             </h1>
-            <h5 className="max-w-lg px-2 mx-auto text-base xl:text-3xl xl:leading-45 xl:max-w-4xl">
-              Directory of 200+ content creation tools designed to streamline
-              your process and enhance productivity.
+            <h5 className="max-w-lg px-2 mx-auto text-base text-center xl:text-3xl xl:max-w-6xl xl:leading-normal">
+              {/* Directory of 200+ content creation tools designed to streamline
+              your process and enhance productivity. */}
+              Search, like, bookmark, and use the best content creation tools to streamline your workflow and create better content.
             </h5>
           </div>
         </div>
-        <div className="flex-1">
+        <div>
           <div className="flex space-x-8 ">
             <div className="flex-1">
               <div className="flex space-x-2 md:space-x-4 lg:space-x-8 xl:space-x-12 ">
