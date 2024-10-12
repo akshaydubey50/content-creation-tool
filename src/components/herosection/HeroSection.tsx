@@ -91,9 +91,10 @@ export default function HeroSection() {
   };
 
   const searchIconHandler = () => {
+    console.log("searchIconHandler");
     dispatch(scrollPage(600));
     dispatch(setSearchInputFocus());
-  };
+  };  
   return (
     <main className="py-12 xl:py-20 bg-light-gray ">
       <section className="flex flex-col px-4 space-y-10 place-items-center xl:space-y-14 md:px-8 xl:px-10">

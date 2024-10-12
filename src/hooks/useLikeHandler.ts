@@ -9,9 +9,11 @@ export function useLikeHandler(
   id: string,
   Name: string,
   isInitialLiked: boolean,
-  itemType: "tool" | "prompt"
+  itemType: "tool" | "prompt",
+  upVoteCount?: number
 ) {
   const [isLiked, setIsLiked] = useState(isInitialLiked);
+  const [totalLikes, setTotalLikes] = useState(upVoteCount);
   const { toast } = useToast();
   const { data: session } = useSession();
   const dispatch = useDispatch<AppDispatch>();
@@ -35,12 +37,14 @@ export function useLikeHandler(
     try {
       if (newLikedState) {
         await dispatch(addLike({ itemId: id, itemType }));
+        setTotalLikes((prevCount) => prevCount + 1);
         toast({
           title: `You liked ${Name}`,
           variant: "success",
         });
       } else {
         await dispatch(deleteLike({ itemId: id, itemType }));
+        setTotalLikes((prevCount) => prevCount - 1);
         toast({
           title: `You removed ${Name} from likes`,
           variant: "destructive",
@@ -51,7 +55,7 @@ export function useLikeHandler(
       // Revert the state back if there's an error
       setIsLiked(isLiked);
     }
-  }, [session, toast, Name, dispatch, id, itemType, isLiked]);
+  }, [session, toast, Name, dispatch, id, itemType, isLiked,]);
 
-  return { isLiked, handleLike };
+  return { isLiked, handleLike, totalLikes, setTotalLikes };
 }
