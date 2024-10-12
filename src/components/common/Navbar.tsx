@@ -9,8 +9,9 @@ import { usePathname, useRouter } from "next/navigation";
 import * as RoutePath from "@/constants/RoutePath";
 import { signOut, useSession } from "next-auth/react";
 
+
 interface MenuItem {
-  id: number | string;
+  id: number| string;
   label: string;
   href: string;
 }
@@ -29,11 +30,8 @@ export default function Navbar() {
     { id: RoutePath.Prompt, label: "Prompt", href: RoutePath.Prompt },
     { id: RoutePath.Resources, label: "Resources", href: RoutePath.Resources },
     { id: RoutePath.Contact, label: "Contact", href: RoutePath.Contact },
-    {
-      id: RoutePath.SubmitTool,
-      label: "Submit Tool",
-      href: RoutePath.SubmitTool,
-    },
+    { id: RoutePath.SubmitTool, label: "Submit Tool", href: RoutePath.SubmitTool },
+
   ];
 
   const [isMenu, setIsMenu] = useState(false);
@@ -72,9 +70,7 @@ export default function Navbar() {
         <div className="flex  max-w-7xl  mx-auto justify-between items-center  py-4 lg:px-2 lg:py-4">
           <div>
             <Link href="/">
-              <h2 className="text-Heading-Small  font-bold">
-                Content Creation FYI
-              </h2>
+              <h2 className="text-Heading-Small  font-bold">Content Creation FYI</h2>
             </Link>
           </div>
           {/* menubar in large screen */}
@@ -129,7 +125,7 @@ export default function Navbar() {
                     className="text-white font-semibold bg-black  px-6 py-2  hover:bg-DarkOrange hover:text-white   rounded-lg"
                     onClick={handleSignup}
                   >
-                    Sign Up
+                    Sign Up 
                   </button>
                 </li>
               )}
@@ -155,9 +151,7 @@ export default function Navbar() {
         }`}
       >
         <div className="p-3 flex my-2 ">
-          <h2 className="text-Heading-Medium font-bold">
-            Content Creation FYI
-          </h2>
+          <h2 className="text-Heading-Medium font-bold">Content Creation FYI</h2>
           <button
             title="close"
             onClick={crossHandler}
@@ -168,59 +162,59 @@ export default function Navbar() {
         </div>
         <div>
           {menuItem.map((menu) => (
-            <div
-              key={menu?.id}
-              className="flex items-center py-4 px-2  border-b border-gray-200 font-semibold text-xl"
-              onClick={() => {
-                console.log("menu", menu);
-                crossHandler();
-                router.push(menu?.href);
-              }}
-            >
-              {menu.label}
-            </div>
+            <>
+              <div key={menu?.id} className="flex items-center py-4 px-2  border-b border-gray-200 font-semibold text-xl"
+                onClick={() => {
+                  console.log("menu", menu)
+                  crossHandler();
+                  router.push(menu?.href)
+                }}
+              >
+                {menu.label}
+              </div>
+            </>
           ))}
 
+         
           {!session && (
-            <div className="grid grid-cols-2 mt-6 justify-items-center items-center font-semibold">
+            <div className="grid grid-cols-2 mt-6 justify-items-center items-center font-semibold" >
               <div className="col-span-1 rounded-full py-4 px-12  border-DarkOrange border text-DarkOrange">
-                <div
-                  className="flex items-center justify-end"
-                  onClick={() => {
-                    crossHandler();
-                    handleSignIn();
-                  }}
-                >
-                  Login
-                </div>
+              <div className="flex items-center justify-end"
+                onClick={() => {
+                  crossHandler();
+                  handleSignIn();
+                }}
+              >
+                Login
+              </div>
               </div>
               <div className="col-span-1 rounded-full py-4 px-12  bg-DarkOrange text-white ">
-                <div
-                  className="  flex items-center  justify-center  "
-                  onClick={() => {
-                    crossHandler();
-                    handleSignup();
-                  }}
-                >
-                  Sign Up
-                </div>
+              <div className="  flex items-center  justify-center  "
+                onClick={() => {
+                  crossHandler();
+                  handleSignup();
+                }}>
+                Sign Up
               </div>
             </div>
+            </div>
+
           )}
           {session && (
             <div className="mt-6 font-semibold flex justify-center">
-              <button
-                className="rounded-full py-4 px-20  bg-DarkOrange text-white"
-                onClick={() => {
-                  crossHandler();
-                  handleSignout();
-                }}
-              >
-                Logout
-              </button>
+            <button className="rounded-full py-4 px-20  bg-DarkOrange text-white"
+              onClick={() => {
+                crossHandler();
+                handleSignout();
+              }}
+            >
+              Logout
+            </button>
             </div>
+
           )}
         </div>
+          
       </aside>
     </>
   );

@@ -36,10 +36,10 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     usePagination(12);
 
   const isBookmark = useSelector(
-    (state: RootState) => state.bookmarks?.isBookmarkChecked || false
+    (state: RootState) => state.bookmarks.isBookmarkChecked || false
   );
   const productSearchQuery = useSelector(
-    (state: RootState) => state.search.searchQuery
+    (state: RootState) => state.searchs.searchQuery
   );
 
   const filteredProductRecords = useFilteredProducts({
@@ -51,10 +51,10 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     id,
     productSearchQuery,
     inputSearchFilterArr: useSelector(
-      (state: RootState) => state.search.searchFilterList
+      (state: RootState) => state.searchs.searchFilterList
     ),
     matchedPrice: useSelector(
-      (state: RootState) => state.pricingModel.matchedPrice
+      (state: RootState) => state.pricingModels.matchedPrice
     ),
     session,
     isBookmark,
@@ -97,7 +97,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
       bookmarkList?.length === 0)
   ) {
     return (
-      <div className="flex items-center justify-center text-3xl font-bold text-center h-80">
+      <div className="text-3xl font-bold text-center h-80 flex items-center justify-center">
         <h2>No Bookmark yet</h2>
       </div>
     );
@@ -105,7 +105,10 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   return (
     <>
-      <main className="grid grid-cols-1 px-10 py-5 mx-auto gap-y-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-10 w-fit lg:px-8 2xl:px-0 justify-items-center">
+      <main
+        className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
+                  lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0 justify-items-center"
+      >
         {updateCurrentProducts(filteredProductRecords).map((item) => (
           <ProductCard
             key={item.id}

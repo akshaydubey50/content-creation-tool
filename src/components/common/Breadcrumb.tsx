@@ -4,7 +4,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setCategoryData } from "@/redux/slice/category/category.slice";
 import { HomePage } from "@/constants/RoutePath";
-import { ChevronRight, LucideHome } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 type BreadcrumbProps = {
   categories: string;
@@ -40,11 +40,11 @@ export default function Breadcrumb({
     const newPath = pathname.includes("/category")
       ? `${pathname}/category/${formattedPage}`
       : pathname.includes("/category")
-        ? `${pathname}/tools/${formattedPage}`
-        : `${pathname}/${formattedPage}`;
+      ? `${pathname}/tools/${formattedPage}`
+      : `${pathname}/${formattedPage}`;
     console.log("newPath", newPath);
     console.log("pathname", pathname);
-    router.replace("/");
+    router.replace(newPath);
   };
 
   return (
@@ -53,8 +53,7 @@ export default function Breadcrumb({
         onClick={handleNavigateToHome}
         className="hover:text-DarkOrange hover:border-b-2 hover:border-DarkOrange cursor-pointer"
       >
-        {" "}
-        <LucideHome size={16} />
+        Content Creation
       </span>
       <ChevronRight className="h-4 w-4 text-gray-400" />
 

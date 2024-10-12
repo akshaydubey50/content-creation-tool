@@ -1,7 +1,6 @@
 import { Metadata, ResolvingMetadata } from "next";
 import ProductDetail from "./product-detail"; // Import client-side component
 import { AirtableModel } from "@/models/airtable.model";
-import { APPConf } from "@/conf/conf";
 
 // Props for generateMetadata
 type Props = {
@@ -17,33 +16,27 @@ export async function generateMetadata(
   // Read route params
   const id = params.id;
 
-  // Fetch data from API
-  const response = await fetch(`${APPConf.BASE_URL}/api/tools`);
-  const { data } = await response.json();
-
-  // Find the matching product
-  const productMatched = data.find((product: AirtableModel) => {
+  // Fetch data from API (replace with your actual API)
+  const product = await fetch(`https://contentcreation.fyi/api/tools`).then(
+    (res) => res.json()
+  );
+  const productMatched = product?.data?.filter((product: AirtableModel) => {
     const formattedTitle = product?.fields?.Name?.toLowerCase()
       ?.trim()
       ?.replace(/\s/g, "-");
     return formattedTitle === id;
   });
-
-  // Fallback values
-  const fallbackTitle = "Product Not Found";
-  const fallbackDescription =
-    "Sorry, we couldn't find the product you're looking for.";
+  console.log("productMatched", productMatched);
+  // Optionally access and extend (rather than replace) parent metadata
 
   // Return dynamic metadata
   return {
-    title: productMatched?.fields?.Name || fallbackTitle,
-    description: productMatched?.fields?.Description || fallbackDescription,
+    title: productMatched?.fields?.Name || "Product Detail",
+    description: productMatched?.fields?.Description || "Product description",
+
     openGraph: {
-      title: productMatched?.fields?.Name || fallbackTitle,
-      description: productMatched?.fields?.Description || fallbackDescription,
-      images: productMatched?.fields?.ToolImage
-        ? [{ url: productMatched.fields.ToolImage }]
-        : [],
+      title: productMatched?.fields?.Name || "Product Detail",
+      description: productMatched?.fields?.Description || "Product description",
     },
   };
 }

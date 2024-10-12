@@ -67,7 +67,7 @@ export function ProductCard(props: any) {
   // const debouncedHandleBookmark = useDebounce(handleBookmark, 250);
 
   return (
-    <div className="flex flex-col max-w-sm border border-black border-solid shadow-lg rounded-2xl">
+    <div className="rounded-2xl max-w-sm flex flex-col border border-black border-solid shadow-lg">
       <Link href={{ pathname: `${HomePage}/${formattedTitle}` }}>
         <section className="border-b border-black border-solid">
           <Image
@@ -78,18 +78,18 @@ export function ProductCard(props: any) {
             height="720"
             decoding="async"
             data-nimg="1"
-            className="object-cover w-full rounded-t-2xl"
+            className="rounded-t-2xl w-full object-cover"
           />
         </section>
       </Link>
-      <section className="h-full px-5 bg-light-gray pt-7 rounded-b-2xl">
+      <section className="bg-light-gray pt-7 px-5 rounded-b-2xl h-full">
         <div className="flex flex-col justify-between h-full">
           <div>
-            <div className="flex flex-row justify-between flex-1 pb-4">
+            <div className="pb-4 flex flex-1 flex-row justify-between">
               <div className="flex items-center gap-x-2">
-                <h2 className="h-8 font-bold text-Title-Medium md:text-Title-Large">
+                <h1 className="font-bold text-Title-Medium md:text-Title-Large h-8">
                   {Name}
-                </h2>
+                </h1>
                 {Verified && (
                   <MdVerified className="text-2xl text-DarkOrange" />
                 )}
@@ -123,17 +123,17 @@ export function ProductCard(props: any) {
             </div>
           </div>
           <div>
-            <div className="h-16 text-Description">
+            <div className="text-Description h-16">
               <p className="line-clamp-3">{Description}</p>
             </div>
           </div>
           <div className="tool-btn-section pb-7">
             <p className="my-6">
-              <span className="px-5 py-1 font-medium bg-white border border-black border-solid rounded-full text-tags">
+              <span className="bg-white rounded-full text-tags font-medium border border-solid border-black px-5 py-1">
                 {Pricing}
               </span>
             </p>
-            <div className="flex items-center justify-between text-white text-Title-Medium">
+            <div className="text-white text-Title-Medium flex justify-between items-center">
               <VisitWebsite url={WebsiteLink} />
               {/* <button title="Bookmark" type="button" onClick={handleBookmark}>
                 {isBookMarked ? (
@@ -143,7 +143,7 @@ export function ProductCard(props: any) {
                 )}
               </button> */}
               <BookmarkButton
-                id={id}
+              id={id}
                 Name={Name}
                 isInitialBookmarked={isAlreadyBookmarked}
                 itemType="tool"

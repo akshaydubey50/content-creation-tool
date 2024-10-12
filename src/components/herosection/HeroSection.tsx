@@ -4,6 +4,7 @@ import { AirtableModel } from "@/models/airtable.model";
 import { RiStackFill, RiSearchLine } from "react-icons/ri";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { VscVerifiedFilled, VscVerified } from "react-icons/vsc";
+import { GoHeartFill } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearBookmarkList,
