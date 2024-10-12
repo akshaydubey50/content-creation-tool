@@ -31,9 +31,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const bookmarkList = useSelector(
     (state: RootState) => state.bookmarks.bookmarkList
   );
-  const upVotedList = useSelector(
-    (state: RootState) => state.likes.likedList
-  );
+  const upVotedList = useSelector((state: RootState) => state.likes.likedList);
 
   const isBookmark = useSelector(
     (state: RootState) => state.bookmarks.isBookmarkChecked || false
@@ -42,7 +40,13 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     (state: RootState) => state.searchs.searchQuery
   );
 
-  const { currentPage, currentProducts, handlePageChange, totalProducts, filteredProducts } = usePaginatedFilteredProducts(12,{
+  const {
+    currentPage,
+    currentProducts,
+    handlePageChange,
+    totalProducts,
+    filteredProducts,
+  } = usePaginatedFilteredProducts(12, {
     currentCategory,
     productList,
     dropDownCategoryArr: useSelector(
@@ -105,9 +109,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   return (
     <>
-      <main
-        className="grid grid-cols-1 px-10 py-5 mx-auto gap-y-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-10 w-fit lg:px-8 2xl:px-0 justify-items-center"
-      >
+      <main className="grid grid-cols-1 px-10 py-5 mx-auto gap-y-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-10 w-fit lg:px-8 2xl:px-0 justify-items-center">
         {currentProducts?.map((item) => (
           <ProductCard
             key={item.id}
@@ -117,7 +119,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           />
         ))}
       </main>
-      {productSearchQuery.length > 0 && totalProducts == 0 && (
+      {productSearchQuery?.length > 0 && totalProducts == 0 && (
         <>
           <h1 className="text-3xl text-center">
             No Search

@@ -33,7 +33,7 @@ export function ProductCard(props: any) {
   const [isAlreadyBookmarked, setIsAlreadyBookmarked] = useState(false);
 
   useEffect(() => {
-    if (likedList.length > 0) {
+    if (likedList?.length > 0 || likedList?.length != null) {
       const toolLikedItem = likedList.find((item) => item.itemType === "tool");
       if (toolLikedItem?.itemIds != null) {
         // Check if the current id is in the itemIds array
@@ -48,7 +48,7 @@ export function ProductCard(props: any) {
 
   // New effect for bookmarks
   useEffect(() => {
-    if (bookmarkedList.length > 0) {
+    if (bookmarkedList?.length > 0 || bookmarkedList?.length != null) {
       const toolBookmarkedItem = bookmarkedList.find(
         (item) => item.itemType === "tool"
       );
