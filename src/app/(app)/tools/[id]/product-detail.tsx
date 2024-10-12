@@ -28,7 +28,6 @@ export default function ProductDetail({ params }: Props) {
       return formattedTitle === slug;
     });
 
-    console.log("productMatched", productMatched);
     if (productMatched) {
       setProductData(productMatched);
     }
@@ -44,6 +43,7 @@ export default function ProductDetail({ params }: Props) {
 
   return (
     <>
+      {" "}
       {product && (
         <>
           <ProductToolBanner

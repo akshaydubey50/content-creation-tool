@@ -15,14 +15,8 @@ import ProductList from "@/components/card/ProductList";
  * */
 import { usePathname, useParams } from "next/navigation";
 
-/**
- * Context Data Import
- * */
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 
-/**
- * Redux Import
- * */
 import {
   setCategoryData,
   setMatchedCategory,
