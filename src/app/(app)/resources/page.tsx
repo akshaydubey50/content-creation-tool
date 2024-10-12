@@ -1,4 +1,3 @@
-import HeroSection from "@/components/herosection/HeroSection";
 import Resource from "@/components/resources";
 
 export default function Resources() {

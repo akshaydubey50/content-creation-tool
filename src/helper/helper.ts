@@ -20,4 +20,10 @@ export const isProductUpvoted = (productId: string, upvoteList: any) => {
   return false;
 };
 
+export const capitalizeWords = (str: string) => {
+  return str.replace(/\b\w/g, (char) => char.toUpperCase());
+};
 
+export const toKebabCase = (str: string) => {
+  return str.toLowerCase().trim().replace(/\s/g, "-");
+};

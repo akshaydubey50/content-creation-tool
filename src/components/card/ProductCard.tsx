@@ -134,7 +134,7 @@ export function ProductCard(props: any) {
               </span>
             </p>
             <div className="text-white text-Title-Medium flex justify-between items-center">
-              <VisitWebsite url={WebsiteLink} />
+              <VisitWebsite btnText="Visit Website" url={WebsiteLink} />
               {/* <button title="Bookmark" type="button" onClick={handleBookmark}>
                 {isBookMarked ? (
                   <BsBookmarkFill className="text-3xl text-DarkOrange" />
@@ -143,7 +143,7 @@ export function ProductCard(props: any) {
                 )}
               </button> */}
               <BookmarkButton
-              id={id}
+                id={id}
                 Name={Name}
                 isInitialBookmarked={isAlreadyBookmarked}
                 itemType="tool"
