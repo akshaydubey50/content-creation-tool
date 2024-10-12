@@ -43,11 +43,14 @@ export const addBookmark = createAsyncThunk<
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ itemId, itemType }),
   });
+  console.log("data", response);
+
+  if (!response.ok) {
+    throw new Error( "Failed to add bookmark");
+  }
 
   dispatch(getBookmarkList());
-  if (!response.ok) {
-    throw new Error("Failed to add bookmark");
-  }
+  
   return { itemType, itemIds: [itemId] }; // Adjust return value to match the structure
 });
 
@@ -62,10 +65,13 @@ export const deleteBookmark = createAsyncThunk<
     body: JSON.stringify({ itemId, itemType }),
   });
 
-  dispatch(getBookmarkList());
+  const data = await response.json();
+
   if (!response.ok) {
-    throw new Error("Failed to delete bookmark");
+    throw new Error(data.msg || "Failed to delete bookmark");
   }
+
+  dispatch(getBookmarkList());
   return { itemId, itemType };
 });
 

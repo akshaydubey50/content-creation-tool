@@ -13,7 +13,6 @@ import BookmarkButton from "../ui/bookmarkbutton";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import VisitWebsite from "../visit-website/VisitWebsite";
-import { toKebabCase } from "@/helper/helper";
 
 const PromptCard = ({
   promptResource,

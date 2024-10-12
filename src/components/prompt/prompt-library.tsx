@@ -18,7 +18,7 @@ export default function PromptLibrary() {
   const [filteredPrompts, setFilteredPrompts] = useState<PropmtResourceModel[]>(
     []
   );
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const dispatch: AppDispatch = useDispatch();
   const { isLoading, isError, promptResourceList } = useSelector(
@@ -30,7 +30,6 @@ export default function PromptLibrary() {
     setCurrentPage(page);
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getPromptCategory = useCallback(() => {
     const categoryList = new Set();
     if (promptList.length > 0) {
@@ -44,23 +43,30 @@ export default function PromptLibrary() {
   }, [promptList]);
 
   const handleCategorySelect = (category: string) => {
-    setSelectedCategory(category);
-    filterPrompts(category);
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category]
+    );
     setCurrentPage(1);
   };
-  const filterPrompts = (category: string) => {
-    const filtered = promptList.filter(
-      (prompt) => prompt.fields?.Category?.[0] === category
-    );
-    setFilteredPrompts(filtered);
-  };
+
+  const filterPrompts = useCallback(() => {
+    if (selectedCategories.length === 0) {
+      setFilteredPrompts(promptList);
+    } else {
+      const filtered = promptList.filter((prompt) =>
+        selectedCategories.includes(prompt.fields?.Category?.[0])
+      );
+      setFilteredPrompts(filtered);
+    }
+  }, [promptList, selectedCategories]);
 
   const updateCurrentProducts = useCallback(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentList = selectedCategory ? filteredPrompts : promptList;
-    return currentList.slice(startIndex, endIndex);
-  }, [currentPage, promptList, filteredPrompts, selectedCategory]);
+    return filteredPrompts.slice(startIndex, endIndex);
+  }, [currentPage, filteredPrompts]);
 
   useEffect(() => {
     if (promptResourceList?.length === 0) {
@@ -74,6 +80,10 @@ export default function PromptLibrary() {
       setFilteredPrompts(promptResourceList);
     }
   }, [isLoading, promptResourceList, isError]);
+
+  useEffect(() => {
+    filterPrompts();
+  }, [filterPrompts, selectedCategories]);
 
   if (isLoading) {
     return <Loader />;
@@ -107,18 +117,13 @@ export default function PromptLibrary() {
             <PromptCategory
               categoryList={getPromptCategory()}
               onSelectCategory={handleCategorySelect}
-              selectedCategory={selectedCategory}
+              selectedCategories={selectedCategories}
             />
           </aside>
 
           {/* Main Content */}
-          {/* {isLoading && <Loader />} */}
           {!isLoading && promptList.length > 0 && (
             <main className="col-span-1 lg:col-span-9 p-4 md:p-6">
-              {/* <Input
-              className="mb-6 ring-DarkOrange ring-opacity-50"
-              placeholder="Looking for a prompt?"
-            /> */}
               <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-3 md:gap-6">
                 {updateCurrentProducts().map((prompt, index) => (
                   <PromptCard key={index} promptResource={prompt} />
@@ -126,9 +131,7 @@ export default function PromptLibrary() {
               </div>
               <Pagination
                 currentPage={currentPage}
-                totalItems={
-                  selectedCategory ? filteredPrompts.length : promptList.length
-                }
+                totalItems={filteredPrompts.length}
                 onPageChange={handlePageChange}
               />
             </main>

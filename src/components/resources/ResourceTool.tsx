@@ -25,7 +25,7 @@ export function ResourceTool({ record }: { record: ResourceModel }) {
                             </span>
                         )}
                         <div className="flex items-center justify-between">
-                           { URL && <VisitWebsite url={URL} btnText="Visit Website" /> }
+                            {URL && <VisitWebsite url={URL} btnText="Visit Website" /> }
                         </div>
                     </div>
                 </div>

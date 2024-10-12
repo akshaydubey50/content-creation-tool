@@ -7,6 +7,7 @@ interface LikeButtonProps {
   itemName: string;
   initialLikedState: boolean;
   itemType: "tool" | "prompt";
+  upVoteCount?: number;
 }
 
 const LikeButton = ({
@@ -14,12 +15,14 @@ const LikeButton = ({
   itemName,
   initialLikedState,
   itemType,
+  upVoteCount
+
 }: LikeButtonProps) => {
-  const { isLiked, handleLike } = useLikeHandler(
+  const { isLiked, handleLike, totalLikes } = useLikeHandler(
     itemId,
     itemName,
     initialLikedState,
-    itemType
+    itemType, upVoteCount
   );
 
   return (
@@ -36,7 +39,7 @@ const LikeButton = ({
           <AiOutlineHeart className="text-3xl text-black" />
         )}
       </p>
-      {/* <p>{isLiked ? totalLikes + 1 : totalLikes}</p> */}
+      {/* <p>{totalLikes}</p> */}
     </button>
   );
 };

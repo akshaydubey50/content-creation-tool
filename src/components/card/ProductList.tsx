@@ -10,7 +10,7 @@ import { ProductCard } from "./ProductCard";
 import Loader from "../common/Loader/Loader";
 import Pagination from "../pagination/Pagination";
 import { usePagination } from "@/hooks/usePagination";
-import { useFilteredProducts } from "@/hooks/useFilteredProduct";
+import { usePaginatedFilteredProducts } from "@/hooks/useFilteredProduct";
 import { isProductBookmarked } from "@/helper/helper";
 import { getLikeList } from "@/redux/slice/like/like.slice";
 
@@ -32,8 +32,6 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     (state: RootState) => state.bookmarks.bookmarkList
   );
   const upVotedList = useSelector((state: RootState) => state.likes.likedList);
-  const { currentPage, updateCurrentProducts, handlePageChange } =
-    usePagination(12);
 
   const isBookmark = useSelector(
     (state: RootState) => state.bookmarks.isBookmarkChecked || false
@@ -42,7 +40,13 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     (state: RootState) => state.searchs.searchQuery
   );
 
-  const filteredProductRecords = useFilteredProducts({
+  const {
+    currentPage,
+    currentProducts,
+    handlePageChange,
+    totalProducts,
+    filteredProducts,
+  } = usePaginatedFilteredProducts(12, {
     currentCategory,
     productList,
     dropDownCategoryArr: useSelector(
@@ -80,8 +84,8 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   }, [productList, dispatch]);
 
   useEffect(() => {
-    dispatch(getLikeList());
     if (session?.user) {
+      dispatch(getLikeList());
       dispatch(getBookmarkList());
     }
   }, [dispatch, session]);
@@ -97,7 +101,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
       bookmarkList?.length === 0)
   ) {
     return (
-      <div className="text-3xl font-bold text-center h-80 flex items-center justify-center">
+      <div className="flex items-center justify-center text-3xl font-bold text-center h-80">
         <h2>No Bookmark yet</h2>
       </div>
     );
@@ -105,11 +109,8 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   return (
     <>
-      <main
-        className="grid grid-cols-1 gap-y-6 md:grid-cols-2  md:gap-8 lg:grid-cols-3 
-                  lg:gap-10  w-fit  mx-auto py-5 px-10 lg:px-8 2xl:px-0 justify-items-center"
-      >
-        {updateCurrentProducts(filteredProductRecords).map((item) => (
+      <main className="grid grid-cols-1 px-10 py-5 mx-auto gap-y-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-10 w-fit lg:px-8 2xl:px-0 justify-items-center">
+        {currentProducts?.map((item) => (
           <ProductCard
             key={item.id}
             product={item}
@@ -118,7 +119,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           />
         ))}
       </main>
-      {productSearchQuery.length > 0 && filteredProductRecords?.length == 0 && (
+      {productSearchQuery?.length > 0 && totalProducts == 0 && (
         <>
           <h1 className="text-3xl text-center">
             No Search
@@ -130,10 +131,10 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           </h1>
         </>
       )}
-      {filteredProductRecords?.length > 12 && (
+      {totalProducts > 12 && (
         <Pagination
           currentPage={currentPage}
-          totalItems={filteredProductRecords.length}
+          totalItems={totalProducts}
           onPageChange={handlePageChange}
         />
       )}
