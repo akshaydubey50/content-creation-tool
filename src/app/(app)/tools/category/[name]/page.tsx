@@ -26,18 +26,18 @@ import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import {
   setCategoryData,
   setMatchedCategory,
-} from "@/redux/slice/category/categorySlice";
-import { clearSearchFilterList } from "@/redux/slice/search/searchSlice";
+} from "@/redux/slice/category/category.slice";
+import { clearSearchFilterList } from "@/redux/slice/search/search.slice";
 import { RootState, AppDispatch } from "@/redux/store";
 import NewsLetter from "@/components/newsletter";
 
 export default function ToolDetails() {
   const dispatch: AppDispatch = useDispatch();
   const categoryData = useSelector(
-    (store: RootState) => store.category.categoryData
+    (store: RootState) => store.categories.categoryData
   );
   const productList: AirtableModel[] | null = useSelector(
-    (store: RootState) => store.product.productList
+    (store: RootState) => store.products.productList
   );
 
   const { setVisibleItem } = useVisibleItemContextData();

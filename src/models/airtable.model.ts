@@ -7,9 +7,9 @@ export interface AirtableModel {
     WebsiteLink: string;
     Description: string;
     ToolImage: string;
-    Verified :boolean;
-    Pricing:string;
-    "Detailed Description"?: string; 
+    Verified: boolean;
+    Pricing: string;
+    "Detailed Description"?: string;
   };
   totalLikes?: any;
 }
@@ -39,3 +39,15 @@ export interface ResourceModel {
   };
 }
 
+export interface ExpertModel {
+  id: string;
+  fields: {
+    Name: string;
+    Description: string;
+    Topics: string[];
+    Tags: string[];
+    Status: string;
+    Source: string;
+    SourceLink: string;
+  };
+}

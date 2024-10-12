@@ -2,7 +2,7 @@
 import React from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { setCategoryData } from "@/redux/slice/category/categorySlice";
+import { setCategoryData } from "@/redux/slice/category/category.slice";
 import { HomePage } from "@/constants/RoutePath";
 import { ChevronRight } from "lucide-react";
 
@@ -31,7 +31,7 @@ export default function Breadcrumb({
         .replace(/\s+/g, "-");
 
       router.push(`${HomePage}/category/${formattedCategory}`);
-      dispatch(setCategoryData([selectedCategory]));
+      dispatch(setCategoryData(selectedCategory));
     }
   };
 

@@ -2,9 +2,8 @@
 import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { useSearchParams, useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchResourcesList } from "@/redux/slice/resources/ResourcesSlice";
+import { fetchResourcesList } from "@/redux/slice/resources/resource.slice";
 import { ResourceTool } from "./ResourceTool";
-import { getUpvoteList } from "@/redux/slice/upvote/upvoteSlice";
 import Loader from "../common/Loader/Loader";
 import { RootState, AppDispatch } from "@/redux/store";
 import Pagination from "../pagination/Pagination";

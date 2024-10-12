@@ -9,19 +9,19 @@ import {
   setCategoryData,
   clearCategoryData,
   clearMatchedCategory,
-} from "@/redux/slice/category/categorySlice";
+} from "@/redux/slice/category/category.slice";
 import {
   setSearchQuery,
   setSearchFilterList,
   clearSearchFilterList,
   scrollPage,
-} from "@/redux/slice/search/searchSlice";
+} from "@/redux/slice/search/search.slice";
 import {
   clearMatchedPrice,
   clearPriceData,
   setMatchedPrice,
   setPriceData,
-} from "@/redux/slice/priceModel/priceModelSlice";
+} from "@/redux/slice/priceModel/priceModel.slice";
 import { RootState, AppDispatch } from "@/redux/store";
 import { HomePage } from "@/constants/RoutePath";
 
@@ -32,23 +32,23 @@ export default function FilterSection() {
   /*Redux Dispatch & Selector*/
   const dispatch = useDispatch();
   const categoryData = useSelector(
-    (store: RootState) => store.category.categoryData
+    (store: RootState) => store.categories.categoryData
   );
   const searchQuery = useSelector(
-    (store: RootState) => store.search.searchQuery
+    (store: RootState) => store.searchs.searchQuery
   );
   const filterData = useSelector(
-    (store: RootState) => store.search.searchFilterList
+    (store: RootState) => store.searchs.searchFilterList
   );
-  const { productList } = useSelector((state: RootState) => state.product);
+  const { productList } = useSelector((state: RootState) => state.products);
   const searchToFocusInput = useSelector(
-    (state: RootState) => state.search.searchToFocus
+    (state: RootState) => state.searchs.searchToFocus
   );
   const scrollPosition = useSelector(
-    (state: RootState) => state.search.scrollPosition
+    (state: RootState) => state.searchs.scrollPosition
   );
   const { priceData, matchedPrice } = useSelector(
-    (state: RootState) => state.priceModel
+    (state: RootState) => state.pricingModels
   );
 
   /*Context Data*/
@@ -58,7 +58,7 @@ export default function FilterSection() {
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     // console.log("searchRef", searchRef.current?.value);
     router.push("/");
-    dispatch(scrollPage(600))
+    dispatch(scrollPage(600));
     dispatch(clearMatchedPrice());
     dispatch(clearPriceData());
     dispatch(clearCategoryData());
