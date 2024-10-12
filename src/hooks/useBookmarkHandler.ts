@@ -93,6 +93,7 @@ export function useBookmarkHandler(
     try {
       if (newBookmarkState) {
         await dispatch(addBookmark(bookmarkData)); // Dispatch to add bookmark
+        console.log("Bookmark added successfully");
         toast({
           title: `You bookmarked ${Name}`,
           variant: "success",
