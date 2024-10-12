@@ -16,5 +16,5 @@ export function usePagination(itemsPerPage: number) {
     setCurrentPage(page);
   };
 
-  return { currentPage, updateCurrentProducts, handlePageChange };
+  return { currentPage, updateCurrentProducts, handlePageChange, setCurrentPage };
 }
