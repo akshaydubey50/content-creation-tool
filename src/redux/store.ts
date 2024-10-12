@@ -4,7 +4,6 @@ import categorySlice from "@/redux/slice/category/category.slice";
 import verifiedProductSlice from "@/redux/slice/verified/verified.slice";
 import bookmarkSlice from "@/redux/slice/bookmark/bookmark.slice";
 import resourceSlice from "@/redux/slice/resources/resource.slice";
-import upvoteSlice from "@/redux/slice/upvote/upvoteSlice";
 import priceModelSlice from "@/redux/slice/priceModel/priceModel.slice";
 import promptResourceSlice from "@/redux/slice/prompt-resource/promptResource.slice";
 import authSlice from "@/redux/slice/auth/auth.slice";
@@ -17,11 +16,10 @@ const appStore = configureStore({
     products: productSlice,
     bookmarks: bookmarkSlice,
     categories: categorySlice,
-    search: searchSlice,
+    searchs: searchSlice,
     verifiedProducts: verifiedProductSlice,
-    upvotes: upvoteSlice,
     likes: likeSlice,
-    pricingModel: priceModelSlice,
+    pricingModels: priceModelSlice,
     promptResources: promptResourceSlice,
     resources: resourceSlice,
   },

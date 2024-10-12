@@ -15,19 +15,13 @@ import ProductList from "@/components/card/ProductList";
  * */
 import { usePathname, useParams } from "next/navigation";
 
-/**
- * Context Data Import
- * */
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 
-/**
- * Redux Import
- * */
 import {
   setCategoryData,
   setMatchedCategory,
-} from "@/redux/slice/category/categorySlice";
-import { clearSearchFilterList } from "@/redux/slice/search/searchSlice";
+} from "@/redux/slice/category/category.slice";
+import { clearSearchFilterList } from "@/redux/slice/search/search.slice";
 import { RootState, AppDispatch } from "@/redux/store";
 import NewsLetter from "@/components/newsletter";
 

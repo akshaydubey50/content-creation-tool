@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState, useMemo, useCallback } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { fetchPromptResourceList } from "@/redux/slice/prompt-resource/promptResourceSlice";
+import { fetchPromptResourceList } from "@/redux/slice/prompt-resource/promptResource.slice";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { Card } from "@/components/ui/card";
 import Loading from "@/app/loading";

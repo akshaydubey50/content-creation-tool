@@ -2,9 +2,10 @@
 import React from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { setCategoryData } from "@/redux/slice/category/categorySlice";
+import { setCategoryData } from "@/redux/slice/category/category.slice";
 import { HomePage } from "@/constants/RoutePath";
 import { ChevronRight, LucideHome } from "lucide-react";
+import { capitalizeWords } from "@/helper/helper";
 
 type BreadcrumbProps = {
   categories: string;
@@ -31,7 +32,7 @@ export default function Breadcrumb({
         .replace(/\s+/g, "-");
 
       router.push(`${HomePage}/category/${formattedCategory}`);
-      dispatch(setCategoryData([selectedCategory]));
+      dispatch(setCategoryData(selectedCategory));
     }
   };
 
@@ -62,11 +63,13 @@ export default function Breadcrumb({
         onClick={() => handlePageNavigation(categories)}
         className="hover:text-DarkOrange hover:border-b-2 hover:border-DarkOrange cursor-pointer"
       >
-        {categories}
+        {capitalizeWords(categories)}
       </span>
       <ChevronRight className="h-4 w-4 text-gray-400" />
 
-      <span className="font-semibold">{currentPageTitle}</span>
+      <span className="font-semibold">
+        {capitalizeWords(currentPageTitle?.replaceAll("-", " "))}
+      </span>
     </nav>
   );
 }

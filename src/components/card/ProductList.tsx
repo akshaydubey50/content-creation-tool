@@ -2,9 +2,8 @@
 import React, { useEffect, useCallback } from "react";
 import { useSearchParams, useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductList } from "@/redux/slice/product/productSlice";
+import { fetchProductList } from "@/redux/slice/product/product.slice";
 import { getBookmarkList } from "@/redux/slice/bookmark/bookmark.slice";
-import { getUpvoteList } from "@/redux/slice/upvote/upvoteSlice";
 import { RootState, AppDispatch } from "@/redux/store";
 import { useSession } from "next-auth/react";
 import { ProductCard } from "./ProductCard";
@@ -33,16 +32,14 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     (state: RootState) => state.bookmarks.bookmarkList
   );
   const upVotedList = useSelector(
-    (state: RootState) => state.upvotes.upvoteList
+    (state: RootState) => state.likes.likedList
   );
-  // const { currentPage, updateCurrentProducts, handlePageChange } =
-  //   usePagination(12);
 
   const isBookmark = useSelector(
-    (state: RootState) => state.bookmarks?.isBookmarkChecked || false
+    (state: RootState) => state.bookmarks.isBookmarkChecked || false
   );
   const productSearchQuery = useSelector(
-    (state: RootState) => state.search.searchQuery
+    (state: RootState) => state.searchs.searchQuery
   );
 
   const { currentPage, currentProducts, handlePageChange, totalProducts, filteredProducts } = usePaginatedFilteredProducts(12,{
@@ -54,10 +51,10 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     id,
     productSearchQuery,
     inputSearchFilterArr: useSelector(
-      (state: RootState) => state.search.searchFilterList
+      (state: RootState) => state.searchs.searchFilterList
     ),
     matchedPrice: useSelector(
-      (state: RootState) => state.pricingModel.matchedPrice
+      (state: RootState) => state.pricingModels.matchedPrice
     ),
     session,
     isBookmark,

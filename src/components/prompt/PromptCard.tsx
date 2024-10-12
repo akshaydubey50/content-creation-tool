@@ -7,21 +7,19 @@ import {
   CardFooter,
 } from "../ui/card";
 import { PropmtResourceModel } from "@/models/airtable.model";
-import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
-import { FiArrowUpRight } from "react-icons/fi";
 import { Badge } from "../ui/badge";
 import LikeButton from "../ui/likebutton";
 import BookmarkButton from "../ui/bookmarkbutton";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import VisitWebsite from "../visit-website/VisitWebsite";
+import { toKebabCase } from "@/helper/helper";
 
 const PromptCard = ({
   promptResource,
 }: {
   promptResource: PropmtResourceModel;
 }) => {
-  const router = useRouter();
   const likedPromptList = useSelector(
     (state: RootState) => state.likes.likedList
   );
@@ -67,14 +65,6 @@ const PromptCard = ({
     }
   }, [bookmarkedPromptList, promptResource?.id]);
 
-  const handlePromptClick = (promptResource: PropmtResourceModel) => {
-    // navigate to prompt detail page
-    const title = promptResource?.fields?.Name?.toLowerCase()
-      .trim()
-      .replace(/\s/g, "-");
-    router.push(`/prompt/${title}`);
-  };
-
   if (!promptResource) {
     return null;
   }
@@ -89,19 +79,6 @@ const PromptCard = ({
               </Badge>
             ))}
           </div>
-          {/* <button
-            title="Bookmark"
-            type="button"
-            className="flex items-center gap-x-2"
-            onClick={handleLike}
-          >
-            {isLiked ? (
-              <AiFillHeart className="text-2xl text-DarkOrange" />
-            ) : (
-              <AiOutlineHeart className="text-2xl   text-black" />
-            )}
-            <span>{Math.floor(Math.random() * 10) + 1}</span>
-          </button> */}
           <LikeButton
             key={promptResource.id}
             initialLikedState={isAlreadyLiked}
@@ -119,20 +96,11 @@ const PromptCard = ({
       </CardContent>
       <CardFooter className="">
         <div className="flex justify-between items-center gap-x-4">
-          <Button
-            onClick={() => handlePromptClick(promptResource)}
-            className=" bg-DarkOrange hover:bg-DarkOrange/90 text-white font-semibold py-2 px-4 rounded-md hover:bg-white hover:text-DarkOrange border border-DarkOrange"
-          >
-            View Prompt
-            <FiArrowUpRight className="text-2xl " />
-          </Button>
-          {/* <button title="Bookmark" onClick={handleBoomark}>
-            {isBookMarked ? (
-              <BsBookmarkFill className="text-2xl text-DarkOrange" />
-            ) : (
-              <BsBookmark className="text-2xl  text-black" />
-            )}
-          </button> */}
+          <VisitWebsite
+            btnText="View Prompt"
+            url={`/prompt/${promptResource.fields?.Name}`}
+            openInNewTab={false}
+          />
           <BookmarkButton
             key={promptResource.id}
             isInitialBookmarked={isAlreadyBookmarked}

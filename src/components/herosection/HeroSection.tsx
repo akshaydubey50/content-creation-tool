@@ -4,12 +4,13 @@ import { AirtableModel } from "@/models/airtable.model";
 import { RiStackFill, RiSearchLine } from "react-icons/ri";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { VscVerifiedFilled, VscVerified } from "react-icons/vsc";
+import { GoHeartFill } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearBookmarkList,
   getBookmarkList,
 } from "@/redux/slice/bookmark/bookmark.slice";
-import { fetchProductList } from "@/redux/slice/product/productSlice";
+import { fetchProductList } from "@/redux/slice/product/product.slice";
 import { AppDispatch, RootState } from "@/redux/store";
 import {
   clearProductVerifiedList,
@@ -21,7 +22,7 @@ import LikedBookmarkModal from "../modal/LikedBookmarkModal";
 import {
   setSearchInputFocus,
   scrollPage,
-} from "@/redux/slice/search/searchSlice";
+} from "@/redux/slice/search/search.slice";
 import { useSession } from "next-auth/react";
 
 export default function HeroSection() {
@@ -34,10 +35,10 @@ export default function HeroSection() {
     (state: RootState) => state.bookmarks?.isBookmarkChecked || false
   );
   const isVerifiedCheck = useSelector(
-    (store: RootState) => store.verifiedProducts?.isVerifiedChecked||false
+    (store: RootState) => store.verifiedProducts?.isVerifiedChecked || false
   );
   const verifiedProductData = useSelector(
-    (store: RootState) => store.verifiedProducts?.verifiedProductList||false
+    (store: RootState) => store.verifiedProducts?.verifiedProductList || false
   );
 
   const { productList } = useSelector((state: RootState) => state.products);
@@ -101,18 +102,19 @@ export default function HeroSection() {
         <div>
           <div className="flex flex-col space-y-4 text-center">
             <p>
-              <span className="px-4 py-1 font-semibold bg-white border border-orange-500 border-solid rounded-full text-DarkOrange">200+ Content Creation Tools</span>
+              <span className="px-4 py-1 font-semibold bg-white border border-orange-500 border-solid rounded-full text-DarkOrange">
+                200+ Content Creation Tools
+              </span>
             </p>
             <h1 className="mx-auto text-3xl font-semibold leading-9 md:text-4xl md:leading-45 md:max-w-2xl xl:text-8xl xl:max-w-7xl xl:leading-tight">
               <span> Every tool you need to </span>
-              <span>
-                ace  at content creation.
-              </span>
+              <span>ace at content creation.</span>
             </h1>
             <h5 className="max-w-lg px-2 mx-auto text-base text-center xl:text-3xl xl:max-w-6xl xl:leading-normal">
               {/* Directory of 200+ content creation tools designed to streamline
               your process and enhance productivity. */}
-              Search, like, bookmark, and use the best content creation tools to streamline your workflow and create better content.
+              Search, like, bookmark, and use the best content creation tools to
+              streamline your workflow and create better content.
             </h5>
           </div>
         </div>

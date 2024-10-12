@@ -1,8 +1,9 @@
+import { AirtableModel } from "@/models/airtable.model";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Define the types for the state
 interface PriceModelState {
-  matchedPrice: number[]; // Assuming matchedPrice is an array of numbers, adjust as needed
+  matchedPrice: AirtableModel[]; // Assuming matchedPrice is an array of numbers, adjust as needed
   priceData: string | null; // Can be a string or null
 }
 
@@ -17,7 +18,7 @@ const priceModelSlice = createSlice({
   name: "priceModel",
   initialState,
   reducers: {
-    setMatchedPrice: (state, action: PayloadAction<number[]>) => {
+    setMatchedPrice: (state, action: PayloadAction<AirtableModel[]>) => {
       // Set matched price data
       state.matchedPrice = action.payload;
     },

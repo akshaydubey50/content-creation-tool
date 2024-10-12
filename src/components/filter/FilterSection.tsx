@@ -9,19 +9,19 @@ import {
   setCategoryData,
   clearCategoryData,
   clearMatchedCategory,
-} from "@/redux/slice/category/categorySlice";
+} from "@/redux/slice/category/category.slice";
 import {
   setSearchQuery,
   setSearchFilterList,
   clearSearchFilterList,
   scrollPage,
-} from "@/redux/slice/search/searchSlice";
+} from "@/redux/slice/search/search.slice";
 import {
   clearMatchedPrice,
   clearPriceData,
   setMatchedPrice,
   setPriceData,
-} from "@/redux/slice/priceModel/priceModelSlice";
+} from "@/redux/slice/priceModel/priceModel.slice";
 import { RootState, AppDispatch } from "@/redux/store";
 import { HomePage } from "@/constants/RoutePath";
 
@@ -39,20 +39,22 @@ export default function FilterSection() {
     (store: RootState) => store.categories.categoryData
   );
   const searchQuery = useSelector(
-    (store: RootState) => store.search.searchQuery
+    (store: RootState) => store.searchs.searchQuery
+  );
+  const filterData = useSelector(
+    (store: RootState) => store.searchs.searchFilterList
   );
   const { productList } = useSelector((state: RootState) => state.products);
   const searchToFocusInput = useSelector(
-    (state: RootState) => state.search.searchToFocus
+    (state: RootState) => state.searchs.searchToFocus
   );
   const reduxScrollPosition = useSelector(
-    (state: RootState) => state.search.scrollPosition
+    (state: RootState) => state.searchs.scrollPosition
   );
-  const { priceData } = useSelector((state: RootState) => state.pricingModel);
+  const { priceData, matchedPrice } = useSelector((state: RootState) => state.pricingModels);
 
   const scrollTimeout = useRef<any>(null);
   const [localScrollPosition, setLocalScrollPosition] = useState(0);
-
 
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
@@ -170,7 +172,7 @@ export default function FilterSection() {
   };
 
   const categoryOptionsList = Array.from(getListOfCategory()).map(
-    (item: string) => {
+    (item: string, index: number) => {
       return {
         value: item,
         label: item,
@@ -189,12 +191,23 @@ export default function FilterSection() {
     return priceItem;
   };
 
-  const priceOptionList = Array.from(priceModelList()).map((item: string) => {
-    return {
-      value: item,
-      label: item,
-    };
-  });
+  const priceOptionList = Array.from(priceModelList()).map(
+    (item: string, index: number) => {
+      return {
+        value: item,
+        label: item,
+      };
+    }
+  );
+
+  const priceTypeHandler = useCallback(() => {
+    const getPriceList = productList.filter(
+      (item: AirtableModel) =>
+        item?.fields?.Pricing[0]?.toLowerCase() == priceData?.toLowerCase()
+    );
+    dispatch(setMatchedPrice(getPriceList));
+    console.log(getPriceList);
+  }, []);
 
 
   useEffect(() => {
