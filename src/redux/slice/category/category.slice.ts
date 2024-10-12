@@ -1,8 +1,9 @@
+import { AirtableModel } from "@/models/airtable.model";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Define the types for the state
 interface CategoryState {
-  matchedCategory: string[]; // Assuming matchedCategory is an array of strings, adjust as needed
+  matchedCategory: AirtableModel[]; // Assuming matchedCategory is an array of strings, adjust as needed
   categoryData: string | null; // Can be a string or null
 }
 
@@ -17,7 +18,7 @@ const categorySlice = createSlice({
   name: "category",
   initialState,
   reducers: {
-    setMatchedCategory: (state, action: PayloadAction<string[]>) => {
+    setMatchedCategory: (state, action: PayloadAction<AirtableModel[]>) => {
       // Set matched category data
       state.matchedCategory = action.payload;
     },

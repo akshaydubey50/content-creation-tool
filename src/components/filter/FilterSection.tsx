@@ -9,19 +9,19 @@ import {
   setCategoryData,
   clearCategoryData,
   clearMatchedCategory,
-} from "@/redux/slice/category/categorySlice";
+} from "@/redux/slice/category/category.slice";
 import {
   setSearchQuery,
   setSearchFilterList,
   clearSearchFilterList,
   scrollPage,
-} from "@/redux/slice/search/searchSlice";
+} from "@/redux/slice/search/search.slice";
 import {
   clearMatchedPrice,
   clearPriceData,
   setMatchedPrice,
   setPriceData,
-} from "@/redux/slice/priceModel/priceModelSlice";
+} from "@/redux/slice/priceModel/priceModel.slice";
 import { RootState, AppDispatch } from "@/redux/store";
 import { HomePage } from "@/constants/RoutePath";
 

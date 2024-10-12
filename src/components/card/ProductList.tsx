@@ -2,9 +2,8 @@
 import React, { useEffect, useCallback } from "react";
 import { useSearchParams, useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductList } from "@/redux/slice/product/productSlice";
+import { fetchProductList } from "@/redux/slice/product/product.slice";
 import { getBookmarkList } from "@/redux/slice/bookmark/bookmark.slice";
-import { getUpvoteList } from "@/redux/slice/upvote/upvoteSlice";
 import { RootState, AppDispatch } from "@/redux/store";
 import { useSession } from "next-auth/react";
 import { ProductCard } from "./ProductCard";
@@ -32,9 +31,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   const bookmarkList = useSelector(
     (state: RootState) => state.bookmarks.bookmarkList
   );
-  const upVotedList = useSelector(
-    (state: RootState) => state.upvotes.upvoteList
-  );
+  const upVotedList = useSelector((state: RootState) => state.likes.likedList);
   const { currentPage, updateCurrentProducts, handlePageChange } =
     usePagination(12);
 
@@ -108,9 +105,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   return (
     <>
-      <main
-        className="grid grid-cols-1 px-10 py-5 mx-auto gap-y-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-10 w-fit lg:px-8 2xl:px-0 justify-items-center"
-      >
+      <main className="grid grid-cols-1 px-10 py-5 mx-auto gap-y-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-10 w-fit lg:px-8 2xl:px-0 justify-items-center">
         {updateCurrentProducts(filteredProductRecords).map((item) => (
           <ProductCard
             key={item.id}
