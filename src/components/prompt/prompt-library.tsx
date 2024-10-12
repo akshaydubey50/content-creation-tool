@@ -20,7 +20,7 @@ export default function PromptLibrary() {
 
   const dispatch: AppDispatch = useDispatch();
   const { isLoading, isError, promptResourceList } = useSelector(
-    (state: RootState) => state.promptResource
+    (state: RootState) => state.promptResources
   );
 
   const itemsPerPage = 6;
@@ -76,23 +76,23 @@ export default function PromptLibrary() {
 
   return (
     <>
-    <div className="flex flex-col  bg-background pt-10">
+    <div className="flex flex-col pt-10 bg-background">
       {/* Mobile Category Toggle */}
-      <div className="block lg:hidden p-4">
+      <div className="block p-4 lg:hidden">
         <Button
-          className="w-full flex justify-between items-center border-black bg-light-gray"
+          className="flex items-center justify-between w-full border-black bg-light-gray"
           onClick={() => setIsCategoryOpen(!isCategoryOpen)}
         >
           Categories
           {isCategoryOpen ? (
-            <ChevronUp className="h-4 w-4" />
+            <ChevronUp className="w-4 h-4" />
           ) : (
-            <ChevronDown className="h-4 w-4" />
+            <ChevronDown className="w-4 h-4" />
           )}
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-6 gap-4 ">  
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6 ">  
         {/* Left Sidebar - Categories */}
         <aside
           className={`col-span-1 lg:col-span-3 p-6 ${
@@ -105,12 +105,12 @@ export default function PromptLibrary() {
         {/* Main Content */}
         {/* {isLoading && <Loader />} */}
         {!isLoading && promptList.length > 0 && (
-          <main className="col-span-1 lg:col-span-9 p-4 md:p-6">
+          <main className="col-span-1 p-4 lg:col-span-9 md:p-6">
             {/* <Input
               className="mb-6 ring-DarkOrange ring-opacity-50"
               placeholder="Looking for a prompt?"
             /> */}
-              <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-3 md:gap-6"> 
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 md:gap-6"> 
                 {updateCurrentProducts().map((prompt, index) => (
                 <PromptCard key={index} promptResource={prompt} />
               ))}
