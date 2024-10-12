@@ -37,14 +37,14 @@ export function useLikeHandler(
     try {
       if (newLikedState) {
         await dispatch(addLike({ itemId: id, itemType }));
-        setTotalLikes((prevCount) => prevCount + 1);
+        setTotalLikes((prevCount:any) => prevCount + 1);
         toast({
           title: `You liked ${Name}`,
           variant: "success",
         });
       } else {
         await dispatch(deleteLike({ itemId: id, itemType }));
-        setTotalLikes((prevCount) => prevCount - 1);
+        setTotalLikes((prevCount:any) => prevCount - 1);
         toast({
           title: `You removed ${Name} from likes`,
           variant: "destructive",

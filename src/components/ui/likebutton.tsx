@@ -39,7 +39,7 @@ const LikeButton = ({
           <AiOutlineHeart className="text-3xl text-black" />
         )}
       </p>
-      <p>{totalLikes}</p>
+      {/* <p>{totalLikes}</p> */}
     </button>
   );
 };
