@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import Image from "next/image";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
@@ -7,19 +7,10 @@ import { Product } from "@/types/product";
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
 import LikedBookmarkModal from "@/components/modal/LikedBookmarkModal";
-import {
-  deleteBookmark,
-  addBookmark,
-} from "@/redux/slice/bookmark/bookmark.slice";
-import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { isProductBookmarked } from "@/helper/helper";
 import { MdVerified } from "react-icons/md";
-import { useSession } from "next-auth/react";
-import { HomePage } from "@/constants/RoutePath";
 import Details from "../details";
-import BookmarkButton from "@/components/ui/bookmarkbutton";
 import { useBookmarkHandler } from "@/hooks/useBookmarkHandler";
 export default function ProductToolBanner({
   url,
@@ -38,15 +29,6 @@ export default function ProductToolBanner({
   const bookmarkedList = useSelector(
     (state: RootState) => state.bookmarks.bookmarkList || []
   );
-  // const [isBookMarked, setIsBookMarked] = useState(false);
-  // const [isBookMarked, setIsBookMarked] = useState(() =>
-  //   isProductBookmarked(id, bookmarkList)
-  // );
-
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const { data: session } = useSession();
-  const DEBOUNCE_DELAY = 250; // ms
 
 
   const { isBookMarked, handleBookmark } = useBookmarkHandler(
@@ -55,17 +37,7 @@ export default function ProductToolBanner({
     isAlreadyBookmarked,
     "tool"
   );
-  // const handleBookmark = useCallback(() => {
-  //   if (!session || !session?.user) {
-  //     setIsOpen(true);
-  //     return;
-  //   }
-  //   setIsBookMarked(!isBookMarked);
-  //   const action = isBookMarked ? deleteBookmark : addBookmark;
-  //   // @ts-ignore
-  //   dispatch(action(id));
-  // }, [session, isBookMarked, id, dispatch]);
-
+  
   function debounce(func: Function, delay: number) {
     let timeoutId: NodeJS.Timeout;
     return (...args: any[]) => {
@@ -74,22 +46,7 @@ export default function ProductToolBanner({
     };
   }
 
-  // const debouncedHandleBookmark = useCallback(
-  //   debounce(handleBookmark, DEBOUNCE_DELAY),
-  //   [handleBookmark]
-  // );
 
-  const formattedTag = tag[0].toLowerCase().replace(/\s/g, "-");
-
-  const goToCategory = () => {
-    router.push(`${HomePage}/category/${formattedTag}`);
-  };
-
-  // useEffect(() => {
-  //   setIsBookMarked(isProductBookmarked(id, bookmarkList));
-  // }, [id, bookmarkList]);
-
-  // New effect for bookmarks
   useEffect(() => {
     if (bookmarkedList?.length > 0 || bookmarkedList?.length != null) {
       const toolBookmarkedItem = bookmarkedList.find(
@@ -132,7 +89,7 @@ export default function ProductToolBanner({
                 <div className="border border-black border-solid rounded-t-xl lg:hidden">
                   <Image
                     src={url}
-                    alt="logo banner"
+                    alt={`${title}_banner`}
                     loading="lazy"
                     width={1280}
                     height={720}

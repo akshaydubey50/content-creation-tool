@@ -72,7 +72,7 @@ export function ProductCard(props: any) {
         <section className="border-b border-black border-solid">
           <Image
             src={ToolImage}
-            alt={formattedTitle}
+            alt={`${formattedTitle}_banner`}
             loading="lazy"
             width="1280"
             height="720"
@@ -94,21 +94,7 @@ export function ProductCard(props: any) {
                   <MdVerified className="text-2xl text-DarkOrange" />
                 )}
               </div>
-              {/*  <button
-                title="Likes"
-                type="button"
-                onClick={handleLike}
-                className="flex items-center gap-x-1"
-              >
-                <p>
-                  {isLiked ? (
-                    <AiFillHeart className="text-3xl text-DarkOrange" />
-                  ) : (
-                    <AiOutlineHeart className="text-3xl text-black" />
-                  )}
-                </p>
-                <p>{isLiked ? totalLikes + 1 : totalLikes}</p>
-              </button> */}
+             
               <LikeButton
                 key={`${{ id }}+${{ Name }}`}
                 itemId={id}
