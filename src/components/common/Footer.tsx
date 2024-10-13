@@ -22,9 +22,9 @@ export default function Footer() {
       <div className="w-full max-w-screen-xl p-4 mx-auto md:py-8">
         <div className="flex flex-col space-y-3 md:flex-row md:items-center md:justify-between md:space-y-0">
           <Link href="/">
-            <h2 className="text-2xl font-semibold text-black whitespace-nowrap">
+            <div className="text-2xl font-semibold text-black whitespace-nowrap">
               Content Creation FYI
-            </h2>
+            </div>
           </Link>
           <ul className="flex flex-wrap items-center justify-center space-x-4 text-sm font-medium text-black sm:mb-0">
             {footerItem.map((menu, index) => (

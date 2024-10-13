@@ -123,12 +123,12 @@ export default function HeroSection() {
               <span> Every tool you need to </span>
               <span>ace at content creation.</span>
             </h1>
-            <h5 className="max-w-lg px-2 mx-auto text-base text-center md:text-base xl:text-2xl xl:max-w-4xl xl:leading-normal">
+            <div className="max-w-lg px-2 mx-auto text-base text-center md:text-base xl:text-2xl xl:max-w-4xl xl:leading-normal">
               {/* Directory of 200+ content creation tools designed to streamline
               your process and enhance productivity. */}
               Search, like, bookmark, and use the best content creation tools to
               streamline your workflow and create better content.
-            </h5>
+            </div>
           </div>
         </div>
               <div className="flex space-x-4 md:space-x-6 lg:space-x-8 xl:space-x-12">
