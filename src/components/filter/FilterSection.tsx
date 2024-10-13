@@ -27,7 +27,6 @@ import { HomePage } from "@/constants/RoutePath";
 
 export default function FilterSection() {
   const [isMounted, SetIsMounted] = useState(false);
-  const [screenWidth, setScreenWidth] = useState(0);
   const scrollPositionRef = useRef(0);
 
   const router = useRouter();
@@ -223,18 +222,6 @@ export default function FilterSection() {
     );
     dispatch(setMatchedPrice(getPriceList));
     console.log(getPriceList);
-  }, []);
-
-  useEffect(() => {
-    // Set initial screen width
-    setScreenWidth(window.innerWidth);
-
-    // Add event listener for window resize
-    const handleResize = () => setScreenWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-
-    // Clean up
-    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
 
