@@ -29,6 +29,7 @@ export default function FilterSection() {
   const [isMounted, SetIsMounted] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const screenWidth = window.innerWidth;
 
   const currentRoute = pathname.split("/");
 
@@ -58,13 +59,25 @@ export default function FilterSection() {
 
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
+  const scrollBaseonInnerWidth = () => {
+    const currenInnerWidth = window.innerWidth;
+    if (currenInnerWidth < 768) {
+      return dispatch(scrollPage(300));
+    }
+    else if (currenInnerWidth < 1280) {
+      return dispatch(scrollPage(400));
+    }
+    else {
+      return dispatch(scrollPage(600));
+    }
+  }
 
   /*Search Functionality*/
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-   
+
     const newSearch = event.target.value.toLowerCase();
     dispatch(setSearchQuery(newSearch));
-    dispatch(scrollPage(600));
+    scrollBaseonInnerWidth()
     dispatch(clearMatchedPrice());
     dispatch(clearPriceData());
     dispatch(clearCategoryData());
@@ -91,15 +104,15 @@ export default function FilterSection() {
       dispatch(setSearchFilterList([]));
     }
     setVisibleItem(9);
-    
+
     setTimeout(() => {
       if (currentRoute.includes("category")) {
         router.replace("/")
-            if (searchRef.current) {
-              searchRef.current.focus();
-            }
+        if (searchRef.current) {
+          searchRef.current.focus();
+        }
       }
-      
+
     }, 250)
 
   };
@@ -115,7 +128,7 @@ export default function FilterSection() {
 
       dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
-      dispatch(scrollPage(600));
+      scrollBaseonInnerWidth()
       router.replace(`${HomePage}/category/${formatedCategory}`);
     }
   };
@@ -139,7 +152,8 @@ export default function FilterSection() {
 
       dispatch(clearCategoryData());
       dispatch(clearMatchedCategory());
-        dispatch(scrollPage(600));
+      scrollBaseonInnerWidth()
+
     }
   };
 

@@ -19,7 +19,8 @@ import { MdVerified } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import { HomePage } from "@/constants/RoutePath";
 import Details from "../details";
-
+import BookmarkButton from "@/components/ui/bookmarkbutton";
+import { useBookmarkHandler } from "@/hooks/useBookmarkHandler";
 export default function ProductToolBanner({
   url,
   title,
@@ -32,29 +33,38 @@ export default function ProductToolBanner({
   detailedMsg,
 }: Product) {
   const [isOpen, setIsOpen] = useState(false);
-  const bookmarkList = useSelector(
+  const [isAlreadyBookmarked, setIsAlreadyBookmarked] = useState(false);
+
+  const bookmarkedList = useSelector(
     (state: RootState) => state.bookmarks.bookmarkList || []
   );
   // const [isBookMarked, setIsBookMarked] = useState(false);
-  const [isBookMarked, setIsBookMarked] = useState(() =>
-    isProductBookmarked(id, bookmarkList)
-  );
+  // const [isBookMarked, setIsBookMarked] = useState(() =>
+  //   isProductBookmarked(id, bookmarkList)
+  // );
 
   const router = useRouter();
   const dispatch = useDispatch();
   const { data: session } = useSession();
   const DEBOUNCE_DELAY = 250; // ms
 
-  const handleBookmark = useCallback(() => {
-    if (!session || !session?.user) {
-      setIsOpen(true);
-      return;
-    }
-    setIsBookMarked(!isBookMarked);
-    const action = isBookMarked ? deleteBookmark : addBookmark;
-    // @ts-ignore
-    dispatch(action(id));
-  }, [session, isBookMarked, id, dispatch]);
+
+  const { isBookMarked, handleBookmark } = useBookmarkHandler(
+    id,
+    title,
+    isAlreadyBookmarked,
+    "tool"
+  );
+  // const handleBookmark = useCallback(() => {
+  //   if (!session || !session?.user) {
+  //     setIsOpen(true);
+  //     return;
+  //   }
+  //   setIsBookMarked(!isBookMarked);
+  //   const action = isBookMarked ? deleteBookmark : addBookmark;
+  //   // @ts-ignore
+  //   dispatch(action(id));
+  // }, [session, isBookMarked, id, dispatch]);
 
   function debounce(func: Function, delay: number) {
     let timeoutId: NodeJS.Timeout;
@@ -64,10 +74,10 @@ export default function ProductToolBanner({
     };
   }
 
-  const debouncedHandleBookmark = useCallback(
-    debounce(handleBookmark, DEBOUNCE_DELAY),
-    [handleBookmark]
-  );
+  // const debouncedHandleBookmark = useCallback(
+  //   debounce(handleBookmark, DEBOUNCE_DELAY),
+  //   [handleBookmark]
+  // );
 
   const formattedTag = tag[0].toLowerCase().replace(/\s/g, "-");
 
@@ -75,37 +85,45 @@ export default function ProductToolBanner({
     router.push(`${HomePage}/category/${formattedTag}`);
   };
 
+  // useEffect(() => {
+  //   setIsBookMarked(isProductBookmarked(id, bookmarkList));
+  // }, [id, bookmarkList]);
+
+  // New effect for bookmarks
   useEffect(() => {
-    setIsBookMarked(isProductBookmarked(id, bookmarkList));
-  }, [id, bookmarkList]);
+    if (bookmarkedList?.length > 0 || bookmarkedList?.length != null) {
+      const toolBookmarkedItem = bookmarkedList.find(
+        (item) => item.itemType === "tool"
+      );
+      if (toolBookmarkedItem?.itemIds != null) {
+        // Check if the current id is in the itemIds array
+        setIsAlreadyBookmarked(toolBookmarkedItem.itemIds.includes(id));
+      } else {
+        setIsAlreadyBookmarked(false);
+      }
+    } else {
+      setIsAlreadyBookmarked(false);
+    }
+  }, [id, bookmarkedList]);
 
   return (
     <>
-      <main className="bg-light-gray py-6 px-8   md:px-10 lg:pt-16  overflow-x-hidden">
-        <div className="max-w-7xl mx-auto pt-14">
-          {/* <Breadcrumb tag={tag} title={title} /> */}
+      <main className="px-8 py-6 overflow-x-hidden bg-light-gray md:px-10 lg:pt-16">
+        <div className="mx-auto max-w-7xl pt-14">
           <Breadcrumb
             categories={tag?.[0]}
             currentPageTitle={title}
             key={title}
+            breadcrumbType="tools"
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 my-4">
-            {/*   <div className="lg:col-span-6 border border-black border-solid rounded-t-xl">
-              <Image
-                src={url}
-                alt="logo banner"
-                loading="lazy"
-                width={1280}
-                height={720}
-                className="rounded-t-xl w-full h-auto object-cover"
-              />
-            </div> */}
+          <div className="grid grid-cols-1 gap-4 my-4 lg:grid-cols-12 sm:gap-6 md:gap-8">
+          
             <div className="lg:col-span-6">
-              <div className="flex flex-col space-y-4 mb-6">
-                <div className="flex gap-2 items-center">
+              <div className="flex flex-col mb-6 space-y-4">
+                <div className="flex items-center gap-2">
                   {/* Responsive text sizes for the title */}
-                  <h1 className="text-xl sm:text-2xl md:text-3xl xl:text-4xl font-bold break-words">
+                  <h1 className="text-xl font-bold break-words sm:text-2xl md:text-3xl xl:text-4xl">
                     {title}
                   </h1>
                   {verified && (
@@ -119,16 +137,16 @@ export default function ProductToolBanner({
                     loading="lazy"
                     width={1280}
                     height={720}
-                    className="rounded-t-xl w-full h-auto object-cover"
+                    className="object-cover w-full h-auto rounded-t-xl"
                   />
                 </div>
 
-                <p className="sm:text-base text-lg break-words">
+                <p className="text-lg break-words sm:text-base">
                   {description}
                 </p>
               </div>
               <div className="flex flex-col space-y-2">
-                <p className=" text-lg md:text-base ">
+                <p className="text-lg md:text-base">
                   <span className="font-semibold">Categories : </span>
                   <span className="break-words">{`${tag?.join(", ")}`}</span>
                 </p>
@@ -137,18 +155,13 @@ export default function ProductToolBanner({
                   <span className="break-words">{`${Pricing} `}</span>
                 </p>
               </div>
-              <div className="flex  justify-between md:justify-start md:space-x-10  pt-4 items-stretch text-white">
-                <div className="border border-DarkOrange rounded-lg py-2 px-10 flex items-center text-DarkOrange hover:bg-DarkOrange hover:text-white hover:cursor-pointer ">
-                  <button
-                    title="Bookmark"
-                    type="button"
-                    className="font-bold"
-                    onClick={debouncedHandleBookmark}
-                  >
+              <div className="flex items-stretch justify-between pt-4 text-white md:justify-start md:space-x-10">
+                <div>
+                  <button title="Bookmark" type="button" onClick={handleBookmark} className="px-10 py-2 border rounded-lg outline-none border-DarkOrange text-DarkOrange hover:cursor-pointer">
                     {isBookMarked ? (
-                      <BsBookmarkFill className="  sm:text-2xl md:text-lg font-bold  " />
+                      <BsBookmarkFill className="text-3xl text-DarkOrange" />
                     ) : (
-                      <BsBookmark className="  sm:text-2xl md:text-lg font-bold " />
+                        <BsBookmark className="text-3xl text-DarkOrange " />
                     )}
                   </button>
                 </div>
@@ -156,7 +169,7 @@ export default function ProductToolBanner({
                   <Link
                     href={link}
                     target="_blank"
-                    className="w-full sm:w-auto hover:bg-white hover:text-DarkOrange border border-DarkOrange flex rounded-md font-semibold bg-DarkOrange items-center justify-center text-sm lg:text-base px-4 py-2 space-x-2"
+                    className="flex items-center justify-center w-full px-4 py-2 space-x-2 text-sm font-semibold border rounded-md outline-none sm:w-auto hover:bg-white hover:text-DarkOrange border-DarkOrange bg-DarkOrange lg:text-base"
                   >
                     <span>Visit Website</span>
                     <FiArrowUpRight className="text-xl" />
@@ -164,14 +177,14 @@ export default function ProductToolBanner({
                 </div>
               </div>
             </div>
-            <div className="hidden lg:block lg:col-span-6 border border-black border-solid rounded-t-xl">
+            <div className="hidden border border-black border-solid lg:block lg:col-span-6 rounded-t-xl">
               <Image
                 src={url}
                 alt="logo banner"
                 loading="lazy"
                 width={1280}
                 height={720}
-                className="rounded-t-xl w-full h-auto object-cover"
+                className="object-cover w-full h-auto rounded-t-xl"
               />
             </div>
           </div>
@@ -179,7 +192,7 @@ export default function ProductToolBanner({
 
         {isOpen && <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />}
       </main>
-      <div className="max-w-7xl mx-auto overflow-x-hidden px-8 ">
+      <div className="px-8 mx-auto overflow-x-hidden max-w-7xl ">
         {detailedMsg && <Details content={detailedMsg} />}
       </div>
     </>

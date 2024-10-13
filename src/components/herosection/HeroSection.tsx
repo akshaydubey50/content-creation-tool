@@ -92,8 +92,16 @@ export default function HeroSection() {
   };
 
   const searchIconHandler = () => {
-    console.log("searchIconHandler");
-    dispatch(scrollPage(600));
+    const currenInnerWidth = window.innerWidth;
+    if(currenInnerWidth < 768){
+      dispatch(scrollPage(300));
+    }
+    else if(currenInnerWidth < 1280){
+      dispatch(scrollPage(400));
+    }
+    else{
+      dispatch(scrollPage(600));
+    }
     dispatch(setSearchInputFocus());
   };  
   return (
