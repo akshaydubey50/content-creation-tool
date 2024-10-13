@@ -1,8 +1,13 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
+interface ItemId {
+  itemId: string;
+  likeCount: number;
+}
+
 // Define the Like model
 interface Like {
-  itemIds: string[];
+  itemIds: ItemId[];
   itemType: "tool" | "prompt";
 }
 
@@ -34,6 +39,7 @@ export const getLikeList = createAsyncThunk<Like[]>(
       throw new Error("Failed to fetch likes");
     }
     const jsonData = await response.json();
+    console.log("likes from api ==> ", jsonData);
     return jsonData.likes as Like[];
   }
 );
@@ -52,7 +58,8 @@ export const addLike = createAsyncThunk<
     throw new Error("Failed to add like");
   }
   await dispatch(getLikeList()); // Re-fetch the like list after adding a like
-  return { itemType, itemIds: [itemId] };
+  // return { itemType, itemIds: [itemId] };
+  return { itemType, itemIds: [{ itemId, likeCount: 1 }] };
 });
 
 // Delete a like
@@ -146,8 +153,9 @@ const likeSlice = createSlice({
             (like) => like.itemType === action.payload.itemType
           );
           if (existingLiked) {
+            // Update to filter based on itemId property of ItemId objects
             existingLiked.itemIds = existingLiked.itemIds.filter(
-              (id) => id !== action.payload.itemId
+              (item) => item.itemId !== action.payload.itemId
             );
           }
         }

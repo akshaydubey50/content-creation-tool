@@ -15,15 +15,15 @@ const LikeButton = ({
   itemName,
   initialLikedState,
   itemType,
-  upVoteCount
-
 }: LikeButtonProps) => {
   const { isLiked, handleLike, totalLikes } = useLikeHandler(
     itemId,
     itemName,
     initialLikedState,
-    itemType, upVoteCount
+    itemType
   );
+
+  console.log("total likes ==> ", totalLikes);
 
   return (
     <button
@@ -39,7 +39,7 @@ const LikeButton = ({
           <AiOutlineHeart className="text-3xl text-black" />
         )}
       </p>
-      {/* <p>{totalLikes}</p> */}
+      {<p>{totalLikes}</p>}
     </button>
   );
 };

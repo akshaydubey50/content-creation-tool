@@ -9,9 +9,8 @@ import { usePathname, useRouter } from "next/navigation";
 import * as RoutePath from "@/constants/RoutePath";
 import { signOut, useSession } from "next-auth/react";
 
-
 interface MenuItem {
-  id: number| string;
+  id: number | string;
   label: string;
   href: string;
 }
@@ -30,8 +29,11 @@ export default function Navbar() {
     { id: RoutePath.Prompt, label: "Prompt", href: RoutePath.Prompt },
     // { id: RoutePath.Resources, label: "Resources", href: RoutePath.Resources },
     { id: RoutePath.Contact, label: "Contact", href: RoutePath.Contact },
-    { id: RoutePath.SubmitTool, label: "Submit Tool", href: RoutePath.SubmitTool },
-
+    {
+      id: RoutePath.SubmitTool,
+      label: "Submit Tool",
+      href: RoutePath.SubmitTool,
+    },
   ];
 
   const [isMenu, setIsMenu] = useState(false);
@@ -125,7 +127,7 @@ export default function Navbar() {
                     className="px-6 py-2 font-semibold text-white bg-black rounded-lg hover:bg-DarkOrange hover:text-white"
                     onClick={handleSignup}
                   >
-                    Sign Up 
+                    Sign Up
                   </button>
                 </li>
               )}
@@ -165,9 +167,9 @@ export default function Navbar() {
             <>
               <div key={menu?.id} className="flex items-center px-2 py-4 text-xl font-semibold border-b border-gray-200"
                 onClick={() => {
-                  console.log("menu", menu)
+                  console.log("menu", menu);
                   crossHandler();
-                  router.push(menu?.href)
+                  router.push(menu?.href);
                 }}
               >
                 {menu.label}
@@ -175,7 +177,6 @@ export default function Navbar() {
             </>
           ))}
 
-         
           {!session && (
             <div className="grid items-center grid-cols-2 mt-6 font-semibold justify-items-center" >
               <div className="col-span-1 px-12 py-4 border rounded-full border-DarkOrange text-DarkOrange">
@@ -198,7 +199,6 @@ export default function Navbar() {
               </div>
             </div>
             </div>
-
           )}
           {session && (
             <div className="flex justify-center mt-6 font-semibold">
@@ -211,10 +211,8 @@ export default function Navbar() {
               Logout
             </button>
             </div>
-
           )}
         </div>
-          
       </aside>
     </>
   );

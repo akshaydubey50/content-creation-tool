@@ -84,11 +84,82 @@ import connectDB from "@/db/dbConnect";
 import LikeModel from "@/models/likes/Like.model"; // Assuming you have a LikeModel similar to BookmarkModel
 
 // GET: Fetch all liked items
+// export async function GET(req: NextRequest) {
+//   await connectDB();
+
+//   const token = await getToken({ req: req });
+
+//   if (!token || token?._id === undefined) {
+//     return NextResponse.json(
+//       { success: false, msg: "Unauthorized access" },
+//       { status: 400 }
+//     );
+//   }
+
+//   try {
+//     const user = await UserModel.findOne({
+//       email: token?.email,
+//     });
+
+//     if (!user) {
+//       return NextResponse.json(
+//         { success: false, msg: "User does not exist" },
+//         { status: 404 }
+//       );
+//     }
+
+//     const likes = await LikeModel.aggregate([
+//       {
+//         $match: {
+//           userId: new mongoose.Types.ObjectId(user?._id),
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: "$itemType", // Group by itemType (either 'product' or 'prompt')
+//           itemIds: { $addToSet: "$itemId" }, // Collect all itemIds for the corresponding itemType
+//           totalLikes: { $sum: 1 }, // Count total likes
+//         },
+//       },
+//       {
+//         $project: {
+//           _id: 0, // Remove _id from the result
+//           itemType: "$_id", // Set _id as itemType in the result
+//           itemIds: "$itemIds", // Array of itemIds (products or prompts)
+//           totalLikes: "$totalLikes", // Total count of likes for this itemType
+//         },
+//       },
+//     ]);
+
+//     if (likes.length === 0) {
+//       return NextResponse.json(
+//         { success: true, likes: null, msg: "No items liked" },
+//         { status: 200 }
+//       );
+//     }
+
+//     return NextResponse.json(
+//       {
+//         success: true,
+//         msg: "Likes fetched successfully",
+//         likes, // This contains both itemIds and total count per itemType (product or prompt)
+//       },
+//       { status: 200 }
+//     );
+//   } catch (error: any) {
+//     console.log("Error while fetching likes ==> ", error);
+
+//     return NextResponse.json(
+//       { success: false, msg: "Internal Server Error" },
+//       { status: 500 }
+//     );
+//   }
+// }
+
 export async function GET(req: NextRequest) {
   await connectDB();
 
   const token = await getToken({ req: req });
-
   if (!token || token?._id === undefined) {
     return NextResponse.json(
       { success: false, msg: "Unauthorized access" },
@@ -116,17 +187,15 @@ export async function GET(req: NextRequest) {
       },
       {
         $group: {
-          _id: "$itemType", // Group by itemType (either 'product' or 'prompt')
-          itemIds: { $addToSet: "$itemId" }, // Collect all itemIds for the corresponding itemType
-          totalLikes: { $sum: 1 }, // Count total likes
+          _id: "$itemType",
+          itemIds: { $addToSet: "$itemId" },
         },
       },
       {
         $project: {
-          _id: 0, // Remove _id from the result
-          itemType: "$_id", // Set _id as itemType in the result
-          itemIds: "$itemIds", // Array of itemIds (products or prompts)
-          totalLikes: "$totalLikes", // Total count of likes for this itemType
+          _id: 0,
+          itemType: "$_id",
+          itemIds: "$itemIds",
         },
       },
     ]);
@@ -138,11 +207,27 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    // Fetch total like count for each item
+    const likesWithCounts = await Promise.all(
+      likes.map(async (likeGroup) => {
+        const itemsWithCounts = await Promise.all(
+          likeGroup.itemIds.map(async (itemId: string) => {
+            const count = await LikeModel.countDocuments({ itemId });
+            return { itemId, likeCount: count };
+          })
+        );
+        return {
+          ...likeGroup,
+          itemIds: itemsWithCounts,
+        };
+      })
+    );
+
     return NextResponse.json(
       {
         success: true,
         msg: "Likes fetched successfully",
-        likes, // This contains both itemIds and total count per itemType (product or prompt)
+        likes: likesWithCounts,
       },
       { status: 200 }
     );

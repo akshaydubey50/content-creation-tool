@@ -1,4 +1,11 @@
 import PromptLibrary from "@/components/prompt/prompt-library";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Content Creation Prompt Library",
+  description:
+    "Explore our collection of content creation prompts to boost your creativity and productivity.",
+};
 
 export default function Prompt() {
   return (

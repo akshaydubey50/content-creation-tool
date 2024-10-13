@@ -33,11 +33,13 @@ export function ProductCard(props: any) {
   const [isAlreadyBookmarked, setIsAlreadyBookmarked] = useState(false);
 
   useEffect(() => {
-    if (likedList?.length > 0 || likedList?.length != null) {
+    if (likedList?.length > 0) {
       const toolLikedItem = likedList.find((item) => item.itemType === "tool");
       if (toolLikedItem?.itemIds != null) {
         // Check if the current id is in the itemIds array
-        setIsAlreadyLiked(toolLikedItem.itemIds.includes(id));
+        setIsAlreadyLiked(
+          toolLikedItem.itemIds.some((item) => item.itemId === id)
+        );
       } else {
         setIsAlreadyLiked(false);
       }
@@ -94,7 +96,7 @@ export function ProductCard(props: any) {
                   <MdVerified className="text-2xl text-DarkOrange" />
                 )}
               </div>
-             
+
               <LikeButton
                 key={`${{ id }}+${{ Name }}`}
                 itemId={id}
@@ -121,13 +123,6 @@ export function ProductCard(props: any) {
             </p>
             <div className="flex items-center justify-between text-white text-Title-Medium">
               <VisitWebsite btnText="Visit Website" url={WebsiteLink} />
-              {/* <button title="Bookmark" type="button" onClick={handleBookmark}>
-                {isBookMarked ? (
-                  <BsBookmarkFill className="text-3xl text-DarkOrange" />
-                ) : (
-                  <BsBookmark className="text-3xl text-black" />
-                )}
-              </button> */}
               <BookmarkButton
                 id={id}
                 Name={Name}

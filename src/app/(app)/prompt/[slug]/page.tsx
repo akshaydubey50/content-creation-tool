@@ -15,7 +15,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // Read route params
-  const title = params.slug;
+  const slug = params.slug;
 
   // Fetch data from API
   const response = await fetch(`${APPConf.BASE_URL}/api/prompts`);
@@ -26,7 +26,7 @@ export async function generateMetadata(
     const formattedTitle = prompt?.fields?.Name?.toLowerCase()
       ?.trim()
       ?.replace(/\s/g, "-");
-    return formattedTitle !== title;
+    return formattedTitle === slug; // Changed '!==' to '==='
   });
 
   // Fallback values
@@ -41,9 +41,9 @@ export async function generateMetadata(
     openGraph: {
       title: productMatched?.fields?.Name || fallbackTitle,
       description: productMatched?.fields?.Description || fallbackDescription,
-      /*  images: productMatched?.fields?.ToolImage
+      images: productMatched?.fields?.ToolImage
         ? [{ url: productMatched.fields.ToolImage }]
-        : [], */
+        : [],
     },
   };
 }

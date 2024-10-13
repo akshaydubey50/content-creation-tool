@@ -1,7 +1,9 @@
 "use client";
+
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../common/Loader/Loader";
@@ -10,6 +12,9 @@ import { PropmtResourceModel } from "@/models/airtable.model";
 import PromptCategory from "./PromptCategory";
 import PromptCard from "./PromptCard";
 import Pagination from "../pagination/Pagination";
+import { getLikeList } from "@/redux/slice/like/like.slice";
+import { getBookmarkList } from "@/redux/slice/bookmark/bookmark.slice";
+import { Input } from "@/components/ui/input";
 
 export default function PromptLibrary() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,10 +24,15 @@ export default function PromptLibrary() {
     []
   );
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isBookmarkMode, setIsBookmarkMode] = useState(false);
 
   const dispatch: AppDispatch = useDispatch();
   const { isLoading, isError, promptResourceList } = useSelector(
     (state: RootState) => state.promptResources
+  );
+  const bookmarkSelector = useSelector(
+    (state: RootState) => state.bookmarks.bookmarkList
   );
 
   const itemsPerPage = 10;
@@ -51,16 +61,36 @@ export default function PromptLibrary() {
     setCurrentPage(1);
   };
 
+  const isPromptBookmarked = (promptId: string) => {
+    const promptBookmarks = bookmarkSelector?.find(
+      (bookmark) => bookmark.itemType === "prompt"
+    );
+    return promptBookmarks ? promptBookmarks.itemIds.includes(promptId) : false;
+  };
+
   const filterPrompts = useCallback(() => {
-    if (selectedCategories.length === 0) {
-      setFilteredPrompts(promptList);
-    } else {
-      const filtered = promptList.filter((prompt) =>
+    let filtered = promptList;
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter((prompt) =>
         selectedCategories.includes(prompt.fields?.Category?.[0])
       );
-      setFilteredPrompts(filtered);
     }
-  }, [promptList, selectedCategories]);
+    if (searchQuery) {
+      filtered = filtered.filter((prompt) =>
+        prompt.fields?.Name?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    if (isBookmarkMode) {
+      filtered = filtered.filter((prompt) => isPromptBookmarked(prompt.id));
+    }
+    setFilteredPrompts(filtered);
+  }, [
+    promptList,
+    selectedCategories,
+    searchQuery,
+    isBookmarkMode,
+    bookmarkSelector,
+  ]);
 
   const updateCurrentProducts = useCallback(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -71,6 +101,8 @@ export default function PromptLibrary() {
   useEffect(() => {
     if (promptResourceList?.length === 0) {
       dispatch(fetchPromptResourceList());
+      dispatch(getLikeList());
+      dispatch(getBookmarkList());
     }
   }, [dispatch, promptResourceList]);
 
@@ -83,61 +115,99 @@ export default function PromptLibrary() {
 
   useEffect(() => {
     filterPrompts();
-  }, [filterPrompts, selectedCategories]);
+  }, [
+    filterPrompts,
+    selectedCategories,
+    searchQuery,
+    isBookmarkMode,
+    bookmarkSelector,
+  ]);
 
   if (isLoading) {
     return <Loader />;
   }
 
   return (
-    <>
-      <div className="flex flex-col  bg-background pt-10">
-        {/* Mobile Category Toggle */}
-        <div className="block lg:hidden p-4">
-          <Button
-            className="w-full flex justify-between items-center border-black bg-light-gray"
-            onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-          >
-            Categories
-            {isCategoryOpen ? (
-              <ChevronUp className="h-4 w-4" />
-            ) : (
-              <ChevronDown className="h-4 w-4" />
-            )}
-          </Button>
-        </div>
+    <div className="flex flex-col bg-background pt-10">
+      {/* Mobile Category Toggle */}
+      <div className="block lg:hidden p-4">
+        <Button
+          className="w-full flex justify-between items-center border-black bg-light-gray"
+          onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+        >
+          Categories
+          {isCategoryOpen ? (
+            <ChevronUp className="h-4 w-4" />
+          ) : (
+            <ChevronDown className="h-4 w-4" />
+          )}
+        </Button>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-6 gap-4 ">
-          {/* Left Sidebar - Categories */}
-          <aside
-            className={`col-span-1 lg:col-span-3 p-6 ${
-              isCategoryOpen ? "block" : "hidden"
-            } lg:block`}
-          >
-            <PromptCategory
-              categoryList={getPromptCategory()}
-              onSelectCategory={handleCategorySelect}
-              selectedCategories={selectedCategories}
-            />
-          </aside>
+      <div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-6 gap-4">
+        {/* Left Sidebar - Categories */}
+        <aside
+          className={`col-span-1 lg:col-span-3 p-6 ${
+            isCategoryOpen ? "block" : "hidden"
+          } lg:block`}
+        >
+          <PromptCategory
+            categoryList={getPromptCategory()}
+            onSelectCategory={handleCategorySelect}
+            selectedCategories={selectedCategories}
+          />
+        </aside>
 
-          {/* Main Content */}
-          {!isLoading && promptList.length > 0 && (
-            <main className="col-span-1 lg:col-span-9 p-4 md:p-6">
+        {/* Main Content */}
+        {!isLoading && promptList.length > 0 && (
+          <main className="col-span-1 lg:col-span-9 p-4 md:p-6">
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+              <div className="flex-grow">
+                <Input
+                  type="text"
+                  placeholder="Search prompts..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full   focus:ring-0 focus:border-DarkOrange focus-visible:ring-0 
+                   focus-visible:ring-offset-0 focus:outline-DarkOrange"
+                />
+              </div>
+              <div
+                className="sm:w-auto cursor-pointer"
+                onClick={() => setIsBookmarkMode(!isBookmarkMode)}
+              >
+                {isBookmarkMode ? (
+                  <BsBookmarkFill className="text-2xl text-DarkOrange md:text-3xl lg:text-4xl" />
+                ) : (
+                  <BsBookmark className="text-2xl text-DarkOrange md:text-3xl lg:text-4xl" />
+                )}
+              </div>
+            </div>
+            {filteredPrompts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-3 md:gap-6">
-                {updateCurrentProducts().map((prompt, index) => (
-                  <PromptCard key={index} promptResource={prompt} />
+                {updateCurrentProducts().map((prompt) => (
+                  <PromptCard key={prompt.id} promptResource={prompt} />
                 ))}
               </div>
+            ) : (
+              <div className="text-center py-8">
+                {isBookmarkMode ? (
+                  <p>No prompts bookmarked yet.</p>
+                ) : (
+                  <p>No results found.</p>
+                )}
+              </div>
+            )}
+            {filteredPrompts.length > 0 && (
               <Pagination
                 currentPage={currentPage}
                 totalItems={filteredPrompts.length}
                 onPageChange={handlePageChange}
               />
-            </main>
-          )}
-        </div>
+            )}
+          </main>
+        )}
       </div>
-    </>
+    </div>
   );
 }
