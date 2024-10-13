@@ -30,9 +30,9 @@ export async function generateMetadata(
   });
 
   // Fallback values
-  const fallbackTitle = "Prompt Not Found";
+  const fallbackTitle = "Prompts Not Found";
   const fallbackDescription =
-    "Sorry, we couldn't find the prompt you're looking for.";
+    "Sorry, we couldn't find the prompts you're looking for.";
 
   // Return dynamic metadata
   return {

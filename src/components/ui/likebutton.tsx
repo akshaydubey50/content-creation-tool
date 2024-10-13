@@ -6,7 +6,7 @@ interface LikeButtonProps {
   itemId: string;
   itemName: string;
   initialLikedState: boolean;
-  itemType: "tool" | "prompt";
+  itemType: "tools" | "prompts";
 }
 
 const LikeButton: React.FC<LikeButtonProps> = ({
