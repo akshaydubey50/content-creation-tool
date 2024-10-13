@@ -11,28 +11,28 @@ import {
 
 const page = ({ params: { slug } }: any) => {
   return (
-    <div className="max-w-4xl mx-auto h-screen pt-10 px-4">
+    <div className="h-screen max-w-4xl px-4 pt-10 mx-auto">
       <div className="  flex flex-col mx-auto  space-y-4   pt-[40px] lg:pt-[60px]">
-        <div className="flex items-start container mx-auto px-4 py-8 max-w-4xl  ">
+        <div className="container flex items-start max-w-4xl px-4 py-8 mx-auto ">
           <Breadcrumb categories="prompt" currentPageTitle={slug} key={slug} />
         </div>
         <div className="flex flex-row">
-          <div className="flex justify-center items-center">
+          <div className="flex items-center justify-center">
             <div className="text-5xl font-bold">
               Identify Trending Topics in a Niche{" "}
             </div>
           </div>
 
-          <Card className="mb-6 mt-10 p-4 max-w-xl">
+          <Card className="max-w-xl p-4 mt-10 mb-6">
             {/*  <CardHeader>
-              <div className="flex justify-between items-start">
+              <div className="flex items-start justify-between">
                 <CardTitle className="text-2xl font-bold">Title</CardTitle>
               </div>
             </CardHeader> */}
             <CardContent>
               <div className="space-y-4">
                 <div>
-                  <p className=" text-gray-600 whitespace-pre-line">
+                  <p className="text-gray-600 whitespace-pre-line ">
                     Based on the provided focus area, generate a list of 5
                     potential blog topics that would be interesting and relevant
                     to the target audience. Focus Area: focus_area Target

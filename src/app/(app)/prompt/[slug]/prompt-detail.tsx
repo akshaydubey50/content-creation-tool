@@ -78,9 +78,9 @@ export default function PromptDetailPage({
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl mt-20">
-      <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-6">
-        <Breadcrumb categories="prompt" currentPageTitle={slug} key={slug} />
+    <div className="container px-4 py-8 mx-auto mt-20 max-w-7xl">
+      <nav className="flex items-center mb-6 space-x-2 text-sm text-gray-500">
+        <Breadcrumb categories="prompt" currentPageTitle={slug} key={slug}  />
       </nav>
 
       <Card className="mb-6 border border-black bg-light-gray">

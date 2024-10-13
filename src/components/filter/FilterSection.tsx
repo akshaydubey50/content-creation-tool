@@ -27,6 +27,8 @@ import { HomePage } from "@/constants/RoutePath";
 
 export default function FilterSection() {
   const [isMounted, SetIsMounted] = useState(false);
+  const scrollPositionRef = useRef(0);
+
   const router = useRouter();
   const pathname = usePathname();
 
@@ -58,13 +60,25 @@ export default function FilterSection() {
 
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
+  const scrollBaseonInnerWidth = () => {
+    const currenInnerWidth = typeof (window as any) !== "undefined" ? window.innerWidth : 0;
+    if (currenInnerWidth < 768) {
+      return dispatch(scrollPage(300));
+    }
+    else if (currenInnerWidth < 1280) {
+      return dispatch(scrollPage(400));
+    }
+    else {
+      return dispatch(scrollPage(600));
+    }
+  }
 
   /*Search Functionality*/
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-   
+
     const newSearch = event.target.value.toLowerCase();
     dispatch(setSearchQuery(newSearch));
-    dispatch(scrollPage(600));
+    scrollBaseonInnerWidth()
     dispatch(clearMatchedPrice());
     dispatch(clearPriceData());
     dispatch(clearCategoryData());
@@ -91,15 +105,15 @@ export default function FilterSection() {
       dispatch(setSearchFilterList([]));
     }
     setVisibleItem(9);
-    
+
     setTimeout(() => {
       if (currentRoute.includes("category")) {
         router.replace("/")
-            if (searchRef.current) {
-              searchRef.current.focus();
-            }
+        if (searchRef.current) {
+          searchRef.current.focus();
+        }
       }
-      
+
     }, 250)
 
   };
@@ -115,7 +129,7 @@ export default function FilterSection() {
 
       dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
-      dispatch(scrollPage(600));
+      scrollBaseonInnerWidth()
       router.replace(`${HomePage}/category/${formatedCategory}`);
     }
   };
@@ -139,7 +153,8 @@ export default function FilterSection() {
 
       dispatch(clearCategoryData());
       dispatch(clearMatchedCategory());
-        dispatch(scrollPage(600));
+      scrollBaseonInnerWidth()
+
     }
   };
 
@@ -212,8 +227,8 @@ export default function FilterSection() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentPosition = window.scrollY;
-      setLocalScrollPosition(currentPosition);
+      scrollPositionRef.current = window.scrollY;
+      setLocalScrollPosition(scrollPositionRef.current);
 
       // Clear the existing timeout
       if (scrollTimeout.current) {
@@ -222,7 +237,7 @@ export default function FilterSection() {
 
       // Set a new timeout
       scrollTimeout.current = setTimeout(() => {
-        dispatch(scrollPage(currentPosition));
+        dispatch(scrollPage(scrollPositionRef.current));
       }, 100); // Adjust this delay as needed
     };
 
@@ -235,6 +250,7 @@ export default function FilterSection() {
       }
     };
   }, [dispatch]);
+ 
 
   useEffect(() => {
     if (reduxScrollPosition > 0 && reduxScrollPosition !== localScrollPosition) {
@@ -252,15 +268,6 @@ export default function FilterSection() {
       searchRef.current?.focus();
     }
   }, [searchToFocusInput]);
-
-  // useEffect(() => {
-  //   window.scrollTo({ top: reduxScrollPosition, behavior: "smooth" });
-  // }, [categoryData, reduxScrollPosition, searchQuery]);
-
-  useEffect(() => {
-    console.log("searchQuery", searchQuery);
-  }, [searchQuery]);
-
 
 
   return (

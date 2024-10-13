@@ -17,55 +17,63 @@ export default function Breadcrumb({
   currentPageTitle,
 }: BreadcrumbProps) {
   const router = useRouter();
-  const pathname = usePathname();
+  // const pathname = usePathname();
   const dispatch = useDispatch();
 
   const handleNavigateToHome = () => {
-    router.push(HomePage);
+    router.replace(`/${categories}`);
   };
 
-  const handleCategorySelection = (selectedCategory: string) => {
-    if (selectedCategory) {
-      const formattedCategory = selectedCategory
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, "-");
+  // const handleCategorySelection = (selectedCategory: string) => {
+  //   if (selectedCategory) {
+  //     const formattedCategory = selectedCategory
+  //       .toLowerCase()
+  //       .trim()
+  //       .replace(/\s+/g, "-");
 
-      router.push(`${HomePage}/category/${formattedCategory}`);
-      dispatch(setCategoryData(selectedCategory));
-    }
-  };
+  //     router.push(`${HomePage}/category/${formattedCategory}`);
+  //     dispatch(setCategoryData(selectedCategory));
+  //   }
+  // };
 
-  const handlePageNavigation = (pageTitle: string) => {
-    const formattedPage = pageTitle.toLowerCase().trim().replace(/\s+/g, "-");
-    const newPath = pathname.includes("/category")
-      ? `${pathname}/category/${formattedPage}`
-      : pathname.includes("/category")
-        ? `${pathname}/tools/${formattedPage}`
-        : `${pathname}/${formattedPage}`;
-    console.log("newPath", newPath);
-    console.log("pathname", pathname);
-    router.replace("/");
-  };
+
+  // const handlePageNavigation = (pageTitle: string) => {
+  //     const formattedPage = pageTitle.toLowerCase().trim().replace(/\s+/g, "-");
+  //     const newPath = pathname.includes("/category")
+  //       ? `${pathname}/category/${formattedPage}`
+  //       : pathname.includes("/tools")
+  //         ? `${pathname}/tools/${formattedPage}`
+  //         : `${pathname}/${formattedPage}`;
+
+  //     router.replace(newPath);
+  // };
 
   return (
-    <nav className="font-medium flex flex-row items-center h-4">
+    <nav className="flex flex-row items-center h-4 font-medium">
       <span
         onClick={handleNavigateToHome}
-        className="hover:text-DarkOrange hover:border-b-2 hover:border-DarkOrange cursor-pointer"
+        className="cursor-pointer hover:text-DarkOrange hover:border-b-2 hover:border-DarkOrange"
       >
-        {" "}
         <LucideHome size={16} />
       </span>
-      <ChevronRight className="h-4 w-4 text-gray-400" />
+      <ChevronRight className="w-4 h-4 text-gray-400" />
 
-      <span
-        onClick={() => handlePageNavigation(categories)}
-        className="hover:text-DarkOrange hover:border-b-2 hover:border-DarkOrange cursor-pointer"
-      >
-        {capitalizeWords(categories)}
-      </span>
-      <ChevronRight className="h-4 w-4 text-gray-400" />
+      {/* Conditionally render category or tool */}
+      {categories === "tools" ? (
+        <span className="cursor-pointer hover:text-DarkOrange hover:border-b-2 hover:border-DarkOrange"
+          onClick={handleNavigateToHome}
+        >
+          Tools
+        </span>
+      ) : (
+        <span
+            onClick={handleNavigateToHome}
+          className="cursor-pointer hover:text-DarkOrange hover:border-b-2 hover:border-DarkOrange"
+        >
+          {capitalizeWords(categories)}
+        </span>
+      )}
+      <ChevronRight className="w-4 h-4 text-gray-400" />
 
       <span className="font-semibold">
         {capitalizeWords(currentPageTitle?.replaceAll("-", " "))}

@@ -27,7 +27,7 @@ export default function Navbar() {
   const menuItem: MenuItem[] = [
     { id: RoutePath.HomePage, label: "Tools", href: RoutePath.HomePage },
     { id: RoutePath.Prompt, label: "Prompt", href: RoutePath.Prompt },
-    { id: RoutePath.Resources, label: "Resources", href: RoutePath.Resources },
+    // { id: RoutePath.Resources, label: "Resources", href: RoutePath.Resources },
     { id: RoutePath.Contact, label: "Contact", href: RoutePath.Contact },
     {
       id: RoutePath.SubmitTool,
@@ -68,18 +68,16 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="bg-white fixed z-10 shadow-md w-full overflow-hidden px-5 xl:px-10  ">
-        <div className="flex  max-w-7xl  mx-auto justify-between items-center  py-4 lg:px-2 lg:py-4">
+      <header className="fixed z-10 w-full px-5 overflow-hidden bg-white shadow-md xl:px-10 ">
+        <div className="flex items-center justify-between py-4 mx-auto max-w-7xl lg:px-2 lg:py-4">
           <div>
             <Link href="/">
-              <h2 className="text-Heading-Small  font-bold">
-                Content Creation FYI
-              </h2>
+              <h2 className="font-bold text-Heading-Small">Content Creation FYI</h2>
             </Link>
           </div>
           {/* menubar in large screen */}
           <nav>
-            <ul className="hidden text-Title-Medium lg:flex flex-1 flex-wrap justify-end font-medium gap-6  text-black items-baseline">
+            <ul className="flex-wrap items-baseline justify-end flex-1 hidden gap-6 font-medium text-black text-Title-Medium lg:flex">
               {menuItem.map((menu, index) => (
                 <li key={menu?.id}>
                   <Link
@@ -105,7 +103,7 @@ export default function Navbar() {
               {session && (
                 <li>
                   <button
-                    className="text-white font-semibold bg-black  px-6 py-2 hover:bg-DarkOrange hover:text-white   rounded-lg"
+                    className="px-6 py-2 font-semibold text-white bg-black rounded-lg hover:bg-DarkOrange hover:text-white"
                     onClick={handleSignout}
                   >
                     Logout
@@ -115,7 +113,7 @@ export default function Navbar() {
               {!session && (
                 <li>
                   <button
-                    className="text-black font-semibold  px-6 py-2  rounded-lg  bg-gray-100 hover:shadow-2xl hover:shadow-gray-100  hover:bg-gray-200"
+                    className="px-6 py-2 font-semibold text-black bg-gray-100 rounded-lg hover:shadow-2xl hover:shadow-gray-100 hover:bg-gray-200"
                     onClick={handleSignIn}
                   >
                     Login
@@ -126,7 +124,7 @@ export default function Navbar() {
               {!session && (
                 <li>
                   <button
-                    className="text-white font-semibold bg-black  px-6 py-2  hover:bg-DarkOrange hover:text-white   rounded-lg"
+                    className="px-6 py-2 font-semibold text-white bg-black rounded-lg hover:bg-DarkOrange hover:text-white"
                     onClick={handleSignup}
                   >
                     Sign Up
@@ -154,14 +152,12 @@ export default function Navbar() {
           isMenu ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="p-3 flex my-2 ">
-          <h2 className="text-Heading-Medium font-bold">
-            Content Creation FYI
-          </h2>
+        <div className="flex p-3 my-2 ">
+          <h2 className="font-bold text-Heading-Medium">Content Creation FYI</h2>
           <button
             title="close"
             onClick={crossHandler}
-            className="outline-none ml-auto px-4"
+            className="px-4 ml-auto outline-none"
           >
             <ImCross size={20} color="red" />
           </button>
@@ -169,9 +165,7 @@ export default function Navbar() {
         <div>
           {menuItem.map((menu) => (
             <>
-              <div
-                key={menu?.id}
-                className="flex items-center py-4 px-2  border-b border-gray-200 font-semibold text-xl"
+              <div key={menu?.id} className="flex items-center px-2 py-4 text-xl font-semibold border-b border-gray-200"
                 onClick={() => {
                   console.log("menu", menu);
                   crossHandler();
@@ -184,42 +178,38 @@ export default function Navbar() {
           ))}
 
           {!session && (
-            <div className="grid grid-cols-2 mt-6 justify-items-center items-center font-semibold">
-              <div className="col-span-1 rounded-full py-4 px-12  border-DarkOrange border text-DarkOrange">
-                <div
-                  className="flex items-center justify-end"
-                  onClick={() => {
-                    crossHandler();
-                    handleSignIn();
-                  }}
-                >
-                  Login
-                </div>
+            <div className="grid items-center grid-cols-2 mt-6 font-semibold justify-items-center" >
+              <div className="col-span-1 px-12 py-4 border rounded-full border-DarkOrange text-DarkOrange">
+              <div className="flex items-center justify-end"
+                onClick={() => {
+                  crossHandler();
+                  handleSignIn();
+                }}
+              >
+                Login
               </div>
-              <div className="col-span-1 rounded-full py-4 px-12  bg-DarkOrange text-white ">
-                <div
-                  className="  flex items-center  justify-center  "
-                  onClick={() => {
-                    crossHandler();
-                    handleSignup();
-                  }}
-                >
-                  Sign Up
-                </div>
               </div>
+              <div className="col-span-1 px-12 py-4 text-white rounded-full bg-DarkOrange ">
+              <div className="flex items-center justify-center "
+                onClick={() => {
+                  crossHandler();
+                  handleSignup();
+                }}>
+                Sign Up
+              </div>
+            </div>
             </div>
           )}
           {session && (
-            <div className="mt-6 font-semibold flex justify-center">
-              <button
-                className="rounded-full py-4 px-20  bg-DarkOrange text-white"
-                onClick={() => {
-                  crossHandler();
-                  handleSignout();
-                }}
-              >
-                Logout
-              </button>
+            <div className="flex justify-center mt-6 font-semibold">
+            <button className="px-20 py-4 text-white rounded-full bg-DarkOrange"
+              onClick={() => {
+                crossHandler();
+                handleSignout();
+              }}
+            >
+              Logout
+            </button>
             </div>
           )}
         </div>

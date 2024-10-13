@@ -74,7 +74,7 @@ export function ProductCard(props: any) {
         <section className="border-b border-black border-solid">
           <Image
             src={ToolImage}
-            alt={formattedTitle}
+            alt={`${formattedTitle}_banner`}
             loading="lazy"
             width="1280"
             height="720"
