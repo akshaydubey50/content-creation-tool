@@ -14,8 +14,8 @@ const PromptContent: React.FC<PromptContentProps> = React.memo(
       <CardContent>
         <div className="space-y-4">
           <div>
-            <h3 className="font-semibold mb-1">Prompt:</h3>
-            <p className="text-md text-muted-foreground whitespace-pre-line">
+            <h3 className="mb-1 font-semibold">Prompts:</h3>
+            <p className="whitespace-pre-line text-md text-muted-foreground">
               {promptData.fields.Description}
             </p>
           </div>

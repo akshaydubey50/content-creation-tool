@@ -12,7 +12,7 @@
 //   id: string,
 //   Name: string,
 //   isInitialBookmarked: boolean,
-//   itemType: "tool" | "prompt"
+//   itemType: "tools" | "prompts"
 // ) {
 //   const [isBookMarked, setIsBookMarked] = useState(isInitialBookmarked);
 //   const { toast } = useToast();
@@ -65,7 +65,7 @@ export function useBookmarkHandler(
   id: string,
   Name: string,
   isInitialBookmarked: boolean,
-  itemType: "tool" | "prompt"
+  itemType: "tools" | "prompts"
 ) {
   const [isBookMarked, setIsBookMarked] = useState(isInitialBookmarked);
   const { toast } = useToast();

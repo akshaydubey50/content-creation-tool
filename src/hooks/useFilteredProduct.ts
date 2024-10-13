@@ -22,7 +22,7 @@ import { usePagination } from "./usePagination";
     let shouldResetPage = false;
     let products: AirtableModel[] = [];
 
-    const toolUpvotes = upVotedList.find((list:any) => list.itemType === "tool")?.itemIds || [];
+    const toolUpvotes = upVotedList.find((list:any) => list.itemType === "tools")?.itemIds || [];
 
 
     if (currentCategory) {

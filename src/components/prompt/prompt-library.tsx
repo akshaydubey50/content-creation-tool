@@ -63,7 +63,7 @@ export default function PromptLibrary() {
 
   const isPromptBookmarked = (promptId: string) => {
     const promptBookmarks = bookmarkSelector?.find(
-      (bookmark) => bookmark.itemType === "prompt"
+      (bookmark) => bookmark.itemType === "prompts"
     );
     return promptBookmarks ? promptBookmarks.itemIds.includes(promptId) : false;
   };
@@ -128,23 +128,23 @@ export default function PromptLibrary() {
   }
 
   return (
-    <div className="flex flex-col bg-background pt-10">
+    <div className="flex flex-col pt-10 bg-background">
       {/* Mobile Category Toggle */}
-      <div className="block lg:hidden p-4">
+      <div className="block p-4 lg:hidden">
         <Button
-          className="w-full flex justify-between items-center border-black bg-light-gray"
+          className="flex items-center justify-between w-full border-black bg-light-gray"
           onClick={() => setIsCategoryOpen(!isCategoryOpen)}
         >
           Categories
           {isCategoryOpen ? (
-            <ChevronUp className="h-4 w-4" />
+            <ChevronUp className="w-4 h-4" />
           ) : (
-            <ChevronDown className="h-4 w-4" />
+            <ChevronDown className="w-4 h-4" />
           )}
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-6 gap-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
         {/* Left Sidebar - Categories */}
         <aside
           className={`col-span-1 lg:col-span-3 p-6 ${
@@ -160,20 +160,19 @@ export default function PromptLibrary() {
 
         {/* Main Content */}
         {!isLoading && promptList.length > 0 && (
-          <main className="col-span-1 lg:col-span-9 p-4 md:p-6">
-            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <main className="col-span-1 p-4 lg:col-span-9 md:p-6">
+            <div className="flex flex-col gap-4 mb-6 sm:flex-row">
               <div className="flex-grow">
                 <Input
                   type="text"
                   placeholder="Search prompts..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full   focus:ring-0 focus:border-DarkOrange focus-visible:ring-0 
-                   focus-visible:ring-offset-0 focus:outline-DarkOrange"
+                  className="w-full focus:ring-0 focus:border-DarkOrange focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-DarkOrange"
                 />
               </div>
               <div
-                className="sm:w-auto cursor-pointer"
+                className="cursor-pointer sm:w-auto"
                 onClick={() => setIsBookmarkMode(!isBookmarkMode)}
               >
                 {isBookmarkMode ? (
@@ -184,13 +183,13 @@ export default function PromptLibrary() {
               </div>
             </div>
             {filteredPrompts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-3 md:gap-6">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 md:gap-6">
                 {updateCurrentProducts().map((prompt) => (
                   <PromptCard key={prompt.id} promptResource={prompt} />
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8">
+              <div className="py-8 text-center">
                 {isBookmarkMode ? (
                   <p>No prompts bookmarked yet.</p>
                 ) : (

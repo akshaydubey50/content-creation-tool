@@ -6,7 +6,7 @@ interface BookmarkButtonProps {
   id: string;
   Name: string;
   isInitialBookmarked: boolean;
-  itemType: "tool" | "prompt"; // Add itemType parameter
+  itemType: "tools" | "prompts"; // Add itemType parameter
 }
 
 const BookmarkButton: React.FC<BookmarkButtonProps> = ({
