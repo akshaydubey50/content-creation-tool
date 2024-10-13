@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 // Define types for bookmark items and state
 export interface BookmarkItem {
-  itemType: "tool" | "prompt"; // Include itemType
+  itemType: "tools" | "prompts"; // Include itemType
   itemIds: string[]; // An array of itemIds
 }
 
@@ -36,7 +36,7 @@ export const getBookmarkList = createAsyncThunk<BookmarkItem[]>(
 // Async thunk to add a bookmark
 export const addBookmark = createAsyncThunk<
   BookmarkItem,
-  { itemId: string; itemType: "tool" | "prompt" }
+  { itemId: string; itemType: "tools" | "prompts" }
 >("bookmark/addBookmark", async ({ itemId, itemType }, { dispatch }) => {
   const response = await fetch("/api/bookmark", {
     method: "POST",

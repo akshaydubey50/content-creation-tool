@@ -8,7 +8,7 @@ interface ItemId {
 // Define the Like model
 interface Like {
   itemIds: ItemId[];
-  itemType: "tool" | "prompt";
+  itemType: "tools" | "prompts";
 }
 
 // Define the initial state and its type
@@ -47,7 +47,7 @@ export const getLikeList = createAsyncThunk<Like[]>(
 // Add a like
 export const addLike = createAsyncThunk<
   Like,
-  { itemId: string; itemType: "tool" | "prompt" }
+  { itemId: string; itemType: "tools" | "prompts" }
 >("like/addLike", async ({ itemId, itemType }, { dispatch }) => {
   const response = await fetch(`/api/like`, {
     method: "POST",
@@ -64,8 +64,8 @@ export const addLike = createAsyncThunk<
 
 // Delete a like
 export const deleteLike = createAsyncThunk<
-  { itemId: string; itemType: "tool" | "prompt" },
-  { itemId: string; itemType: "tool" | "prompt" }
+  { itemId: string; itemType: "tools" | "prompts" },
+  { itemId: string; itemType: "tools" | "prompts" }
 >("like/deleteLike", async ({ itemId, itemType }, { dispatch }) => {
   const response = await fetch(`/api/like`, {
     method: "DELETE",

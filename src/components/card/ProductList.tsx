@@ -63,7 +63,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     ),
     session,
     isBookmark,
-    bookmarkList: bookmarkList.filter((item: any) => item.itemType == "tool"),
+    bookmarkList: bookmarkList.filter((item: any) => item.itemType == "tools"),
     isVerifiedCheck: useSelector(
       (state: RootState) => state.verifiedProducts.isVerifiedChecked
     ),
@@ -97,7 +97,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
 
   if (
     isBookmark &&
-    (bookmarkList.filter((item: any) => item.itemType == "tool")?.length ===
+    (bookmarkList.filter((item: any) => item.itemType == "tools")?.length ===
       0 ||
       bookmarkList?.length === 0)
   ) {

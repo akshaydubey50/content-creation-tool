@@ -34,7 +34,7 @@ export function ProductCard(props: any) {
 
   useEffect(() => {
     if (likedList?.length > 0) {
-      const toolLikedItem = likedList.find((item) => item.itemType === "tool");
+      const toolLikedItem = likedList.find((item) => item.itemType === "tools");
       if (toolLikedItem?.itemIds != null) {
         // Check if the current id is in the itemIds array
         setIsAlreadyLiked(
@@ -52,7 +52,7 @@ export function ProductCard(props: any) {
   useEffect(() => {
     if (bookmarkedList?.length > 0 || bookmarkedList?.length != null) {
       const toolBookmarkedItem = bookmarkedList.find(
-        (item) => item.itemType === "tool"
+        (item) => item.itemType === "tools"
       );
       if (toolBookmarkedItem?.itemIds != null) {
         // Check if the current id is in the itemIds array
@@ -102,7 +102,7 @@ export function ProductCard(props: any) {
                 itemId={id}
                 itemName={Name}
                 initialLikedState={isAlreadyLiked}
-                itemType="tool"
+                itemType="tools"
               />
               {/* Modal for unregistered users */}
               {/* {!session?.user && (
@@ -127,7 +127,7 @@ export function ProductCard(props: any) {
                 id={id}
                 Name={Name}
                 isInitialBookmarked={isAlreadyBookmarked}
-                itemType="tool"
+                itemType="tools"
               />
             </div>
           </div>

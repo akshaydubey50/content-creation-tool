@@ -26,7 +26,7 @@ export default function Navbar() {
 
   const menuItem: MenuItem[] = [
     { id: RoutePath.HomePage, label: "Tools", href: RoutePath.HomePage },
-    { id: RoutePath.Prompt, label: "Prompt", href: RoutePath.Prompt },
+    { id: RoutePath.Prompts, label: "Prompts", href: RoutePath.Prompts },
     // { id: RoutePath.Resources, label: "Resources", href: RoutePath.Resources },
     { id: RoutePath.Contact, label: "Contact", href: RoutePath.Contact },
     {

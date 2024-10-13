@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 export interface Bookmark extends Document {
   userId: Schema.Types.ObjectId;
   itemId: string;
-  itemType: "tool" | "prompt";
+  itemType: "tools" | "prompts";
 }
 
 const bookmarkSchema: Schema<Bookmark> = new Schema({
@@ -18,7 +18,7 @@ const bookmarkSchema: Schema<Bookmark> = new Schema({
   },
   itemType: {
     type: String,
-    enum: ["tool", "prompt"],
+    enum: ["tools", "prompts"],
     required: [true, "Item type is required"],
   },
 });

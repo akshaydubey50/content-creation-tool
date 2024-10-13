@@ -35,7 +35,7 @@ export default function ProductToolBanner({
     id,
     title,
     isAlreadyBookmarked,
-    "tool"
+    "tools"
   );
   
   function debounce(func: Function, delay: number) {
@@ -50,7 +50,7 @@ export default function ProductToolBanner({
   useEffect(() => {
     if (bookmarkedList?.length > 0 || bookmarkedList?.length != null) {
       const toolBookmarkedItem = bookmarkedList.find(
-        (item) => item.itemType === "tool"
+        (item) => item.itemType === "tools"
       );
       if (toolBookmarkedItem?.itemIds != null) {
         // Check if the current id is in the itemIds array

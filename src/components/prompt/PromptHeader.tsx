@@ -48,7 +48,7 @@ const PromptHeader: React.FC<PromptHeaderProps> = React.memo(
     useEffect(() => {
       if (likedPromptList?.length > 0) {
         const toolLikedItem = likedPromptList.find(
-          (item) => item?.itemType?.toLowerCase() === "prompt"
+          (item) => item?.itemType?.toLowerCase() === "prompts"
         );
         if (toolLikedItem?.itemIds != null) {
           // Check if the current id is in the itemIds array
@@ -70,7 +70,7 @@ const PromptHeader: React.FC<PromptHeaderProps> = React.memo(
         bookmarkedPromptList?.length != null
       ) {
         const toolBookmarkedItem = bookmarkedPromptList.find(
-          (item) => item?.itemType?.toLowerCase() === "prompt"
+          (item) => item?.itemType?.toLowerCase() === "prompts"
         );
         if (toolBookmarkedItem?.itemIds != null) {
           // Check if the current id is in the itemIds array
@@ -92,7 +92,7 @@ const PromptHeader: React.FC<PromptHeaderProps> = React.memo(
             {category}
           </Badge>
         ))} */}
-        <div className="flex justify-between items-start">
+        <div className="flex items-start justify-between">
           <CardTitle className="text-3xl font-bold">
             {promptData.fields.Name}
           </CardTitle>
@@ -102,14 +102,14 @@ const PromptHeader: React.FC<PromptHeaderProps> = React.memo(
               initialLikedState={isAlreadyLiked}
               itemId={promptData?.id}
               itemName={promptData?.fields?.Name}
-              itemType="prompt"
+              itemType="prompts"
             />
             <BookmarkButton
               key={promptData?.id}
               isInitialBookmarked={isAlreadyBookmarked}
               Name={promptData?.fields?.Name}
               id={promptData?.id}
-              itemType="prompt"
+              itemType="prompts"
             />
             <Button
               onClick={copyPrompt}

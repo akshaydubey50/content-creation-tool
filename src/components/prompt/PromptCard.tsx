@@ -37,7 +37,7 @@ const PromptCard = ({
   useEffect(() => {
     if (likedPromptList?.length > 0) {
       const toolLikedItem = likedPromptList.find(
-        (item) => item?.itemType?.toLowerCase() === "prompt"
+        (item) => item?.itemType?.toLowerCase() === "prompts"
       );
       if (toolLikedItem?.itemIds != null) {
         // Check if the current id is in the itemIds array
@@ -61,7 +61,7 @@ const PromptCard = ({
       bookmarkedPromptList?.length != null
     ) {
       const toolBookmarkedItem = bookmarkedPromptList.find(
-        (item) => item?.itemType?.toLowerCase() === "prompt"
+        (item) => item?.itemType?.toLowerCase() === "prompts"
       );
       if (toolBookmarkedItem?.itemIds != null) {
         // Check if the current id is in the itemIds array
@@ -99,7 +99,7 @@ const PromptCard = ({
             initialLikedState={isAlreadyLiked}
             itemId={promptResource?.id}
             itemName={promptResource?.fields?.Name}
-            itemType="prompt"
+            itemType="prompts"
           />
         </div>
         <CardTitle className="text-lg">{promptResource.fields?.Name}</CardTitle>
@@ -110,10 +110,10 @@ const PromptCard = ({
         </p>
       </CardContent>
       <CardFooter className="">
-        <div className="flex justify-between items-center gap-x-4">
+        <div className="flex items-center justify-between gap-x-4">
           <VisitWebsite
             btnText="View Prompt"
-            url={`/prompt/${promptResource.fields?.Name}`}
+            url={`/prompts/${promptResource.fields?.Name}`}
             openInNewTab={false}
           />
           <BookmarkButton
@@ -121,7 +121,7 @@ const PromptCard = ({
             isInitialBookmarked={isAlreadyBookmarked}
             Name={promptResource.fields?.Name}
             id={promptResource.id}
-            itemType="prompt"
+            itemType="prompts"
           />
         </div>
       </CardFooter>
