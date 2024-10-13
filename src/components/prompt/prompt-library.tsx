@@ -1,82 +1,134 @@
 "use client";
+
 import { useCallback, useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../common/Loader/Loader";
-import { fetchPromptResourceList } from "@/redux/slice/prompt-resource/promptResourceSlice";
+import { fetchPromptResourceList } from "@/redux/slice/prompt-resource/promptResource.slice";
 import { PropmtResourceModel } from "@/models/airtable.model";
 import PromptCategory from "./PromptCategory";
 import PromptCard from "./PromptCard";
 import Pagination from "../pagination/Pagination";
+import { getLikeList } from "@/redux/slice/like/like.slice";
+import { getBookmarkList } from "@/redux/slice/bookmark/bookmark.slice";
+import { Input } from "@/components/ui/input";
 
 export default function PromptLibrary() {
   const [currentPage, setCurrentPage] = useState(1);
-
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [promptList, setPromptList] = useState<PropmtResourceModel[]>([]);
+  const [filteredPrompts, setFilteredPrompts] = useState<PropmtResourceModel[]>(
+    []
+  );
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isBookmarkMode, setIsBookmarkMode] = useState(false);
 
   const dispatch: AppDispatch = useDispatch();
   const { isLoading, isError, promptResourceList } = useSelector(
-    (state: RootState) => state.promptResource
+    (state: RootState) => state.promptResources
+  );
+  const bookmarkSelector = useSelector(
+    (state: RootState) => state.bookmarks.bookmarkList
   );
 
-  const itemsPerPage = 6;
+  const itemsPerPage = 10;
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const getPromptCategory = () => {
+  const getPromptCategory = useCallback(() => {
     const categoryList = new Set();
     if (promptList.length > 0) {
-      promptList.map((prompt) => {
-        if (!categoryList?.has(prompt.fields?.Category?.[0])) {
-          categoryList.add(prompt.fields?.Category?.[0]);
+      promptList.forEach((prompt) => {
+        if (prompt.fields?.Category?.[0]) {
+          categoryList.add(prompt.fields.Category[0]);
         }
       });
     }
+    return Array.from(categoryList) as string[];
+  }, [promptList]);
 
-    return Array.from(categoryList);
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category]
+    );
+    setCurrentPage(1);
   };
 
+  const isPromptBookmarked = (promptId: string) => {
+    const promptBookmarks = bookmarkSelector?.find(
+      (bookmark) => bookmark.itemType === "prompt"
+    );
+    return promptBookmarks ? promptBookmarks.itemIds.includes(promptId) : false;
+  };
+
+  const filterPrompts = useCallback(() => {
+    let filtered = promptList;
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter((prompt) =>
+        selectedCategories.includes(prompt.fields?.Category?.[0])
+      );
+    }
+    if (searchQuery) {
+      filtered = filtered.filter((prompt) =>
+        prompt.fields?.Name?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    if (isBookmarkMode) {
+      filtered = filtered.filter((prompt) => isPromptBookmarked(prompt.id));
+    }
+    setFilteredPrompts(filtered);
+  }, [
+    promptList,
+    selectedCategories,
+    searchQuery,
+    isBookmarkMode,
+    bookmarkSelector,
+  ]);
 
   const updateCurrentProducts = useCallback(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const newCurrentProducts = promptList!.slice(
-      startIndex,
-      endIndex
-    );
-    return newCurrentProducts;
-  }, [currentPage, promptList]);
+    return filteredPrompts.slice(startIndex, endIndex);
+  }, [currentPage, filteredPrompts]);
 
   useEffect(() => {
-    updateCurrentProducts();
-  }, [currentPage, promptList, updateCurrentProducts]);
-
-  useEffect(() => {
-    if (promptResourceList.length === 0) {
+    if (promptResourceList?.length === 0) {
       dispatch(fetchPromptResourceList());
+      dispatch(getLikeList());
+      dispatch(getBookmarkList());
     }
   }, [dispatch, promptResourceList]);
 
   useEffect(() => {
-    console.log("useEffect Triggered!!!");
-    if (!isLoading && promptResourceList.length > 0) {
+    if (!isLoading && promptResourceList?.length > 0) {
       setPromptList(promptResourceList);
+      setFilteredPrompts(promptResourceList);
     }
-  }, [isLoading, promptResourceList, isError, getPromptCategory]);
+  }, [isLoading, promptResourceList, isError]);
+
+  useEffect(() => {
+    filterPrompts();
+  }, [
+    filterPrompts,
+    selectedCategories,
+    searchQuery,
+    isBookmarkMode,
+    bookmarkSelector,
+  ]);
 
   if (isLoading) {
     return <Loader />;
   }
 
   return (
-    <>
-    <div className="flex flex-col  bg-background pt-10">
+    <div className="flex flex-col bg-background pt-10">
       {/* Mobile Category Toggle */}
       <div className="block lg:hidden p-4">
         <Button
@@ -92,41 +144,70 @@ export default function PromptLibrary() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-6 gap-4 ">  
+      <div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-6 gap-4">
         {/* Left Sidebar - Categories */}
         <aside
           className={`col-span-1 lg:col-span-3 p-6 ${
             isCategoryOpen ? "block" : "hidden"
           } lg:block`}
         >
-          <PromptCategory categoryList={getPromptCategory()} />
+          <PromptCategory
+            categoryList={getPromptCategory()}
+            onSelectCategory={handleCategorySelect}
+            selectedCategories={selectedCategories}
+          />
         </aside>
 
         {/* Main Content */}
-        {/* {isLoading && <Loader />} */}
         {!isLoading && promptList.length > 0 && (
           <main className="col-span-1 lg:col-span-9 p-4 md:p-6">
-            {/* <Input
-              className="mb-6 ring-DarkOrange ring-opacity-50"
-              placeholder="Looking for a prompt?"
-            /> */}
-              <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-3 md:gap-6"> 
-                {updateCurrentProducts().map((prompt, index) => (
-                <PromptCard key={index} promptResource={prompt} />
-              ))}
-            </div>
-                <Pagination
-                  currentPage={currentPage}
-                  totalItems={promptList!.length}
-                  onPageChange={handlePageChange}
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+              <div className="flex-grow">
+                <Input
+                  type="text"
+                  placeholder="Search prompts..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full   focus:ring-0 focus:border-DarkOrange focus-visible:ring-0 
+                   focus-visible:ring-offset-0 focus:outline-DarkOrange"
                 />
+              </div>
+              <div
+                className="sm:w-auto cursor-pointer"
+                onClick={() => setIsBookmarkMode(!isBookmarkMode)}
+              >
+                {isBookmarkMode ? (
+                  <BsBookmarkFill className="text-2xl text-DarkOrange md:text-3xl lg:text-4xl" />
+                ) : (
+                  <BsBookmark className="text-2xl text-DarkOrange md:text-3xl lg:text-4xl" />
+                )}
+              </div>
+            </div>
+            {filteredPrompts.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-3 md:gap-6">
+                {updateCurrentProducts().map((prompt) => (
+                  <PromptCard key={prompt.id} promptResource={prompt} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                {isBookmarkMode ? (
+                  <p>No prompts bookmarked yet.</p>
+                ) : (
+                  <p>No results found.</p>
+                )}
+              </div>
+            )}
+            {filteredPrompts.length > 0 && (
+              <Pagination
+                currentPage={currentPage}
+                totalItems={filteredPrompts.length}
+                onPageChange={handlePageChange}
+              />
+            )}
           </main>
         )}
       </div>
     </div>
-    
-      
-    </>
-
   );
 }

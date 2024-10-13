@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,7 +12,6 @@ import { Label } from "@/components/ui/label";
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { isLoading } from "@/redux/slice/product/productSlice";
 import { Loader2Icon } from "lucide-react";
 
 export default function Page() {

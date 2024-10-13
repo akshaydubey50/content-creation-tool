@@ -39,6 +39,12 @@ module.exports = {
         Description: "clamp(0.875rem, 1.5vw, 1rem)",
         "Description-Large": "clamp(1rem, 2vw, 1.25rem)",
         tags: "clamp(0.75rem, 1.25vw, 0.9rem)",
+        // "7xl": "clamp(4rem, 6vw, 5rem)",   
+        "8xl": "clamp(4.5rem, 7vw, 6rem)",
+        "9xl": "clamp(5rem, 8vw, 7rem)",
+        "10xl": "clamp(5.5rem, 9vw, 8rem)",
+        "11xl": "clamp(6rem, 10vw, 9rem)",
+        "12xl": "clamp(6.5rem, 11vw, 10rem)"
       },
       lineHeight: {
         45: "2.813rem",

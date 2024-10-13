@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -7,51 +7,100 @@ import {
   CardFooter,
 } from "../ui/card";
 import { PropmtResourceModel } from "@/models/airtable.model";
-import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
-import { FiArrowUpRight } from "react-icons/fi";
+import { Badge } from "../ui/badge";
+import LikeButton from "../ui/likebutton";
+import BookmarkButton from "../ui/bookmarkbutton";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import VisitWebsite from "../visit-website/VisitWebsite";
 
+interface ItemId {
+  itemId: string;
+  likeCount: number;
+}
 const PromptCard = ({
-  promptResource = {
-    id: "recEyJBryU2v9u5KM",
-    fields: {
-      Source: "GPTBot",
-      Name: "Create a social media schedule",
-      Category: ["Content Creation"],
-      Description:
-        "As a skilled social media manager, your task is to formulate a one-month social media posting calendar beginning from [insert date that schedule will start]. The frequency of posts should align with your preference, either [daily/every two days/every weekday/weekly]. Your business, known as [insert name], is engaged in selling [insert products or services]. Each post should detail the publish date, an engaging heading, captivating body text, and relevant hashtags. Ensure that the tone is [professional/casual/funny/friendly] as per our brand’s voice. Additionally, each post should include a suggestion for a suitable image, which could be sourced from a stock image service.",
-      Tags: ["LinkedIn", "Instagram", "Twitter"],
-      Status: "",
-      SourceLink: "",
-    },
-  },
+  promptResource,
 }: {
-  promptResource?: PropmtResourceModel;
+  promptResource: PropmtResourceModel;
 }) => {
-  const router = useRouter();
+  const likedPromptList = useSelector(
+    (state: RootState) => state.likes.likedList
+  );
+  const bookmarkedPromptList = useSelector(
+    (state: RootState) => state.bookmarks.bookmarkList
+  );
 
-  const handlePromptClick = (promptResource: PropmtResourceModel) => {
-    // navigate to prompt detail page
-    const title = promptResource?.fields?.Name?.toLowerCase()
-      .trim()
-      .replace(/\s/g, "-");
+  const [isAlreadyLiked, setIsAlreadyLiked] = useState(false);
+  const [isAlreadyBookmarked, setIsAlreadyBookmarked] = useState(false);
 
-    router.push(`/prompt/${title}`);
+  // New effect for Likes
+  useEffect(() => {
+    if (likedPromptList?.length > 0) {
+      const toolLikedItem = likedPromptList.find(
+        (item) => item?.itemType?.toLowerCase() === "prompt"
+      );
+      if (toolLikedItem?.itemIds != null) {
+        // Check if the current id is in the itemIds array
+        setIsAlreadyLiked(
+          toolLikedItem.itemIds.some(
+            (item) => item.itemId === promptResource?.id
+          )
+        );
+      } else {
+        setIsAlreadyLiked(false);
+      }
+    } else {
+      setIsAlreadyLiked(false);
+    }
+  }, [promptResource?.id, likedPromptList]);
 
-    console.log("PromptCard handlePromptClick", title);
-  };
+  // New effect for bookmarks
+  useEffect(() => {
+    if (
+      bookmarkedPromptList?.length > 0 ||
+      bookmarkedPromptList?.length != null
+    ) {
+      const toolBookmarkedItem = bookmarkedPromptList.find(
+        (item) => item?.itemType?.toLowerCase() === "prompt"
+      );
+      if (toolBookmarkedItem?.itemIds != null) {
+        // Check if the current id is in the itemIds array
+        setIsAlreadyBookmarked(
+          toolBookmarkedItem.itemIds.includes(promptResource?.id)
+        );
+      } else {
+        setIsAlreadyBookmarked(false);
+      }
+    } else {
+      setIsAlreadyBookmarked(false);
+    }
+  }, [promptResource?.id, bookmarkedPromptList]);
+
+  if (!promptResource) {
+    return null;
+  }
   return (
     <Card className="flex flex-col border-black hover:border-DarkOrange bg-light-gray ">
       <CardHeader>
-        <div className="flex flex-wrap gap-2 mb-2">
-          {promptResource.fields?.Category?.map((category, categoryIndex) => (
-            <span
-              key={categoryIndex}
-              className="border px-3 py-1  bg-white border-black text-secondary-foreground text-xs rounded-full hover:cursor-pointer hover:text-DarkOrange   hover:border-DarkOrange"
-            >
-              {category}
-            </span>
-          ))}
+        <div className="flex items-center justify-between">
+          <div className="flex flex-wrap gap-2 mb-2">
+            {promptResource.fields?.Category?.map((category, categoryIndex) => (
+              <Badge
+                key={categoryIndex}
+                variant="outline"
+                className="bg-white hover:border-DarkOrange"
+              >
+                {category}
+              </Badge>
+            ))}
+          </div>
+          <LikeButton
+            key={promptResource?.id}
+            initialLikedState={isAlreadyLiked}
+            itemId={promptResource?.id}
+            itemName={promptResource?.fields?.Name}
+            itemType="prompt"
+          />
         </div>
         <CardTitle className="text-lg">{promptResource.fields?.Name}</CardTitle>
       </CardHeader>
@@ -60,14 +109,21 @@ const PromptCard = ({
           {promptResource.fields?.Description?.split("\n")[0]}
         </p>
       </CardContent>
-      <CardFooter className="pt-0">
-        <Button
-          onClick={() => handlePromptClick(promptResource)}
-          className=" bg-DarkOrange hover:bg-DarkOrange/90 text-white font-semibold py-2 px-4 rounded-md hover:bg-white hover:text-DarkOrange border border-DarkOrange"
-        >
-          View Prompt
-          <FiArrowUpRight className="text-2xl " />
-        </Button>
+      <CardFooter className="">
+        <div className="flex justify-between items-center gap-x-4">
+          <VisitWebsite
+            btnText="View Prompt"
+            url={`/prompt/${promptResource.fields?.Name}`}
+            openInNewTab={false}
+          />
+          <BookmarkButton
+            key={promptResource.id}
+            isInitialBookmarked={isAlreadyBookmarked}
+            Name={promptResource.fields?.Name}
+            id={promptResource.id}
+            itemType="prompt"
+          />
+        </div>
       </CardFooter>
     </Card>
   );

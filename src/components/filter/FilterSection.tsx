@@ -1,7 +1,7 @@
 "use client";
 import { AirtableModel } from "@/models/airtable.model";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { use, useCallback, useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { useVisibleItemContextData } from "@/lib/visibleItemContext";
 import SelectDropdown from "./SelectDropdown";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,62 +9,80 @@ import {
   setCategoryData,
   clearCategoryData,
   clearMatchedCategory,
-} from "@/redux/slice/category/categorySlice";
+} from "@/redux/slice/category/category.slice";
 import {
   setSearchQuery,
   setSearchFilterList,
   clearSearchFilterList,
   scrollPage,
-} from "@/redux/slice/search/searchSlice";
+} from "@/redux/slice/search/search.slice";
 import {
   clearMatchedPrice,
   clearPriceData,
   setMatchedPrice,
   setPriceData,
-} from "@/redux/slice/priceModel/priceModelSlice";
+} from "@/redux/slice/priceModel/priceModel.slice";
 import { RootState, AppDispatch } from "@/redux/store";
 import { HomePage } from "@/constants/RoutePath";
 
 export default function FilterSection() {
   const [isMounted, SetIsMounted] = useState(false);
+  const scrollPositionRef = useRef(0);
+
   const router = useRouter();
+  const pathname = usePathname();
+
+  const currentRoute = pathname.split("/");
+
   const searchRef = useRef<HTMLInputElement>(null);
   /*Redux Dispatch & Selector*/
   const dispatch = useDispatch();
   const categoryData = useSelector(
-    (store: RootState) => store.category.categoryData
+    (store: RootState) => store.categories.categoryData
   );
   const searchQuery = useSelector(
-    (store: RootState) => store.search.searchQuery
+    (store: RootState) => store.searchs.searchQuery
   );
   const filterData = useSelector(
-    (store: RootState) => store.search.searchFilterList
+    (store: RootState) => store.searchs.searchFilterList
   );
-  const { productList } = useSelector((state: RootState) => state.product);
+  const { productList } = useSelector((state: RootState) => state.products);
   const searchToFocusInput = useSelector(
-    (state: RootState) => state.search.searchToFocus
+    (state: RootState) => state.searchs.searchToFocus
   );
-  const scrollPosition = useSelector(
-    (state: RootState) => state.search.scrollPosition
+  const reduxScrollPosition = useSelector(
+    (state: RootState) => state.searchs.scrollPosition
   );
-  const { priceData, matchedPrice } = useSelector(
-    (state: RootState) => state.priceModel
-  );
+  const { priceData, matchedPrice } = useSelector((state: RootState) => state.pricingModels);
+
+  const scrollTimeout = useRef<any>(null);
+  const [localScrollPosition, setLocalScrollPosition] = useState(0);
 
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
+  const scrollBaseonInnerWidth = () => {
+    const currenInnerWidth = typeof (window as any) !== "undefined" ? window.innerWidth : 0;
+    if (currenInnerWidth < 768) {
+      return dispatch(scrollPage(300));
+    }
+    else if (currenInnerWidth < 1280) {
+      return dispatch(scrollPage(400));
+    }
+    else {
+      return dispatch(scrollPage(600));
+    }
+  }
 
   /*Search Functionality*/
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log("searchRef", searchRef.current?.value);
-    router.push("/");
-    dispatch(scrollPage(600))
+
+    const newSearch = event.target.value.toLowerCase();
+    dispatch(setSearchQuery(newSearch));
+    scrollBaseonInnerWidth()
     dispatch(clearMatchedPrice());
     dispatch(clearPriceData());
     dispatch(clearCategoryData());
     dispatch(clearMatchedCategory());
-    const newSearch = event.target.value.toLowerCase();
-    dispatch(setSearchQuery(newSearch));
 
     /* Filter data based on the updated search query */
     const filteredResults =
@@ -86,8 +104,18 @@ export default function FilterSection() {
       // If no results found, show no result message
       dispatch(setSearchFilterList([]));
     }
-
     setVisibleItem(9);
+
+    setTimeout(() => {
+      if (currentRoute.includes("category")) {
+        router.replace("/")
+        if (searchRef.current) {
+          searchRef.current.focus();
+        }
+      }
+
+    }, 250)
+
   };
 
   /* Selected Category functionality */
@@ -101,8 +129,8 @@ export default function FilterSection() {
 
       dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
-      dispatch(scrollPage(600));
-      router.push(`${HomePage}/category/${formatedCategory}`);
+      scrollBaseonInnerWidth()
+      router.replace(`${HomePage}/category/${formatedCategory}`);
     }
   };
 
@@ -120,12 +148,13 @@ export default function FilterSection() {
       dispatch(setMatchedPrice(getPriceList));
       console.log("getPriceList", getPriceList);
       setVisibleItem(9);
-      dispatch(scrollPage(600));
       dispatch(clearSearchFilterList());
       dispatch(setPriceData(priceVal));
 
       dispatch(clearCategoryData());
       dispatch(clearMatchedCategory());
+      scrollBaseonInnerWidth()
+
     }
   };
 
@@ -139,13 +168,10 @@ export default function FilterSection() {
     dispatch(clearMatchedPrice());
     dispatch(clearPriceData());
 
-    if (searchRef.current?.value) {
-      searchRef.current!.value = "";
-      searchRef.current!.innerText = "";
-    }
-
     setVisibleItem(9);
-    router.push("/");
+    if (currentRoute.includes("category")) {
+      router.replace("/");
+    }
   };
 
   /*Get a List for Category*/
@@ -198,35 +224,67 @@ export default function FilterSection() {
     console.log(getPriceList);
   }, []);
 
+
+  useEffect(() => {
+    const handleScroll = () => {
+      scrollPositionRef.current = window.scrollY;
+      setLocalScrollPosition(scrollPositionRef.current);
+
+      // Clear the existing timeout
+      if (scrollTimeout.current) {
+        clearTimeout(scrollTimeout.current);
+      }
+
+      // Set a new timeout
+      scrollTimeout.current = setTimeout(() => {
+        dispatch(scrollPage(scrollPositionRef.current));
+      }, 100); // Adjust this delay as needed
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeout.current) {
+        clearTimeout(scrollTimeout.current);
+      }
+    };
+  }, [dispatch]);
+ 
+
+  useEffect(() => {
+    if (reduxScrollPosition > 0 && reduxScrollPosition !== localScrollPosition) {
+      window.scrollTo({ top: reduxScrollPosition, behavior: "smooth" });
+    }
+  }, [reduxScrollPosition]);
+
   useEffect(() => {
     SetIsMounted(true);
   }, []);
 
   useEffect(() => {
-    if (searchToFocusInput) {
+    console.log("searchRef", searchRef.current, searchToFocusInput);
+    if (searchToFocusInput && searchRef.current) {
       searchRef.current?.focus();
     }
   }, [searchToFocusInput]);
 
-  useEffect(() => {
-    window.scrollTo({ top: scrollPosition, behavior: "smooth" });
-  }, [categoryData, scrollPosition, searchQuery]);
 
   return (
     <>
-      <section className="hidden md:grid md:grid-cols-12 place-content-center px-10 py-5 md:gap-4  mx-auto text-white  lg:max-w-5xl xl:max-w-6xl   text-Title-Small lg:text-Title-Small">
-        <div className=" md:col-span-2 ">
+      <section className="hidden px-10 py-5 mx-auto text-white md:grid md:grid-cols-12 place-content-center md:gap-4 lg:max-w-5xl xl:max-w-6xl text-Title-Small lg:text-Title-Small">
+        <div className=" md:col-span-2">
           <div>
             <button
-              className="bg-DarkOrange  px-5 lg:px-8 py-3 rounded-full   focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-semibold w-full text-center "
+              className="w-full px-5 py-3 font-semibold text-center rounded-full bg-DarkOrange lg:px-8 focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 "
               onClick={clearFilter}
             >
               All
             </button>
           </div>
         </div>
-        <div className="md:col-span-6 lg:col-span-3 z-0">
-          <div className=" bg-DarkOrange  rounded-full    h-full">
+        <div className="z-0 md:col-span-6 lg:col-span-3">
+          <div className="h-full rounded-full bg-DarkOrange">
             {isMounted && (
               <SelectDropdown
                 key={categoryData}
@@ -242,8 +300,8 @@ export default function FilterSection() {
             )}
           </div>
         </div>
-        <div className="md:col-span-4 lg:col-span-2 z-0">
-          <div className=" bg-DarkOrange text-center  rounded-full    h-full">
+        <div className="z-0 md:col-span-4 lg:col-span-2">
+          <div className="h-full text-center rounded-full bg-DarkOrange">
             {isMounted && (
               <SelectDropdown
                 key={priceData}
@@ -259,22 +317,23 @@ export default function FilterSection() {
             )}
           </div>
         </div>
-        <div className=" md:col-span-4 lg:col-span-2 font-medium">
+        <div className="font-medium md:col-span-4 lg:col-span-2">
           <div className="">
             <button
-              className="bg-DarkOrange whitespace-nowrap px-5  py-3 rounded-full   focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 font-semibold w-full text-center"
+              className="w-full px-5 py-3 font-semibold text-center rounded-full bg-DarkOrange whitespace-nowrap focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2"
               onClick={clearFilter}
             >
               Clear Filters
             </button>
           </div>
         </div>
-        <div className=" md:col-span-8 lg:col-span-3 font-medium">
+        <div className="font-medium md:col-span-8 lg:col-span-3">
           <div className=" text-black py-0.5 ">
             <input
               ref={searchRef}
+              value={searchQuery}
               onChange={handleSearch}
-              className="rounded-xl  w-full  border-2 outline-none px-4 py-2 font-medium border-black border-solid"
+              className="w-full px-4 py-2 font-medium border-2 border-black border-solid outline-none rounded-xl"
               type="text"
               placeholder="Search By Product Name"
             />
@@ -286,15 +345,16 @@ export default function FilterSection() {
       <section className="grid grid-cols-1 md:hidden py-[25px]  gap-3 text-Title-Small lg:text-Title-Large max-w-md mx-auto px-[30px]">
         <div className="col-span-1">
           <input
-            className="rounded-xl  w-full  border-2 outline-none p-3 font-medium border-black border-solid"
+            className="w-full p-3 font-medium border-2 border-black border-solid outline-none rounded-xl"
             type="text"
             placeholder="Search By Product Name"
             onChange={handleSearch}
+            value={searchQuery}
             ref={searchRef}
           />
         </div>
         <div className="col-span-1">
-          <div className="bg-DarkOrange  rounded-full   text-white  w-full ">
+          <div className="w-full text-white rounded-full bg-DarkOrange ">
             {isMounted && (
               <SelectDropdown
                 key={categoryData}
@@ -311,7 +371,7 @@ export default function FilterSection() {
           </div>
         </div>
         <div className="col-span-1">
-          <div className=" bg-DarkOrange text-center   rounded-full    h-full">
+          <div className="h-full text-center rounded-full bg-DarkOrange">
             {isMounted && (
               <SelectDropdown
                 key={priceData}
@@ -327,11 +387,11 @@ export default function FilterSection() {
             )}
           </div>
         </div>
-        <div className="col-span-1 text-white font-semibold">
-          <div className=" grid grid-cols-2 gap-x-4">
+        <div className="col-span-1 font-semibold text-white">
+          <div className="grid grid-cols-2 gap-x-4">
             <div className="col-span-1">
               <button
-                className="w-full bg-DarkOrange   p-3 rounded-full   focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 "
+                className="w-full p-3 rounded-full bg-DarkOrange focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 "
                 onClick={clearFilter}
               >
                 All
@@ -339,7 +399,7 @@ export default function FilterSection() {
             </div>
             <div className="col-span-1">
               <button
-                className="w-full bg-DarkOrange whitespace-nowrap p-3 rounded-full    focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 "
+                className="w-full p-3 rounded-full bg-DarkOrange whitespace-nowrap focus:bg-orange-200 focus:outline focus:outline-DarkOrange focus:outline-2 "
                 onClick={clearFilter}
               >
                 Clear Filters

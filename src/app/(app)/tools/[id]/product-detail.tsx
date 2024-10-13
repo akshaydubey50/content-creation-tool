@@ -14,7 +14,7 @@ type Props = {
 
 export default function ProductDetail({ params }: Props) {
   const id = useSearchParams().get("id");
-  const { productList } = useSelector((state: RootState) => state.product);
+  const { productList } = useSelector((state: RootState) => state.products);
   const [product, setProductData] = useState<AirtableModel>();
   const { setVisibleItem } = useVisibleItemContextData();
   const currentCategory = product && product!.fields.Tags[0];
@@ -28,7 +28,6 @@ export default function ProductDetail({ params }: Props) {
       return formattedTitle === slug;
     });
 
-    console.log("productMatched", productMatched);
     if (productMatched) {
       setProductData(productMatched);
     }
@@ -44,6 +43,7 @@ export default function ProductDetail({ params }: Props) {
 
   return (
     <>
+      {" "}
       {product && (
         <>
           <ProductToolBanner
@@ -54,16 +54,16 @@ export default function ProductDetail({ params }: Props) {
             link={product!.fields.WebsiteLink}
             id={product!.id}
             verified={product!.fields.Verified}
-            Pricing={product!.fields.Pricing} 
-
+            Pricing={product!.fields.Pricing}
+            detailedMsg={product!.fields["Detailed Description"]}
           />
 
           <div className="px-4">
-            <h1 className="text-xl md:text-3xl lg:text-4xl text-center  my-6 md:my-8 w-full font-bold">
+            <h2 className="w-full my-6 text-xl font-bold text-center md:text-3xl lg:text-4xl md:my-8">
               Similar{" "}
               <span className="text-DarkOrange">{product!.fields.Tags}</span>{" "}
               Tools
-            </h1>
+            </h2>
           </div>
         </>
       )}

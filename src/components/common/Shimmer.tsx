@@ -7,10 +7,9 @@ export default function Shimmer() {
     return (
         <>
             <div
-                className="rounded-2xl max-w-sm  flex flex-col  border border-black 
-        border-solid  shadow-2xl"
+                className="flex flex-col max-w-sm border border-black border-solid shadow-2xl rounded-2xl"
             >
-                <section className="border-b border-black border-solid w-full">
+                <section className="w-full border-b border-black border-solid">
                     <div
                         // loading="lazy"
                         /*    width="1280"
@@ -21,14 +20,13 @@ export default function Shimmer() {
                     />
                 </section>
 
-                <section className="bg-light-gray pt-7 px-5 rounded-b-2xl h-full">
+                <section className="h-full px-5 bg-light-gray pt-7 rounded-b-2xl">
                     <div className="flex flex-col justify-between h-full">
                         <div className="">
-                            <div className="pb-4 flex flex-1 flex-row justify-between">
+                            <div className="flex flex-row justify-between flex-1 pb-4">
                                 <div className="flex items-center gap-x-2">
                                     <div
-                                        className="font-bold text-Title-Medium md:text-Title-Large 
-                  w-40 bg-gray-400 px-8 h-6 "
+                                        className="w-40 h-6 px-8 font-bold bg-gray-400 text-Title-Medium md:text-Title-Large "
                                     ></div>
                                 </div>
                             </div>
@@ -40,18 +38,16 @@ export default function Shimmer() {
                         </div>
                         <div className="tool-btn-section pb-7">
                             <p
-                                className="my-6 bg-white rounded-full  text-tags font-medium border 
-              border-solid border-black px-5 py-1"
+                                className="px-5 py-1 my-6 font-medium bg-white border border-black border-solid rounded-full text-tags"
                             >
                                 Tags
                             </p>
                             <div
-                                className="text-white text-Title-Medium  flex 
-        justify-between items-center"
+                                className="flex items-center justify-between text-white text-Title-Medium"
                             >
-                                <VisitWebsite url="" />
+                                <VisitWebsite url="" btnText="" />
                                 <button title="Bookmark" type="button">
-                                    <BsBookmark className="text-3xl   text-black" />
+                                    <BsBookmark className="text-3xl text-black" />
                                 </button>
                             </div>
                         </div>
