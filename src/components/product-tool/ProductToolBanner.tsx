@@ -111,10 +111,9 @@ export default function ProductToolBanner({
       <main className="px-8 py-6 overflow-x-hidden bg-light-gray md:px-10 lg:pt-16">
         <div className="mx-auto max-w-7xl pt-14">
           <Breadcrumb
-            categories={tag?.[0]}
+            categories={"tools"}
             currentPageTitle={title}
             key={title}
-            breadcrumbType="tools"
           />
 
           <div className="grid grid-cols-1 gap-4 my-4 lg:grid-cols-12 sm:gap-6 md:gap-8">

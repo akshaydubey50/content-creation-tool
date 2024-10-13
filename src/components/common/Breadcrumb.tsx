@@ -10,20 +10,18 @@ import { capitalizeWords } from "@/helper/helper";
 type BreadcrumbProps = {
   categories: string;
   currentPageTitle: string;
-  breadcrumbType: "tools" | "prompt"; // New prop to differentiate types
 };
 
 export default function Breadcrumb({
   categories,
   currentPageTitle,
-  breadcrumbType, // Use this to check the breadcrumb type
 }: BreadcrumbProps) {
   const router = useRouter();
   // const pathname = usePathname();
   const dispatch = useDispatch();
 
   const handleNavigateToHome = () => {
-    router.replace(`/${breadcrumbType}`);
+    router.replace(`/${categories}`);
   };
 
   // const handleCategorySelection = (selectedCategory: string) => {
@@ -61,7 +59,7 @@ export default function Breadcrumb({
       <ChevronRight className="w-4 h-4 text-gray-400" />
 
       {/* Conditionally render category or tool */}
-      {breadcrumbType === "tools" ? (
+      {categories === "tools" ? (
         <span className="cursor-pointer hover:text-DarkOrange hover:border-b-2 hover:border-DarkOrange"
           onClick={handleNavigateToHome}
         >

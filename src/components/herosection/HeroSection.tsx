@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AirtableModel } from "@/models/airtable.model";
 import { RiStackFill, RiSearchLine } from "react-icons/ri";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
@@ -28,6 +28,7 @@ import { useSession } from "next-auth/react";
 export default function HeroSection() {
   const dispatch: AppDispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
+  const [innerWidth, setInnerWidth] = useState(0);
 
   const { data: session } = useSession();
 
@@ -91,12 +92,16 @@ export default function HeroSection() {
     }
   };
 
+
+  useEffect(() => {
+    setInnerWidth(window.innerWidth);
+  }, []);
+
   const searchIconHandler = () => {
-    const currenInnerWidth = window.innerWidth;
-    if(currenInnerWidth < 768){
+    if(innerWidth < 768){
       dispatch(scrollPage(300));
     }
-    else if(currenInnerWidth < 1280){
+    else if(innerWidth < 1280){
       dispatch(scrollPage(400));
     }
     else{

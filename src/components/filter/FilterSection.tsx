@@ -27,9 +27,11 @@ import { HomePage } from "@/constants/RoutePath";
 
 export default function FilterSection() {
   const [isMounted, SetIsMounted] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(0);
+  const scrollPositionRef = useRef(0);
+
   const router = useRouter();
   const pathname = usePathname();
-  const screenWidth = window.innerWidth;
 
   const currentRoute = pathname.split("/");
 
@@ -60,7 +62,7 @@ export default function FilterSection() {
   /*Context Data*/
   const { setVisibleItem } = useVisibleItemContextData();
   const scrollBaseonInnerWidth = () => {
-    const currenInnerWidth = window.innerWidth;
+    const currenInnerWidth = typeof (window as any) !== "undefined" ? window.innerWidth : 0;
     if (currenInnerWidth < 768) {
       return dispatch(scrollPage(300));
     }
@@ -223,11 +225,23 @@ export default function FilterSection() {
     console.log(getPriceList);
   }, []);
 
+  useEffect(() => {
+    // Set initial screen width
+    setScreenWidth(window.innerWidth);
+
+    // Add event listener for window resize
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+
+    // Clean up
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentPosition = window.scrollY;
-      setLocalScrollPosition(currentPosition);
+      scrollPositionRef.current = window.scrollY;
+      setLocalScrollPosition(scrollPositionRef.current);
 
       // Clear the existing timeout
       if (scrollTimeout.current) {
@@ -236,7 +250,7 @@ export default function FilterSection() {
 
       // Set a new timeout
       scrollTimeout.current = setTimeout(() => {
-        dispatch(scrollPage(currentPosition));
+        dispatch(scrollPage(scrollPositionRef.current));
       }, 100); // Adjust this delay as needed
     };
 
@@ -249,6 +263,7 @@ export default function FilterSection() {
       }
     };
   }, [dispatch]);
+ 
 
   useEffect(() => {
     if (reduxScrollPosition > 0 && reduxScrollPosition !== localScrollPosition) {
@@ -266,15 +281,6 @@ export default function FilterSection() {
       searchRef.current?.focus();
     }
   }, [searchToFocusInput]);
-
-  // useEffect(() => {
-  //   window.scrollTo({ top: reduxScrollPosition, behavior: "smooth" });
-  // }, [categoryData, reduxScrollPosition, searchQuery]);
-
-  useEffect(() => {
-    console.log("searchQuery", searchQuery);
-  }, [searchQuery]);
-
 
 
   return (
