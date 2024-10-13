@@ -21,6 +21,10 @@ import { usePagination } from "./usePagination";
   return useMemo(() => {
     let shouldResetPage = false;
     let products: AirtableModel[] = [];
+
+    const toolUpvotes = upVotedList.find((list:any) => list.itemType === "tool")?.itemIds || [];
+
+
     if (currentCategory) {
       products = getProductByCategory(currentCategory) || [];
       shouldResetPage = true;
@@ -63,12 +67,15 @@ import { usePagination } from "./usePagination";
       products = productList;
     }
 
-    const productsWithUpvotes = products.map((product) => ({
-      ...product,
-      totalLikes:
-        upVotedList?.find((item: any) => item?.productId === product?.id)
-          ?.totalLikes || 0,
-    }));
+    const productsWithUpvotes = products.map((product) => {
+      const upvoteInfo = toolUpvotes.find((item:any) => item.itemId === product.id);
+      return {
+        ...product,
+        totalLikes: upvoteInfo?.likeCount || 0,
+        isLiked: !!upvoteInfo
+      };
+    });
+    console.log("productsWithUpvotes::::::::::",productsWithUpvotes)
 
     return {filteredProducts:productsWithUpvotes.sort((a, b) => b.totalLikes - a.totalLikes),
       shouldResetPage

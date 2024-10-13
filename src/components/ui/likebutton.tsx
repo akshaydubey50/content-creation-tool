@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useLikeHandler } from "@/hooks/useLikeHandler";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
@@ -7,23 +7,20 @@ interface LikeButtonProps {
   itemName: string;
   initialLikedState: boolean;
   itemType: "tool" | "prompt";
-  upVoteCount?: number;
 }
 
-const LikeButton = ({
+const LikeButton: React.FC<LikeButtonProps> = ({
   itemId,
   itemName,
   initialLikedState,
   itemType,
-}: LikeButtonProps) => {
+}) => {
   const { isLiked, handleLike, totalLikes } = useLikeHandler(
     itemId,
     itemName,
     initialLikedState,
     itemType
   );
-
-  console.log("total likes ==> ", totalLikes);
 
   return (
     <button
@@ -32,14 +29,12 @@ const LikeButton = ({
       onClick={handleLike}
       className="flex items-center gap-x-1"
     >
-      <p>
-        {isLiked ? (
-          <AiFillHeart className="text-3xl text-DarkOrange" />
-        ) : (
-          <AiOutlineHeart className="text-3xl text-black" />
-        )}
-      </p>
-      {<p>{totalLikes}</p>}
+      {isLiked ? (
+        <AiFillHeart className="text-3xl text-DarkOrange" />
+      ) : (
+        <AiOutlineHeart className="text-3xl text-black" />
+      )}
+      <span>{totalLikes}</span>
     </button>
   );
 };

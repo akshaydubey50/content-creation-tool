@@ -32,6 +32,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     (state: RootState) => state.bookmarks.bookmarkList
   );
   const upVotedList = useSelector((state: RootState) => state.likes.likedList);
+  console.log("upVotedList::::::::::",upVotedList)
 
   const isBookmark = useSelector(
     (state: RootState) => state.bookmarks.isBookmarkChecked || false

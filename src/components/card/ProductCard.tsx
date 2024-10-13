@@ -90,7 +90,7 @@ export function ProductCard(props: any) {
             <div className="flex flex-row justify-between flex-1 pb-4">
               <div className="flex items-center gap-x-2">
                 <h1 className="h-8 font-bold text-Title-Medium md:text-Title-Large">
-                  {Name}
+                  {Name} 
                 </h1>
                 {Verified && (
                   <MdVerified className="text-2xl text-DarkOrange" />
