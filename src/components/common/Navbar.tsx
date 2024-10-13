@@ -153,7 +153,7 @@ export default function Navbar() {
         }`}
       >
         <div className="flex p-3 my-2 ">
-          <h2 className="font-bold text-Heading-Medium">Content Creation FYI</h2>
+          <div className="font-bold text-Heading-Medium">Content Creation FYI</div>
           <button
             title="close"
             onClick={crossHandler}

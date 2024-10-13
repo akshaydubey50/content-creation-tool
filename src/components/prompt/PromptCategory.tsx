@@ -14,7 +14,7 @@ const PromptCategory: React.FC<PromptCategoryProps> = ({
 }) => {
   return (
     <>
-      <h2 className="text-xl font-bold mb-4">Categories</h2>
+      <div className="mb-4 text-xl font-bold">Categories</div>
       <div className="space-y-4">
         {categoryList?.map((category, index) => (
           <div
