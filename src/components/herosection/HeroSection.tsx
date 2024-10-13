@@ -119,11 +119,11 @@ export default function HeroSection() {
                 200+ Content Creation Tools
               </span>
             </p>
-            <h1 className="mx-auto text-3xl font-semibold leading-9 md:text-4xl md:leading-45 md:max-w-2xl xl:text-8xl xl:max-w-7xl xl:leading-tight">
+            <h1 className="mx-auto text-2xl font-semibold leading-9 md:text-4xl md:leading-45 md:max-w-2xl xl:text-7xl xl:max-w-4xl xl:leading-tight">
               <span> Every tool you need to </span>
               <span>ace at content creation.</span>
             </h1>
-            <h5 className="max-w-lg px-2 mx-auto text-base text-center xl:text-3xl xl:max-w-6xl xl:leading-normal">
+            <h5 className="max-w-lg px-2 mx-auto text-base text-center md:text-base xl:text-2xl xl:max-w-4xl xl:leading-normal">
               {/* Directory of 200+ content creation tools designed to streamline
               your process and enhance productivity. */}
               Search, like, bookmark, and use the best content creation tools to
@@ -131,10 +131,7 @@ export default function HeroSection() {
             </h5>
           </div>
         </div>
-        <div>
-          <div className="flex space-x-8 ">
-            <div className="flex-1">
-              <div className="flex space-x-2 md:space-x-4 lg:space-x-8 xl:space-x-12 ">
+              <div className="flex space-x-4 md:space-x-6 lg:space-x-8 xl:space-x-12">
                 <div className="flex flex-col space-y-4 cursor-pointer place-items-center">
                   <button
                     className={`text-tags bg-opacity-50 rounded-full p-3 xl:p-6  "bg-gray-200" : "bg-gray-300"
@@ -144,7 +141,7 @@ export default function HeroSection() {
                     <RiStackFill className="text-2xl text-black md:text-3xl lg:text-4xl" />
                   </button>
                   <p className="font-medium text-Title-Small xl:text-Title-Medium">
-                    All
+                    All Tools
                   </p>
                 </div>
                 <div className="flex flex-col space-y-4 cursor-pointer place-items-center">
@@ -199,9 +196,6 @@ export default function HeroSection() {
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
       </section>
     </main>
   );
