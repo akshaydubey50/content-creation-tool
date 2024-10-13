@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
@@ -10,7 +10,6 @@ interface PromptContentProps {
 
 const PromptContent: React.FC<PromptContentProps> = React.memo(
   ({ promptData }) => {
-    console.log("promptData Contect ", promptData.fields);
     return (
       <CardContent>
         <div className="space-y-4">
@@ -40,7 +39,11 @@ const PromptContent: React.FC<PromptContentProps> = React.memo(
               <h3 className="font-semibold">Categories:</h3>
               <div className="flex flex-wrap gap-2">
                 {promptData.fields.Category?.map((category, index) => (
-                  <Badge key={index} variant="outline">
+                  <Badge
+                    key={index}
+                    variant="outline"
+                    className="bg-white hover:border-DarkOrange "
+                  >
                     {category}
                   </Badge>
                 ))}
@@ -57,7 +60,7 @@ const PromptContent: React.FC<PromptContentProps> = React.memo(
                       <Badge
                         key={index}
                         variant="outline"
-                        className="border-black"
+                        className="border-black "
                       >
                         {tag}
                       </Badge>

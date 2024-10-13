@@ -14,6 +14,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import VisitWebsite from "../visit-website/VisitWebsite";
 
+interface ItemId {
+  itemId: string;
+  likeCount: number;
+}
 const PromptCard = ({
   promptResource,
 }: {
@@ -29,27 +33,35 @@ const PromptCard = ({
   const [isAlreadyLiked, setIsAlreadyLiked] = useState(false);
   const [isAlreadyBookmarked, setIsAlreadyBookmarked] = useState(false);
 
+  // New effect for Likes
   useEffect(() => {
-    if (likedPromptList.length > 0) {
+    if (likedPromptList?.length > 0) {
       const toolLikedItem = likedPromptList.find(
-        (item) => item.itemType === "prompt"
+        (item) => item?.itemType?.toLowerCase() === "prompt"
       );
       if (toolLikedItem?.itemIds != null) {
         // Check if the current id is in the itemIds array
-        setIsAlreadyLiked(toolLikedItem.itemIds.includes(promptResource?.id));
+        setIsAlreadyLiked(
+          toolLikedItem.itemIds.some(
+            (item) => item.itemId === promptResource?.id
+          )
+        );
       } else {
         setIsAlreadyLiked(false);
       }
     } else {
       setIsAlreadyLiked(false);
     }
-  }, [likedPromptList, promptResource?.id]);
+  }, [promptResource?.id, likedPromptList]);
 
   // New effect for bookmarks
   useEffect(() => {
-    if (bookmarkedPromptList.length > 0) {
+    if (
+      bookmarkedPromptList?.length > 0 ||
+      bookmarkedPromptList?.length != null
+    ) {
       const toolBookmarkedItem = bookmarkedPromptList.find(
-        (item) => item.itemType === "prompt"
+        (item) => item?.itemType?.toLowerCase() === "prompt"
       );
       if (toolBookmarkedItem?.itemIds != null) {
         // Check if the current id is in the itemIds array
@@ -62,7 +74,7 @@ const PromptCard = ({
     } else {
       setIsAlreadyBookmarked(false);
     }
-  }, [bookmarkedPromptList, promptResource?.id]);
+  }, [promptResource?.id, bookmarkedPromptList]);
 
   if (!promptResource) {
     return null;
@@ -73,16 +85,20 @@ const PromptCard = ({
         <div className="flex items-center justify-between">
           <div className="flex flex-wrap gap-2 mb-2">
             {promptResource.fields?.Category?.map((category, categoryIndex) => (
-              <Badge key={categoryIndex} variant="outline">
+              <Badge
+                key={categoryIndex}
+                variant="outline"
+                className="bg-white hover:border-DarkOrange"
+              >
                 {category}
               </Badge>
             ))}
           </div>
           <LikeButton
-            key={promptResource.id}
+            key={promptResource?.id}
             initialLikedState={isAlreadyLiked}
-            itemId={promptResource.id}
-            itemName={promptResource.fields?.Name}
+            itemId={promptResource?.id}
+            itemName={promptResource?.fields?.Name}
             itemType="prompt"
           />
         </div>
