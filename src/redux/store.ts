@@ -9,6 +9,7 @@ import promptResourceSlice from "@/redux/slice/prompt-resource/promptResource.sl
 import authSlice from "@/redux/slice/auth/auth.slice";
 import searchSlice from "@/redux/slice/search/search.slice";
 import likeSlice from "./slice/like/like.slice";
+import expertsSlice from './slice/experts/experts.slice';
 
 const appStore = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ const appStore = configureStore({
     pricingModels: priceModelSlice,
     promptResources: promptResourceSlice,
     resources: resourceSlice,
+    experts:expertsSlice
   },
 });
 

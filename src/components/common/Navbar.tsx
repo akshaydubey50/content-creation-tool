@@ -34,6 +34,11 @@ export default function Navbar() {
       label: "Submit Tool",
       href: RoutePath.SubmitTool,
     },
+    {
+      id: RoutePath.Experts,
+      label: "Experts",
+      href: RoutePath.Experts,
+    },
   ];
 
   const [isMenu, setIsMenu] = useState(false);

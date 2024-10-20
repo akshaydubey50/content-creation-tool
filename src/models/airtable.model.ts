@@ -42,12 +42,20 @@ export interface ResourceModel {
 export interface ExpertModel {
   id: string;
   fields: {
-    Name: string;
-    Description: string;
-    Topics: string[];
-    Tags: string[];
-    Status: string;
-    Source: string;
-    SourceLink: string;
+    "Username": string;
+    "Skills": string[];
+    "First Name": string;
+    "Country": string;
+    "Email": string;
+    "Industry": string[];
+    "Last Name": string;
+    "Twitter": string;
+    "LinkedIn": string;
+    "Professinal Bio": string;
+    "Portfolio": string;
+    "Instagram": string;
+    "Status": string;
+    "Tools": string;
+    "Platforms": string[];
   };
 }
