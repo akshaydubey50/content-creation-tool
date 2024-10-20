@@ -20,7 +20,7 @@ export const fetchExpertsList = createAsyncThunk<
 >("fetch/expertsList", async () => {
     const response = await fetch("/api/experts");
     if (!response.ok) {
-        throw new Error("Failed to fetch prompt resources");
+        throw new Error("Failed to fetch experts");
     }
     const responseBody = await response.json();
     return responseBody.data;
@@ -47,8 +47,8 @@ const expertsSlice = createSlice({
     },
 });
 
-// Selector to get the prompt resource list
-export const selectPromptResourceList = (state: {
+// Selector to get the experts list
+export const selectExpertsList = (state: {
     expertsList: ExpertsState;
 }) => state.expertsList.expertsList;
 
