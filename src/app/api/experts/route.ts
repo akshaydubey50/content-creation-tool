@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
-import { AirtableModel } from "@/models/airtable.model";
+import { ExpertModel } from "@/models/airtable.model";
 import axios from "axios";
 import { AirtableConf } from "@/conf/conf";
 import connectDB from "@/db/dbConnect";
@@ -12,11 +12,11 @@ export async function GET() {
   };
 
   try {
-    let airtableProductList: AirtableModel[] = [];
+    let expertList: ExpertModel[] = [];
     let offset = null;
     do {
       const response: any = await axios.get(
-        `${AirtableConf.BASE_URL}/${AirtableConf.BASE_ID}/${AirtableConf.TABLE_ID}`,
+        `${AirtableConf.BASE_URL}/${AirtableConf.EXPERT_BASE_ID}/${AirtableConf.EXPERT_TABLE_ID}`,
         {
           headers,
           params: {
@@ -26,21 +26,21 @@ export async function GET() {
       );
 
       if (response.status === 200) {
-        const records: AirtableModel[] = (await response.data[
+        const records: ExpertModel[] = (await response.data[
           "records"
-        ]) as AirtableModel[];
-        airtableProductList.push(...records);
+        ]) as ExpertModel[];
+        expertList.push(...records);
         offset = response.data.offset;
       }
     } while (offset);
-    const statusRecord = airtableProductList?.filter(
-      (item: AirtableModel) => item.fields?.Stage?.toLowerCase() == "done"
-    );
+    // const statusRecord = expertList?.filter(
+    //   (item: ExpertModel) => item.fields?.Stage?.toLowerCase() == "done"
+    // );
 
     return NextResponse.json(
       {
         success: true,
-        data: statusRecord,
+        data: expertList,
       },
       { status: 200 }
     );
