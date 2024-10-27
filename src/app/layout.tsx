@@ -38,12 +38,12 @@ export default function RootLayout({
         />
         <GoogleAnalytics gaId="GTM-P65VN64G" />
       </head>
-      <body className="font-poppins flex flex-col min-h-screen ">
+      <body className="flex flex-col min-h-screen font-poppins ">
         <Authprovider>
           <Providers>
             <Toaster />
             <Navbar />
-            <main className="flex-grow flex items-center justify-center">
+            <main className="flex items-center justify-center flex-grow">
               {children}
             </main>
             <Footer />

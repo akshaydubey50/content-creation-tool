@@ -71,7 +71,7 @@ export default function Page() {
   };
 
   return (
-    <section className="w-full flex items-center justify-center min-h-screen md:min-h-[calc(100vh-4rem)] py-8">
+    <section className="w-full flex items-center justify-center min-h-screen md:min-h-[calc(100vh-20rem)] py-8">
       <Card className="mx-4 md:mx-auto  max-w-sm shadow-[0_8px_30px_rgb(0,0,0,0.12)] text-black bg-white">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
@@ -104,7 +104,7 @@ export default function Page() {
                         )}
                       />
                     </FormControl>
-                    <FormMessage className="text-red-500 font-medium text-sm transition-all duration-200 ease-in-out" />
+                    <FormMessage className="text-sm font-medium text-red-500 transition-all duration-200 ease-in-out" />
                   </FormItem>
                 )}
               />
@@ -118,7 +118,7 @@ export default function Page() {
                         <FormLabel>Password</FormLabel>{" "}
                         <Link
                           href="/forgot-password"
-                          className="ml-auto inline-block text-sm underline"
+                          className="inline-block ml-auto text-sm underline"
                         >
                           Forgot your password?
                         </Link>
@@ -142,24 +142,24 @@ export default function Page() {
                             type="button"
                             variant="ghost"
                             size="sm"
-                            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent transition-opacity duration-300 ease-in-out"
+                            className="absolute top-0 right-0 h-full px-3 py-2 transition-opacity duration-300 ease-in-out hover:bg-transparent"
                             onClick={() => setShowPassword(!showPassword)}
                           >
                             {showPassword ? (
-                              <Eye className="h-4 w-4 icon-fade" />
+                              <Eye className="w-4 h-4 icon-fade" />
                             ) : (
-                              <EyeOff className="h-4 w-4 icon-fade" />
+                              <EyeOff className="w-4 h-4 icon-fade" />
                             )}
                           </Button>{" "}
                         </div>
                       </>
                     </FormControl>
-                    <FormMessage className="text-red-500 font-medium text-sm transition-all duration-300 ease-in-out" />
+                    <FormMessage className="text-sm font-medium text-red-500 transition-all duration-300 ease-in-out" />
                   </FormItem>
                 )}
               />
               {error && (
-                <p className="text-red-500  font-medium transition-all duration-200 ease-in-out">
+                <p className="font-medium text-red-500 transition-all duration-200 ease-in-out">
                   {error}
                 </p>
               )}
@@ -171,11 +171,11 @@ export default function Page() {
                 >
                   {isLoading ? (
                     <>
-                      <Loader2Icon className="animate-spin mr-2" /> Loading
+                      <Loader2Icon className="mr-2 animate-spin" /> Loading
                     </>
                   ) : (
                     <>
-                      <LogIn className="mr-2 h-4 w-4" /> Login
+                      <LogIn className="w-4 h-4 mr-2" /> Login
                     </>
                   )}
                 </Button>
@@ -184,7 +184,7 @@ export default function Page() {
           </Form>
           <Button
             variant="outline"
-            className=" font-medium bg-slate-200 hover:bg-opacity-50 mt-2 w-full"
+            className="w-full mt-2 font-medium bg-slate-200 hover:bg-opacity-50"
             onClick={() => {
               setIsLoadingGoogle(true);
               signIn("google");
@@ -192,15 +192,15 @@ export default function Page() {
           >
             {isLoadingGoogle ? (
               <>
-                <Loader2Icon className="animate-spin mr-2" /> Loading
+                <Loader2Icon className="mr-2 animate-spin" /> Loading
               </>
             ) : (
               <>
-                <Mail className="mr-2 h-4 w-4" /> Login with Google
+                <Mail className="w-4 h-4 mr-2" /> Login with Google
               </>
             )}
           </Button>
-          <div className="mt-4 text-center text-sm">
+          <div className="mt-4 text-sm text-center">
             Don&apos;t have an account?{" "}
             <Link href="/signup" className="underline">
               Sign up
