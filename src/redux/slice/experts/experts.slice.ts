@@ -1,17 +1,34 @@
 import { ExpertModel } from "@/models/airtable.model";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { set } from "mongoose";
 
 // Define the state interface
+
+interface ExpertsFilter{
+    category: ExpertModel[],
+    search: ExpertModel[],
+    verified: ExpertModel[]
+}
 interface ExpertsState {
     isLoading: boolean;
     isError: boolean;
     expertsList: ExpertModel[];
+    filter: ExpertsFilter;
+    searchQuery: string;
+    isVerifiedChecked: boolean;
 }
 
 const initialState: ExpertsState = {
     isLoading: true,
     isError: false,
     expertsList: [],
+    filter:{
+        category:[],
+        search:[],
+        verified:[]
+    },
+    searchQuery:"",
+    isVerifiedChecked:false,
 };
 
 export const fetchExpertsList = createAsyncThunk<
@@ -29,7 +46,22 @@ export const fetchExpertsList = createAsyncThunk<
 const expertsSlice = createSlice({
     name: "expertsList",
     initialState,
-    reducers: {},
+    reducers: {
+
+      
+        setSearchQuery: (state, action) => {
+            console.log("action", action.payload)
+            state.searchQuery = action.payload;
+        },
+        setVerifiedChecked: (state, action) => {
+            state.isVerifiedChecked = action.payload;
+        },
+        setFilter: (state, action) => {
+            console.log("action", action.payload)
+            state.filter = action.payload;
+        },  
+        
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchExpertsList.fulfilled, (state, action) => {
@@ -63,7 +95,7 @@ export const selectIsError = (state: {
 }) => state.expertsList.isError;
 
 // Export actions (if you have any in the reducers, otherwise this can be omitted)
-export const { } = expertsSlice.actions;
+export const { setFilter,setSearchQuery,setVerifiedChecked } = expertsSlice.actions;
 
 // Export the reducer
 export default expertsSlice.reducer;

@@ -107,7 +107,7 @@ export default function Page() {
   };
 
   return (
-    <section className="w-full flex items-center justify-center min-h-screen md:min-h-[calc(100vh-4rem)] py-8">
+    <section className="w-full flex items-center justify-center min-h-screen md:min-h-[calc(100vh-20rem)] py-8">
       <Card className="mx-4 md:mx-auto max-w-sm shadow-[0_8px_30px_rgb(0,0,0,0.12)] text-black bg-white my-8">
         <CardHeader>
           <CardTitle className="text-2xl">Sign Up</CardTitle>
@@ -141,7 +141,7 @@ export default function Page() {
                           )}
                         />
                       </FormControl>
-                      <FormMessage className="text-red-500  font-medium text-sm transition-all duration-200 ease-in-out" />
+                      <FormMessage className="text-sm font-medium text-red-500 transition-all duration-200 ease-in-out" />
                     </FormItem>
                   )}
                 />
@@ -176,24 +176,24 @@ export default function Page() {
                             type="button"
                             variant="ghost"
                             size="sm"
-                            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent transition-opacity duration-300 ease-in-out"
+                            className="absolute top-0 right-0 h-full px-3 py-2 transition-opacity duration-300 ease-in-out hover:bg-transparent"
                             onClick={() => setShowPassword(!showPassword)}
                           >
                             {showPassword ? (
-                              <Eye className="h-4 w-4 icon-fade" />
+                              <Eye className="w-4 h-4 icon-fade" />
                             ) : (
-                              <EyeOff className="h-4 w-4 icon-fade" />
+                              <EyeOff className="w-4 h-4 icon-fade" />
                             )}
                           </Button>
                         </div>
                       </FormControl>
-                      <FormMessage className="text-red-500 font-medium text-sm transition-all duration-300 ease-in-out" />
+                      <FormMessage className="text-sm font-medium text-red-500 transition-all duration-300 ease-in-out" />
                     </FormItem>
                   )}
                 />
               </div>
               {passwordMessages.length > 0 && (
-                <ul className="text-sm font-medium list-disc ml-5">
+                <ul className="ml-5 text-sm font-medium list-disc">
                   {passwordMessages.map((msg, index) => (
                     <li
                       key={index}
@@ -208,7 +208,7 @@ export default function Page() {
                   ))}
                 </ul>
               )}
-              {error && <p className="text-red-500 font-medium">{error}</p>}
+              {error && <p className="font-medium text-red-500">{error}</p>}
               <div className="grid gap-2">
                 <Button
                   type="submit"
@@ -217,11 +217,11 @@ export default function Page() {
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="animate-spin mr-2" /> Loading
+                      <Loader2 className="mr-2 animate-spin" /> Loading
                     </>
                   ) : (
                     <>
-                      <LogIn className="mr-2 h-4 w-4" /> Sign Up
+                      <LogIn className="w-4 h-4 mr-2" /> Sign Up
                     </>
                   )}
                 </Button>
@@ -230,7 +230,7 @@ export default function Page() {
           </Form>
           <Button
             variant="outline"
-            className=" font-medium w-full mt-2 bg-slate-200 hover:bg-opacity-50 "
+            className="w-full mt-2 font-medium bg-slate-200 hover:bg-opacity-50"
             onClick={async () => {
               setIsLoadingGoogle(true);
               const response = await signIn("google", { redirect: false });
@@ -239,16 +239,16 @@ export default function Page() {
           >
             {isLoadingGoogle ? (
               <>
-                <Loader2 className="animate-spin mr-2" /> Loading
+                <Loader2 className="mr-2 animate-spin" /> Loading
               </>
             ) : (
               <>
-                {/* <LogIn className="mr-2 h-4 w-4" /> Sign Up */}
-                <Mail className="mr-2 h-4 w-4" /> Sign up with Google
+                {/* <LogIn className="w-4 h-4 mr-2" /> Sign Up */}
+                <Mail className="w-4 h-4 mr-2" /> Sign up with Google
               </>
             )}
           </Button>
-          <div className="mt-4 text-center text-sm">
+          <div className="mt-4 text-sm text-center">
             Already have an account?{" "}
             <Link href="/signin" className="underline">
               Sign in
