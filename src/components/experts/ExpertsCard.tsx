@@ -8,10 +8,32 @@ import Pagination from '../pagination/Pagination'
 import { usePaginatedFilteredProducts } from '@/hooks/useFilteredProduct'
 import Link from 'next/link'
 
+const placeholderImage_50 ="https://placehold.co/50x50/png"
+
 export default function ExpertsCard({ listItem }: any) {
 const {currentPage,setCurrentPage,handlePageChange,updateCurrentProducts}= usePagination(12); 
-const sliceItem = updateCurrentProducts(listItem);   
-console.log("sliceItem", sliceItem)
+const sliceItem = updateCurrentProducts(listItem);  
+
+
+    const getUserName = (obj: any) => {
+        const firstName = obj?.fields["First Name"];
+        const lastName = obj?.fields["Last Name"];
+
+        if (firstName && lastName) {
+            return `${firstName} ${lastName}`;
+        } else {
+            return "UserCCFYI";
+        }
+    };
+    
+    const getProfileImage = (obj: any) => {
+        if (obj?.fields?.ProfileImage) {
+            return obj?.fields?.ProfileImage
+        }
+        else {
+            return placeholderImage_50
+        }
+    } 
 
     return (
 
@@ -24,7 +46,7 @@ console.log("sliceItem", sliceItem)
                             <div className="flex space-x-6">
                                 <div className="rounded-full">
                                     <Image
-                                        src={"https://placehold.co/50x50/png"}
+                                        src={getProfileImage(item)}
                                         alt={`banner`}
                                         loading="lazy"
                                         width={"70"}
@@ -33,7 +55,10 @@ console.log("sliceItem", sliceItem)
                                     />
                                 </div>
                                 <div className="flex flex-col space-y-2">
-                                    <h2 className='text-xl font-medium '>{item?.fields?.["First Name"]} {item?.fields?.["Last Name"]}</h2>
+                                    <h2 className='text-xl font-medium '>
+                                        {getUserName(item)}
+                                        {/* {item?.fields?.["First Name"]} {item?.fields?.["Last Name"]} */}
+                                        </h2>
                                     <p>Senior UX Expert, 8 Years, 130K+ Hours Research</p>
                                     <p className='flex items-center space-x-2'>
                                         <MapPin />
@@ -47,7 +72,7 @@ console.log("sliceItem", sliceItem)
                             </Link>
                         </div>
 
-                        {item?.fields.Skills && <SkillDisplay skillList={item?.fields.Skills} />}
+                        {item?.fields.Skills && <SkillDisplay skillList={item?.fields?.Skills} />}
 
                     </Card>
                 </React.Fragment>

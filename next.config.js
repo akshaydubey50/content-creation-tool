@@ -13,7 +13,9 @@ const nextConfig = {
       "d1muf25xaso8hp.cloudfront.net",
       // Add the domain here
       "ik.imagekit.io",
-      "placehold.co"
+      "placehold.co",
+      "media.licdn.com",
+      "pbs.twimg.com"
     ],
   },
 };
