@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 interface PaginationProps {
   currentPage: number;
   totalItems: number;
+  itemsCount:number
   onPageChange: (page: number) => void;
 }
 import { MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight, MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
@@ -10,11 +11,11 @@ import { MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight, MdKeyboardArrowL
 import { SkipForward, ChevronRight, SkipBack, ChevronLeft } from "lucide-react";
 
 function Pagination({
-  currentPage,
+  currentPage, itemsCount,
   totalItems,
   onPageChange,
 }: PaginationProps) {
-  const totalPages = Math.ceil(totalItems / 12);
+  const totalPages = Math.ceil(totalItems / itemsCount);
   const isFirstPage = currentPage === 1;
   const isLastPage = currentPage === totalPages;
   const [inputValue, setInputValue] = useState(currentPage.toString());
