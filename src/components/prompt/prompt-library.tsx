@@ -103,7 +103,7 @@ export default function PromptLibrary({itemsCount}:{itemsCount:number}) {
       dispatch(getLikeList());
       dispatch(getBookmarkList());
     }
-  }, [dispatch, promptResourceList]);
+  }, []);
 
   useEffect(() => {
     if (!isLoading && promptResourceList?.length > 0) {

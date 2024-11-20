@@ -114,7 +114,7 @@ export default function HeroSection() {
       <section className="flex flex-col px-4 space-y-10 place-items-center xl:space-y-14 md:px-8 xl:px-10">
         <div>
           <div className="flex flex-col space-y-4 text-center">
-            <p className="mt-10 lg:mt-14 xl:mt-10">
+            <p>
               <span className="px-4 py-1 font-semibold bg-white border border-orange-500 border-solid rounded-full text-DarkOrange">
                 200+ Content Creation Tools
               </span>

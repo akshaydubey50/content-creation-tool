@@ -83,7 +83,7 @@ export default function ProductList({ currentCategory, itemsCount=12 }: ProductL
     if (productList?.length === 0) {
       dispatch(fetchProductList());
     }
-  }, [productList, dispatch]);
+  }, []);
 
   useEffect(() => {
     if (session?.user) {
