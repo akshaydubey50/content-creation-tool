@@ -18,7 +18,7 @@ export default function Home() {
   };
   const itemPerPageCount = 6;
   return (
-    <div className="mb-8 overflow-x-hidden">
+    <div className="my-8 overflow-x-hidden">
       <HeroSection />
       <FilterSection />
       <ProductList itemsCount={itemPerPageCount} />
