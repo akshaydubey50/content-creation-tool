@@ -27,6 +27,7 @@ import NewsLetter from "@/components/newsletter";
 
 export default function ToolDetails() {
   const dispatch: AppDispatch = useDispatch();
+  const itemPerPageCount = 12;
   const categoryData = useSelector(
     (store: RootState) => store.categories.categoryData
   );
@@ -82,7 +83,7 @@ export default function ToolDetails() {
     <div className="mt-[40px] lg:mt-[60px]">
       <HeroSection />
       <FilterSection />
-      <ProductList />
+      <ProductList itemsCount={itemPerPageCount} />
       <NewsLetter />
     </div>
   );

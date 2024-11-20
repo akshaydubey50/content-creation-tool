@@ -13,7 +13,7 @@ import ResourceSidebar from "./ResourceSidebar";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
-export default function ResourceList() {
+export default function ResourceList({itemsCount}:{itemsCount:number}) {
 
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -106,6 +106,7 @@ export default function ResourceList() {
                             })}
                         </main>
                         <Pagination
+                        itemsCount={itemsCount}
                             currentPage={currentPage}
                             totalItems={resourceList!.length}
                             onPageChange={handlePageChange}

@@ -9,6 +9,7 @@ import {
   setCategoryData,
   clearCategoryData,
   clearMatchedCategory,
+  setMatchedCategory,
 } from "@/redux/slice/category/category.slice";
 import {
   setSearchQuery,
@@ -130,7 +131,12 @@ export default function FilterSection() {
       dispatch(setCategoryData(categoryVal));
       setVisibleItem(9);
       scrollBaseonInnerWidth()
-      router.replace(`${HomePage}/category/${formatedCategory}`);
+      const filteredData = productList!.filter(
+        (item: AirtableModel) =>
+          item.fields.Tags[0]?.toLowerCase().replace(/\s/g, "-") ===
+          formatedCategory
+      );
+      dispatch(setMatchedCategory(filteredData));
     }
   };
 
