@@ -447,13 +447,13 @@ export async function GET(req: NextRequest) {
         }
       ]);
 
-      const formattedLikes = likesData[0].totalLikes.map(typeGroup => {
-        const userLikeGroup = likesData[0].userLikes.find(
-          ul => ul.itemType === typeGroup.itemType
+      const formattedLikes = likesData[0].totalLikes?.map((typeGroup:any) => {
+        const userLikeGroup = likesData[0].userLikes?.find(
+          (ul:any) => ul.itemType === typeGroup.itemType
         );
         return {
           ...typeGroup,
-          itemIds: typeGroup.itemIds.map(item => ({
+          itemIds: typeGroup.itemIds.map((item:any) => ({
             ...item,
             isLiked: userLikeGroup?.likedItemIds.includes(item.itemId) || false
           }))
