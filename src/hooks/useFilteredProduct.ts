@@ -22,7 +22,7 @@ import { usePagination } from "./usePagination";
     let shouldResetPage = false;
     let products: AirtableModel[] = [];
 
-    const toolUpvotes = upVotedList.find((list:any) => list.itemType === "tools")?.itemIds || [];
+    const toolUpvotes = upVotedList?.find((list:any) => list.itemType === "tools")?.itemIds || [];
 
 
     if (currentCategory) {
@@ -67,8 +67,8 @@ import { usePagination } from "./usePagination";
       products = productList;
     }
 
-    const productsWithUpvotes = products.map((product) => {
-      const upvoteInfo = toolUpvotes.find((item:any) => item.itemId === product.id);
+    const productsWithUpvotes = products?.map((product) => {
+      const upvoteInfo = toolUpvotes?.find((item:any) => item.itemId === product.id);
       return {
         ...product,
         totalLikes: upvoteInfo?.likeCount || 0,
@@ -77,7 +77,7 @@ import { usePagination } from "./usePagination";
     });
     console.log("productsWithUpvotes::::::::::",productsWithUpvotes)
 
-    return {filteredProducts:productsWithUpvotes.sort((a, b) => b.totalLikes - a.totalLikes),
+    return {filteredProducts:productsWithUpvotes?.sort((a, b) => b.totalLikes - a.totalLikes),
       shouldResetPage
 
     }

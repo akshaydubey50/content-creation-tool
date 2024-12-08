@@ -164,7 +164,7 @@ export default function Navbar() {
         </div>
         <div>
           {menuItem.map((menu) => (
-            <>
+          
               <div key={menu?.id} className="flex items-center px-2 py-4 text-xl font-semibold border-b border-gray-200"
                 onClick={() => {
                   console.log("menu", menu);
@@ -174,7 +174,7 @@ export default function Navbar() {
               >
                 {menu.label}
               </div>
-            </>
+          
           ))}
 
           {!session && (
