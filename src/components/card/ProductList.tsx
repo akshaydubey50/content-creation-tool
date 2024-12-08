@@ -85,8 +85,9 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   }, [productList, dispatch]);
 
   useEffect(() => {
+    dispatch(getLikeList());
     if (session?.user) {
-      dispatch(getLikeList());
+     
       dispatch(getBookmarkList());
     }
   }, [dispatch, session]);

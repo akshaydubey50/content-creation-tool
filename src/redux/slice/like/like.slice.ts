@@ -5,13 +5,12 @@ interface ItemId {
   likeCount: number;
 }
 
-// Define the Like model
 interface Like {
+  isAuthenticated: boolean;
   itemIds: ItemId[];
   itemType: "tools" | "prompts";
 }
 
-// Define the initial state and its type
 interface LikeState {
   isLikedChecked: boolean;
   likedList: Like[];
@@ -28,9 +27,6 @@ const initialState: LikeState = {
   error: null,
 };
 
-// Async thunks
-
-// Fetch like list
 export const getLikeList = createAsyncThunk<Like[]>(
   "like/fetchLikeList",
   async () => {
@@ -44,25 +40,48 @@ export const getLikeList = createAsyncThunk<Like[]>(
   }
 );
 
-// Add a like
+interface AddLikePayload {
+  itemId: string;
+  itemType: "tools" | "prompts";
+}
+
+interface AddLikeResponse {
+  success: boolean;
+  msg: string;
+  like: {
+    itemId: string;
+    itemType: "tools" | "prompts";
+  };
+}
+
 export const addLike = createAsyncThunk<
-  Like,
-  { itemId: string; itemType: "tools" | "prompts" }
+  Like, // Return type
+  AddLikePayload, // Argument type
+  { rejectValue: string }
 >("like/addLike", async ({ itemId, itemType }, { dispatch }) => {
   const response = await fetch(`/api/like`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ itemId, itemType }),
   });
+
   if (!response.ok) {
     throw new Error("Failed to add like");
   }
-  await dispatch(getLikeList()); // Re-fetch the like list after adding a like
-  // return { itemType, itemIds: [itemId] };
-  return { itemType, itemIds: [{ itemId, likeCount: 1 }] };
+
+  const data: AddLikeResponse = await response.json();
+
+  // Re-fetch the like list after adding a like
+  await dispatch(getLikeList());
+
+  // Return properly formatted Like object
+  return {
+    isAuthenticated: true,
+    itemType,
+    itemIds: [{ itemId, likeCount: 1 }]
+  };
 });
 
-// Delete a like
 export const deleteLike = createAsyncThunk<
   { itemId: string; itemType: "tools" | "prompts" },
   { itemId: string; itemType: "tools" | "prompts" }
@@ -72,15 +91,14 @@ export const deleteLike = createAsyncThunk<
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ itemId, itemType }),
   });
+  
   if (!response.ok) {
     throw new Error("Failed to delete like");
   }
-  await dispatch(getLikeList()); // Re-fetch the like list after deleting a like
-  // return itemId as string;
+  
+  await dispatch(getLikeList());
   return { itemId, itemType };
 });
-
-// Redux slice
 
 const likeSlice = createSlice({
   name: "like",
@@ -98,35 +116,26 @@ const likeSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // getLikeList
       .addCase(getLikeList.pending, (state) => {
         state.getLikeListStatus = "loading";
       })
-      .addCase(
-        getLikeList.fulfilled,
-        (state, action: PayloadAction<Like[]>) => {
-          state.getLikeListStatus = "succeeded";
-          state.likedList = action.payload;
-        }
-      )
+      .addCase(getLikeList.fulfilled, (state, action: PayloadAction<Like[]>) => {
+        state.getLikeListStatus = "succeeded";
+        state.likedList = action.payload;
+      })
       .addCase(getLikeList.rejected, (state, action) => {
         state.getLikeListStatus = "failed";
         state.error = action.error.message || null;
       })
-
-      // addLike
       .addCase(addLike.pending, (state) => {
         state.status = "loading";
       })
       .addCase(addLike.fulfilled, (state, action: PayloadAction<Like>) => {
         state.status = "succeeded";
-
-        // Find if there's an existing like for the same itemType
         const existingLike = state.likedList.find(
           (like) => like.itemType === action.payload.itemType
         );
 
-        // If found, add the itemId to the itemIds array, else push a new like object
         if (existingLike) {
           existingLike.itemIds.push(action.payload.itemIds[0]);
         } else {
@@ -137,23 +146,17 @@ const likeSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message || null;
       })
-
-      // deleteLike
       .addCase(deleteLike.pending, (state) => {
         state.status = "loading";
       })
       .addCase(
         deleteLike.fulfilled,
-        (
-          state,
-          action: PayloadAction<{ itemId: string; itemType: string }>
-        ) => {
+        (state, action: PayloadAction<{ itemId: string; itemType: string }>) => {
           state.status = "succeeded";
           const existingLiked = state.likedList.find(
             (like) => like.itemType === action.payload.itemType
           );
           if (existingLiked) {
-            // Update to filter based on itemId property of ItemId objects
             existingLiked.itemIds = existingLiked.itemIds.filter(
               (item) => item.itemId !== action.payload.itemId
             );
@@ -167,7 +170,5 @@ const likeSlice = createSlice({
   },
 });
 
-// Export actions and reducer
-export const { setIsLikedChecked, clearLikedList, updateLikeList } =
-  likeSlice.actions;
+export const { setIsLikedChecked, clearLikedList, updateLikeList } = likeSlice.actions;
 export default likeSlice.reducer;

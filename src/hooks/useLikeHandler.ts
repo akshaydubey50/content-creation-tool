@@ -16,6 +16,7 @@ export function useLikeHandler(
   isInitialLiked: boolean,
   itemType: "tools" | "prompts"
 ) {
+  console.log({id, Name, isInitialLiked, itemType})
   const [isLiked, setIsLiked] = useState(isInitialLiked);
   const [localTotalLikes, setLocalTotalLikes] = useState(0);
   const { toast } = useToast();
@@ -52,7 +53,6 @@ export function useLikeHandler(
     setLocalTotalLikes(prev => newLikedState ? prev + 1 : prev - 1);
 
     try {
-      debugger
       if (newLikedState) {
         await dispatch(addLike({ itemId: id, itemType }));
         toast({

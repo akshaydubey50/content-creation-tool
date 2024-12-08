@@ -14,6 +14,7 @@ import LikeButton from "../ui/likebutton";
 import BookmarkButton from "../ui/bookmarkbutton";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
+import { useAuthState } from "@/hooks/useAuth";
 
 export function ProductCard(props: any) {
   const { upVotedList, bookmarkList, product, totalLikes } = props;
@@ -28,11 +29,18 @@ export function ProductCard(props: any) {
   const bookmarkedList = useSelector(
     (state: RootState) => state.bookmarks.bookmarkList
   );
+  
+  const {isAuthenticated} = useAuthState()
 
   const [isAlreadyLiked, setIsAlreadyLiked] = useState(false);
   const [isAlreadyBookmarked, setIsAlreadyBookmarked] = useState(false);
 
   useEffect(() => {
+
+    if(!isAuthenticated) {
+      setIsAlreadyLiked(false);
+      return;
+    }
     if (likedList?.length > 0) {
       const toolLikedItem = likedList.find((item) => item.itemType === "tools");
       if (toolLikedItem?.itemIds != null) {
