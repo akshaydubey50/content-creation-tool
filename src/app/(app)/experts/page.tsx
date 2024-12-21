@@ -1,20 +1,21 @@
 "use client";
-import * as RoutePath from "@/constants/RoutePath";
-import { useRouter } from "next/navigation";
+
+import ExpertsMainScreen from "@/components/experts/ExpertsMainScreen";
 
 export default function Experts() {
-    const route = useRouter();
+
     return (
-        <div className="flex flex-col items-center justify-center h-[79vh] space-y-4 ">
-            <h2 className="font-semibold text-5xl md:text-6xl text-center pb-4 inline-block text-transparent bg-gradient-to-b from-DarkOrange to-white bg-clip-text">Coming Soon</h2>
-
-            <button
-                className="border-2 border-DarkOrange text-base px-6 py-2 text-DarkOrange rounded-full hover:bg-orange-100 "
-                onClick={() => route.push(RoutePath.HomePage)}
-            >
-                Back to Home
-            </button>
-        </div>
-
+                    <>
+                        <div className="min-w-xs bg-light-gray  h-[250px] lg:h-[300px] flex items-center justify-center px-4 mb-4">
+                            <div className="mx-auto max-w-8xl ">
+                                <h1 className="text-2xl font-bold text-center md:text-4xl lg:text-6xl">
+                                    Content Creation <span className="text-DarkOrange">Experts</span>{" "}
+                                </h1>
+                            </div>
+                        </div>
+                        <div className="px-4 mx-auto min-w-xs max-w-8xl">
+                        </div>
+                        <ExpertsMainScreen />
+                    </>
     );
 }

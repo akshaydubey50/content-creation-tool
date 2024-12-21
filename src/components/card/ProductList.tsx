@@ -86,8 +86,9 @@ export default function ProductList({ currentCategory, itemsCount=12 }: ProductL
   }, []);
 
   useEffect(() => {
+    dispatch(getLikeList());
     if (session?.user) {
-      dispatch(getLikeList());
+     
       dispatch(getBookmarkList());
     }
   }, [dispatch, session]);

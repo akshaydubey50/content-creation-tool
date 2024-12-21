@@ -156,84 +156,329 @@ import LikeModel from "@/models/likes/Like.model"; // Assuming you have a LikeMo
 //   }
 // }
 
+
+// export async function GET(req: NextRequest) {
+//   await connectDB();
+
+//   const token = await getToken({ req: req });
+//   // if (!token || token?._id === undefined) {
+//   //   return NextResponse.json(
+//   //     { success: false, msg: "Unauthorized access" },
+//   //     { status: 400 }
+//   //   );
+//   // }
+
+//   try {
+//     const user = await UserModel.findOne({
+//       email: token?.email,
+//     });
+
+//     if (!user) {
+//       return NextResponse.json(
+//         { success: false, msg: "User does not exist" },
+//         { status: 404 }
+//       );
+//     }
+
+//     const likes = await LikeModel.aggregate([
+//       {
+//         $match: {
+//           userId: new mongoose.Types.ObjectId(user?._id),
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: "$itemType",
+//           itemIds: { $addToSet: "$itemId" },
+//         },
+//       },
+//       {
+//         $project: {
+//           _id: 0,
+//           itemType: "$_id",
+//           itemIds: "$itemIds",
+//         },
+//       },
+//     ]);
+
+//     if (likes.length === 0) {
+//       return NextResponse.json(
+//         { success: true, likes: null, msg: "No items liked" },
+//         { status: 200 }
+//       );
+//     }
+
+//     // Fetch total like count for each item
+//     const likesWithCounts = await Promise.all(
+//       likes.map(async (likeGroup) => {
+//         const itemsWithCounts = await Promise.all(
+//           likeGroup.itemIds.map(async (itemId: string) => {
+//             const count = await LikeModel.countDocuments({ itemId });
+//             return { itemId, likeCount: count };
+//           })
+//         );
+//         return {
+//           ...likeGroup,
+//           itemIds: itemsWithCounts,
+//         };
+//       })
+//     );
+
+//     return NextResponse.json(
+//       {
+//         success: true,
+//         msg: "Likes fetched successfully",
+//         likes: likesWithCounts,
+//       },
+//       { status: 200 }
+//     );
+//   } catch (error: any) {
+//     console.log("Error while fetching likes ==> ", error);
+
+//     return NextResponse.json(
+//       { success: false, msg: "Internal Server Error" },
+//       { status: 500 }
+//     );
+//   }
+// }
+
+// export async function GET(req: NextRequest) {
+//   await connectDB();
+
+//   const token = await getToken({ req: req });
+//   const isAuthenticated = token && token.email;
+
+//   try {
+//     // Base aggregation pipeline for getting total likes
+//     const baseAggregation = [
+//       {
+//         $group: {
+//           _id: {
+//             itemId: "$itemId",
+//             itemType: "$itemType"
+//           },
+//           likeCount: { $sum: 1 }
+//         }
+//       },
+//       {
+//         $group: {
+//           _id: "$_id.itemType",
+//           items: {
+//             $push: {
+//               itemId: "$_id.itemId",
+//               likeCount: "$likeCount",
+//               isLiked: { $literal: false } // Default isLiked to false
+//             }
+//           }
+//         }
+//       },
+//       {
+//         $project: {
+//           itemType: "$_id",
+//           itemIds: "$items",
+//           _id: 0
+//         }
+//       }
+//     ];
+
+//     // If user is authenticated, get their liked items as well
+//     if (isAuthenticated) {
+//       const user = await UserModel.findOne({ email: token.email });
+      
+//       if (!user) {
+//         return NextResponse.json(
+//           { success: false, msg: "User does not exist" },
+//           { status: 404 }
+//         );
+//       }
+
+//       const likesData = await LikeModel.aggregate([
+//         {
+//           $facet: {
+//             // Get total likes for all items
+//             "totalLikes": baseAggregation,
+//             // Get user's liked items
+//             "userLikes": [
+//               {
+//                 $match: {
+//                   userId: new mongoose.Types.ObjectId(user._id)
+//                 }
+//               },
+//               {
+//                 $group: {
+//                   _id: "$itemType",
+//                   likedItemIds: { $addToSet: "$itemId" }
+//                 }
+//               },
+//               {
+//                 $project: {
+//                   itemType: "$_id",
+//                   likedItemIds: 1,
+//                   _id: 0
+//                 }
+//               }
+//             ]
+//           }
+//         }
+//       ]);
+
+//       // Combine total likes with user's liked status
+//       const formattedLikes = likesData[0].totalLikes.map(typeGroup => {
+//         const userLikeGroup = likesData[0].userLikes.find(
+//           ul => ul.itemType === typeGroup.itemType
+//         );
+//         return {
+//           ...typeGroup,
+//           itemIds: typeGroup.itemIds.map(item => ({
+//             ...item,
+//             isLiked: userLikeGroup?.likedItemIds.includes(item.itemId) || false
+//           }))
+//         };
+//       });
+
+//       return NextResponse.json({
+//         success: true,
+//         msg: "Likes fetched successfully",
+//         likes: formattedLikes,
+//         isAuthenticated: true
+//       });
+//     } 
+    
+//     // For unauthenticated users, return total likes with isLiked: false
+//     const totalLikes = await LikeModel.aggregate(baseAggregation);
+
+//     return NextResponse.json({
+//       success: true,
+//       msg: "Likes fetched successfully",
+//       likes: totalLikes,
+//       isAuthenticated: false
+//     });
+
+//   } catch (error: any) {
+//     console.log("Error while fetching likes ==> ", error);
+//     return NextResponse.json(
+//       { success: false, msg: "Internal Server Error" },
+//       { status: 500 }
+//     );
+//   }
+// }
+
 export async function GET(req: NextRequest) {
   await connectDB();
 
   const token = await getToken({ req: req });
-  if (!token || token?._id === undefined) {
-    return NextResponse.json(
-      { success: false, msg: "Unauthorized access" },
-      { status: 400 }
-    );
-  }
+  const isAuthenticated = token && token.email;
 
   try {
-    const user = await UserModel.findOne({
-      email: token?.email,
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, msg: "User does not exist" },
-        { status: 404 }
-      );
-    }
-
-    const likes = await LikeModel.aggregate([
+    // Base aggregation pipeline for getting total likes
+    const baseAggregation = [
       {
         $match: {
-          userId: new mongoose.Types.ObjectId(user?._id),
-        },
+          itemType: { $in: ["tools", "prompts"] }
+        }
       },
       {
         $group: {
-          _id: "$itemType",
-          itemIds: { $addToSet: "$itemId" },
-        },
+          _id: {
+            itemId: "$itemId",
+            itemType: "$itemType"
+          },
+          likeCount: { $sum: 1 }
+        }
+      },
+      {
+        $group: {
+          _id: "$_id.itemType",
+          items: {
+            $push: {
+              itemId: "$_id.itemId",
+              likeCount: "$likeCount",
+              isLiked: { $literal: false }
+            }
+          }
+        }
       },
       {
         $project: {
-          _id: 0,
           itemType: "$_id",
-          itemIds: "$itemIds",
-        },
-      },
-    ]);
+          itemIds: "$items",
+          _id: 0
+        }
+      }
+    ];
 
-    if (likes.length === 0) {
-      return NextResponse.json(
-        { success: true, likes: null, msg: "No items liked" },
-        { status: 200 }
-      );
-    }
+    // If user is authenticated, get their liked items as well
+    if (isAuthenticated) {
+      const user = await UserModel.findOne({ email: token.email });
+      
+      if (!user) {
+        return NextResponse.json(
+          { success: false, msg: "User does not exist" },
+          { status: 404 }
+        );
+      }
 
-    // Fetch total like count for each item
-    const likesWithCounts = await Promise.all(
-      likes.map(async (likeGroup) => {
-        const itemsWithCounts = await Promise.all(
-          likeGroup.itemIds.map(async (itemId: string) => {
-            const count = await LikeModel.countDocuments({ itemId });
-            return { itemId, likeCount: count };
-          })
+      const likesData = await LikeModel.aggregate([
+        {
+          $facet: {
+            "totalLikes": baseAggregation,
+            "userLikes": [
+              {
+                $match: {
+                  userId: new mongoose.Types.ObjectId(user._id),
+                  itemType: { $in: ["tools", "prompts"] }
+                }
+              },
+              {
+                $group: {
+                  _id: "$itemType",
+                  likedItemIds: { $addToSet: "$itemId" }
+                }
+              },
+              {
+                $project: {
+                  itemType: "$_id",
+                  likedItemIds: 1,
+                  _id: 0
+                }
+              }
+            ]
+          }
+        }
+      ]);
+
+      const formattedLikes = likesData[0].totalLikes?.map((typeGroup:any) => {
+        const userLikeGroup = likesData[0].userLikes?.find(
+          (ul:any) => ul.itemType === typeGroup.itemType
         );
         return {
-          ...likeGroup,
-          itemIds: itemsWithCounts,
+          ...typeGroup,
+          itemIds: typeGroup.itemIds.map((item:any) => ({
+            ...item,
+            isLiked: userLikeGroup?.likedItemIds.includes(item.itemId) || false
+          }))
         };
-      })
-    );
+      });
 
-    return NextResponse.json(
-      {
+      return NextResponse.json({
         success: true,
         msg: "Likes fetched successfully",
-        likes: likesWithCounts,
-      },
-      { status: 200 }
-    );
+        likes: formattedLikes,
+        isAuthenticated: true
+      });
+    }
+
+    const totalLikes = await LikeModel.aggregate(baseAggregation);
+
+    return NextResponse.json({
+      success: true,
+      msg: "Likes fetched successfully",
+      likes: totalLikes,
+      isAuthenticated: false
+    });
+
   } catch (error: any) {
     console.log("Error while fetching likes ==> ", error);
-
     return NextResponse.json(
       { success: false, msg: "Internal Server Error" },
       { status: 500 }
