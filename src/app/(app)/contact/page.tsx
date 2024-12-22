@@ -102,11 +102,15 @@ export default function ContactUs() {
   ];
   return (
     <>
-      <div className="max-w-7xl mx-auto px-6 md:px-8">
-        <div className="flex flex-col lg:items-center space-y-4  pt-24 pb:4  lg:pb-8">
-          <h1 className="font-semibold text-2xl  xl:text-4xl  ">Contact </h1>
+      <div className="min-w-xs bg-light-gray  h-[250px] lg:h-[300px] flex items-center justify-center px-4 mb-4">
+        <div className="mx-auto max-w-8xl text-center">
+          <h1 className="text-2xl font-bold  md:text-4xl lg:text-6xl">
+            Contact
+          </h1>
           <p>We&apos;re here to help!</p>
         </div>
+      </div>
+      <div className="max-w-7xl mx-auto px-6 md:px-8">
         <div className="flex flex-col lg:flex-row  space-y-10 lg:space-y-0 lg:justify-center  lg:items-start  lg:space-x-20    mt-6 lg:mt-10 lg:px-6 ">
           <section>
             <div className="flex flex-col lg:items-start space-y-4 ">
