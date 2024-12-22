@@ -65,8 +65,8 @@ export default function ProductToolBanner({
 
   return (
     <>
-      <main className="px-8 py-6 overflow-x-hidden bg-light-gray md:px-10 lg:pt-16">
-        <div className="mx-auto max-w-7xl pt-14">
+      <main className="px-8 py-6 overflow-x-hidden bg-light-gray md:px-10 ">
+        <div className="mx-auto max-w-7xl ">
           <Breadcrumb
             categories={"tools"}
             currentPageTitle={title}

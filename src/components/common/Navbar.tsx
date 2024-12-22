@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ImCross } from "react-icons/im";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -10,86 +10,70 @@ import * as RoutePath from "@/constants/RoutePath";
 import { signOut, useSession } from "next-auth/react";
 
 interface MenuItem {
-  id: number | string;
+  id: string;
   label: string;
   href: string;
 }
+
 export default function Navbar() {
-  const [isActiveMenu, setIsActiveMenu] = useState(0);
-  const dispatch: AppDispatch = useDispatch();
-
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
   const pathName = usePathname();
-
-  useEffect(() => {
-    localStorage.setItem("isActiveMenu", String(isActiveMenu));
-  }, [isActiveMenu, dispatch]);
+  const router = useRouter();
+  const { data: session } = useSession();
 
   const menuItem: MenuItem[] = [
     { id: RoutePath.HomePage, label: "Tools", href: RoutePath.HomePage },
     { id: RoutePath.Prompts, label: "Prompts", href: RoutePath.Prompts },
-    // { id: RoutePath.Resources, label: "Resources", href: RoutePath.Resources },
+    { id: RoutePath.Experts, label: "Experts", href: RoutePath.Experts },
+    { id: RoutePath.SubmitTool, label: "Submit Tool", href: RoutePath.SubmitTool },
     { id: RoutePath.Contact, label: "Contact", href: RoutePath.Contact },
-    {
-      id: RoutePath.SubmitTool,
-      label: "Submit Tool",
-      href: RoutePath.SubmitTool,
-    },
   ];
 
-  const [isMenu, setIsMenu] = useState(false);
+  const handleSignIn = () => router.push("/signin");
+  const handleSignup = () => router.push("/signup");
+  const handleSignout = () => signOut();
 
-  const { data: session } = useSession();
+  const toggleMobileMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  const router = useRouter();
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (window.scrollY > 0) {
+  //       setIsSticky(true);
+  //     } else {
+  //       setIsSticky(false);
+  //     }
+  //   };
 
-  const handleNavbarMenu = (index: number) => {
-    setIsActiveMenu(index);
-  };
+  //   window.addEventListener("scroll", handleScroll);
 
-  function hamburgerHandler() {
-    setIsMenu(true);
-  }
-
-  function crossHandler() {
-    setIsMenu(false);
-  }
-
-  const handleSignIn = () => {
-    router.push("/signin");
-  };
-
-  const handleSignup = () => {
-    router.push("/signup");
-  };
-
-  const handleSignout = () => {
-    signOut();
-  };
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
 
   return (
     <>
-      <header className="fixed z-10 w-full px-5 overflow-hidden bg-white shadow-md xl:px-10 ">
-        <div className="flex items-center justify-between py-4 mx-auto max-w-7xl lg:px-2 lg:py-4">
+      <header className={`w-full px-5 bg-white shadow-md xl:px-10 transition-all duration-500 
+      // ${isSticky && 'fixed top-0 left-0 right-0 z-50' }
+      `} >
+
+        <div className={`flex items-center justify-between mx-auto max-w-7xl lg:px-2 ${isSticky ? 'py-4 duration-500 transition-all' : 'py-6'}`}>
           <div>
             <Link href="/">
               <div className="font-bold text-Heading-Small">Content Creation FYI</div>
             </Link>
           </div>
-          {/* menubar in large screen */}
-          <nav>
-            <ul className="flex-wrap items-baseline justify-end flex-1 hidden gap-6 font-medium text-black text-Title-Medium lg:flex">
-              {menuItem.map((menu, index) => (
-                <li key={menu?.id}>
+          {/* Desktop Menu */}
+          <nav className="hidden lg:flex">
+            <ul className="flex gap-6 font-medium text-black text-Title-Medium">
+              {menuItem.map((menu) => (
+                <li key={menu.id}>
                   <Link
-                    target={menu?.label == "Submit Tool" ? "_blank" : "_self"}
-                    className={`  text-black    hover:border-b-4 hover:border-DarkOrange  cursor-pointer
-                ${
-                  pathName === menu.href
-                    ? "border-b-4 border-DarkOrange text-black  "
-                    : "text-black"
-                }`}
+                    target={menu.label === "Submit Tool" ? "_blank" : "_self"}
                     href={menu.href}
-                    onClick={() => handleNavbarMenu(index)}
+                    className={`hover:border-b-4 hover:border-DarkOrange cursor-pointer ${pathName === menu.href ? "border-b-4 border-DarkOrange" : ""
+                      }`}
                   >
                     {menu.label}
                   </Link>
@@ -98,49 +82,36 @@ export default function Navbar() {
             </ul>
           </nav>
 
-          <div className="hidden lg:block">
-            <ul className="flex space-x-6">
-              {session && (
-                <li>
-                  <button
-                    className="px-6 py-2 font-semibold text-white bg-black rounded-lg hover:bg-DarkOrange hover:text-white"
-                    onClick={handleSignout}
-                  >
-                    Logout
-                  </button>
-                </li>
-              )}
-              {!session && (
-                <li>
-                  <button
-                    className="px-6 py-2 font-semibold text-black bg-gray-100 rounded-lg hover:shadow-2xl hover:shadow-gray-100 hover:bg-gray-200"
-                    onClick={handleSignIn}
-                  >
-                    Login
-                  </button>
-                </li>
-              )}
-
-              {!session && (
-                <li>
-                  <button
-                    className="px-6 py-2 font-semibold text-white bg-black rounded-lg hover:bg-DarkOrange hover:text-white"
-                    onClick={handleSignup}
-                  >
-                    Sign Up
-                  </button>
-                </li>
-              )}
-            </ul>
+          <div className="hidden space-x-6 lg:flex">
+            {session ? (
+              <button
+                className="px-6 py-2 font-semibold text-white bg-black rounded-lg hover:bg-DarkOrange"
+                onClick={handleSignout}
+              >
+                Logout
+              </button>
+            ) : (
+              <>
+                <button
+                  className="px-6 py-2 font-semibold text-black bg-gray-100 rounded-lg hover:bg-gray-200"
+                  onClick={handleSignIn}
+                >
+                  Login
+                </button>
+                <button
+                  className="px-6 py-2 font-semibold text-white bg-black rounded-lg hover:bg-DarkOrange"
+                  onClick={handleSignup}
+                >
+                  Sign Up
+                </button>
+              </>
+            )}
           </div>
 
-          <div className="block lg:hidden">
-            <button
-              title="menu"
-              onClick={hamburgerHandler}
-              className="outline-none"
-            >
-              <GiHamburgerMenu size={20} />
+          {/* Mobile Menu Icon */}
+          <div className="lg:hidden">
+            <button onClick={toggleMobileMenu} className="outline-none">
+              {isMenuOpen ? <ImCross size={20} color="red" /> : <GiHamburgerMenu size={20} />}
             </button>
           </div>
         </div>
@@ -148,71 +119,64 @@ export default function Navbar() {
 
       {/* Mobile View Sidebar */}
       <aside
-        className={`fixed top-0 z-40 h-full w-screen px-3 bg-white text-black text-Title-Large transform transition-transform duration-500 overscroll-none ${
-          isMenu ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 z-40 h-full w-screen bg-white text-black transform transition-transform duration-500 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
-        <div className="flex p-3 my-2 ">
+        <div className="flex justify-between p-3 my-2">
           <div className="font-bold text-Heading-Medium">Content Creation FYI</div>
-          <button
-            title="close"
-            onClick={crossHandler}
-            className="px-4 ml-auto outline-none"
-          >
+          <button onClick={toggleMobileMenu} className="outline-none">
             <ImCross size={20} color="red" />
           </button>
         </div>
-        <div>
+        <nav className="px-3">
           {menuItem.map((menu) => (
-          
-              <div key={menu?.id} className="flex items-center px-2 py-4 text-xl font-semibold border-b border-gray-200"
-                onClick={() => {
-                  console.log("menu", menu);
-                  crossHandler();
-                  router.push(menu?.href);
-                }}
-              >
-                {menu.label}
-              </div>
-          
-          ))}
-
-          {!session && (
-            <div className="grid items-center grid-cols-2 mt-6 font-semibold justify-items-center" >
-              <div className="col-span-1 px-12 py-4 border rounded-full border-DarkOrange text-DarkOrange">
-              <div className="flex items-center justify-end"
-                onClick={() => {
-                  crossHandler();
-                  handleSignIn();
-                }}
-              >
-                Login
-              </div>
-              </div>
-              <div className="col-span-1 px-12 py-4 text-white rounded-full bg-DarkOrange ">
-              <div className="flex items-center justify-center "
-                onClick={() => {
-                  crossHandler();
-                  handleSignup();
-                }}>
-                Sign Up
-              </div>
-            </div>
-            </div>
-          )}
-          {session && (
-            <div className="flex justify-center mt-6 font-semibold">
-            <button className="px-20 py-4 text-white rounded-full bg-DarkOrange"
+            <div
+              key={menu.id}
+              className="py-4 text-xl font-semibold border-b border-gray-200"
               onClick={() => {
-                crossHandler();
+                toggleMobileMenu();
+                router.push(menu.href);
+              }}
+            >
+              {menu.label}
+            </div>
+          ))}
+        </nav>
+
+        {!session ? (
+          <div className="grid grid-cols-2 gap-4 p-6 mt-6 font-semibold">
+            <button
+              className="col-span-1 px-12 py-4 border rounded-full border-DarkOrange text-DarkOrange"
+              onClick={() => {
+                toggleMobileMenu();
+                handleSignIn();
+              }}
+            >
+              Login
+            </button>
+            <button
+              className="col-span-1 px-12 py-4 text-white rounded-full bg-DarkOrange"
+              onClick={() => {
+                toggleMobileMenu();
+                handleSignup();
+              }}
+            >
+              Sign Up
+            </button>
+          </div>
+        ) : (
+          <div className="flex justify-center p-6 mt-6 font-semibold">
+            <button
+              className="px-20 py-4 text-white rounded-full bg-DarkOrange"
+              onClick={() => {
+                toggleMobileMenu();
                 handleSignout();
               }}
             >
               Logout
             </button>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </aside>
     </>
   );

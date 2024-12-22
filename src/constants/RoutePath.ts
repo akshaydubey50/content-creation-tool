@@ -9,3 +9,4 @@ export const Resources = "/resources";
 export const Experts = "/experts";
 
 
+export const placeholderImage ="https://placehold.co/100x100/png";

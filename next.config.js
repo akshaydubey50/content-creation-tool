@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
   swcMinify: true,
   /*  experimental: {
     serverActions: true,
@@ -13,7 +16,9 @@ const nextConfig = {
       "d1muf25xaso8hp.cloudfront.net",
       // Add the domain here
       "ik.imagekit.io",
-      "placehold.co"
+      "placehold.co",
+      "media.licdn.com",
+      "pbs.twimg.com"
     ],
   },
 };
