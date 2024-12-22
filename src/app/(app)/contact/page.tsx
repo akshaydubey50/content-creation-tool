@@ -107,7 +107,6 @@ export default function ContactUs() {
           <h1 className="text-2xl font-bold  md:text-4xl lg:text-6xl">
             Contact
           </h1>
-          <p>We&apos;re here to help!</p>
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-6 md:px-8">
