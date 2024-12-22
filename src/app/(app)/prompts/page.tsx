@@ -11,9 +11,9 @@ export default function Prompt() {
   const itemsPerPageCount = 12;
   return (
     <>
-      <div className="min-w-xs bg-light-gray pt-[80px] h-[200px] lg:h-[300px] flex items-center justify-center px-4">
+      <div className="min-w-xs bg-light-gray  h-[250px] lg:h-[300px] flex items-center justify-center px-4 mb-4">
         <div className="mx-auto max-w-8xl ">
-          <h1 className="text-2xl font-semibold text-center md:text-4xl  lg:text-6xl xl:text-7xl">
+          <h1 className="text-2xl font-bold text-center md:text-4xl lg:text-6xl">
             Content Creation <span className="text-DarkOrange">Prompts</span>{" "}
           </h1>
         </div>
