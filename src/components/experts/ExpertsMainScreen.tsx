@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label"
 import useFilterExperts from '@/hooks/useFilterExperts'
 
 export default function ExpertsMainScreen() {
+  const itemsPerPageCount = 12;
   const expertList = useSelector((store: RootState) => store.experts.expertsList)
   const dispatch: AppDispatch = useDispatch()
     const { getSkillCategoryList , filterList } = useFilterExperts();
@@ -45,7 +46,7 @@ export default function ExpertsMainScreen() {
               <ExpertsVerifiedStatus dispatch={dispatch} />
             </div> */}
           </div>
-          <ExpertsCard listItem={filterList} />
+          <ExpertsCard listItem={filterList} itemsCount={itemsPerPageCount} />
         </div>
       </div>
     </div>
