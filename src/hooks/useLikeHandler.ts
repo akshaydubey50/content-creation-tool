@@ -1,18 +1,13 @@
-// useLikeHandler.ts
 import { useState, useCallback, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  addLike,
-  deleteLike,
-  getLikeList,
-} from "@/redux/slice/like/like.slice";
+import { addLike, deleteLike, getLikeList } from "@/redux/slice/like/like.slice";
 import { useDispatch, useSelector } from "react-redux";
 
 export function useLikeHandler(
   id: string,
-  Name: string,
+  name: string,
   isInitialLiked: boolean,
   itemType: "tools" | "prompts"
 ) {
@@ -23,18 +18,31 @@ export function useLikeHandler(
   const dispatch = useDispatch<AppDispatch>();
 
   const likedList = useSelector((state: RootState) => state.likes.likedList);
+  const getLikeListStatus = useSelector((state: RootState) => state.likes.getLikeListStatus);
 
   useEffect(() => {
-    setIsLiked(isInitialLiked);
-  }, [isInitialLiked]);
+    // Only dispatch getLikeList if the status is idle (not fetched yet)
+    if (getLikeListStatus === "idle") {
+      dispatch(getLikeList());
+    }
+    // If the user is not logged in, don't set any initial liked state
+    if (!session?.user) {
+      setIsLiked(false);
+    } else {
+      setIsLiked(isInitialLiked);
+    }
+  }, [isInitialLiked, dispatch, getLikeListStatus, session]);
 
   useEffect(() => {
-    const item = likedList
-      ?.find((like) => like.itemType === itemType)
-      ?.itemIds.find((item) => item.itemId === id);
-
-    if (item) {
-      setLocalTotalLikes(item.likeCount);
+    if (likedList && likedList.length > 0) {
+      // Find the item within likedList only if it's properly loaded
+      const likeCategory = likedList?.find((like) => like.itemType === itemType);
+      if (likeCategory) {
+        const item = likeCategory.items?.find((item) => item.itemId === id);
+        if (item) {
+          setLocalTotalLikes(item.totalLikes); // Update local total likes
+        }
+      }
     }
   }, [likedList, id, itemType]);
 
@@ -49,20 +57,19 @@ export function useLikeHandler(
 
     const newLikedState = !isLiked;
     setIsLiked(newLikedState);
-    setLocalTotalLikes(prev => newLikedState ? prev + 1 : prev - 1);
+    setLocalTotalLikes((prev) => (newLikedState ? prev + 1 : prev - 1));
 
     try {
-      debugger
       if (newLikedState) {
         await dispatch(addLike({ itemId: id, itemType }));
         toast({
-          title: `You liked ${Name}`,
+          title: `You liked ${name}`,
           variant: "success",
         });
       } else {
         await dispatch(deleteLike({ itemId: id, itemType }));
         toast({
-          title: `You removed ${Name} from likes`,
+          title: `You removed ${name} from likes`,
           variant: "destructive",
         });
       }
@@ -70,9 +77,9 @@ export function useLikeHandler(
     } catch (error) {
       console.error("Error liking/unliking the item:", error);
       setIsLiked(isLiked);
-      setLocalTotalLikes(prev => isLiked ? prev - 1 : prev + 1);
+      setLocalTotalLikes((prev) => (isLiked ? prev - 1 : prev + 1));
     }
-  }, [session, toast, Name, dispatch, id, itemType, isLiked]);
+  }, [session, toast, name, dispatch, id, itemType, isLiked]);
 
   return { isLiked, handleLike, totalLikes: localTotalLikes };
 }

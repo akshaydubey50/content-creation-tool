@@ -35,10 +35,10 @@ export function ProductCard(props: any) {
   useEffect(() => {
     if (likedList?.length > 0) {
       const toolLikedItem = likedList.find((item) => item.itemType === "tools");
-      if (toolLikedItem?.itemIds != null) {
+      if (toolLikedItem?.items != null) {
         // Check if the current id is in the itemIds array
         setIsAlreadyLiked(
-          toolLikedItem.itemIds.some((item) => item.itemId === id)
+          toolLikedItem.items.some((item) => item.itemId === id)
         );
       } else {
         setIsAlreadyLiked(false);

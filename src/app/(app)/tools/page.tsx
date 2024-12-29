@@ -15,6 +15,5 @@ export default function Home() {
         <NewsLetter />
       </div>
     </div>
-
   );
 }

@@ -156,91 +156,180 @@ import LikeModel from "@/models/likes/Like.model"; // Assuming you have a LikeMo
 //   }
 // }
 
+// export async function GET(req: NextRequest) {
+//   await connectDB();
+
+//   const token = await getToken({ req: req });
+//   if (!token || token?._id === undefined) {
+//     return NextResponse.json(
+//       { success: false, msg: "Unauthorized access" },
+//       { status: 400 }
+//     );
+//   }
+
+//   try {
+//     const user = await UserModel.findOne({
+//       email: token?.email,
+//     });
+
+//     if (!user) {
+//       return NextResponse.json(
+//         { success: false, msg: "User does not exist" },
+//         { status: 404 }
+//       );
+//     }
+
+//     const likes = await LikeModel.aggregate([
+//       {
+//         $match: {
+//           userId: new mongoose.Types.ObjectId(user?._id),
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: "$itemType",
+//           itemIds: { $addToSet: "$itemId" },
+//         },
+//       },
+//       {
+//         $project: {
+//           _id: 0,
+//           itemType: "$_id",
+//           itemIds: "$itemIds",
+//         },
+//       },
+//     ]);
+
+//     if (likes.length === 0) {
+//       return NextResponse.json(
+//         { success: true, likes: null, msg: "No items liked" },
+//         { status: 200 }
+//       );
+//     }
+
+//     // Fetch total like count for each item
+//     const likesWithCounts = await Promise.all(
+//       likes.map(async (likeGroup) => {
+//         const itemsWithCounts = await Promise.all(
+//           likeGroup.itemIds.map(async (itemId: string) => {
+//             const count = await LikeModel.countDocuments({ itemId });
+//             return { itemId, likeCount: count };
+//           })
+//         );
+//         return {
+//           ...likeGroup,
+//           itemIds: itemsWithCounts,
+//         };
+//       })
+//     );
+
+//     return NextResponse.json(
+//       {
+//         success: true,
+//         msg: "Likes fetched successfully",
+//         likes: likesWithCounts,
+//       },
+//       { status: 200 }
+//     );
+//   } catch (error: any) {
+//     console.log("Error while fetching likes ==> ", error);
+
+//     return NextResponse.json(
+//       { success: false, msg: "Internal Server Error" },
+//       { status: 500 }
+//     );
+//   }
+// }
+
 export async function GET(req: NextRequest) {
   await connectDB();
 
   const token = await getToken({ req: req });
-  if (!token || token?._id === undefined) {
-    return NextResponse.json(
-      { success: false, msg: "Unauthorized access" },
-      { status: 400 }
-    );
-  }
+  console.log("token for likes :::", token);
 
   try {
     const user = await UserModel.findOne({
       email: token?.email,
     });
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, msg: "User does not exist" },
-        { status: 404 }
-      );
-    }
+    console.log("user found for /like api ::: ", user);
 
     const likes = await LikeModel.aggregate([
       {
         $match: {
-          userId: new mongoose.Types.ObjectId(user?._id),
+          itemType: { $in: ["prompts", "tools"] },
         },
       },
       {
         $group: {
-          _id: "$itemType",
-          itemIds: { $addToSet: "$itemId" },
+          _id: {
+            itemType: "$itemType",
+            itemId: "$itemId",
+          },
+          totalLikes: { $sum: 1 },
+          userIds: { $push: "$userId" },
+        },
+      },
+      {
+        $group: {
+          _id: "$_id.itemType",
+          items: {
+            $push: {
+              itemId: "$_id.itemId",
+              totalLikes: "$totalLikes",
+              userIds: "$userIds",
+            },
+          },
         },
       },
       {
         $project: {
           _id: 0,
           itemType: "$_id",
-          itemIds: "$itemIds",
+          items: {
+            $map: {
+              input: "$items",
+              as: "item",
+              in: {
+                itemId: "$$item.itemId",
+                totalLikes: "$$item.totalLikes",
+                isLikedByUser: {
+                  $cond: {
+                    if: { $in: [user?._id, "$$item.userIds"] },
+                    then: true,
+                    else: false,
+                  },
+                },
+              },
+            },
+          },
         },
       },
     ]);
 
     if (likes.length === 0) {
       return NextResponse.json(
-        { success: true, likes: null, msg: "No items liked" },
-        { status: 200 }
+        { success: true, msg: "No items liked in prompts or tools categories" },
+        { status: 200 },
       );
     }
-
-    // Fetch total like count for each item
-    const likesWithCounts = await Promise.all(
-      likes.map(async (likeGroup) => {
-        const itemsWithCounts = await Promise.all(
-          likeGroup.itemIds.map(async (itemId: string) => {
-            const count = await LikeModel.countDocuments({ itemId });
-            return { itemId, likeCount: count };
-          })
-        );
-        return {
-          ...likeGroup,
-          itemIds: itemsWithCounts,
-        };
-      })
-    );
 
     return NextResponse.json(
       {
         success: true,
-        msg: "Likes fetched successfully",
-        likes: likesWithCounts,
+        msg: "Likes for prompts and tools fetched successfully",
+        likes,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error: any) {
     console.log("Error while fetching likes ==> ", error);
 
     return NextResponse.json(
       { success: false, msg: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-
 // POST: Add a new like
 export async function POST(req: NextRequest) {
   await connectDB();
@@ -250,7 +339,7 @@ export async function POST(req: NextRequest) {
   if (!token || token?._id === undefined) {
     return NextResponse.json(
       { success: false, msg: "Unauthorized access" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -263,7 +352,7 @@ export async function POST(req: NextRequest) {
     if (!user) {
       return NextResponse.json(
         { success: false, msg: "User does not exist" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -277,7 +366,7 @@ export async function POST(req: NextRequest) {
     if (likeExisting) {
       return NextResponse.json(
         { success: true, msg: `Already liked this ${itemType}` },
-        { status: 200 }
+        { status: 200 },
       );
     }
 
@@ -293,20 +382,20 @@ export async function POST(req: NextRequest) {
     if (!savedLiked) {
       return NextResponse.json(
         { success: false, msg: `Failed to like ${itemType}` },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     return NextResponse.json(
       { success: true, msg: `${itemType} liked successfully`, like },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error: any) {
     console.log("Error while liking ==> ", error);
 
     return NextResponse.json(
       { success: false, msg: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -320,7 +409,7 @@ export async function DELETE(req: NextRequest) {
   if (!token) {
     return NextResponse.json(
       { success: false, msg: "Unauthorized access" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -331,7 +420,7 @@ export async function DELETE(req: NextRequest) {
     if (!user) {
       return NextResponse.json(
         { success: false, msg: "User does not exist" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -351,13 +440,13 @@ export async function DELETE(req: NextRequest) {
 
     return NextResponse.json(
       { success: true, msg: `${itemType} deleted from likes successfully` },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error: any) {
     console.log("Error while deleting like ==> ", error);
     return NextResponse.json(
       { success: false, msg: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

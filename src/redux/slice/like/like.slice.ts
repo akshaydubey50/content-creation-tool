@@ -1,14 +1,16 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
-interface ItemId {
+// Define the Item model
+interface Item {
   itemId: string;
-  likeCount: number;
+  totalLikes: number;
+  isLikedByUser: boolean;
 }
 
 // Define the Like model
 interface Like {
-  itemIds: ItemId[];
   itemType: "tools" | "prompts";
+  items: Item[];
 }
 
 // Define the initial state and its type
@@ -58,8 +60,7 @@ export const addLike = createAsyncThunk<
     throw new Error("Failed to add like");
   }
   await dispatch(getLikeList()); // Re-fetch the like list after adding a like
-  // return { itemType, itemIds: [itemId] };
-  return { itemType, itemIds: [{ itemId, likeCount: 1 }] };
+  return { itemType, items: [{ itemId, totalLikes: 1, isLikedByUser: true }] }; // Adjusted to reflect the response structure
 });
 
 // Delete a like
@@ -76,7 +77,6 @@ export const deleteLike = createAsyncThunk<
     throw new Error("Failed to delete like");
   }
   await dispatch(getLikeList()); // Re-fetch the like list after deleting a like
-  // return itemId as string;
   return { itemId, itemType };
 });
 
@@ -126,9 +126,9 @@ const likeSlice = createSlice({
           (like) => like.itemType === action.payload.itemType
         );
 
-        // If found, add the itemId to the itemIds array, else push a new like object
+        // If found, add the item to the items array, else push a new like object
         if (existingLike) {
-          existingLike.itemIds.push(action.payload.itemIds[0]);
+          existingLike.items.push(action.payload.items[0]);
         } else {
           state.likedList.push(action.payload);
         }
@@ -153,8 +153,7 @@ const likeSlice = createSlice({
             (like) => like.itemType === action.payload.itemType
           );
           if (existingLiked) {
-            // Update to filter based on itemId property of ItemId objects
-            existingLiked.itemIds = existingLiked.itemIds.filter(
+            existingLiked.items = existingLiked.items.filter(
               (item) => item.itemId !== action.payload.itemId
             );
           }

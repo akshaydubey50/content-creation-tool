@@ -24,7 +24,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({
 
   return (
     <button
-      title="Likes"
+      title={`Like ${itemName}`}
       type="button"
       onClick={handleLike}
       className="flex items-center gap-x-1"

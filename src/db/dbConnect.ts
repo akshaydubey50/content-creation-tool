@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { MongodbConf } from "@/conf/conf";
+// import { MongodbConf } from "@/conf/conf";
+import { MongodbConf } from "../conf/conf";
 
 type ConnectionObject = {
   isConnected?: number;
@@ -19,8 +20,11 @@ export default async function connectDB(): Promise<void> {
       throw new Error("Please define MONGO_URL env variable");
     }
 
+    // const db = await mongoose.connect(
+    //   MongodbConf.MONGO_URI + "/" + MongodbConf.DB_NAME,
+    // );
     const db = await mongoose.connect(
-      MongodbConf.MONGO_URI + "/" + MongodbConf.DB_NAME
+      "mongodb+srv://aannkkiitt:oDVxyUJo43hW0i5U@cluster0.9dzgtrv.mongodb.net/Content_Tool",
     );
     connection.isConnected = db.connections[0].readyState;
 

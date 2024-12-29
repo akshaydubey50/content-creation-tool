@@ -81,12 +81,13 @@ export default function ProductList({ currentCategory }: ProductListProps) {
   useEffect(() => {
     if (productList?.length === 0) {
       dispatch(fetchProductList());
+      dispatch(getLikeList());
     }
   }, [productList, dispatch]);
 
   useEffect(() => {
+    
     if (session?.user) {
-      dispatch(getLikeList());
       dispatch(getBookmarkList());
     }
   }, [dispatch, session]);
@@ -117,7 +118,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
               key={item.id}
               product={item}
               isBookmark={isProductBookmarked(item, bookmarkList)}
-              totalLikes={item?.totalLikes}
+              // totalLikes={item?.totalLikes}
             />
           );
         })}
