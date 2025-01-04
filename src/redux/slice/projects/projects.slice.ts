@@ -1,37 +1,26 @@
-import { ProjectModel, ResourceModel } from "@/models/airtable.model";
+import { ProjectModel } from "@/models/airtable.model";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
-// Define the shape of the initial state
 interface ProjectsState {
     isLoading: boolean;
     error: string | null;
     projectList: ProjectModel[];
-    filter: ProjectFilter;
-    searchQuery: string;
-
-}
-interface ProjectFilter{
-    category: string[],
-    search: string[],
-    projectType: string[]
+    filter: {
+        groupFilter: ProjectModel[];
+    };
 }
 
-// Define the initial state
 const initialState: ProjectsState = {
     isLoading: false,
     error: null,
     projectList: [],
     filter: {
-        category: [],
-        search: [],
-        projectType: []
-    },
-    searchQuery: "",
+        groupFilter: []
+    }
 };
 
-// Async thunk to fetch data from the Airtable list
 export const fetchProjectsList = createAsyncThunk<
-    ProjectsState["projectList"],
+    ProjectModel[],
     void
 >("fetch/projectList", async () => {
     const response = await fetch("/api/projects");
@@ -39,44 +28,30 @@ export const fetchProjectsList = createAsyncThunk<
     return responseBody.data;
 });
 
-// Create the slice
 const projectsSlice = createSlice({
     name: "projectList",
     initialState,
     reducers: {
-
-
-        setSearchQuery: (state, action) => {
-            console.log("action", action.payload)
-            state.searchQuery = action.payload;
+        setGroupFilter: (state, action: PayloadAction<{ groupFilter: ProjectModel[] }>) => {
+            state.filter.groupFilter = action.payload.groupFilter;
         },
-        
-        setFilter: (state, action) => {
-            console.log("action", action.payload)
-            state.filter = action.payload;
-        },
-
     },
     extraReducers: (builder) => {
-        builder.addCase(
-            fetchProjectsList.fulfilled,
-            (state, action: PayloadAction<ProjectsState["projectList"]>) => {
+        builder
+            .addCase(fetchProjectsList.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(fetchProjectsList.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.projectList = action.payload;
-            }
-        );
-        builder.addCase(fetchProjectsList.pending, (state) => {
-            state.isLoading = true;
-        });
-        builder.addCase(fetchProjectsList.rejected, (state, action) => {
-            state.isLoading = false;
-            state.error = action.error.message ?? "Something went wrong";
-        });
+                state.filter.groupFilter = action.payload; // Initialize with all projects
+            })
+            .addCase(fetchProjectsList.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.error.message ?? "Something went wrong";
+            });
     },
 });
 
-// Export the actions (if you have defined ProjectModel in reducers)
-export const { } = projectsSlice.actions;
-
-// Export the reducer
+export const { setGroupFilter } = projectsSlice.actions;
 export default projectsSlice.reducer;
