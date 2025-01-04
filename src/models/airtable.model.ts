@@ -59,3 +59,18 @@ export interface ExpertModel {
     "Platforms": string[];
   };
 }
+
+export interface ProjectModel {
+  id: string;
+  fields: {
+    "Project Title": string;
+    Status: string,
+    Category: string[];
+    Budget: string;
+    Deadline: string,
+    "Project Description": string;
+    ProjectType: string;
+    ProjectURL: string;
+  };
+}
+
