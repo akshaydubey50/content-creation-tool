@@ -23,9 +23,13 @@ export const fetchProjectsList = createAsyncThunk<
     ProjectModel[],
     void
 >("fetch/projectList", async () => {
-    const response = await fetch("/api/projects");
-    const responseBody = await response.json();
-    return responseBody.data;
+   try{
+       const response = await fetch("/api/projects");
+       const responseBody = await response?.json();
+       return responseBody.data;
+   }catch{
+    return []
+   }
 });
 
 const projectsSlice = createSlice({
