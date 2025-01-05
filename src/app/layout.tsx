@@ -44,9 +44,11 @@ export default function RootLayout({
             <Toaster />
             <Navbar />
             <main 
-            className="flex  justify-center flex-grow"
+            className="flex  justify-center"
             >
+              <div className="grow">
               {children}
+              </div>
             </main>
             <Footer />
           </Providers>
