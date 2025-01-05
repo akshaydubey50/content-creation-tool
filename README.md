@@ -35,3 +35,13 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 checking out the branch == master dev
 
+
+Title {string}
+Description {string}
+Body content {rich text}
+Slug {string}
+Author { name, img }
+Date/Updated Date
+Thumbnail {img}
+Category {string}
+Tags {string}
