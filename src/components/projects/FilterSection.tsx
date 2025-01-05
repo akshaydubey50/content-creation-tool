@@ -6,53 +6,50 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/store'
 import { ProjectModel } from '../../models/airtable.model'
-import { setGroupFilter } from '@/redux/slice/projects/projects.slice'
+import { setGroupFilter, setSearchQuery, setSelectedProjectType, setSelectedCategory } from '@/redux/slice/projects/projects.slice'
 
 export default function ProjectFilterSection() {
-    const { projectList } = useSelector((state: RootState) => state.projects)
+    const { projectList, searchQuery, selectedCategory, selectedProjectType } = useSelector((state: RootState) => state.projects)
     const dispatch = useDispatch()
 
-    const [search, setSearch] = useState('')
-    const [category, setCategory] = useState('all')
-    const [projectType, setProjectType] = useState('all')
 
     // Combined filter function that handles all filter types
     const applyFilters = useCallback(() => {
         if (!projectList?.length) return
 
-        const filteredProjects = projectList.filter((project: ProjectModel) => {
-            const matchesSearch = !search ||
-                project.fields["Project Title"]?.toLowerCase().includes(search.toLowerCase())
+        const filteredProjects = projectList?.filter((project: ProjectModel) => {
+            const matchesSearch = !searchQuery ||
+                project.fields["Project Title"]?.toLowerCase().includes(searchQuery.toLowerCase())
 
-            const matchesCategory = category === 'all' ||
-                project.fields.Category?.includes(category)
+            const matchesCategory = selectedCategory === 'all' ||
+                project.fields.Category?.includes(selectedCategory)
 
-            const matchesProjectType = projectType === 'all' ||
-                project.fields.ProjectType?.toLowerCase() === projectType.toLowerCase()
+            const matchesProjectType = selectedProjectType === 'all' ||
+                project.fields.ProjectType?.toLowerCase() === selectedProjectType.toLowerCase()
 
             return matchesSearch && matchesCategory && matchesProjectType
         })
 
         dispatch(setGroupFilter({ groupFilter: filteredProjects }))
-    }, [projectList, search, category, projectType, dispatch])
+    }, [projectList, searchQuery, selectedCategory, selectedProjectType, dispatch])
 
     // Handle individual filter changes
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearch(e.target.value)
+        dispatch(setSearchQuery({searchQuery:e.target.value}))
     }
 
     const handleCategoryChange = (selectedCategory: string) => {
-        setCategory(selectedCategory)
+        dispatch(setSelectedCategory({selectedCategory}))
     }
 
     const handleProjectTypeChange = (selectedType: string) => {
-        setProjectType(selectedType)
+        dispatch(setSelectedProjectType({selectedProjectType:selectedType}))
     }
 
     // Apply filters whenever any filter value changes
     useEffect(() => {
         applyFilters()
-    }, [search, category, projectType, applyFilters])
+    }, [searchQuery, selectedCategory, selectedProjectType, applyFilters])
 
     // Memoized unique categories and project types
     const getProjectCategory = useMemo(() => {
@@ -78,11 +75,11 @@ export default function ProjectFilterSection() {
             <Input
                 type="text"
                 placeholder="Search projects..."
-                value={search}
+                value={searchQuery}
                 onChange={handleSearch}
                 className="flex-grow"
             />
-            <Select value={category} onValueChange={handleCategoryChange}>
+            <Select value={selectedCategory} onValueChange={handleCategoryChange}>
                 <SelectTrigger className="w-full md:w-[200px]">
                     <SelectValue placeholder="Category" />
                 </SelectTrigger>
@@ -99,7 +96,7 @@ export default function ProjectFilterSection() {
                     ))}
                 </SelectContent>
             </Select>
-            <Select value={projectType} onValueChange={handleProjectTypeChange}>
+            <Select value={selectedProjectType} onValueChange={handleProjectTypeChange}>
                 <SelectTrigger className="w-full md:w-[200px]">
                     <SelectValue placeholder="Project Type" />
                 </SelectTrigger>
