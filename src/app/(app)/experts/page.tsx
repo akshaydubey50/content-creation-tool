@@ -1,6 +1,13 @@
-"use client";
 
 import ExpertsMainScreen from "@/components/experts/ExpertsMainScreen";
+
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Content Creation Experts | Writers, Copywriters, Marketers & More",
+    description:
+        "Find top content creation experts—writers, ghostwriters, copywriters, social media marketers, and personal branding specialists—to enhance your content and strategy.",
+};
 
 export default function Experts() {
 

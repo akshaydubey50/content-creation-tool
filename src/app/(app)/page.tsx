@@ -1,36 +1,11 @@
+import HomScreen from "@/components/home/HomScreen";
+import type { Metadata } from "next";
 
-
-"use client";
-import ProductList from "@/components/card/ProductList";
-import HeroSection from "@/components/herosection/HeroSection";
-import FilterSection from "@/components/filter/FilterSection";
-import NewsLetter from "@/components/newsletter";
-import FAQ from "@/components/faq";
-import Button from "@/components/common/Button";
-import { useRouter } from "next/navigation";
-import PromptLibrary from "@/components/prompt/prompt-library";
-
+export const metadata: Metadata = {
+  title: "Directory of 200+ Content Creation Tools - Content Creation FYI",
+  description: "Explore 200+ content creation tools for AI writing, social media, design, video editing, and more. Find free, free trial, paid, and premium options to boost your workflow."
+};
 export default function Home() {
-  const router = useRouter();
-
-  const allToolsClickHandler = () => {
-    router.push("/tools");
-  };
-  const itemPerPageCount = 6;
-  return (
-    <div className="mb-8 overflow-x-hidden">
-      <HeroSection />
-      <FilterSection />
-      <ProductList itemsCount={itemPerPageCount} />
-      <div className="flex items-center justify-center">
-        <button className="px-12 py-3 mt-4 text-lg font-semibold text-white border-2 rounded-full border-DarkOrange bg-DarkOrange hover:bg-orange-300 focus:bg-DarkOrange" onClick={allToolsClickHandler}>
-          All Tools
-        </button>
-      </div>
-      <div className="px-6 xl:px-0">
-        <NewsLetter />
-      </div>
-    </div>
-
-  );
+  return <HomScreen />
+   
 }
