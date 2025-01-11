@@ -11,9 +11,12 @@ export const postsQuery = groq`*[_type == "post"] {
 }`; 
 
 // Get a single post by its slug
-export const postQuery = groq`*[_type == "post" && slug.current == $slug][0]{ 
-    title, description, mainImage, body
-  }`;
+  export const postQuery = groq`*[_type == "post" && slug.current == $slug][0]{ 
+      title, description, mainImage, body,
+      "headings":body[style in ["h2","h3"]],
+        "imageURL": mainImage.asset->url,  
+          "authorName": author->name,
+    }`; 
 
 // Get all post slugs
 export const postPathsQuery = groq`*[_type == "post" && defined(slug.current)][]{
