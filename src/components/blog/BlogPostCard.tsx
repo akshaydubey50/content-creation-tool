@@ -12,21 +12,21 @@ console.log("post", post)
     <Card className="max-w-md overflow-hidden bg-gray-50/50 h-full">
       <div className="p-6 space-y-4">
         {/* Image Container */}
-        <div className="flex justify-center py-8 bg-gray-100 rounded-lg">
+        <div className="flex justify-center  bg-gray-100 rounded-lg">
           <Image
-            src="/placeholder.svg?height=100&width=100"
+            src={post?.imageURL ||""}
             alt="Text Editor Icon"
-            width={100}
-            height={100}
-            className="text-blue-600"
+            width={1366}
+            height={768}
+            className="text-blue-600 rounded-lg object-fit"
           />
         </div>
 
         {/* Content */}
         <div className="space-y-4">
-          <div className="text-sm text-gray-500 uppercase tracking-wide">
+          {/* <div className="text-sm text-gray-500 uppercase tracking-wide">
             Blog Post
-          </div>
+          </div> */}
           
           <h2 className="text-2xl font-bold tracking-tight">
            {post?.title}

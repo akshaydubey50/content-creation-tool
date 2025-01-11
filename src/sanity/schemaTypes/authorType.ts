@@ -29,13 +29,13 @@ export const authorType = defineType({
       name: 'bio',
       type: 'array',
       of: [
-        {
+        defineArrayMember({
           type: 'block',
           styles: [{ title: 'Normal', value: 'normal' }],
           lists: [],
-        },
+        }),
       ],
-    }),
+    } as any), // Type assertion to bypass type error
   ],
   preview: {
     select: {
