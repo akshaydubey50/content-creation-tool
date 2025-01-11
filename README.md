@@ -44,4 +44,3 @@ Author { name, img }
 Date/Updated Date
 Thumbnail {img}
 Category {string}
-Tags {string}
