@@ -33,9 +33,9 @@ export async function GET() {
         offset = response.data.offset;
       }
     } while (offset);
-    // const statusRecord = expertList?.filter(
-    //   (item: ExpertModel) => item.fields?.Stage?.toLowerCase() == "done"
-    // );
+    const statusRecord = expertList?.filter(
+      (item: ExpertModel) => item.fields?.Status?.toLowerCase() == "done"
+    );
 
     return NextResponse.json(
       {

@@ -4,7 +4,7 @@ import { set } from "mongoose";
 
 // Define the state interface
 
-interface ExpertsFilter {
+export interface ExpertsFilter {
     selectedSkills: string[];
     selectedLanguages: string[];
     selectedExpertTypes: string[];

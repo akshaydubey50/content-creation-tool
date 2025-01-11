@@ -14,6 +14,7 @@ import { RootState } from '../../redux/store'
 import { updateFilters } from "@/redux/slice/experts/experts.slice"
 import { useState } from 'react'
 import debounce from 'lodash/debounce'
+import { ExpertModel } from '../../models/airtable.model';
 
 export default function ExpertsFilter() {
   const [skillSearch, setSkillSearch] = useState('')
@@ -26,7 +27,7 @@ export default function ExpertsFilter() {
     const skillList = new Set<string>()
     if (!expertList?.length) return []
 
-    expertList.forEach((expert) => {
+    expertList.forEach((expert: ExpertModel) => {
       expert.fields?.Skills?.forEach((skill: string) => {
         skillList.add(skill.trim())
       })
@@ -85,13 +86,7 @@ export default function ExpertsFilter() {
     dispatch(updateFilters({ selectedExpertTypes: updatedTypes }))
   }, [dispatch, filters.selectedExpertTypes])
 
-  // Debounced search handler
-  const debouncedSearch = useCallback(
-    debounce((value: string) => {
-      dispatch(updateFilters({ searchQuery: value }))
-    }, 300),
-    [dispatch]
-  )
+
 
   return (
     <Card className="sticky top-4">
