@@ -25,7 +25,7 @@ export default function ExpertCard({ expert }: any) {
             <div className="flex justify-between items-start">
               <div className="flex items-center space-x-2">
                 <p className="text-lg font-medium text-gray-900">
-                  {`${firstName} ${lastName}`} <span className="text-gray-500">{Country}</span>
+                  {`${firstName} ${lastName}`} <span className="text-gray-500 uppercase">{Country.slice(0,2)}</span>
                 </p>
                 {Verified && (
                   <Badge variant="secondary" className="text-xs bg-orange-100 text-orange-700 border-orange-200">
