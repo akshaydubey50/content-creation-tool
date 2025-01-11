@@ -3,7 +3,7 @@
 import ExpertsMainScreen from "@/components/experts/ExpertsMainScreen";
 
 export default function Experts() {
-
+    const itemCountPerPage = 12;
     return (
     <>
     <div className="min-w-xs bg-light-gray  h-[250px] lg:h-[300px] flex items-center justify-center px-4 mb-4">
@@ -15,7 +15,7 @@ export default function Experts() {
     </div>
     <div className="px-4 mx-auto min-w-xs max-w-8xl">
     </div>
-        <ExpertsMainScreen />
+            <ExpertsMainScreen itemsCount={itemCountPerPage} />
     </>
     );
 }

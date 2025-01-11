@@ -2,6 +2,12 @@ import Image from 'next/image'
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle } from 'lucide-react'
+import ExpertCard from './ExpertCard'
+import React, { useEffect, useMemo, useState } from "react"
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState, AppDispatch } from '../../redux/store';
+import { fetchExpertsList } from '@/redux/slice/experts/experts.slice'
+import Pagination from '../pagination/Pagination'
 
 const experts = [
     {
@@ -116,60 +122,49 @@ const experts = [
     }
 ]
 
-export default function ExpertList() {
+
+
+export default function ExpertList({ itemsCount }: { itemsCount: number }) {
+    const [currentPage, setCurrentPage] = useState(1);
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
+    const dispatch: AppDispatch = useDispatch()
+    const filterList = useSelector((store: RootState) => store.experts.expertsList)
+
+
+    // Calculate pagination
+    const startIndex = (currentPage - 1) * itemsCount
+    const endIndex = startIndex + itemsCount
+
+
+    // Get current page items using memoization
+    const currentPageItems = useMemo(() => {
+        console.log("expertList::::::::::", filterList)
+        return filterList?.slice(startIndex, endIndex)
+    }, [filterList, startIndex, endIndex])
+
+    useEffect(() => {
+        if (filterList?.length === 0) {
+            dispatch(fetchExpertsList())
+        }
+    }, [dispatch, filterList.length])
+
     return (
         <div className="grid grid-cols-1 gap-6">
-            {experts.map((expert, index) => (
-                <Card key={index} className="overflow-hidden">
-                    <CardContent className="p-6">
-                        <div className="flex items-start space-x-6">
-                            <Image
-                                src={expert.image}
-                                alt={expert.name}
-                                width={60}
-                                height={60}
-                                className="rounded-full"
-                            />
-                            <div className="flex-1 min-w-0 space-y-1">
-                                <div className="flex justify-between items-start">
-                                    <div className="flex items-center space-x-2">
-                                        <p className="text-lg font-medium text-gray-900">
-                                            {expert.name} <span className="text-gray-500">({expert.countryCode})</span>
-                                        </p>
-                                        {expert.verified && (
-                                            <Badge variant="secondary" className="text-xs bg-orange-100 text-orange-700 border-orange-200">
-                                                <CheckCircle className="w-3 h-3 mr-1" />
-                                                Verified
-                                            </Badge>
-                                        )}
-                                    </div>
-                                    <Badge variant="outline" className="text-xs">
-                                        {expert.expertType}
-                                    </Badge>
-                                </div>
-                                <p className="text-base text-gray-500">
-                                    {expert.headline}
-                                </p>
-                                <div className="flex flex-wrap gap-2">
-                                    {expert.skills.slice(0, 5).map((skill, skillIndex) => (
-                                        <Badge key={skillIndex} variant="secondary" className="text-xs">
-                                            {skill}
-                                        </Badge>
-                                    ))}
-                                    {expert.skills.length > 5 && (
-                                        <Badge variant="secondary" className="text-xs">
-                                            +{expert.skills.length - 5}
-                                        </Badge>
-                                    )}
-                                </div>
-                                <p className="text-sm text-gray-600 line-clamp-3">
-                                    {expert.description}
-                                </p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            ))}
+            {currentPageItems?.map((expert, index) => {
+                const { fields } = expert
+                return (
+                    <React.Fragment key={index}>
+                        <ExpertCard expert={fields} key={index} />
+                    </React.Fragment>
+                )
+            }
+            )}
+            <Pagination currentPage={currentPage}
+                totalItems={filterList?.length}
+                onPageChange={handlePageChange} />
         </div>
     )
 }
