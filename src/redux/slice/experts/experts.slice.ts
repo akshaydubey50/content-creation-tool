@@ -1,34 +1,34 @@
 import { ExpertModel } from "@/models/airtable.model";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { set } from "mongoose";
 
 // Define the state interface
 
-interface ExpertsFilter{
-    category: ExpertModel[],
-    search: ExpertModel[],
-    verified: ExpertModel[]
+export interface ExpertsFilter {
+    selectedSkills: string[];
+    selectedLanguages: string[];
+    selectedExpertTypes: string[];
+    searchQuery: string;
+    isVerified: boolean;
 }
 interface ExpertsState {
     isLoading: boolean;
     isError: boolean;
     expertsList: ExpertModel[];
     filter: ExpertsFilter;
-    searchQuery: string;
-    isVerifiedChecked: boolean;
 }
 
 const initialState: ExpertsState = {
     isLoading: true,
     isError: false,
     expertsList: [],
-    filter:{
-        category:[],
-        search:[],
-        verified:[]
+    filter: {
+        selectedSkills: [],
+        selectedLanguages: [],
+        selectedExpertTypes: [],
+        searchQuery: "",
+        isVerified: false,
     },
-    searchQuery:"",
-    isVerifiedChecked:false,
 };
 
 export const fetchExpertsList = createAsyncThunk<
@@ -48,19 +48,14 @@ const expertsSlice = createSlice({
     initialState,
     reducers: {
 
-      
-        setSearchQuery: (state, action) => {
-            console.log("action", action.payload)
-            state.searchQuery = action.payload;
+        updateFilters: (state, action: PayloadAction<Partial<ExpertsFilter>>) => {
+            state.filter = { ...state.filter, ...action.payload };
         },
-        setVerifiedChecked: (state, action) => {
-            state.isVerifiedChecked = action.payload;
-        },
-        setFilter: (state, action) => {
-            console.log("action", action.payload)
-            state.filter = action.payload;
-        },  
-        
+        resetFilters: (state) => {
+            state.filter = initialState.filter;
+        }
+
+
     },
     extraReducers: (builder) => {
         builder
@@ -79,23 +74,10 @@ const expertsSlice = createSlice({
     },
 });
 
-// Selector to get the experts list
-export const selectExpertsList = (state: {
-    expertsList: ExpertsState;
-}) => state.expertsList.expertsList;
 
-// Selector to get loading state
-export const selectIsLoading = (state: {
-    expertsList: ExpertsState;
-}) => state.expertsList.isLoading;
-
-// Selector to get error state
-export const selectIsError = (state: {
-    expertsList: ExpertsState;
-}) => state.expertsList.isError;
 
 // Export actions (if you have any in the reducers, otherwise this can be omitted)
-export const { setFilter,setSearchQuery,setVerifiedChecked } = expertsSlice.actions;
+export const { updateFilters ,resetFilters} = expertsSlice.actions;
 
 // Export the reducer
 export default expertsSlice.reducer;

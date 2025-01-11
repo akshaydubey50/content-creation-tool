@@ -18,7 +18,8 @@ const nextConfig = {
       "ik.imagekit.io",
       "placehold.co",
       "media.licdn.com",
-      "pbs.twimg.com"
+      "pbs.twimg.com",
+      "cdn.sanity.io"
     ],
   },
 };
