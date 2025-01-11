@@ -69,7 +69,7 @@ export default function ExpertList({ itemsCount }: { itemsCount: number }) {
     }
 
 
-    if (filter?.searchQuery && currentPageItems?.length === 0) {
+    if ( currentPageItems?.length === 0) {
         return <div className='text-center font-semibold text-2xl'>No Record found for Experts</div>
     }
 
