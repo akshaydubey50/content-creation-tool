@@ -18,15 +18,15 @@ import { getImageDimensions } from "@sanity/asset-utils";
 import Link from 'next/link';
 import NewsLetter from '@/components/newsletter';
 import { useParams, usePathname } from 'next/navigation';
+import { SanityConf } from '@/conf/conf';
 
 const builder = imageUrlBuilder(client);
-
 interface PostProps {
   post: SanityDocument;
 }
 const imageBuilder = urlBuilder({
-  projectId: "gv9plwtb", // Replace with your Sanity project ID
-  dataset: "production", // Replace with your Sanity dataset
+  projectId: SanityConf.PROJECT_ID, 
+  dataset: SanityConf.DATASET,
 });
 
 export const urlFor = (source:any) => imageBuilder.image(source);

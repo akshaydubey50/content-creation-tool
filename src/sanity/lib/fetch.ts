@@ -24,18 +24,17 @@ export async function sanityFetch<QueryResponse>({
       "The `SANITY_API_READ_TOKEN` environment variable is required."
     );
   }
-  const isDevelopment = process.env.NODE_ENV === "development";
 
   return client
-    .withConfig({ useCdn: true })
+    .withConfig({ useCdn: false }) // Changed to false to get live data
     .fetch<QueryResponse>(query, params, {
-      cache: isDevelopment || isDraftMode ? undefined : "force-cache",
+      cache: 'no-store', // Forces fresh data fetches
       ...(isDraftMode && {
         token: token,
         perspective: "previewDrafts",
       }),
       next: {
-        ...(isDraftMode && { revalidate: 30 }),
+        revalidate: 0, // Disabled caching
         tags,
       },
     });
