@@ -1,21 +1,32 @@
 import { SanityDocument } from "@sanity/client";
-import { postPathsQuery, postQuery } from "@/sanity/lib/queries";
+import { postQuery } from "@/sanity/lib/queries";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { client } from "@/sanity/lib/client";
 import Post from "./Post";
+import { Card } from "@/components/ui/card";
 
-export const revalidate = 60;
+// Set dynamic rendering
+export const dynamic = 'force-dynamic';
 
-export async function generateStaticParams() {
-  const posts = await client.fetch(postPathsQuery);
-  return posts
+// Remove generateStaticParams since we don't need static generation anymore
+
+interface PageProps {
+  params: {
+    slug: string;
+  };
 }
 
-const PostPage = async ({ params }: { params: any }) => {
-  const post = await sanityFetch<SanityDocument>({ query: postQuery, params })
-  return (
-    <Post post={post} />
-  )
+const PostPage = async ({ params }: PageProps) => {
+  const post = await sanityFetch<SanityDocument>({ query: postQuery, params });
+  
+  if (!post) {
+    return (
+      <Card>
+        <h1>Post not found</h1>
+      </Card>
+    );
+  }
+
+  return <Post post={post} />;
 }
 
-export default PostPage
+export default PostPage;
