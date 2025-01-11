@@ -1,7 +1,12 @@
-"use client";
+"use client"
 import Resource from "@/components/resources";
 import * as RoutePath from "@/constants/RoutePath";
 import { useRouter } from "next/navigation";
+// import type { Metadata } from "next";
+
+// export const metadata: Metadata = {
+//   title: "Resources - Content Creation FYI",
+// };
 
 export default function Resources() {
   const route = useRouter();

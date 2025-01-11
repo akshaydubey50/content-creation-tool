@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useCallback } from "react";
-import { useSearchParams, useParams } from "next/navigation";
+import { useSearchParams, useParams, usePathname } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductList } from "@/redux/slice/product/product.slice";
 import { getBookmarkList } from "@/redux/slice/bookmark/bookmark.slice";
@@ -16,12 +16,13 @@ import { getLikeList } from "@/redux/slice/like/like.slice";
 
 interface ProductListProps {
   currentCategory?: string;
+  itemsCount: number
 }
 
-export default function ProductList({ currentCategory }: ProductListProps) {
+export default function ProductList({ currentCategory, itemsCount=12 }: ProductListProps) {
   const id = useSearchParams().get("id");
   const params = useParams();
-  const slug = params;
+  const homePath = usePathname();
 
   const dispatch: AppDispatch = useDispatch();
   const { data: session } = useSession();
@@ -32,7 +33,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     (state: RootState) => state.bookmarks.bookmarkList
   );
   const upVotedList = useSelector((state: RootState) => state.likes.likedList);
-  console.log("upVotedList::::::::::",upVotedList)
+  console.log("upVotedList::::::::::", upVotedList)
 
   const isBookmark = useSelector(
     (state: RootState) => state.bookmarks.isBookmarkChecked || false
@@ -47,7 +48,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     handlePageChange,
     totalProducts,
     filteredProducts,
-  } = usePaginatedFilteredProducts(12, {
+  } = usePaginatedFilteredProducts(itemsCount, {
     currentCategory,
     productList,
     dropDownCategoryArr: useSelector(
@@ -82,7 +83,7 @@ export default function ProductList({ currentCategory }: ProductListProps) {
     if (productList?.length === 0) {
       dispatch(fetchProductList());
     }
-  }, [productList, dispatch]);
+  }, []);
 
   useEffect(() => {
     dispatch(getLikeList());
@@ -135,13 +136,16 @@ export default function ProductList({ currentCategory }: ProductListProps) {
           </h1>
         </>
       )}
-      {totalProducts > 12 && (
-        <Pagination
-          currentPage={currentPage}
-          totalItems={totalProducts}
-          onPageChange={handlePageChange}
-        />
-      )}
+      <div className={`${homePath === "/" ? "hidden" : "block"}`}>
+        {totalProducts > itemsCount && (
+          <Pagination
+            itemsCount={itemsCount}
+            currentPage={currentPage}
+            totalItems={totalProducts}
+            onPageChange={handlePageChange}
+          />
+        )}
+      </div>
     </>
   );
 }
