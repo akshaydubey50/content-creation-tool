@@ -81,6 +81,7 @@ export default function ExpertList({ itemsCount }: { itemsCount: number }) {
             {
                 filteredExperts?.length > 12 && <Pagination
                     currentPage={currentPage}
+                    itemsCount={itemsCount}
                     totalItems={filteredExperts?.length}
                     onPageChange={setCurrentPage}
                 />
