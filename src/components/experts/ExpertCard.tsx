@@ -1,14 +1,14 @@
 import Image from 'next/image'
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { CheckCircle } from 'lucide-react'
+import { CheckCircle, User } from 'lucide-react'
+
 
 export default function ExpertCard({ expert }: any) {
   console.log("expert", expert)
   const { "First Name": firstName, "Last Name": lastName, ExpertType, ProfileImage, "Professional Bio": professionalBio, Verified, Country, Headline, Skills:skills } = expert;
 
-
-  const defaultImage = "https://placehold.co/50x50/png"
+  const defaultImage = <User />
 
   return (
     <Card className="overflow-hidden">

@@ -33,6 +33,7 @@ export async function GET() {
         offset = response.data.offset;
       }
     } while (offset);
+    
     const statusRecord = expertList?.filter(
       (item: ExpertModel) => item.fields?.Status?.toLowerCase() == "done"
     );
@@ -40,7 +41,7 @@ export async function GET() {
     return NextResponse.json(
       {
         success: true,
-        data: expertList,
+        data: statusRecord,
       },
       { status: 200 }
     );

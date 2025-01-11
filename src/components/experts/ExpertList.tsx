@@ -6,6 +6,7 @@ import { fetchExpertsList } from '@/redux/slice/experts/experts.slice'
 import Pagination from '../pagination/Pagination'
 import { ExpertModel } from '../../models/airtable.model';
 import { ExpertsFilter } from '../../redux/slice/experts/experts.slice';
+import ExpertCardSkeleton from './ExpertCardSkeleton';
 
 
 export default function ExpertList({ itemsCount }: { itemsCount: number }) {
@@ -40,7 +41,7 @@ export default function ExpertList({ itemsCount }: { itemsCount: number }) {
     };
 
 
-    const { expertsList, filter } = useSelector((state: RootState) => state.experts);
+    const { expertsList, filter,isLoading } = useSelector((state: RootState) => state.experts);
 
     // Apply filters to the expert list
     const filteredExperts = useMemo(() => applyFilters(expertsList, filter), [expertsList, filter]);
@@ -56,6 +57,17 @@ export default function ExpertList({ itemsCount }: { itemsCount: number }) {
             dispatch(fetchExpertsList());
         }
     }, [dispatch, expertsList?.length]);
+
+    if (isLoading) {
+        return (
+            <div className="grid grid-cols-1 gap-6">
+                {Array.from({ length: itemsCount }).map((_, index) => (
+                    <ExpertCardSkeleton key={index} />
+                ))}
+            </div>
+        );
+    }
+
 
     if (filter?.searchQuery && currentPageItems?.length === 0) {
         return <div className='text-center font-semibold text-2xl'>No Record found for Experts</div>
