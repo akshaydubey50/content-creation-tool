@@ -8,6 +8,8 @@ import Providers from "@/providers/Providers";
 import Authprovider from "./Authprovider";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Toaster } from "@/components/ui/toaster";
+import { Metadata } from 'next';
+import { APPConf } from "@/conf/conf";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -16,11 +18,26 @@ const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-export const metadata = {
-  title: "Content Creation FYI",
-  description:
-    "Directory of 200+ content creation tools designed to streamline your process and enhance productivity.",
-};
+interface GenerateMetadataProps {
+  params: { slug?: string };
+  pathname: string;
+}
+
+export async function generateMetadata({ 
+  params, 
+  pathname = '' // provide default value
+}: Partial<GenerateMetadataProps>): Promise<Metadata> {
+  const canonical = `${APPConf.BASE_URL}${pathname}`;
+
+  return {
+    title: "Content Creation FYI",
+    description: "Directory of 200+ content creation tools designed to streamline your process and enhance productivity.",
+    metadataBase: new URL(APPConf.BASE_URL),
+    alternates: {
+      canonical: canonical,
+    }
+  };
+}
 
 export default function RootLayout({
   children,
@@ -43,9 +60,7 @@ export default function RootLayout({
           <Providers>
             <Toaster />
             <Navbar />
-            <main 
-            className="flex  justify-center flex-grow"
-            >
+            <main className="flex justify-center flex-grow">
               {children}
             </main>
             <Footer />

@@ -3,6 +3,7 @@ import { postQuery } from "@/sanity/lib/queries";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import Post from "./Post";
 import { Card } from "@/components/ui/card";
+import Canonical from "@/components/seo/Canonical";
 
 // Set dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -26,7 +27,12 @@ const PostPage = async ({ params }: PageProps) => {
     );
   }
 
-  return <Post post={post} />;
+  return (
+    <>
+      <Canonical path={`/blog/${params.slug}`} />
+      <Post post={post} />
+    </>
+  );
 }
 
 export default PostPage;

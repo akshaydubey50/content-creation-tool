@@ -38,6 +38,7 @@ import {
 import { MapPin, Mail, Phone, Loader2 } from "lucide-react";
 import axios, { AxiosError } from "axios";
 import { useToast } from "@/components/ui/use-toast";
+import Canonical from "@/components/seo/Canonical";
 
 const loginSchema = z.object({
   name: z.string().min(1, "First name is required"),
@@ -101,7 +102,8 @@ export default function ContactUs() {
     { value: "other", label: "Other" },
   ];
   return (
-    <>
+    <> 
+  <Canonical/>    
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <div className="flex flex-col lg:items-center space-y-4  pt-24 pb:4  lg:pb-8">
           <h1 className="font-semibold text-2xl  xl:text-4xl  ">Contact </h1>
