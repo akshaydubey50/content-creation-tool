@@ -5,138 +5,159 @@ import {
   PropmtResourceModel,
   ResourceModel,
 } from "@/models/airtable.model";
+import { sanityFetch } from "@/sanity/lib/fetch";
+import { postsQuery } from "@/sanity/lib/queries";
+import { SanityDocument } from "next-sanity";
 
-// Helper function to safely fetch data
-async function safeFetch(url: string) {
+async function fetchTools() {
   try {
-    const response = await fetch(url, {
-      headers: {
-        'Accept': 'application/json',
-      },
-      next: {
-        revalidate: 3600 // Revalidate every hour
-      }
+    // Fetch data from API
+    const response = await fetch(`${APPConf.BASE_URL}/api/tools`);
+    const { data } = await response.json();
+
+    // Find the matching product
+    return data.map((product: AirtableModel) => {
+      return {
+        name: product?.fields?.Name?.toLowerCase()?.trim()?.replace(/\s/g, "-"),
+        // description: product?.fields?.Description?.toLowerCase(),
+      };
     });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const contentType = response.headers.get("content-type");
-    if (!contentType || !contentType.includes("application/json")) {
-      throw new Error("Response is not JSON");
-    }
-
-    const data = await response.json();
-    return data;
   } catch (error) {
-    console.error(`Error fetching ${url}:`, error);
-    return { data: [] };
+    console.error("Error fetching tools:", error);
+    return [];
   }
 }
 
-async function fetchTools() {
-  const { data } = await safeFetch(`${APPConf.BASE_URL}/api/tools`);
-  return data.map((product: AirtableModel) => ({
-    name: product?.fields?.Name?.toLowerCase?.()?.trim?.()?.replace(/\s/g, "-") || "",
-  })).filter((tool:any) => tool.name); // Filter out items with empty names
-}
-
 async function fetchPrompts() {
-  const { data } = await safeFetch(`${APPConf.BASE_URL}/api/prompts`);
-  return data.map((prompt: PropmtResourceModel) => ({
-    name: prompt?.fields?.Name?.toLowerCase?.()?.trim?.()?.replace(/\s/g, "-") || "",
-  })).filter((prompt:any) => prompt.name);
+  try {
+    // Fetch data from API
+    const response = await fetch(`${APPConf.BASE_URL}/api/prompts`);
+    const { data } = await response.json();
+
+    // Find the matching product
+    return data.map((prompt: PropmtResourceModel) => {
+      return {
+        name: prompt?.fields.Name?.toLowerCase()?.trim()?.replace(/\s/g, "-"),
+      };
+    });
+  } catch (error) {
+    console.error("Error fetching tools:", error);
+    return [];
+  }
 }
 
 async function fetchResources() {
-  const { data } = await safeFetch(`${APPConf.BASE_URL}/api/resources`);
-  return data.map((resource: ResourceModel) => ({
-    name: resource?.fields?.Name?.toLowerCase?.()?.trim?.()?.replace(/\s/g, "-") || "",
-  })).filter((resource:any) => resource.name);
+  try {
+    // Fetch data from API
+    const response = await fetch(`${APPConf.BASE_URL}/api/resources`);
+    const { data } = await response.json();
+
+    // Find the matching product
+    return data.map((product: ResourceModel) => {
+      return {
+        name: product?.fields?.Name?.toLowerCase()?.trim()?.replace(/\s/g, "-"),
+        // description: product?.fields?.Description?.toLowerCase(),
+      };
+    });
+  } catch (error) {
+    console.error("Error fetching tools:", error);
+    return [];
+  }
+}
+
+async function fetchBlogs() {
+  try {
+    const posts = await sanityFetch<SanityDocument[]>({ query: postsQuery });
+    return posts.map((post) => ({
+      slug: post.slug.current,
+      lastModified: post._updatedAt || post._createdAt || new Date(),
+    }));
+  } catch (error) {
+    console.error("Error fetching blogs:", error);
+    return [];
+  }
+}
+
+async function fetchExperts() {
+  try {
+    const response = await fetch(`${APPConf.BASE_URL}/api/experts`);
+    const { data } = await response.json();
+    
+    return data.map((expert: any) => ({
+      slug: expert?.fields?.["First Name"]?.toLowerCase()?.trim()?.replace(/\s/g, "-"),
+      lastModified: expert?.fields?.LastModified || new Date(),
+    }));
+  } catch (error) {
+    console.error("Error fetching experts:", error);
+    return [];
+  }
+}
+
+async function fetchProjects() {
+  try {
+    const response = await fetch(`${APPConf.BASE_URL}/api/projects`);
+    const { data } = await response.json();
+    
+    return data.map((project: any) => ({
+      slug: project?.fields?.Name?.toLowerCase()?.trim()?.replace(/\s/g, "-"),
+      lastModified: project?.fields?.LastModified || new Date(),
+    }));
+  } catch (error) {
+    console.error("Error fetching projects:", error);
+    return [];
+  }
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = APPConf.BASE_URL;
 
-  // Fetch all data concurrently
-  const [tools, resources, prompts] = await Promise.all([
-    fetchTools().catch(() => []),
-    fetchResources().catch(() => []),
-    fetchPrompts().catch(() => []),
-  ]);
+  const tools = (await fetchTools()) || [];
+  const resources = (await fetchResources()) || [];
+  const prompts = (await fetchPrompts()) || [];
+  const blogs = (await fetchBlogs()) || [];
+  const experts = (await fetchExperts()) || [];
+  const projects = (await fetchProjects()) || [];
 
-  // Static routes with their last modified dates
-  const staticRoutes: MetadataRoute.Sitemap = [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/about-us`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/experts`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/prompts`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/resources`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/submit-a-tool`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/tools`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-  ];
+  const staticRoutes = [
+    "",
+    "/about-us",
+    "/contact",
+    "/experts",
+    "/prompts",
+    "/resources",
+    "/submit-a-tool",
+    "/tools",
+    "/blogs",
+    "/projects",
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date(),
+  }));
 
-  // Dynamic routes
-  const dynamicRoutes: MetadataRoute.Sitemap = [
-    ...tools.map((tool:any) => ({
+  const dynamicRoutes = [
+    ...tools.map((tool: any) => ({
       url: `${baseUrl}/tools/${tool.name}`,
       lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
     })),
-    ...prompts.map((prompt:any) => ({
+    ...prompts.map((prompt: any) => ({
       url: `${baseUrl}/prompts/${prompt.name}`,
       lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
     })),
-    ...resources.map((resource:any) => ({
+    ...resources.map((resource: any) => ({
       url: `${baseUrl}/resources/${resource.name}`,
       lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
+    })),
+    ...blogs.map((blog: any) => ({
+      url: `${baseUrl}/blogs/${blog.slug}`,
+      lastModified: blog.lastModified,
+    })),
+    ...experts.map((expert: any) => ({
+      url: `${baseUrl}/experts/${expert.slug}`,
+      lastModified: expert.lastModified,
+    })),
+    ...projects.map((project: any) => ({
+      url: `${baseUrl}/projects/${project.slug}`,
+      lastModified: project.lastModified,
     })),
   ];
 
