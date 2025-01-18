@@ -1,4 +1,5 @@
 import PromptLibrary from "@/components/prompt/prompt-library";
+import Canonical from "@/components/seo/Canonical";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

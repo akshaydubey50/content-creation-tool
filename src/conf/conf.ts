@@ -39,3 +39,8 @@ export const MongodbConf = {
 export const APPConf = {
   BASE_URL: String(process.env.NEXTAUTH_URL),
 };
+
+export const SanityConf={
+  PROJECT_ID: String(process.env.NEXT_PUBLIC_SANITY_PROJECT_ID),
+  DATASET: String(process.env.NEXT_PUBLIC_SANITY_DATASET),
+}

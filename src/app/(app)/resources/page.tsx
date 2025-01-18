@@ -1,5 +1,6 @@
 "use client"
 import Resource from "@/components/resources";
+import Canonical from "@/components/seo/Canonical";
 import * as RoutePath from "@/constants/RoutePath";
 import { useRouter } from "next/navigation";
 // import type { Metadata } from "next";
@@ -14,6 +15,8 @@ export default function Resources() {
   if(true){
     return (
       <div className="flex flex-col items-center justify-center h-[79vh] space-y-4 ">
+
+  <Canonical/>
         <h2 className="inline-block pb-4 text-5xl font-bold text-center text-transparent md:text-6xl bg-gradient-to-b from-DarkOrange to-white bg-clip-text">Coming Soon</h2>
 
         <button

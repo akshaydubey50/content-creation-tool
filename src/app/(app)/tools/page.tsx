@@ -3,6 +3,7 @@ import HeroSection from "@/components/herosection/HeroSection";
 import FilterSection from "@/components/filter/FilterSection";
 import NewsLetter from "@/components/newsletter";
 import FAQ from "@/components/faq";
+import Canonical from "@/components/seo/Canonical";
 
 import type { Metadata } from "next";
 
@@ -15,6 +16,7 @@ export default function Home() {
   const itemPerPageCount = 12;
   return (
     <div className="mb-8 overflow-x-hidden">
+      <Canonical />
       <HeroSection />
       <FilterSection />
       <ProductList itemsCount={itemPerPageCount} />
@@ -23,6 +25,5 @@ export default function Home() {
         <NewsLetter />
       </div>
     </div>
-
   );
 }

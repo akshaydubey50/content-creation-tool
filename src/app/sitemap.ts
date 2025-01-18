@@ -6,48 +6,45 @@ import {
   ResourceModel,
   ExpertModel
 } from "@/models/airtable.model";
+import { sanityFetch } from "@/sanity/lib/fetch";
+import { postsQuery } from "@/sanity/lib/queries";
+import { SanityDocument } from "next-sanity";
 
-// Helper function to safely fetch data
-async function safeFetch(url: string) {
+async function fetchTools() {
   try {
-    const response = await fetch(url, {
-      headers: {
-        'Accept': 'application/json',
-      },
-      next: {
-        revalidate: 3600 // Revalidate every hour
-      }
+    // Fetch data from API
+    const response = await fetch(`${APPConf.BASE_URL}/api/tools`);
+    const { data } = await response.json();
+
+    // Find the matching product
+    return data.map((product: AirtableModel) => {
+      return {
+        name: product?.fields?.Name?.toLowerCase()?.trim()?.replace(/\s/g, "-"),
+        // description: product?.fields?.Description?.toLowerCase(),
+      };
     });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const contentType = response.headers.get("content-type");
-    if (!contentType || !contentType.includes("application/json")) {
-      throw new Error("Response is not JSON");
-    }
-
-    const data = await response.json();
-    return data;
   } catch (error) {
-    console.error(`Error fetching ${url}:`, error);
-    return { data: [] };
+    console.error("Error fetching tools:", error);
+    return [];
   }
 }
 
-async function fetchTools() {
-  const { data } = await safeFetch(`${APPConf.BASE_URL}/api/tools`);
-  return data.map((product: AirtableModel) => ({
-    name: product?.fields?.Name?.toLowerCase?.()?.trim?.()?.replace(/\s/g, "-") || "",
-  })).filter((tool:any) => tool.name); // Filter out items with empty names
-}
-
 async function fetchPrompts() {
-  const { data } = await safeFetch(`${APPConf.BASE_URL}/api/prompts`);
-  return data.map((prompt: PropmtResourceModel) => ({
-    name: prompt?.fields?.Name?.toLowerCase?.()?.trim?.()?.replace(/\s/g, "-") || "",
-  })).filter((prompt:any) => prompt.name);
+  try {
+    // Fetch data from API
+    const response = await fetch(`${APPConf.BASE_URL}/api/prompts`);
+    const { data } = await response.json();
+
+    // Find the matching product
+    return data.map((prompt: PropmtResourceModel) => {
+      return {
+        name: prompt?.fields.Name?.toLowerCase()?.trim()?.replace(/\s/g, "-"),
+      };
+    });
+  } catch (error) {
+    console.error("Error fetching tools:", error);
+    return [];
+  }
 }
 
 // async function fetchResources() {
@@ -126,19 +123,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Dynamic routes
-  const dynamicRoutes: MetadataRoute.Sitemap = [
-    ...tools.map((tool:any) => ({
+  const dynamicRoutes = [
+    ...tools.map((tool: any) => ({
       url: `${baseUrl}/tools/${tool.name}`,
       lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
     })),
-    ...prompts.map((prompt:any) => ({
+    ...prompts.map((prompt: any) => ({
       url: `${baseUrl}/prompts/${prompt.name}`,
       lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
     })),
     // ...resources.map((resource:any) => ({
     //   url: `${baseUrl}/resources/${resource.name}`,
@@ -149,8 +141,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...experts.map((resource: any) => ({
       url: `${baseUrl}/experts/${resource.name}`,
       lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
+    })),
+    ...blogs.map((blog: any) => ({
+      url: `${baseUrl}/blogs/${blog.slug}`,
+      lastModified: blog.lastModified,
+    })),
+    ...experts.map((expert: any) => ({
+      url: `${baseUrl}/experts/${expert.slug}`,
+      lastModified: expert.lastModified,
+    })),
+    ...projects.map((project: any) => ({
+      url: `${baseUrl}/projects/${project.slug}`,
+      lastModified: project.lastModified,
     })),
   ];
 

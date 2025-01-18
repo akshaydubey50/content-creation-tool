@@ -2,6 +2,7 @@ import { Metadata, ResolvingMetadata } from "next";
 import ProductDetail from "./product-detail"; // Import client-side component
 import { AirtableModel } from "@/models/airtable.model";
 import { APPConf } from "@/conf/conf";
+import Canonical from "@/components/seo/Canonical";
 
 // Props for generateMetadata
 type Props = {
@@ -50,5 +51,8 @@ export async function generateMetadata(
 
 // Render the client-side component in this server-side component
 export default function Page({ params }: Props) {
-  return <ProductDetail params={params} />;
+  return <>
+  <Canonical/>
+  <ProductDetail params={params} />
+  </>;
 }

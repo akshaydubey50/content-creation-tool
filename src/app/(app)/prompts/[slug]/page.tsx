@@ -2,6 +2,7 @@ import { Metadata, ResolvingMetadata } from "next";
 import PromptDetailPage from "./prompt-detail"; // Import client-side component
 import { PropmtResourceModel } from "@/models/airtable.model";
 import { APPConf } from "@/conf/conf";
+import Canonical from "@/components/seo/Canonical";
 
 // Props for generateMetadata
 type Props = {
@@ -50,5 +51,10 @@ export async function generateMetadata(
 
 // Render the client-side component in this server-side component
 export default function Page({ params }: Props) {
-  return <PromptDetailPage params={params} />;
+  return  <>
+
+<Canonical/>
+  <PromptDetailPage params={params} />
+  
+  </>;
 }

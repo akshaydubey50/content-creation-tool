@@ -24,6 +24,7 @@ import {
 import { clearSearchFilterList } from "@/redux/slice/search/search.slice";
 import { RootState, AppDispatch } from "@/redux/store";
 import NewsLetter from "@/components/newsletter";
+import Canonical from "@/components/seo/Canonical";
 
 export default function ToolDetails() {
   const dispatch: AppDispatch = useDispatch();
@@ -81,6 +82,7 @@ export default function ToolDetails() {
 
   return (
     <div className="mt-[40px] lg:mt-[60px]">
+      <Canonical />
       <HeroSection />
       <FilterSection />
       <ProductList itemsCount={itemPerPageCount} />
