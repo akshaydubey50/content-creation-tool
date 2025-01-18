@@ -16,7 +16,7 @@ import { getLikeList } from "@/redux/slice/like/like.slice";
 import { getBookmarkList } from "@/redux/slice/bookmark/bookmark.slice";
 import { Input } from "@/components/ui/input";
 
-export default function PromptLibrary() {
+export default function PromptLibrary({itemsCount}:{itemsCount:number}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [promptList, setPromptList] = useState<PropmtResourceModel[]>([]);
@@ -35,7 +35,6 @@ export default function PromptLibrary() {
     (state: RootState) => state.bookmarks.bookmarkList
   );
 
-  const itemsPerPage = 10;
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -93,8 +92,8 @@ export default function PromptLibrary() {
   ]);
 
   const updateCurrentProducts = useCallback(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
+    const startIndex = (currentPage - 1) * itemsCount;
+    const endIndex = startIndex + itemsCount;
     return filteredPrompts.slice(startIndex, endIndex);
   }, [currentPage, filteredPrompts]);
 
@@ -104,7 +103,7 @@ export default function PromptLibrary() {
       dispatch(getLikeList());
       dispatch(getBookmarkList());
     }
-  }, [dispatch, promptResourceList]);
+  }, []);
 
   useEffect(() => {
     if (!isLoading && promptResourceList?.length > 0) {
@@ -199,6 +198,7 @@ export default function PromptLibrary() {
             )}
             {filteredPrompts.length > 0 && (
               <Pagination
+                itemsCount={itemsCount}
                 currentPage={currentPage}
                 totalItems={filteredPrompts.length}
                 onPageChange={handlePageChange}

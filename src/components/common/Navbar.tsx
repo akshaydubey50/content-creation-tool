@@ -26,6 +26,7 @@ export default function Navbar() {
     { id: RoutePath.HomePage, label: "Tools", href: RoutePath.HomePage },
     { id: RoutePath.Prompts, label: "Prompts", href: RoutePath.Prompts },
     { id: RoutePath.Experts, label: "Experts", href: RoutePath.Experts },
+    { id: RoutePath.Projects, label: "Projects", href: RoutePath.Projects },
     { id: RoutePath.SubmitTool, label: "Submit Tool", href: RoutePath.SubmitTool },
     { id: RoutePath.Contact, label: "Contact", href: RoutePath.Contact },
   ];

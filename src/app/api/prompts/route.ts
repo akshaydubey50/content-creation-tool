@@ -35,7 +35,7 @@ export async function GET() {
       }
     } while (offset);
     const statusRecord = airtableProductList?.filter(
-      (item: PropmtResourceModel) => item.fields?.Source?.toLowerCase() !== ""
+      (item: PropmtResourceModel) => item.fields?.Status?.toLowerCase() === "done"
     );
 
     return NextResponse.json(

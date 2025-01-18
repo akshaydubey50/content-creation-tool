@@ -14,6 +14,7 @@ type Props = {
 
 export default function ProductDetail({ params }: Props) {
   const id = useSearchParams().get("id");
+  const itemPerPageCount = 6;
   const { productList } = useSelector((state: RootState) => state.products);
   const [product, setProductData] = useState<AirtableModel>();
   const { setVisibleItem } = useVisibleItemContextData();
@@ -67,7 +68,7 @@ export default function ProductDetail({ params }: Props) {
           </div>
         </>
       )}
-      <ProductList currentCategory={currentCategory} />
+      <ProductList itemsCount={itemPerPageCount} currentCategory={currentCategory} />
     </>
   );
 }
