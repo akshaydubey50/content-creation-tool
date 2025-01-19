@@ -6,7 +6,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Providers from "@/providers/Providers";
 import Authprovider from "./Authprovider";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import { GoogleAnalytics,GoogleTagManager,} from "@next/third-parties/google";
 import { Toaster } from "@/components/ui/toaster";
 import { Metadata } from 'next';
 import { APPConf } from "@/conf/conf";
@@ -53,15 +53,20 @@ export default function RootLayout({
           href="https://embeds.beehiiv.com/c8b47983-58f2-410d-9d69-f10d79908089?slim=true"
           as="document"
         />
-        <GoogleAnalytics gaId="GTM-P65VN64G" />
+        <GoogleTagManager gtmId="GTM-P65VN64G" />
+        
       </head>
       <body className="flex flex-col min-h-screen font-poppins ">
         <Authprovider>
           <Providers>
             <Toaster />
             <Navbar />
-            <main className="">
+            <main 
+            className="flex  justify-center"
+            >
+              <div className="grow">
               {children}
+              </div>
             </main>
             <Footer />
           </Providers>

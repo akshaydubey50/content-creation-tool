@@ -3,13 +3,10 @@ import React from "react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Content Creation About Us",
-  description:
-    "We are a small passionate team.  Content Creation FYI (contentcreation.fyi) is your go-to resourcefor content creation tools.",
+  title: "About - Content Creation FYI",
 };
 
 export default function AboutUs() {
-  return <NotFound />;
   return (
     <>
       <main className="max-w-7xl mx-auto">

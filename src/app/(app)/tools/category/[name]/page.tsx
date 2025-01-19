@@ -28,6 +28,7 @@ import Canonical from "@/components/seo/Canonical";
 
 export default function ToolDetails() {
   const dispatch: AppDispatch = useDispatch();
+  const itemPerPageCount = 12;
   const categoryData = useSelector(
     (store: RootState) => store.categories.categoryData
   );
@@ -84,7 +85,7 @@ export default function ToolDetails() {
       <Canonical />
       <HeroSection />
       <FilterSection />
-      <ProductList />
+      <ProductList itemsCount={itemPerPageCount} />
       <NewsLetter />
     </div>
   );

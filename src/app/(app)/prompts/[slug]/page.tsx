@@ -37,10 +37,10 @@ export async function generateMetadata(
 
   // Return dynamic metadata
   return {
-    title: productMatched?.fields?.Name || fallbackTitle,
+    title: `${productMatched?.fields?.Name} - Content Prompts` || fallbackTitle,
     description: productMatched?.fields?.Description || fallbackDescription,
     openGraph: {
-      title: productMatched?.fields?.Name || fallbackTitle,
+      title: `${productMatched?.fields?.Name} - Content Prompts` || fallbackTitle,
       description: productMatched?.fields?.Description || fallbackDescription,
       images: productMatched?.fields?.ToolImage
         ? [{ url: productMatched.fields.ToolImage }]

@@ -10,6 +10,7 @@ import authSlice from "@/redux/slice/auth/auth.slice";
 import searchSlice from "@/redux/slice/search/search.slice";
 import likeSlice from "./slice/like/like.slice";
 import expertsSlice from './slice/experts/experts.slice';
+import projectsSlice from "./slice/projects/projects.slice";
 
 const appStore = configureStore({
   reducer: {
@@ -23,7 +24,8 @@ const appStore = configureStore({
     pricingModels: priceModelSlice,
     promptResources: promptResourceSlice,
     resources: resourceSlice,
-    experts:expertsSlice
+    experts:expertsSlice,
+    projects:projectsSlice
   },
 });
 

@@ -47,6 +47,7 @@ export interface ExpertModel {
     "First Name": string;
     "Country": string;
     "Email": string;
+    "ExpertType": string[];
     "Industry": string[];
     "Last Name": string;
     "Twitter": string;
@@ -59,6 +60,21 @@ export interface ExpertModel {
     "Platforms": string[];
   };
 }
+
+export interface ProjectModel {
+  id: string;
+  fields: {
+    "Project Title": string;
+    Status: string,
+    Category: string[];
+    Budget: string;
+    Deadline: string,
+    "Project Description": string;
+    ProjectType: string;
+    ProjectURL: string;
+  };
+}
+
 export interface JobModel {
   id: string;
   fields: {

@@ -14,6 +14,7 @@ const Page = async () => {
 
   return (
     <div className='my-5 container mx-auto flex flex-col items-center'>
+
       <Canonical/>    
       <Posts posts={posts}/>
     </div>

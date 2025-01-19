@@ -7,6 +7,7 @@ export const About_US = "/about-us";
 export const Prompts = "/prompts";
 export const Resources = "/resources";
 export const Experts = "/experts";
+export const Projects = "/projects";
 
 
 export const placeholderImage ="https://placehold.co/100x100/png";
