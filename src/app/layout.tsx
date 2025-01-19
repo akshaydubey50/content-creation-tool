@@ -60,7 +60,7 @@ export default function RootLayout({
           <Providers>
             <Toaster />
             <Navbar />
-            <main className="flex justify-center flex-grow">
+            <main className="">
               {children}
             </main>
             <Footer />

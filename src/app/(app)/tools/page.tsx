@@ -5,7 +5,12 @@ import NewsLetter from "@/components/newsletter";
 import FAQ from "@/components/faq";
 import Canonical from "@/components/seo/Canonical";
 
-export default function Home() {
+export const metadata = {
+  title: 'Tools - Content Creation',
+  description: 'Explore our collection of content creation tools',
+};
+
+export default function ToolsPage() {
   return (
     <div className="mb-8 overflow-x-hidden">
       <Canonical />

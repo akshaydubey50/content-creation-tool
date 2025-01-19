@@ -59,3 +59,17 @@ export interface ExpertModel {
     "Platforms": string[];
   };
 }
+export interface JobModel {
+  id: string;
+  fields: {
+    "Job_Title"?: string;
+    "Company_LogoURL"?: string; 
+    "CompanyName"?: string;
+    "Location"?: string;
+    "ApplyLink"?: string;
+    "Salary"?: string;
+    "JobType"?: string;
+    "Status"?: string;
+  };
+}
+
