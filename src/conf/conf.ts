@@ -15,6 +15,8 @@ export const AirtableConf = {
   EXPERT_TABLE_ID: String(process.env.EXPERT_TABLE_ID),
   PROJECTS_BASE_ID: String(process.env.PROJECTS_BASE_ID),
   PROJECTS_TABLE_ID: String(process.env.PROJECTS_TABLE_ID),
+  JOB_BASE_ID:String(process.env.JOB_BASE_ID),
+  JOB_TABLE_ID:String(process.env.JOB_TABLE_ID),
 };
 
 export const ResendConf = {

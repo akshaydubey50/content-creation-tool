@@ -13,7 +13,7 @@ const Page = async () => {
   console.log("all", { posts })
 
   return (
-    <div className='my-5 container'>
+    <div className='my-5 container mx-auto flex flex-col items-center'>
 
       <Canonical/>    
       <Posts posts={posts}/>

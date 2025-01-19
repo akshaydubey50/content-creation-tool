@@ -8,11 +8,14 @@ export const metadata: Metadata = {
     description:
         "Find top content creation experts—writers, ghostwriters, copywriters, social media marketers, and personal branding specialists—to enhance your content and strategy.",
 };
+import Canonical from "@/components/seo/Canonical";
 
 export default function Experts() {
     const itemCountPerPage = 12;
     return (
     <>
+
+  <Canonical/>
     <div className="min-w-xs bg-light-gray  h-[250px] lg:h-[300px] flex items-center justify-center px-4 mb-4">
         <div className="mx-auto max-w-8xl ">
             <h1 className="text-2xl font-bold text-center md:text-4xl lg:text-6xl">
