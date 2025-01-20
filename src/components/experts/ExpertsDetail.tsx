@@ -1,25 +1,16 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import ReactMarkdown from 'react-markdown'
 import { Button } from "@/components/ui/button"
-import { Instagram, Linkedin, Twitter } from 'lucide-react'
-import IndiaFlag from '@/assets/images/india-flag-icon.png';
+import { Globe, Instagram, Languages, Linkedin, MapPin, Share2, Twitter } from 'lucide-react'
 import { placeholderImage } from '@/constants/RoutePath'
-
-interface Expert {
-    fields: {
-        "First Name": string;
-        "Last Name": string;
-        "Professional Bio": string;
-        Skills: string[];
-        Instagram?: string;
-        LinkedIn?: string;
-        Twitter?: string;
-        ProfileImage?:string;
-    }
-}
+import { Badge } from '../ui/badge'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../redux/store';
+import { useCallback, useEffect } from 'react'
+import { ExpertModel } from '@/models/airtable.model'
 
 const getUserName = (obj: any) => {
+    obj = obj || {};
     const firstName = obj["First Name"];
     const lastName = obj["Last Name"];
 
@@ -40,79 +31,203 @@ const getProfileImage =(obj:any)=>{
 }
 
 
-export default function ExpertsDetail({ expert }: { expert: Expert }) {
+export default function ExpertsDetail({ expert }: { expert: ExpertModel }) {
+    
     const { fields } = expert
 
     return (
-        <section className="relative">
-            <div className="bg-[#FF8E37CC] h-[250px] lg:h-[300px]" />
-            <div className="px-4 mx-auto max-w-9xl sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 gap-8 -mt-24 lg:grid-cols-12">
-                    <div className="lg:col-span-8">
-                        <div className="p-6">
-                            <Image
-                                src={getProfileImage(fields)}
-                                alt={getUserName(fields)}
-                                width={100}
-                                height={100}
-                                className="rounded-full"
-                            />
-                            <div className="flex items-center my-4 space-x-4">
-                                    <h1 className="text-2xl font-bold">
-                                    {getUserName(fields)}
-                                    </h1>
-                                    <Image src={IndiaFlag} alt="Country flag" width={40} height={40} />
-                            </div>
-                            <div className="flex items-center mb-8 space-x-4">
-                                <Button className="bg-[#FF8E37] hover:bg-[#FF8E37]/80 text-white">
-                                    Get in touch
-                                </Button>
-                                {fields?.Instagram && (
-                                    <Link href={`https://www.instagram.com/${fields.Instagram}`} className="text-gray-400 hover:text-gray-600">
-                                        <Instagram className="w-6 h-6" />
-                                    </Link>
-                                )}
-                                {fields?.LinkedIn && (
-                                    <Link href={`https://www.linkedin.com/in/${fields.LinkedIn}`} className="text-gray-400 hover:text-gray-600">
-                                        <Linkedin className="w-6 h-6" />
-                                    </Link>
-                                )}
-                                {fields?.Twitter && (
-                                    <Link href={`https://twitter.com/${fields.Twitter}`} className="text-gray-400 hover:text-gray-600">
-                                        <Twitter className="w-6 h-6" />
-                                    </Link>
-                                )}
-                            </div>
-                            <div className="prose max-w-none">
-                                <h2 className="mb-4 text-xl font-semibold">Professional Bio</h2>
-                                <ReactMarkdown>{fields["Professional Bio"]}</ReactMarkdown>
-                            </div>
-                            
-                        </div>
-                    </div>
-                    {
-                        fields?.Skills?.length>0 &&(
-                            <div className="mt-28 lg:col-span-4">
-                                <div className="p-6 ">
-                                    <h2 className="mb-4 text-xl font-semibold">Skills</h2>
-                                    <div className="flex flex-wrap gap-2">
-                                        {fields?.Skills?.map((skill, index) => (
-                                            <span
-                                                key={index}
-                                                className="inline-flex items-center px-3 py-1 text-sm font-medium text-gray-800 bg-gray-100 rounded-full"
-                                            >
-                                                {skill}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        )  
-                    }
-                    
-                    
+        <div className="min-h-screen bg-gray-50" >
+            {/* Navigation Breadcrumb */}
+            < div className="container mx-auto px-4 py-4" >
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0" >
+                    <nav className="flex flex-wrap space-x-2 text-sm text-muted-foreground" >
+                        <Link href="/" > Home </Link>
+                        <span> / </span>
+                        < Link href="/experts" > Experts </Link>
+                        <span> / </span>
+                        < span className="text-foreground" > {getUserName(fields)}</span>
+                    </nav>
+                    < Button variant="ghost" size="sm" className="text-xs sm:text-sm" >
+                        <Share2 className="h-4 w-4 mr-2" />
+                        Share this profile
+                    </Button>
                 </div>
             </div>
-        </section>
+
+            {/* Main Profile Section */}
+            <div className="w-full bg-orange-50" >
+                <div className="container mx-auto px-4 py-8" >
+                    <div className="flex flex-col lg:flex-row justify-between gap-8" >
+                        {/* Mobile: Image at the top */}
+                        < div className="lg:hidden w-full flex justify-center mb-6" >
+                            <div className="relative" >
+                                <Image
+                                    src={getProfileImage(fields)}
+                                    alt={`${getUserName(fields) }`
+                                    }
+                                    width={200}
+                                    height={200}
+                                    className="rounded-lg object-cover"
+                                />
+                              
+                            </div>
+                        </div>
+
+                        {/* Left Column */}
+                        <div className="flex-grow space-y-6" >
+                            <div className="flex items-start gap-2" >
+                                <Badge variant="outline" className="bg-white text-xs sm:text-sm" >
+                                    {expert?.fields?.ExpertType}
+                                </Badge>
+                            </div>
+
+
+                            < div className="flex flex-col items-start gap-2" >
+                                <h1 className="text-3xl sm:text-4xl font-bold" >
+                                    {getUserName(fields)}
+                                </h1>
+                                {
+                                    expert?.fields?.Status === "Verified" && (
+                                        <Badge variant="default" className="bg-green-500 text-xs sm:text-sm" > Verified </Badge>
+                                    )
+                                }
+                            </div>
+
+                            < div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground" >
+                                <div className="flex items-center" >
+                                    <Languages className="h-4 w-4 mr-1" />
+                                    India
+                                    </div>
+                                < div className="flex items-center" >
+                                    <MapPin className="h-4 w-4 mr-1" />
+                                    {expert?.fields?.Country}
+                                </div>
+                            </div>
+
+                            < p className="text-base sm:text-lg" > {expert?.fields?.Headline} </p>
+
+                            < div className="flex flex-col sm:flex-row gap-3" >
+                                <Button className="bg-primary w-full sm:w-auto" > Get in touch </Button>
+                                < div className="flex gap-2 justify-center sm:justify-start" >
+                                    {
+                                        expert?.fields.LinkedIn && (
+                                            <Button variant="outline" size="icon" >
+                                                <Linkedin className="h-4 w-4" />
+                                            </Button>
+                                        )
+                                    }
+                                    {
+                                        expert?.fields.Twitter && (
+                                            <Button variant="outline" size="icon" >
+                                                <Twitter className="h-4 w-4" />
+                                            </Button>
+                                        )
+                                    }
+                                    {
+                                        expert?.fields.Portfolio && (
+                                            <Button variant="outline" size="icon" >
+                                                <Globe className="h-4 w-4" />
+                                            </Button>
+                                        )
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Desktop: Right Column - Profile Image */}
+                        <div className="hidden lg:block relative" >
+                            
+                            < Image
+                                src={getProfileImage(expert?.fields)}
+                                alt={`${getUserName(expert?.fields)}`}
+                                width={200}
+                                height={200}
+                                className="rounded-lg object-cover"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Skills & Industries Section */}
+            <div className="container mx-auto px-4 py-8 sm:py-12" >
+                <div className="max-w-4xl space-y-8" >
+                    <div>
+                        <h2 className="text-xl sm:text-2xl font-bold mb-4" > Skills </h2>
+                        < div className="flex flex-wrap gap-2" >
+                            {
+                                expert?.fields?.Skills?.map((skill, index) => (
+                                    <Badge key={index} variant="secondary" className="text-xs sm:text-sm" >
+                                        {skill}
+                                    </Badge>
+                                ))
+                            }
+                        </div>
+                    </div>
+
+                   
+                </div>
+            </div>
+
+            {/* Professional Bio Section */}
+            {expert?.fields?.['Professional Bio'] &&<div className="container mx-auto px-4 py-8 sm:py-12 border-t" >
+                <div className="max-w-4xl" >
+                    <h2 className="text-xl sm:text-2xl font-bold mb-4" > Professional Bio </h2>
+                    < div className="prose max-w-none text-sm sm:text-base" >
+                        <p className="whitespace-pre-line" > {expert?.fields?.['Professional Bio']} </p>
+                    </div>
+                </div>
+            </div>}
+
+            <div className="container mx-auto px-4 py-8 sm:py-12" >
+                <div className="max-w-4xl space-y-8" >
+                    {expert?.fields?.Industry?.length > 0 && (
+                        <div>
+                            <h2 className="text-xl sm:text-2xl font-bold mb-4" > Industries </h2>
+                            <div className="flex flex-wrap gap-2" >
+                                {
+                                    expert?.fields?.Industry?.map((industry, index) => (
+                                        <Badge key={index} variant="outline" className="text-xs sm:text-sm" >
+                                            {industry}
+                                        </Badge>
+                                    ))
+                                }
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Tools Section */}
+                    {expert?.fields?.Tools?.length > 0 && (<div className="container mx-auto px-4 py-8 sm:py-12 border-t" >
+                        <div className="max-w-4xl" >
+                            <h2 className="text-xl sm:text-2xl font-bold mb-4" > Tools </h2>
+                            < div className="flex flex-wrap gap-2" >
+                                {
+                                    expert?.fields?.Tools?.map((tool, index) => (
+                                        <Badge key={index} variant="secondary" className="text-xs sm:text-sm" >
+                                            {tool}
+                                        </Badge>
+                                    ))
+                                }
+                            </div>
+                        </div>
+                    </div>)}
+                    </div>
+                    </div>
+
+       
+
+            {/* CTA Section */}
+            <div className="bg-orange-50" >
+                <div className="container mx-auto px-4 py-8 sm:py-12" >
+                    <div className="max-w-4xl flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0" >
+                        <div className="text-center sm:text-left" >
+                            <h2 className="text-xl sm:text-2xl font-bold" > Join our expert partnership program </h2>
+                            < p className="text-sm sm:text-base text-muted-foreground" > Become a part of our growing network of professionals </p>
+                        </div>
+                        < Button className="bg-primary w-full sm:w-auto" > Apply now </Button>
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 }

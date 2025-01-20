@@ -1,27 +1,39 @@
-"use client"
-import ExpertsDetail from '@/components/experts/ExpertsDetail'
-import { usePathname } from 'next/navigation'
-import React from 'react'
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../../redux/store';
+"use client";
+import ExpertsDetail from "@/components/experts/ExpertsDetail";
+import { usePathname } from "next/navigation";
+import React from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store";
+import Canonical from "@/components/seo/Canonical";
 import { ExpertModel } from '../../../../models/airtable.model';
-import Canonical from '@/components/seo/Canonical';
-
-
-
 
 export default function Details() {
     const pathname = usePathname();
-    console.log("pathname", pathname)
-    const expertsList = useSelector((store: RootState) => store.experts.expertsList)
+    const expertsList = useSelector((store: RootState) => store.experts.expertsList);
 
-    const expert: any = expertsList?.find((item: any) => { 
-       return  item?.fields?.Username.indexOf(pathname?.split('/')[2]) !== -1
-    })
+    // Extract the slug (expert identifier) from the pathname
+    const expertSlug = pathname?.split("/")[2]?.toLowerCase();
+
+    console.log("expertSlug::::::::::", decodeURIComponent(expertSlug))
+    // Find the matching expert
+    const expert = expertsList?.find((item:ExpertModel) => {
+        const username = item?.fields?.Username?.toLowerCase()?.trim()?.replace(/\s+/g, "-");
+        return username === decodeURIComponent(expertSlug);
+    });
+
+    console.log("Current Expert Details:", expert);
+
     return (
         <>
-  <Canonical/>
-            <ExpertsDetail expert={expert||{}} />
+            <Canonical />
+            {expert ? (
+                <ExpertsDetail expert={expert} />
+            ) : (
+                <div className="text-center mt-10">
+                    <h2 className="text-lg font-semibold">Expert not found</h2>
+                    <p className="text-gray-500">We couldn’t find the expert you’re looking for.</p>
+                </div>
+            )}
         </>
-    )
+    );
 }
