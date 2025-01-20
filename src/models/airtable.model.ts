@@ -52,11 +52,12 @@ export interface ExpertModel {
     "Last Name": string;
     "Twitter": string;
     "LinkedIn": string;
-    "Professinal Bio": string;
+    "Headline": string;
+    "Professional Bio": string;
     "Portfolio": string;
     "Instagram": string;
     "Status": string;
-    "Tools": string;
+    "Tools": string[];
     "Platforms": string[];
   };
 }
