@@ -46,6 +46,7 @@ export interface ExpertModel {
     "Skills": string[];
     "First Name": string;
     "Country": string;
+    "Verified":boolean;
     "Email": string;
     "ExpertType": string[];
     "Industry": string[];
