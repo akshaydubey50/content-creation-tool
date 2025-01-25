@@ -34,7 +34,10 @@ export default function ExpertList({ itemsCount }: { itemsCount: number }) {
                 expert.fields["Last Name"].toLowerCase().includes(searchQuery.toLowerCase())
                 : true;
 
-            const matchesVerified = isVerified ? expert.fields.Status === "Verified" : true;
+            // const matchesVerified = isVerified ? expert.fields.Status === "Verified" : true;
+            const matchesVerified = (isVerified && expert.fields.Verified === true) || !isVerified;
+
+            console.log("matchesVerified",matchesVerified)
 
             return matchesSkills && matchesLanguages && matchesExpertTypes && matchesSearchQuery && matchesVerified;
         });
