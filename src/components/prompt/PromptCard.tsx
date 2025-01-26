@@ -13,10 +13,12 @@ import BookmarkButton from "../ui/bookmarkbutton";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import VisitWebsite from "../visit-website/VisitWebsite";
+import { useSession } from "next-auth/react";
 
 interface ItemId {
   itemId: string;
   likeCount: number;
+  isLiked: boolean;
 }
 const PromptCard = ({
   promptResource,
@@ -29,30 +31,32 @@ const PromptCard = ({
   const bookmarkedPromptList = useSelector(
     (state: RootState) => state.bookmarks.bookmarkList
   );
+  const { data: session } = useSession();
+  const isAuthenticated = !!session?.user;
 
   const [isAlreadyLiked, setIsAlreadyLiked] = useState(false);
   const [isAlreadyBookmarked, setIsAlreadyBookmarked] = useState(false);
 
-  // New effect for Likes
+  // Updated effect for Likes
   useEffect(() => {
-    if (likedPromptList?.length > 0) {
-      const toolLikedItem = likedPromptList.find(
-        (item) => item?.itemType?.toLowerCase() === "prompts"
-      );
-      if (toolLikedItem?.itemIds != null) {
-        // Check if the current id is in the itemIds array
-        setIsAlreadyLiked(
-          toolLikedItem.itemIds.some(
-            (item) => item.itemId === promptResource?.id
-          )
-        );
-      } else {
-        setIsAlreadyLiked(false);
-      }
-    } else {
+    if (!isAuthenticated) {
+      setIsAlreadyLiked(false);
+      return;
+    }
+
+    // Find the prompt in the likedList and check its isLiked property
+    const promptLikedItem = likedPromptList?.find(
+      (item) => item?.itemType?.toLowerCase() === "prompts"
+    );
+    if (promptLikedItem?.itemIds) {
+      const likedItem = promptLikedItem.itemIds.find(
+        (item) => item.itemId === promptResource?.id
+      ) as ItemId;
+      setIsAlreadyLiked(likedItem?.isLiked || false);
+    } else {  
       setIsAlreadyLiked(false);
     }
-  }, [promptResource?.id, likedPromptList]);
+  }, [promptResource?.id, likedPromptList, isAuthenticated]);
 
   // New effect for bookmarks
   useEffect(() => {
