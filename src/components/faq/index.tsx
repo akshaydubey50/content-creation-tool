@@ -34,7 +34,7 @@ export default function FAQ() {
       <Script id="webpage-faq-schema" type="application/ld+json">
         {schemaString}
       </Script>
-      <section className=" max-w-7xl rounded-xl  py-5 mx-auto  bg-white-200 my-10 ">
+      <section className=" max-w-screen-2xl rounded-xl  py-5 mx-auto  bg-white-200 my-10 ">
         <h2 className="text-center font-semibold text-2xl lg:text-4xl my-4">
           Frequently Ask Questions
         </h2>

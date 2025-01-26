@@ -36,29 +36,12 @@ export default function Navbar() {
 
   const toggleMobileMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     if (window.scrollY > 0) {
-  //       setIsSticky(true);
-  //     } else {
-  //       setIsSticky(false);
-  //     }
-  //   };
-
-  //   window.addEventListener("scroll", handleScroll);
-
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
 
   return (
     <>
-      <header className={`w-full px-5 bg-white shadow-md xl:px-10 transition-all duration-500 
-      // ${isSticky && 'fixed top-0 left-0 right-0 z-50' }
-      `} >
+      <header className={` px-5 bg-white shadow-md xl:px-10 transition-all duration-500 `} >
 
-        <div className={`flex items-center justify-between mx-auto max-w-7xl lg:px-2 ${isSticky ? 'py-4 duration-500 transition-all' : 'py-6'}`}>
+        <div className={`max-w-screen-2xl mx-auto flex items-center justify-between  lg:px-2 ${isSticky ? 'py-4 duration-500 transition-all' : 'py-6'}`}>
           <div>
             <Link href="/">
               <div className="font-bold text-Heading-Small">Content Creation FYI</div>

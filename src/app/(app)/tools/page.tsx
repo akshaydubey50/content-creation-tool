@@ -22,7 +22,7 @@ export default function ToolsPage() {
       <FilterSection />
       <ProductList itemsCount={itemPerPageCount} />
       <FAQ />
-      <div className="px-6 xl:px-0">
+      <div className="px-4 md:px-8 xl:px-0">
         <NewsLetter />
       </div>
     </div>
