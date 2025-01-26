@@ -29,32 +29,29 @@ export function ProductCard(props: any) {
   const bookmarkedList = useSelector(
     (state: RootState) => state.bookmarks.bookmarkList
   );
-  
-  const {isAuthenticated} = useAuthState()
+
+  const { isAuthenticated } = useAuthState();
 
   const [isAlreadyLiked, setIsAlreadyLiked] = useState(false);
   const [isAlreadyBookmarked, setIsAlreadyBookmarked] = useState(false);
 
   useEffect(() => {
-
-    if(!isAuthenticated) {
+    if (!isAuthenticated) {
       setIsAlreadyLiked(false);
       return;
     }
-    if (likedList?.length > 0) {
-      const toolLikedItem = likedList.find((item) => item.itemType === "tools");
-      if (toolLikedItem?.itemIds != null) {
-        // Check if the current id is in the itemIds array
-        setIsAlreadyLiked(
-          toolLikedItem.itemIds.some((item) => item.itemId === id)
-        );
-      } else {
-        setIsAlreadyLiked(false);
-      }
+
+    // Find the tool in the likedList and check its isLiked property
+    const toolLikedItem = likedList?.find((item) => item.itemType === "tools");
+    if (toolLikedItem?.itemIds) {
+      const likedItem = toolLikedItem.itemIds.find(
+        (item) => item.itemId === id
+      );
+      setIsAlreadyLiked(likedItem?.isLiked || false);
     } else {
       setIsAlreadyLiked(false);
     }
-  }, [id, likedList]);
+  }, [id, likedList, isAuthenticated]);
 
   // New effect for bookmarks
   useEffect(() => {
@@ -98,7 +95,7 @@ export function ProductCard(props: any) {
             <div className="flex flex-row justify-between flex-1 pb-4">
               <div className="flex items-center gap-x-2">
                 <h2 className="h-8 font-bold text-Title-Medium md:text-Title-Large">
-                  {Name} 
+                  {Name}
                 </h2>
                 {Verified && (
                   <MdVerified className="text-2xl text-DarkOrange" />

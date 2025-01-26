@@ -18,7 +18,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({
   initialLikedState,
   itemType,
 }) => {
-  const {isAuthenticated} = useAuthState()
+  const { isAuthenticated } = useAuthState();
 
   const { isLiked, handleLike, totalLikes } = useLikeHandler(
     itemId,
@@ -27,9 +27,8 @@ const LikeButton: React.FC<LikeButtonProps> = ({
     itemType
   );
 
-  // For unauthenticated users, always show outline heart
-  // const showFilledHeart = isAuthenticated && isLiked;
-  // console.log({isAuthenticated, isLiked})
+  // Determine which heart icon to show based on authentication and like status
+  const showFilledHeart = isAuthenticated && isLiked;
 
   return (
     <button
@@ -38,7 +37,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({
       onClick={handleLike}
       className="flex items-center gap-x-1 transition-all duration-200 hover:scale-110"
     >
-      {isLiked ? (
+      {showFilledHeart ? (
         <AiFillHeart className="text-3xl text-DarkOrange" />
       ) : (
         <AiOutlineHeart className="text-3xl text-black" />
