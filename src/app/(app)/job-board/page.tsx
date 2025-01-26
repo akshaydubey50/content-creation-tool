@@ -194,31 +194,52 @@ export default function Page() {
   };
 
   return (
-    <main className="min-h-screen px-4 py-12">
-      <div className="mx-auto container max-w-7xl">
-        <div className="mb-12 text-center my-5">
-          <h1 className="mb-4 text-4xl font-bold md:text-5xl">Top roles for professionals</h1>
-          <p className="text-lg text-gray-600">
-            Explore job openings across sales, marketing, engineering, and more.
-          </p>
-        </div>
-        <div className="mb-8">
+    <main className="min-h-screen  ">
+      <div className="bg-light-gray">
+        <section className="flex flex-col px-4 space-y-10 place-items-center xl:space-y-14 md:px-8 xl:px-10 py-12 lg:py:14 xl:py-16">
+          <div>
+            <div className="flex flex-col space-y-4 text-center">
+              <p>
+                <span
+                  className="px-4 py-1 font-semibold bg-white border border-orange-500 border-solid rounded-full text-DarkOrange">
+                  Content Creation Job Board
+                </span>
+              </p>
+              <h1
+                className="mx-auto text-2xl font-semibold leading-9 md:text-4xl md:leading-45 md:max-w-2xl xl:text-7xl xl:max-w-4xl xl:leading-tight">
+                <span> Find Content jobs that </span>
+                <span>match your skills.</span>
+              </h1>
+              <div
+                className="max-w-lg px-2 mx-auto text-base text-center md:text-base xl:text-2xl xl:max-w-4xl xl:leading-normal">
+                Browse a curated list of content jobs tailored to your expertise, with details on role, company, salary, and location.
+              </div>
+            </div>
+          </div>
+
+        </section>
+      </div>
+      <div className="mx-auto container max-w-screen-2xl px-4">
+     
+        <div className="my-8">
           <SubmitJob />
         </div>
 
-        <div className="mb-8">
-          <SearchBar 
-            onSearch={handleSearch} 
+        <div className="my-8">
+          <SearchBar
+            onSearch={handleSearch}
             isLoading={isLoading}
             locations={locations}
             jobTypes={jobTypes}
           />
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 my-8">
           {renderContent()}
         </div>
+
       </div>
+     
     </main>
   )
 }

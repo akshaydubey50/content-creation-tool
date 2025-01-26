@@ -348,7 +348,7 @@ export default function FilterSection() {
       </section>
 
       {/* Visible in mobile screen only */}
-      <section className="grid grid-cols-1 md:hidden py-[25px]  gap-3 text-Title-Small lg:text-Title-Large max-w-md mx-auto px-[30px]">
+      <section className="grid grid-cols-1 md:hidden py-[25px]  gap-3 text-Title-Small lg:text-Title-Large max-w-md mx-auto px-4">
         <div className="col-span-1">
           <input
             className="w-full p-3 font-medium border-2 border-black border-solid outline-none rounded-xl"

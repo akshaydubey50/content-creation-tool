@@ -112,7 +112,7 @@ export default function ProductList({ currentCategory, itemsCount=12 }: ProductL
 
   return (
     <>
-      <main className="grid grid-cols-1 px-10 py-5 mx-auto gap-y-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-10 w-fit lg:px-8 2xl:px-0 justify-items-center">
+      <main className="grid grid-cols-1 px-4 py-5 mx-auto gap-y-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-10 w-fit md:px-8 2xl:px-0 justify-items-center">
         {currentProducts?.map((item) => {
           return (
             <ProductCard

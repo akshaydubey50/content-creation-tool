@@ -16,15 +16,32 @@ export default function Experts() {
     <>
 
   <Canonical/>
-    <div className="min-w-xs bg-light-gray  h-[250px] lg:h-[300px] flex items-center justify-center px-4 mb-4">
-        <div className="mx-auto max-w-8xl ">
-            <h1 className="text-2xl font-bold text-center md:text-4xl lg:text-6xl">
-                Content Creation <span className="text-DarkOrange">Experts</span>{" "}
-            </h1>
-        </div>
+    <div className=" bg-light-gray  ">
+                <section
+                    className="flex flex-col px-4 space-y-10 place-items-center xl:space-y-14 md:px-8 xl:px-10 py-12 lg:py:14 xl:py-16">
+                    <div>
+                        <div className="flex flex-col space-y-4 text-center">
+                            <p>
+                                <span
+                                    className="px-4 py-1 font-semibold bg-white border border-orange-500 border-solid rounded-full text-DarkOrange">
+                                    Content Creation Job Board
+                                </span>
+                            </p>
+                            <h1
+                                className="mx-auto text-2xl font-semibold leading-9 md:text-4xl md:leading-45 md:max-w-2xl xl:text-7xl xl:max-w-4xl xl:leading-tight">
+                                <span> Hire content experts </span>
+                                <span>for your next project.</span>
+                            </h1>
+                            <div
+                                className="max-w-lg px-2 mx-auto text-base text-center md:text-base xl:text-2xl xl:max-w-4xl xl:leading-normal">
+                                Explore global content experts from various fields, locations, and languages, ready to bring your ideas to life.
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
     </div>
-    <div className="px-4 mx-auto min-w-xs max-w-8xl">
-    </div>
+   
             <ExpertsMainScreen itemsCount={itemCountPerPage} />
     </>
     );

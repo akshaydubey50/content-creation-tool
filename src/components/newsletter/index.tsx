@@ -6,8 +6,8 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function NewsLetter() {
     return (
-        <Card className="max-w-7xl mx-auto my-4 sm:my-6 md:my-8 border-0 px-4 sm:px-6 lg:px-8">
-            <CardContent className="bg-[#FF8C00] rounded-xl shadow-2xl p-6 sm:p-8 md:p-10 lg:p-12">
+        <Card className="max-w-screen-2xl mx-auto my-4 sm:my-6 md:my-8 border-0 ">
+            <CardContent className="bg-[#FF8C00] rounded-3xl shadow-lg p-6 sm:p-8 md:p-10 lg:p-12">
                 <div className="flex flex-col md:flex-row items-center md:items-start gap-8 lg:gap-12">
                     <div className="w-full md:w-2/3 space-y-4 sm:space-y-6">
                         <h3 className="font-semibold text-2xl sm:text-3xl lg:text-4xl text-white text-center md:text-left leading-tight">

@@ -65,8 +65,8 @@ export default function ProductToolBanner({
 
   return (
     <>
-      <main className="px-8 py-6 overflow-x-hidden bg-light-gray md:px-10 ">
-        <div className="mx-auto max-w-7xl ">
+      <main className="  px-8 py-6 overflow-x-hidden bg-light-gray md:px-10 ">
+        <div className="mx-auto max-w-screen-2xl ">
           <Breadcrumb
             categories={"tools"}
             currentPageTitle={title}
@@ -93,7 +93,7 @@ export default function ProductToolBanner({
                     loading="lazy"
                     width={1280}
                     height={720}
-                    className="object-cover w-full h-auto rounded-t-xl"
+                    className="object-contain w-full h-auto rounded-t-xl"
                   />
                 </div>
 
@@ -133,7 +133,7 @@ export default function ProductToolBanner({
                 </div>
               </div>
             </div>
-            <div className="hidden border border-black border-solid lg:block lg:col-span-6 rounded-t-xl">
+            <div className="max-w-prose hidden border border-black border-solid lg:block lg:col-span-6 rounded-t-xl">
               <Image
                 src={url}
                 alt="logo banner"
@@ -148,7 +148,7 @@ export default function ProductToolBanner({
 
         {isOpen && <LikedBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />}
       </main>
-      <div className="px-8 mx-auto overflow-x-hidden max-w-7xl ">
+      <div className="px-4 md:px-8 mx-auto overflow-x-hidden max-w-screen-2xl ">
         {detailedMsg && <Details content={detailedMsg} />}
       </div>
     </>
