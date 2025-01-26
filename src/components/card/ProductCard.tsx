@@ -44,9 +44,10 @@ export function ProductCard(props: any) {
     // Find the tool in the likedList and check its isLiked property
     const toolLikedItem = likedList?.find((item) => item.itemType === "tools");
     if (toolLikedItem?.itemIds) {
-      const likedItem = toolLikedItem.itemIds.find(
+      const likedItem : any = toolLikedItem.itemIds.find(
         (item) => item.itemId === id
       );
+      console.log("likedItem::::",likedItem)
       setIsAlreadyLiked(likedItem?.isLiked || false);
     } else {
       setIsAlreadyLiked(false);
