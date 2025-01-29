@@ -32,7 +32,7 @@ export default function Prompt() {
               </h1>
               <div
                 className="max-w-lg px-2 mx-auto text-base text-center md:text-base xl:text-2xl xl:max-w-4xl xl:leading-normal">
-                Search,like, bookmark and filter curated content prompts that spark creativity, streamline your planning, and make ideation effortless.
+                Search, like, bookmark and filter curated content prompts that spark creativity, streamline your planning, and make ideation effortless.
               </div>
             </div>
           </div>
