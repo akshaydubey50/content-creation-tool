@@ -93,20 +93,7 @@ async function fetchExperts() {
   }
 }
 
-async function fetchProjects() {
-  try {
-    const response = await fetch(`${APPConf.BASE_URL}/api/projects`);
-    const { data } = await response.json();
 
-    return data.map((project: any) => ({
-      slug: project?.fields?.Name?.toLowerCase()?.trim()?.replace(/\s/g, "-"),
-      lastModified: project?.fields?.LastModified || new Date(),
-    }));
-  } catch (error) {
-    console.error("Error fetching projects:", error);
-    return [];
-  }
-}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = APPConf.BASE_URL;
@@ -116,7 +103,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const prompts = (await fetchPrompts()) || [];
   const blogs = (await fetchBlogs()) || [];
   const experts = (await fetchExperts()) || [];
-  const projects = (await fetchProjects()) || [];
 
   const staticRoutes = [
     "",
@@ -155,10 +141,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/experts/${expert.slug}`,
       lastModified: expert.lastModified,
     })),
-    ...projects.map((project: any) => ({
-      url: `${baseUrl}/projects/${project.slug}`,
-      lastModified: project.lastModified,
-    })),
+   
   ];
 
   return [...staticRoutes, ...dynamicRoutes];
