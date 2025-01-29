@@ -24,7 +24,7 @@ export default function Experts() {
                             <p>
                                 <span
                                     className="px-4 py-1 font-semibold bg-white border border-orange-500 border-solid rounded-full text-DarkOrange">
-                                    Content Creation Job Board
+                                    50+ Content Creation Experts
                                 </span>
                             </p>
                             <h1
