@@ -21,18 +21,18 @@ const getUserName = (obj: any) => {
     }
 };
 
-const getProfileImage =(obj:any)=>{
-    if (obj?.ProfileImage){
+const getProfileImage = (obj: any) => {
+    if (obj?.ProfileImage) {
         return obj?.ProfileImage
     }
-    else{
+    else {
         return placeholderImage
     }
 }
 
 
 export default function ExpertsDetail({ expert }: { expert: ExpertModel }) {
-    
+
     const { fields } = expert
 
     return (
@@ -47,7 +47,7 @@ export default function ExpertsDetail({ expert }: { expert: ExpertModel }) {
                         <span> / </span>
                         < span className="text-foreground" > {getUserName(fields)}</span>
                     </nav>
-                    < Button variant="ghost" size="sm" className="text-xs sm:text-sm" >
+                    <Button variant="ghost" size="sm" className="text-xs sm:text-sm" >
                         <Share2 className="h-4 w-4 mr-2" />
                         Share this profile
                     </Button>
@@ -63,13 +63,13 @@ export default function ExpertsDetail({ expert }: { expert: ExpertModel }) {
                             <div className="relative" >
                                 <Image
                                     src={getProfileImage(fields)}
-                                    alt={`${getUserName(fields) }`
+                                    alt={`${getUserName(fields)}`
                                     }
                                     width={200}
                                     height={200}
                                     className="rounded-lg object-cover"
                                 />
-                              
+
                             </div>
                         </div>
 
@@ -93,41 +93,38 @@ export default function ExpertsDetail({ expert }: { expert: ExpertModel }) {
                                 }
                             </div>
 
-                            < div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground" >
-                                <div className="flex items-center" >
-                                    <Languages className="h-4 w-4 mr-1" />
-                                    India
-                                    </div>
-                                < div className="flex items-center" >
-                                    <MapPin className="h-4 w-4 mr-1" />
-                                    {expert?.fields?.Country}
-                                </div>
+                            <div className="flex items-center text-muted-foreground" >
+                                <MapPin className="h-4 w-4 mr-1" />
+                                {expert?.fields?.Country}
                             </div>
 
-                            < p className="text-base sm:text-lg" > {expert?.fields?.Headline} </p>
 
-                            < div className="flex flex-col sm:flex-row gap-3" >
-                                <Button className="bg-primary w-full sm:w-auto" > Get in touch </Button>
-                                < div className="flex gap-2 justify-center sm:justify-start" >
+                            <p className="text-base sm:text-lg" > {expert?.fields?.Headline} </p>
+
+                            <div className="flex flex-col sm:flex-row gap-3" >
+                                <Link href={expert?.fields?.Portfolio} target='_blank' className='sm:w-auto w-full  text-center text-white bg-primary rounded-md py-2 px-4'>
+                                    Get in touch
+                                </Link>
+                                <div className="flex gap-2 justify-center sm:justify-start">
                                     {
                                         expert?.fields.LinkedIn && (
-                                            <Button variant="outline" size="icon" >
+                                            <Link href={`${expert?.fields.LinkedIn}`} target="_blank" className='rounded-md border border-solid border-gray-300 cursor-pointer hover:bg-accent inline-flex bg-white py-2 px-3 mb-0 items-center justify-center'>
                                                 <Linkedin className="h-4 w-4" />
-                                            </Button>
+                                            </Link>
                                         )
                                     }
                                     {
                                         expert?.fields.Twitter && (
-                                            <Button variant="outline" size="icon" >
+                                            <Link href={`${expert?.fields.Twitter}`} target="_blank" className='rounded-md border border-solid border-gray-300 cursor-pointer hover:bg-accent inline-flex bg-white py-2 px-3 mb-0 items-center justify-center'>
                                                 <Twitter className="h-4 w-4" />
-                                            </Button>
+                                            </Link>
                                         )
                                     }
                                     {
                                         expert?.fields.Portfolio && (
-                                            <Button variant="outline" size="icon" >
+                                            <Link href={`${expert?.fields.Portfolio}`} target="_blank" className='rounded-md border border-solid border-gray-300 cursor-pointer hover:bg-accent inline-flex bg-white py-2 px-3 mb-0 items-center justify-center'>
                                                 <Globe className="h-4 w-4" />
-                                            </Button>
+                                            </Link>
                                         )
                                     }
                                 </div>
@@ -136,8 +133,8 @@ export default function ExpertsDetail({ expert }: { expert: ExpertModel }) {
 
                         {/* Desktop: Right Column - Profile Image */}
                         <div className="hidden lg:block relative" >
-                            
-                            < Image
+
+                            <Image
                                 src={getProfileImage(expert?.fields)}
                                 alt={`${getUserName(expert?.fields)}`}
                                 width={200}
@@ -157,7 +154,7 @@ export default function ExpertsDetail({ expert }: { expert: ExpertModel }) {
                         < div className="flex flex-wrap gap-2" >
                             {
                                 expert?.fields?.Skills?.map((skill, index) => (
-                                    <Badge key={index} variant="secondary" className="text-xs sm:text-sm" >
+                                    <Badge key={index} variant="secondary" className=" text-xs sm:text-sm" >
                                         {skill}
                                     </Badge>
                                 ))
@@ -165,12 +162,12 @@ export default function ExpertsDetail({ expert }: { expert: ExpertModel }) {
                         </div>
                     </div>
 
-                   
+
                 </div>
             </div>
 
             {/* Professional Bio Section */}
-            {expert?.fields?.['Professional Bio'] &&<div className="container mx-auto px-4 py-8 sm:py-12 border-t" >
+            {expert?.fields?.['Professional Bio'] && <div className="container mx-auto px-4 py-8 sm:py-12 border-t" >
                 <div className="max-w-4xl" >
                     <h2 className="text-xl sm:text-2xl font-bold mb-4" > Professional Bio </h2>
                     < div className="prose max-w-none text-sm sm:text-base" >
@@ -211,13 +208,13 @@ export default function ExpertsDetail({ expert }: { expert: ExpertModel }) {
                             </div>
                         </div>
                     </div>)}
-                    </div>
-                    </div>
+                </div>
+            </div>
 
-       
+
 
             {/* CTA Section */}
-            <div className="bg-orange-50" >
+            {/* <div className="bg-orange-50" >
                 <div className="container mx-auto px-4 py-8 sm:py-12" >
                     <div className="max-w-4xl flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0" >
                         <div className="text-center sm:text-left" >
@@ -227,7 +224,7 @@ export default function ExpertsDetail({ expert }: { expert: ExpertModel }) {
                         < Button className="bg-primary w-full sm:w-auto" > Apply now </Button>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }

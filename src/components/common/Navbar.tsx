@@ -25,6 +25,7 @@ export default function Navbar() {
   const menuItem: MenuItem[] = [
     { id: RoutePath.HomePage, label: "Tools", href: RoutePath.HomePage },
     { id: RoutePath.Prompts, label: "Prompts", href: RoutePath.Prompts },
+    {id:RoutePath.Resources,label:"Resources",href:RoutePath.Resources},
     { id: RoutePath.Experts, label: "Experts", href: RoutePath.Experts },
     { id: RoutePath.SubmitTool, label: "Submit Tool", href: RoutePath.SubmitTool },
     { id: RoutePath.Contact, label: "Contact", href: RoutePath.Contact },
@@ -39,9 +40,9 @@ export default function Navbar() {
 
   return (
     <>
-      <header className={` px-5 bg-white shadow-md xl:px-10 transition-all duration-500 `} >
+      <header className={`  bg-white shadow-md  transition-all duration-500 `} >
 
-        <div className={`max-w-screen-2xl mx-auto flex items-center justify-between  lg:px-2 ${isSticky ? 'py-4 duration-500 transition-all' : 'py-6'}`}>
+        <div className={`max-w-screen-2xl mx-auto flex items-center justify-between px-4  py-6  ${isSticky ? ' duration-500 transition-all' : ''}`}>
           <div>
             <Link href="/">
               <div className="font-bold text-Heading-Small">Content Creation FYI</div>

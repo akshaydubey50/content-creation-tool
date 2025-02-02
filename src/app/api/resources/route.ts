@@ -12,7 +12,7 @@ export async function GET() {
   };
 
   try {
-    let airtableProductList: ResourceModel[] = [];
+    let resourceList: ResourceModel[] = [];
 
     let offset = null;
     do {
@@ -30,12 +30,12 @@ export async function GET() {
         const records: ResourceModel[] = (await response.data[
           "records"
         ]) as ResourceModel[];
-        airtableProductList.push(...records);
+        resourceList.push(...records);
         offset = response.data.offset;
       }
     } while (offset);
-    const statusRecord = airtableProductList?.filter(
-      (item: ResourceModel) => item.fields?.Description
+    const statusRecord = resourceList?.filter(
+      (item: ResourceModel) => item.fields?.Status?.toLowerCase()==="done"
     );
 
     return NextResponse.json(

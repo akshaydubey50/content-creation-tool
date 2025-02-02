@@ -19,9 +19,9 @@ export default function Projects() {
     return (
         <>
             
-            <div className=" bg-light-gray  ">
-                <section
-                    className="flex flex-col px-4 space-y-10 place-items-center xl:space-y-14 md:px-8 xl:px-10 py-12 lg:py:14 xl:py-16">
+            <main className=" bg-light-gray ">
+                <section className="flex flex-col py-12 
+      px-4 space-y-10 place-items-center xl:space-y-14  max-w-screen-2xl mx-auto">
                     <div>
                         <div className="flex flex-col space-y-4 text-center">
                             <p>
@@ -43,7 +43,7 @@ export default function Projects() {
                     </div>
 
                 </section>
-            </div>
+            </main>
 
             <div className="px-4 py-8 mx-auto min-w-xs max-w-8xl container">
                 <ProjectScreen itemsPerPageCount={itemsPerPageCount} />

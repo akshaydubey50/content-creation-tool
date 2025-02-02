@@ -12,21 +12,21 @@ const PromptContent: React.FC<PromptContentProps> = React.memo(
   ({ promptData }) => {
     return (
       <CardContent>
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div>
-            <h3 className="mb-1 font-semibold">Prompts:</h3>
-            <p className="whitespace-pre-line text-md text-muted-foreground">
+            <h3 className="mb-2 font-semibold">Prompts:</h3>
+            <p className="whitespace-pre-line text-sm md:text-md text-muted-foreground">
               {promptData.fields.Description}
             </p>
           </div>
           <div>
-            <div className="flex flex-row items-center gap-2">
+            <div className="flex flex-col md:flex-row md:items-center gap-2">
               {promptData.fields.Source && (
                 <>
                   <h3 className="font-semibold">Source: </h3>
                   <Link
                     href={promptData.fields.SourceLink || "#"}
-                    className="hover:text-DarkOrange hover:underline"
+                    className="hover:text-DarkOrange hover:underline break-all"
                   >
                     {promptData.fields.Source}
                   </Link>
@@ -35,14 +35,14 @@ const PromptContent: React.FC<PromptContentProps> = React.memo(
             </div>
           </div>
           <div>
-            <div className="flex flex-row items-center gap-2">
-              <h3 className="font-semibold">Categories:</h3>
+            <div className="flex flex-col md:flex-row gap-2">
+              <h3 className="font-semibold whitespace-nowrap">Categories:</h3>
               <div className="flex flex-wrap gap-2">
                 {promptData.fields.Category?.map((category, index) => (
                   <Badge
                     key={index}
                     variant="outline"
-                    className="bg-white hover:border-DarkOrange "
+                    className="bg-white hover:border-DarkOrange"
                   >
                     {category}
                   </Badge>
@@ -51,16 +51,16 @@ const PromptContent: React.FC<PromptContentProps> = React.memo(
             </div>
           </div>
           <div>
-            <div className="flex flex-row items-center gap-2">
+            <div className="flex flex-col md:flex-row gap-2">
               {promptData.fields.Tags && (
                 <>
-                  <h3 className="font-semibold">Tags:</h3>
+                  <h3 className="font-semibold whitespace-nowrap">Tags:</h3>
                   <div className="flex flex-wrap gap-2">
                     {promptData.fields?.Tags?.map((tag, index) => (
                       <Badge
                         key={index}
                         variant="outline"
-                        className="border-black "
+                        className="border-black"
                       >
                         {tag}
                       </Badge>

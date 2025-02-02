@@ -3,7 +3,7 @@ import Link from 'next/link'
 export default function Footer() {
   return (
     <footer className="border-t bg-muted/40">
-      <div className="container px-4 py-12 md:px-8 mx-auto max-w-screen-3xl  ">
+      <div className="container px-4 py-12 mx-auto max-w-screen-2xl  ">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-6">
           {/* Main Links */}
           <div className="col-span-2 lg:col-span-2">
@@ -39,22 +39,22 @@ export default function Footer() {
           {/* Submit */}
           <div className="flex flex-col gap-2">
             <h3 className="font-semibold">Submit</h3>
-            <Link href="/submit-tool" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
               Submit Tools
             </Link>
-            <Link href="/submit-prompt" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
               Submit Prompts
             </Link>
-            <Link href="/submit-expert" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
               Submit Expert Profile
             </Link>
-            <Link href="/submit-job" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
               Submit Jobs
             </Link>
-            <Link href="/submit-project" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
               Submit Projects
             </Link>
-            <Link href="/submit-resource" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
               Submit Resources
             </Link>
           </div>
@@ -65,10 +65,10 @@ export default function Footer() {
             <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground">
               Contact Us
             </Link>
-            <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
               About Us
             </Link>
-            <Link href="/faq" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
               FAQ
             </Link>
           </div>
@@ -99,25 +99,25 @@ export default function Footer() {
                 © {new Date().getFullYear()} Content Creation FYI. All rights reserved.
               </p>
               <div className="flex gap-4">
-                <Link href="/twitter" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
                   Twitter
                 </Link>
-                <Link href="/linkedin" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
                   LinkedIn
                 </Link>
-                <Link href="/github" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
                   GitHub
                 </Link>
               </div>
             </div>
             <div className="flex gap-8 md:justify-end">
-              <Link href="/privacy" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
                 Terms of Service
               </Link>
-              <Link href="/cookies" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
                 Cookie Policy
               </Link>
             </div>
