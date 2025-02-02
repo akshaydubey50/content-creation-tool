@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { CheckCircle, User } from 'lucide-react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { COUNTRY_SHORTCODE } from './utils'
 
 
 export default function ExpertCard({ expert }: any) {
@@ -43,7 +44,8 @@ export default function ExpertCard({ expert }: any) {
                   <p className="text-base sm:text-lg font-medium text-gray-900">
                     {`${firstName} ${lastName}`}
                     <span className="text-gray-500 sm:ml-2 ml-1 text-sm uppercase">
-                      {Country?.slice(0, 2)}
+                      {/* {Country?.slice(0, 2)} */}
+                      {COUNTRY_SHORTCODE[Country]}
                     </span>
                   </p>
                   {Verified && (
@@ -57,7 +59,7 @@ export default function ExpertCard({ expert }: any) {
                   {ExpertType}
                 </Badge>
               </div>
-              <p className="text-sm sm:text-base text-gray-500 line-clamp-2">
+              <p className="text-sm sm:text-base text-gray-500 line-clamp-1">
                 {Headline}
               </p>
               <div className="flex flex-wrap gap-1.5 pt-1">
@@ -68,7 +70,7 @@ export default function ExpertCard({ expert }: any) {
                 ))}
                 {skills?.length > 3 && (
                   <Badge variant="secondary" className="text-xs">
-                    +{skills.length - 3}
+                    +{skills.length - 3} Skills
                   </Badge>
                 )}
               </div>

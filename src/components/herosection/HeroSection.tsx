@@ -110,8 +110,9 @@ export default function HeroSection() {
     dispatch(setSearchInputFocus());
   };  
   return (
-    <main className="py-12 lg:px-14 xl:py-16 bg-light-gray ">
-      <section className="flex flex-col px-4 space-y-10 place-items-center xl:space-y-14 md:px-8 xl:px-10">
+    <main className=" bg-light-gray ">
+      <section className="flex flex-col py-12 
+      px-4 space-y-10 place-items-center xl:space-y-14  max-w-screen-2xl mx-auto">
         <div>
           <div className="flex flex-col space-y-4 text-center">
             <p>

@@ -9,8 +9,8 @@ export function ResourceTool({ record }: { record: ResourceModel }) {
     const { Name, Description, Tags, URL } = fields;
 
     return (
-        <div className="max-w-sm shadow-lg rounded-2xl">
-            <section className="flex flex-col h-full p-6 border border-black bg-light-gray rounded-2xl">
+        <div className="col-span-1 shadow-lg  w-full border-black border bg-light-gray rounded-2xl">
+            <section className="flex flex-col h-full p-6  ">
                 <div className="flex flex-col h-full">
                     <div className="mb-4 h-14"> 
                         <h1 className="font-bold text-Title-Medium md:text-Title-Large line-clamp-2">
