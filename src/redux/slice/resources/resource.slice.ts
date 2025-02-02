@@ -2,10 +2,17 @@ import { ResourceModel } from "@/models/airtable.model";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 // Define the shape of the initial state
+
+export interface ResourceFilter {
+  selectedTopic: string;
+}
+
 interface ResourceState {
   isLoading: boolean;
   error: string | null;
   resourceList: ResourceModel[];
+  filter: ResourceFilter;
+
 }
 
 // Define the initial state
@@ -13,6 +20,9 @@ const initialState: ResourceState = {
   isLoading: false,
   error: null,
   resourceList: [],
+  filter:{
+    selectedTopic: "All",
+  }
 };
 
 // Async thunk to fetch data from the Airtable list
@@ -29,7 +39,15 @@ export const fetchResourcesList = createAsyncThunk<
 const resourceSlice = createSlice({
   name: "resourceList",
   initialState,
-  reducers: {},
+  reducers: {
+
+    updateFilters: (state, action: PayloadAction<Partial<ResourceFilter>>) => {
+      state.filter = { ...state.filter, ...action.payload };
+    },
+    resetFilters: (state) => {
+      state.filter = initialState.filter;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(
       fetchResourcesList.fulfilled,
@@ -49,7 +67,7 @@ const resourceSlice = createSlice({
 });
 
 // Export the actions (if you have defined any in reducers)
-export const {} = resourceSlice.actions;
+export const { updateFilters, resetFilters } = resourceSlice.actions;
 
 // Export the reducer
 export default resourceSlice.reducer;

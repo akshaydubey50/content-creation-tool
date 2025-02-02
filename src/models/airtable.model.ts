@@ -32,9 +32,10 @@ export interface ResourceModel {
   fields: {
     Name?: string;
     Description?: string;
-    Topics?: string[];
-    Tags?: string;
+    Topics: string[];
+    Tags: string;
     URL?: string;
+    Status:string;
     "Author/Publisher/Admin/Creator"?: string;
   };
 }
