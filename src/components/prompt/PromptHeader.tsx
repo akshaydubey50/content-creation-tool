@@ -87,16 +87,11 @@ const PromptHeader: React.FC<PromptHeaderProps> = React.memo(
 
     return (
       <CardHeader>
-        {/* {promptData.fields?.Category?.map((category, categoryIndex) => (
-          <Badge key={categoryIndex} variant="outline">
-            {category}
-          </Badge>
-        ))} */}
-        <div className="flex items-start justify-between">
-          <CardTitle className="text-3xl font-bold">
+        <div className="flex flex-col space-y-4 md:flex-row md:items-start md:justify-between md:space-y-0">
+          <CardTitle className="text-2xl md:text-3xl font-bold">
             {promptData.fields.Name}
           </CardTitle>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-2 md:gap-4">
             <LikeButton
               key={promptData?.id}
               initialLikedState={isAlreadyLiked}
@@ -117,7 +112,7 @@ const PromptHeader: React.FC<PromptHeaderProps> = React.memo(
               size="sm"
               className={`border-black ${isTextCopied ? "bg-DarkOrange text-white border-none" : ""}`}
             >
-              {isTextCopied ? "Copied Prompt" : "Copy Prompt"}
+              {isTextCopied ? "Copied" : "Copy Prompt"}
             </Button>
           </div>
         </div>
