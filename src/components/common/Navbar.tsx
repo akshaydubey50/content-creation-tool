@@ -25,7 +25,7 @@ export default function Navbar() {
   const menuItem: MenuItem[] = [
     { id: RoutePath.HomePage, label: "Tools", href: RoutePath.HomePage },
     { id: RoutePath.Prompts, label: "Prompts", href: RoutePath.Prompts },
-    {id:RoutePath.Resources,label:"Resources",href:RoutePath.Resources},
+    // {id:RoutePath.Resources,label:"Resources",href:RoutePath.Resources},
     { id: RoutePath.Experts, label: "Experts", href: RoutePath.Experts },
     { id: RoutePath.SubmitTool, label: "Submit Tool", href: RoutePath.SubmitTool },
     { id: RoutePath.Contact, label: "Contact", href: RoutePath.Contact },
@@ -50,7 +50,7 @@ export default function Navbar() {
           </div>
           {/* Desktop Menu */}
           <nav className="hidden lg:flex">
-            <ul className="flex gap-6 font-medium text-black text-Title-Medium">
+            <ul className="flex gap-6 font-medium text-black text-Title-Small">
               {menuItem.map((menu) => (
                 <li key={menu.id}>
                   <Link

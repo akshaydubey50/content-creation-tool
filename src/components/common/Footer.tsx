@@ -42,7 +42,7 @@ export default function Footer() {
             <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
               Submit Tools
             </Link>
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+            {/* <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
               Submit Prompts
             </Link>
             <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
@@ -56,7 +56,7 @@ export default function Footer() {
             </Link>
             <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
               Submit Resources
-            </Link>
+            </Link> */}
           </div>
 
           {/* Contact */}
@@ -65,12 +65,12 @@ export default function Footer() {
             <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground">
               Contact Us
             </Link>
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+            {/* <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
               About Us
-            </Link>
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+            </Link> */}
+            {/* <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
               FAQ
-            </Link>
+            </Link> */}
           </div>
 
           {/* Other Projects */}
@@ -98,7 +98,7 @@ export default function Footer() {
               <p className="text-sm text-muted-foreground">
                 © {new Date().getFullYear()} Content Creation FYI. All rights reserved.
               </p>
-              <div className="flex gap-4">
+              {/* <div className="flex gap-4">
                 <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
                   Twitter
                 </Link>
@@ -108,9 +108,9 @@ export default function Footer() {
                 <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
                   GitHub
                 </Link>
-              </div>
+              </div> */}
             </div>
-            <div className="flex gap-8 md:justify-end">
+            {/* <div className="flex gap-8 md:justify-end">
               <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
                 Privacy Policy
               </Link>
@@ -120,7 +120,7 @@ export default function Footer() {
               <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
                 Cookie Policy
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
