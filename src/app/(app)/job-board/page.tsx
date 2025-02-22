@@ -220,7 +220,7 @@ export default function Page() {
 
         </section>
       </main>
-      <div className="mx-auto container max-w-screen-2xl px-4">
+      <div className="mx-auto container max-w-screen-2xl px-4 md:px-8 lg:px-16">
      
         <div className="my-8">
           <SubmitJob />

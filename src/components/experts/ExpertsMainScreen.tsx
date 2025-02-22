@@ -9,7 +9,7 @@ export default function Home({ itemsCount }: { itemsCount: number }) {
   const { isLoading } = useSelector((state: any) => state.experts)
  
   return (
-    <main className=" md:container md:mx-auto px-4 py-8">
+    <main className=" md:container md:mx-auto px-4 md:px-8 lg:px-16 py-8">
       <div className="flex flex-col lg:flex-row gap-8">
         <aside className="w-full lg:w-1/4">
           {isLoading ? <ExpertsFilterSkeleton /> : <ExpertsFilter />}

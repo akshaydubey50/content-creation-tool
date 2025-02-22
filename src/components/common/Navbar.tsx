@@ -42,7 +42,7 @@ export default function Navbar() {
     <>
       <header className={`  bg-white shadow-md  transition-all duration-500 `} >
 
-        <div className={`max-w-screen-2xl mx-auto flex items-center justify-between px-4  py-6  ${isSticky ? ' duration-500 transition-all' : ''}`}>
+        <div className={`max-w-screen-2xl mx-auto flex items-center justify-between px-4 md:px-8 lg:px-16  py-6  ${isSticky ? ' duration-500 transition-all' : ''}`}>
           <div>
             <Link href="/">
               <div className="font-bold text-Heading-Small">Content Creation FYI</div>

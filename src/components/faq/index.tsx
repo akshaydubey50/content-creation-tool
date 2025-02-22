@@ -34,7 +34,7 @@ export default function FAQ() {
       <Script id="webpage-faq-schema" type="application/ld+json">
         {schemaString}
       </Script>
-      <section className=" max-w-screen-2xl rounded-xl  py-5 mx-auto  bg-white-200 my-10 ">
+      <section className=" max-w-screen-2xl rounded-xl px-4 md:px-8 lg:px-16  py-5 mx-auto  bg-white-200 my-10 ">
         <h2 className="text-center font-semibold text-2xl lg:text-4xl my-4">
           Frequently Ask Questions
         </h2>
@@ -80,7 +80,7 @@ const renderAccordion=(items:any)=>(
   </Accordion>
 );
 return (
-  <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-16  px-6 lg:px-8 2xl:px-0  ">
+  <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-16    ">
     <div>{renderAccordion(leftColumn)}</div>
     <div>{renderAccordion(rightColumn)}</div>
   </div>

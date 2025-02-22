@@ -38,7 +38,7 @@ export default function ExpertsDetail({ expert }: { expert: ExpertModel }) {
     return (
         <div className="min-h-screen bg-gray-50" >
             {/* Navigation Breadcrumb */}
-            < div className="container mx-auto px-4 py-4" >
+            < div className="container mx-auto px-4 md:px-8 lg:px-16 py-4" >
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0" >
                     <nav className="flex flex-wrap space-x-2 text-sm text-muted-foreground" >
                         <Link href="/" > Home </Link>
@@ -56,7 +56,7 @@ export default function ExpertsDetail({ expert }: { expert: ExpertModel }) {
 
             {/* Main Profile Section */}
             <div className="w-full bg-orange-50" >
-                <div className="container mx-auto px-4 py-8" >
+                <div className="container mx-auto px-4 md:px-8 lg:px-16 py-8" >
                     <div className="flex flex-col lg:flex-row justify-between gap-8" >
                         {/* Mobile: Image at the top */}
                         < div className="lg:hidden w-full flex justify-center mb-6" >
@@ -147,7 +147,7 @@ export default function ExpertsDetail({ expert }: { expert: ExpertModel }) {
             </div>
 
             {/* Skills & Industries Section */}
-            <div className="container mx-auto px-4 py-8 sm:py-12" >
+            <div className="container mx-auto px-4 md:px-8 lg:px-16 py-8 sm:py-12" >
                 <div className="max-w-4xl space-y-8" >
                     <div>
                         <h2 className="text-xl sm:text-2xl font-bold mb-4" > Skills </h2>
@@ -167,7 +167,7 @@ export default function ExpertsDetail({ expert }: { expert: ExpertModel }) {
             </div>
 
             {/* Professional Bio Section */}
-            {expert?.fields?.['Professional Bio'] && <div className="container mx-auto px-4 py-8 sm:py-12 border-t" >
+            {expert?.fields?.['Professional Bio'] && <div className="container mx-auto px-4 md:px-8 lg:px-16 py-8 sm:py-12 border-t" >
                 <div className="max-w-4xl" >
                     <h2 className="text-xl sm:text-2xl font-bold mb-4" > Professional Bio </h2>
                     < div className="prose max-w-none text-sm sm:text-base" >
@@ -176,7 +176,7 @@ export default function ExpertsDetail({ expert }: { expert: ExpertModel }) {
                 </div>
             </div>}
 
-            <div className="container mx-auto px-4 py-8 sm:py-12" >
+            <div className="container mx-auto px-4 md:px-8 lg:px-16 py-8 sm:py-12" >
                 <div className="max-w-4xl space-y-8" >
                     {expert?.fields?.Industry?.length > 0 && (
                         <div>
@@ -194,7 +194,7 @@ export default function ExpertsDetail({ expert }: { expert: ExpertModel }) {
                     )}
 
                     {/* Tools Section */}
-                    {expert?.fields?.Tools?.length > 0 && (<div className="container mx-auto px-4 py-8 sm:py-12 border-t" >
+                    {expert?.fields?.Tools?.length > 0 && (<div className="container mx-auto px-4 md:px-8 lg:px-16 py-8 sm:py-12 border-t" >
                         <div className="max-w-4xl" >
                             <h2 className="text-xl sm:text-2xl font-bold mb-4" > Tools </h2>
                             < div className="flex flex-wrap gap-2" >

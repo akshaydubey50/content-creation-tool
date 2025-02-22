@@ -24,7 +24,7 @@ export default function HomScreen() {
                     All Tools
                 </button>
             </div>
-            <div className="px-4 xl:px-0">
+            <div className="px-16">
                 <NewsLetter />
             </div>
         </div>

@@ -109,7 +109,7 @@ export default function ContactScreen() {
                     </h1>
                 </div>
             </div>
-            <div className="max-w-7xl mx-auto px-6 md:px-8">
+            <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
                 <div className="flex flex-col lg:flex-row  space-y-10 lg:space-y-0 lg:justify-center  lg:items-start  lg:space-x-20    mt-6 lg:mt-10 lg:px-6 ">
                     <section>
                         <div className="flex flex-col lg:items-start space-y-4 ">
@@ -294,6 +294,8 @@ export default function ContactScreen() {
                         </Card>
                     </section>
                 </div>
+            </div>
+            <div className="px-4 md:px-8 lg:px-16">
                 <NewsLetter />
             </div>
         </>
